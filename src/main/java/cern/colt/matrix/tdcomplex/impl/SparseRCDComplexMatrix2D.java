@@ -1213,10 +1213,9 @@ public class SparseRCDComplexMatrix2D extends WrapperDComplexMatrix2D {
 		IntArrayList columnIndexesList = new IntArrayList(columnIndexes);
 		columnIndexesList.setSizeRaw(rowPointers[rows]);
 		DoubleArrayList valuesList = new DoubleArrayList(values);
-		valuesList.setSizeRaw(rowPointers[rows]);
+		valuesList.setSizeRaw(2 * rowPointers[rows]);
 		columnIndexesList.remove(index);
-		valuesList.remove(2 * index);
-		valuesList.remove(2 * index + 1);
+		valuesList.removeFromTo(2 * index, 2 * index + 1);
 		for (int i = rowPointers.length; --i > row;)
 			rowPointers[i]--;
 		columnIndexes = columnIndexesList.elements();
