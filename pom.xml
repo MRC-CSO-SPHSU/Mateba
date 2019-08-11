@@ -7,6 +7,8 @@
   <description>Parallel Colt is a multithreaded version of Colt - a library for high performance scientific computing in Java. It contains efficient algorithms for data analysis, linear algebra, multi-dimensional arrays, Fourier transforms, statistics and histogramming.</description>
   <url>http://sourceforge.net/projects/parallelcolt/</url>
 
+  <packaging>jar</packaging>
+
   <licenses>
     <license>
       <comments>packages cern.colt.* cern.jet.* cern.clhep.*</comments>
@@ -206,6 +208,27 @@
           <failOnError>false</failOnError>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <transformers>
+            <transformer
+                    implementation= "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+              <mainClass>cern.colt.Version</mainClass>
+            </transformer>
+          </transformers>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 
@@ -230,27 +253,6 @@
                 <phase>verify</phase>
                 <goals>
                   <goal>sign</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-            <version>3.0.0</version>
-            <configuration>
-              <transformers>
-                <transformer
-                        implementation= "org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>cern.colt.Version</mainClass>
-                </transformer>
-              </transformers>
-            </configuration>
-            <executions>
-              <execution>
-                <phase>package</phase>
-                <goals>
-                  <goal>shade</goal>
                 </goals>
               </execution>
             </executions>
