@@ -713,9 +713,8 @@ public class DoubleFactory2D extends cern.colt.PersistentObject {
 
         DoubleMatrix2D A = ascending(2, 2);
         DoubleMatrix2D B = descending(2, 2);
-        DoubleMatrix2D _ = null;
 
-        DoubleMatrix2D[][] parts4 = { { A, _, A, _ }, { _, A, _, B } };
+        DoubleMatrix2D[][] parts4 = { { A, null, A, null }, { null, A, null, B } };
         System.out.println("\n" + compose(parts4));
         // System.out.println("\n"+cern.colt.matrixpattern.Converting.toHTML(make(parts4).toString()));
 
@@ -728,12 +727,12 @@ public class DoubleFactory2D extends cern.colt.PersistentObject {
         System.out.println("\n\n");
         DoubleMatrix2D matrix;
         DoubleMatrix2D A, B, C, D;
-        DoubleMatrix2D _ = null;
+
         A = make(2, 2, 1);
         B = make(4, 4, 2);
         C = make(4, 3, 3);
         D = make(2, 2, 4);
-        DoubleMatrix2D[][] parts1 = { { _, A, _ }, { B, _, C }, { _, D, _ } };
+        DoubleMatrix2D[][] parts1 = { { null, A, null }, { B, null, C }, { null, D, null } };
         matrix = compose(parts1);
         System.out.println("\n" + matrix);
 
