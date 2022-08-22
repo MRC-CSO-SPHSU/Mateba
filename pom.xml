@@ -11,6 +11,8 @@
   <description>Parallel Colt is a multithreaded version of Colt - a library for high performance scientific computing in Java. It contains efficient algorithms for data analysis, linear algebra, multi-dimensional arrays, Fourier transforms, statistics and histogramming.</description>
   <url>http://sourceforge.net/projects/parallelcolt/</url>
 
+  <packaging>jar</packaging>
+
   <licenses>
     <license>
       <comments>packages cern.colt.* cern.jet.* cern.clhep.*</comments>
@@ -59,7 +61,7 @@
     <!-- github server corresponds to entry in ~/.m2/settings.xml -->
     <github.global.server>github</github.global.server>
   </properties>
-  
+
   <distributionManagement>
     <!-- use the following if you're not using a snapshot version. -->
     <!--
@@ -120,40 +122,40 @@
     </dependency>
     
 
-   <dependency>
-    <groupId>com.github.wendykierp</groupId>
-    <artifactId>JTransforms</artifactId>
-    <version>3.1</version>
-</dependency>
-
     <dependency>
-    	<groupId>net.sourceforge.csparsej</groupId>
-    	<artifactId>csparsej</artifactId>
-    	<version>1.1.1</version>
+      <groupId>com.github.wendykierp</groupId>
+      <artifactId>JTransforms</artifactId>
+      <version>3.1</version>
     </dependency>
 
     <dependency>
-    	<groupId>net.sourceforge.parallelcolt</groupId>
-    	<artifactId>optimization</artifactId>
-    	<version>1.0</version>
+      <groupId>net.sourceforge.csparsej</groupId>
+      <artifactId>csparsej</artifactId>
+      <version>1.1.1</version>
     </dependency>
 
     <dependency>
-    	<groupId>junit</groupId>
-    	<artifactId>junit</artifactId>
-    	<version>4.10</version>
+      <groupId>net.sourceforge.parallelcolt</groupId>
+      <artifactId>optimization</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.10</version>
       <scope>test</scope>
     </dependency>
 
     <dependency>
-    	<groupId>com.googlecode.netlib-java</groupId>
-    	<artifactId>netlib-java</artifactId>
-    	<version>0.9.3</version>
+      <groupId>com.googlecode.netlib-java</groupId>
+      <artifactId>netlib-java</artifactId>
+      <version>0.9.3</version>
     </dependency>
     <dependency>
-    	<groupId>com.github.rwl</groupId>
-    	<artifactId>JKLU</artifactId>
-    	<version>1.0.0</version>
+      <groupId>com.github.rwl</groupId>
+      <artifactId>JKLU</artifactId>
+      <version>1.0.0</version>
     </dependency>
   </dependencies>
 
@@ -167,7 +169,7 @@
           <target>1.5</target>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -185,7 +187,7 @@
           </excludes>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -234,7 +236,7 @@
           <mavenExecutorId>forked-path</mavenExecutorId>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
