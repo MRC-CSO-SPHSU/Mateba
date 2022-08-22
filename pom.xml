@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.sourceforge.parallelcolt</groupId>
   <artifactId>parallelcolt</artifactId>
-  <version>0.10.2-SNAPSHOT</version>
+  <version>0.11.5-SNAPSHOT</version>
   <name>ParallelColt</name>
   <description>Parallel Colt is a multithreaded version of Colt - a library for high performance scientific computing in Java. It contains efficient algorithms for data analysis, linear algebra, multi-dimensional arrays, Fourier transforms, statistics and histogramming.</description>
   <url>http://sourceforge.net/projects/parallelcolt/</url>
