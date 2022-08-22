@@ -1,240 +1,269 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.uog</groupId>
-  <artifactId>parallelcolt</artifactId>
-  <version>0.11.5-SNAPSHOT</version>
-  <name>ParallelColt</name>
-  <description>Parallel Colt is a multithreaded version of Colt - a library for high performance scientific computing in
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.uog</groupId>
+    <artifactId>parallelcolt</artifactId>
+    <version>0.11.5-SNAPSHOT</version>
+    <name>ParallelColt</name>
+    <description>Parallel Colt is a multithreaded version of Colt - a library for high performance scientific computing in
     Java. It contains efficient algorithms for data analysis, linear algebra, multidimensional arrays, Fourier
     transforms, statistics and histogramming.</description>
-  <url>https://github.com/MRC-CSO-SPHSU/ParallelColt</url>
+    <url>https://github.com/MRC-CSO-SPHSU/ParallelColt</url>
 
-  <packaging>jar</packaging>
+    <packaging>jar</packaging>
 
-  <licenses>
-    <license>
-      <comments>packages cern.colt.* cern.jet.* cern.clhep.*</comments>
-      <name>CERN Public License</name>
-      <url>https://acs.lbl.gov/software/colt/license.html</url>
-      <distribution>repo</distribution>
-    </license>
-    <license>
-      <comments>packages hep.aida.*</comments>
-      <name>Gnu LGPL</name>
-      <url>https://www.gnu.org/licenses/lgpl-2.1.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+    <licenses>
+        <license>
+            <comments>packages cern.colt.* cern.jet.* cern.clhep.*</comments>
+            <name>CERN Public License</name>
+            <url>https://acs.lbl.gov/software/colt/license.html</url>
+            <distribution>repo</distribution>
+        </license>
+        <license>
+            <comments>packages hep.aida.*</comments>
+            <name>Gnu LGPL</name>
+            <url>https://www.gnu.org/licenses/lgpl-2.1.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-  <scm>
-    <url>git@github.com:MRC-CSO-SPHSU/ParallelColt.git</url>
-    <connection>scm:git:git@github.com:MRC-CSO-SPHSU/ParallelColt.git</connection>
-    <developerConnection>scm:git:git@github.com:MRC-CSO-SPHSU/ParallelColt.git</developerConnection>
-    <tag>HEAD</tag>
-  </scm>
+    <scm>
+        <url>git@github.com:MRC-CSO-SPHSU/ParallelColt.git</url>
+        <connection>scm:git:git@github.com:MRC-CSO-SPHSU/ParallelColt.git</connection>
+        <developerConnection>scm:git:git@github.com:MRC-CSO-SPHSU/ParallelColt.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
 
-  <developers>
-    <developer>
-      <id>wendykierp</id>
-      <name>Piotr Wendykier</name>
-      <email>piotr.wendykier@gmail.com</email>
-    </developer>
-    <developer>
-      <id>vishvas</id>
-      <name>Vishvas Vasuki</name>
-      <email>vishvas@users.sourceforge.net</email>
-    </developer>
-    <developer>
-      <id>rwl</id>
-      <name>Richard Lincoln</name>
-      <email>r.w.lincoln@gmail.com</email>
-    </developer>
-    <developer>
-      <id>Bonder-MJ</id>
-      <name>Marc Jan Bonder</name>
-      <email>bonder.m.j@gmail.com</email>
-    </developer>
-    <developer>
-      <id>aeismann</id>
-      <name>Andi Eismann</name>
-    </developer>
-    <developer>
-      <id>Idoia</id>
-      <name>Idoia Murua</name>
-      <email>idoia.murua@tecnalia.com</email>
-    </developer>
-  </developers>
+    <developers>
+        <developer>
+            <id>wendykierp</id>
+            <name>Piotr Wendykier</name>
+            <email>piotr.wendykier@gmail.com</email>
+        </developer>
+        <developer>
+            <id>vishvas</id>
+            <name>Vishvas Vasuki</name>
+            <email>vishvas@users.sourceforge.net</email>
+        </developer>
+        <developer>
+            <id>rwl</id>
+            <name>Richard Lincoln</name>
+            <email>r.w.lincoln@gmail.com</email>
+        </developer>
+        <developer>
+            <id>Bonder-MJ</id>
+            <name>Marc Jan Bonder</name>
+            <email>bonder.m.j@gmail.com</email>
+        </developer>
+        <developer>
+            <id>aeismann</id>
+            <name>Andi Eismann</name>
+        </developer>
+        <developer>
+            <id>Idoia</id>
+            <name>Idoia Murua</name>
+            <email>idoia.murua@tecnalia.com</email>
+        </developer>
+    </developers>
 
-  <dependencies>
+    <dependencies>
     <!-- Custom -->
-    <dependency>
-        <groupId>com.github.rwl</groupId>
-        <artifactId>core-lapack</artifactId>
-        <version>0.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.wendykierp</groupId>
-      <artifactId>JTransforms</artifactId>
-      <version>3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>com.github.rwl</groupId>
-      <artifactId>JKLU</artifactId>
-      <version>1.0.0</version>
-    </dependency>
+        <dependency>
+            <groupId>com.github.rwl</groupId>
+            <artifactId>core-lapack</artifactId>
+            <version>0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.wendykierp</groupId>
+            <artifactId>JTransforms</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.rwl</groupId>
+            <artifactId>JKLU</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
     <!-- Legacy -->
     <!-- https://mvnrepository.com/artifact/incanter/arpack-combo -->
-    <dependency>
-      <groupId>incanter</groupId>
-      <artifactId>arpack-combo</artifactId>
-      <version>0.9.4</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sourceforge.csparsej</groupId>
-      <artifactId>csparsej</artifactId>
-      <version>1.1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>net.sourceforge.parallelcolt</groupId>
-      <artifactId>optimization</artifactId>
-      <version>1.0</version>
-    </dependency>
+        <dependency>
+            <groupId>incanter</groupId>
+            <artifactId>arpack-combo</artifactId>
+            <version>0.9.4</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.csparsej</groupId>
+            <artifactId>csparsej</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.parallelcolt</groupId>
+            <artifactId>optimization</artifactId>
+            <version>1.0</version>
+        </dependency>
     <!-- https://mvnrepository.com/artifact/com.github.fommil.netlib/all -->
-    <dependency>
-      <groupId>com.github.fommil.netlib</groupId>
-      <artifactId>all</artifactId>
-      <version>1.1.2</version>
-      <type>pom</type>
-    </dependency>
+        <dependency>
+            <groupId>com.github.fommil.netlib</groupId>
+            <artifactId>all</artifactId>
+            <version>1.1.2</version>
+            <type>pom</type>
+        </dependency>
     <!-- FIXME see https://github.com/fommil/netlib-java -->
 
     <!-- Other -->
     <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <version>5.9.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.junit.vintage</groupId>
-      <artifactId>junit-vintage-engine</artifactId>
-      <version>5.9.0</version>
-      <scope>test</scope>
-    </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.vintage</groupId>
+            <artifactId>junit-vintage-engine</artifactId>
+            <version>5.9.0</version>
+            <scope>test</scope>
+        </dependency>
     <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.24</version>
-      <scope>provided</scope>
-    </dependency>
-  </dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.24</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.10.1</version>
-        <configuration>
-          <source>18</source>
-          <target>18</target>
-          <compilerArgs>--enable-preview</compilerArgs>
-        </configuration>
-      </plugin>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <source>18</source>
+                    <target>18</target>
+                    <compilerArgs>--enable-preview</compilerArgs>
+                </configuration>
+            </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.0.0-M7</version>
-        <configuration>
-          <excludes>
-            <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleCGAMGTest.java</exclude>
-            <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleCGSAMGTest.java</exclude>
-            <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleQMRAMGTest.java</exclude>
-            <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleIRTest.java</exclude>
-            <exclude>cern/colt/matrix/tfloat/algo/solver/FloatCGAMGTest.java</exclude>
-            <exclude>cern/colt/matrix/tfloat/algo/solver/FloatCGSAMGTest.java</exclude>
-            <exclude>cern/colt/matrix/tfloat/algo/solver/FloatQMRAMGTest.java</exclude>
-            <exclude>cern/colt/matrix/tfloat/algo/solver/FloatIRTest.java</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M7</version>
+                <configuration>
+                    <excludes>
+                        <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleCGAMGTest.java</exclude>
+                        <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleCGSAMGTest.java</exclude>
+                        <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleQMRAMGTest.java</exclude>
+                        <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleIRTest.java</exclude>
+                        <exclude>cern/colt/matrix/tfloat/algo/solver/FloatCGAMGTest.java</exclude>
+                        <exclude>cern/colt/matrix/tfloat/algo/solver/FloatCGSAMGTest.java</exclude>
+                        <exclude>cern/colt/matrix/tfloat/algo/solver/FloatQMRAMGTest.java</exclude>
+                        <exclude>cern/colt/matrix/tfloat/algo/solver/FloatIRTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
 
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.3.0</version>
-        <executions>
-          <execution>
-            <id>add-source</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>add-test-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>src/benchmark/java</source>
-                <source>src/benchmark/resources</source>
-              </sources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-test-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/benchmark/java</source>
+                                <source>src/benchmark/resources</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.5</version>
-        <configuration>
-          <autoVersionSubmodules>true</autoVersionSubmodules>
-          <useReleaseProfile>false</useReleaseProfile>
-          <releaseProfiles>release</releaseProfiles>
-          <goals>deploy</goals>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
           <!-- need this for gpg plugin to work correctly -->
-          <mavenExecutorId>forked-path</mavenExecutorId>
-        </configuration>
-      </plugin>
+                    <mavenExecutorId>forked-path</mavenExecutorId>
+                </configuration>
+            </plugin>
 
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.8.1</version>
-        <configuration>
-          <doctitle>&lt;h2&gt;&lt;a target=_top href=${project.url} &gt;Parallel Colt&lt;/a&gt;
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <doctitle>&lt;h2&gt;&lt;a target=_top href=${project.url} &gt;Parallel Colt&lt;/a&gt;
             &lt;/h2&gt;&lt;h4&gt;Open Source Libraries for High Performance Scientific and Technical Computing in
             Java&lt;/h4&gt;&lt;hr&gt;</doctitle>
-          <show>public</show>
-          <author>true</author>
-          <use>true</use>
-          <splitindex>true</splitindex>
-          <version>true</version>
-          <windowtitle>Parallel Colt ${project.version} - API Specification</windowtitle>
-          <header>&lt;b&gt;Parallel Colt ${project.version}&lt;/b&gt;</header>
-          <bottom>&lt;font size=-1 &gt;Jump to the &lt;a target=_top href=${project.url} &gt;Parallel Colt
+                    <show>public</show>
+                    <author>true</author>
+                    <use>true</use>
+                    <splitindex>true</splitindex>
+                    <version>true</version>
+                    <windowtitle>Parallel Colt ${project.version} - API Specification</windowtitle>
+                    <header>&lt;b&gt;Parallel Colt ${project.version}&lt;/b&gt;</header>
+                    <bottom>&lt;font size=-1 &gt;Jump to the &lt;a target=_top href=${project.url} &gt;Parallel Colt
             Homepage&lt;/a&gt;</bottom>
-          <failOnError>false</failOnError>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+                    <failOnError>false</failOnError>
+                </configuration>
+            </plugin>
 
-  <repositories>
-    <repository>
-      <id>Clojars Repository</id>
-      <url>https://clojars.org/repo/</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>projectlombok.org</id>
-      <url>https://projectlombok.org/mavenrepo</url>
-    </repository>
-  </repositories>
+            <plugin>
+                <groupId>org.ec4j.maven</groupId>
+                <artifactId>editorconfig-maven-plugin</artifactId>
+                <version>0.1.1</version>
+                <executions>
+                    <execution>
+                        <id>check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                <!-- See http://ec4j.github.io/editorconfig-maven-plugin/ for full configuration reference -->
+                    <excludes>
+                    <!-- Note that maven submodule directories and many non-source file patterns are excluded by default -->
+                    <!-- see https://github.com/ec4j/editorconfig-linters/blob/master/editorconfig-lint-api/src/main/java/org/ec4j/lint/api/Constants.java#L37 -->
+                    <!-- You can exclude further files from processing: -->
+                        <exclude>src/main/**/*.whatever</exclude>
+                    </excludes>
+                <!-- All files are included by default:
+                <includes>
+                  <include>**</include>
+                </includes>
+                -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>Clojars Repository</id>
+            <url>https://clojars.org/repo/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>projectlombok.org</id>
+            <url>https://projectlombok.org/mavenrepo</url>
+        </repository>
+    </repositories>
 
 </project>
