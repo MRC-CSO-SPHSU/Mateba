@@ -8,13 +8,13 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tfloat.algo.decomposition;
 
-import org.netlib.lapack.LAPACK;
 
 import cern.colt.matrix.tfloat.FloatMatrix2D;
 import cern.colt.matrix.tfloat.algo.FloatProperty;
 import cern.colt.matrix.tfloat.impl.DenseColumnFloatMatrix2D;
 import cern.colt.matrix.tfloat.impl.DenseFloatMatrix2D;
 import cern.colt.matrix.tfloat.impl.DiagonalFloatMatrix2D;
+import com.github.fommil.netlib.LAPACK;
 
 /**
  * 

@@ -13,8 +13,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import org.netlib.blas.BLAS;
-
 import cern.colt.function.tfloat.FloatFloatFunction;
 import cern.colt.function.tfloat.FloatFunction;
 import cern.colt.function.tfloat.FloatProcedure;
@@ -28,6 +26,7 @@ import cern.colt.matrix.tfcomplex.FComplexMatrix2D;
 import cern.colt.matrix.tfcomplex.impl.DenseFComplexMatrix2D;
 import cern.colt.matrix.tfloat.FloatMatrix1D;
 import cern.colt.matrix.tfloat.FloatMatrix2D;
+import com.github.fommil.netlib.BLAS;
 import org.jtransforms.dct.FloatDCT_2D;
 import org.jtransforms.dht.FloatDHT_2D;
 import org.jtransforms.dst.FloatDST_2D;
