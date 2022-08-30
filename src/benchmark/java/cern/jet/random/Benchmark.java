@@ -13,6 +13,7 @@ import cern.colt.list.tint.IntArrayList;
 import cern.jet.random.tdouble.AbstractDoubleDistribution;
 import cern.jet.random.tdouble.Poisson;
 import cern.jet.random.tdouble.engine.DoubleRandomEngine;
+import cern.jet.random.tdouble.engine.MersenneTwister;
 
 /**
  * Benchmarks random number generation from various distributions as well as PDF
@@ -51,7 +52,7 @@ public class Benchmark extends cern.colt.PersistentObject {
 
         // for tests and debugging use a random engine with CONSTANT seed -->
         // deterministic and reproducible results
-        cern.jet.random.tdouble.engine.DoubleRandomEngine engine = new cern.jet.random.tdouble.engine.DoubleMersenneTwister();
+        cern.jet.random.tdouble.engine.DoubleRandomEngine engine = new MersenneTwister();
 
         // your favourite distribution goes here
         cern.jet.random.tdouble.AbstractDoubleDistribution dist = new cern.jet.random.tdouble.Gamma(alpha, lambda,

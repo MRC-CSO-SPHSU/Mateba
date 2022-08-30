@@ -9,6 +9,7 @@ It is provided "as is" without expressed or implied warranty.
 package cern.jet.random.tdouble;
 
 import cern.jet.random.tdouble.engine.DoubleRandomEngine;
+import cern.jet.random.tdouble.engine.MersenneTwister;
 
 /**
  * Contains methods for conveniently generating pseudo-random numbers from
@@ -34,7 +35,7 @@ import cern.jet.random.tdouble.engine.DoubleRandomEngine;
  * }
  * </pre>
  * 
- * @see cern.jet.random.tdouble.engine.DoubleMersenneTwister
+ * @see MersenneTwister
  * @see java.util.Random
  * @see java.lang.Math
  * @author wolfgang.hoschek@cern.ch

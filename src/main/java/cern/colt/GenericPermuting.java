@@ -8,6 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt;
 
+import cern.jet.random.tdouble.engine.MersenneTwister;
+
 /**
  * Generically reorders (permutes) arbitrary shaped data (for example, an array,
  * three arrays, a 2-d matrix, two linked lists) using an <i>in-place</i>
@@ -123,7 +125,7 @@ public class GenericPermuting extends Object {
      * to compute <tt>k</tt> distinct and random permutations of a sequence,
      * obtaining <tt>p</tt> from {@link cern.jet.random.tdouble.sampling}
      * without replacement or a random engine like
-     * {@link cern.jet.random.tdouble.engine.DoubleMersenneTwister}. <br>
+     * {@link MersenneTwister}. <br>
      * Note: When <tt>N!</tt> exceeds the 64-bit range (i.e. for <tt>N > 20</tt>
      * ), this method has <i>different</i> behaviour: it makes a sequence
      * <tt>[0,1,...,N-1]</tt> and randomizes it, seeded with parameter
@@ -178,7 +180,7 @@ public class GenericPermuting extends Object {
             for (int i = N; --i >= 0;)
                 permutation[i] = i;
             cern.jet.random.tdouble.DoubleUniform gen = new cern.jet.random.tdouble.DoubleUniform(
-                    new cern.jet.random.tdouble.engine.DoubleMersenneTwister((int) p));
+                    new MersenneTwister((int) p));
             for (int i = 0; i < N - 1; i++) {
                 int random = gen.nextIntFromTo(i, N - 1);
 

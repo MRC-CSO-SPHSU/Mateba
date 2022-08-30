@@ -27,6 +27,7 @@ import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.WrapperDoubleMatrix1D;
 import cern.jet.math.tdouble.DoubleFunctions;
+import cern.jet.random.tdouble.engine.MersenneTwister;
 
 /**
  * Quick and dirty tests.
@@ -694,7 +695,7 @@ class TestMatrix2D {
         double mean = 5.0;
         double stdDev = 3.0;
         cern.jet.random.tdouble.Normal random = new cern.jet.random.tdouble.Normal(mean, stdDev,
-                new cern.jet.random.tdouble.engine.DoubleMersenneTwister());
+                new MersenneTwister());
 
         System.out.println("sampling...");
         double value = 2;
@@ -1483,7 +1484,7 @@ class TestMatrix2D {
          */
     }
 
-    public static double[][] randomMatrix(int dof, cern.jet.random.tdouble.engine.DoubleMersenneTwister RANDOM) {
+    public static double[][] randomMatrix(int dof, MersenneTwister RANDOM) {
         double[][] m = new double[dof][dof];
         /*
          * for (int i = 0; i < dof; ++i) { for (int j = i - 1, n = i + 1; j <=

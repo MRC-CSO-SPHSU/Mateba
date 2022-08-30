@@ -11,6 +11,7 @@ package cern.colt.matrix.tdouble;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix1D;
 import cern.jet.math.tdouble.DoubleFunctions;
+import cern.jet.random.tdouble.engine.MersenneTwister;
 
 /**
  * Factory for convenient construction of 1-d matrices holding <tt>double</tt>
@@ -217,7 +218,7 @@ public class DoubleFactory1D extends cern.colt.PersistentObject {
             return matrix;
 
         cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant sampler = new cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant(
-                n, size, new cern.jet.random.tdouble.engine.DoubleMersenneTwister());
+                n, size, new MersenneTwister());
         for (int i = size; --i >= 0;) {
             if (sampler.sampleNextElement()) {
                 matrix.setQuick(i, value);

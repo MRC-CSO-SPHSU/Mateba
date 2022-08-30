@@ -12,6 +12,7 @@ import cern.colt.matrix.tint.impl.DenseIntMatrix2D;
 import cern.colt.matrix.tint.impl.SparseIntMatrix2D;
 import cern.colt.matrix.tint.impl.SparseRCIntMatrix2D;
 import cern.jet.math.tint.IntFunctions;
+import cern.jet.random.tdouble.engine.MersenneTwister;
 
 /**
  * Factory for convenient construction of 2-d matrices holding <tt>int</tt>
@@ -1015,7 +1016,7 @@ public class IntFactory2D extends cern.colt.PersistentObject {
             return matrix;
 
         cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant sampler = new cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant(
-                n, size, new cern.jet.random.tdouble.engine.DoubleMersenneTwister());
+                n, size, new MersenneTwister());
         for (int i = 0; i < size; i++) {
             if (sampler.sampleNextElement()) {
                 int row = (i / columns);

@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdouble.algo;
 
+import cern.jet.random.tdouble.engine.MersenneTwister;
 import hep.aida.tdouble.bin.DynamicDoubleBin1D;
 
 import java.util.concurrent.Future;
@@ -753,7 +754,7 @@ public class DoubleStatistic extends Object {
 
         // random generator seeded with current time
         if (randomGenerator == null)
-            randomGenerator = new cern.jet.random.tdouble.engine.DoubleMersenneTwister((int) System.currentTimeMillis());
+            randomGenerator = new MersenneTwister((int) System.currentTimeMillis());
 
         int ncolumns = (int) Math.round(matrix.size() * fraction);
         int max = ncolumns;
@@ -858,7 +859,7 @@ public class DoubleStatistic extends Object {
 
         // random generator seeded with current time
         if (randomGenerator == null)
-            randomGenerator = new cern.jet.random.tdouble.engine.DoubleMersenneTwister((int) System.currentTimeMillis());
+            randomGenerator = new MersenneTwister((int) System.currentTimeMillis());
 
         int nrows = (int) Math.round(matrix.rows() * rowFraction);
         int ncolumns = (int) Math.round(matrix.columns() * columnFraction);
@@ -939,7 +940,7 @@ public class DoubleStatistic extends Object {
 
         // random generator seeded with current time
         if (randomGenerator == null)
-            randomGenerator = new cern.jet.random.tdouble.engine.DoubleMersenneTwister((int) System.currentTimeMillis());
+            randomGenerator = new MersenneTwister((int) System.currentTimeMillis());
 
         int nslices = (int) Math.round(matrix.slices() * sliceFraction);
         int nrows = (int) Math.round(matrix.rows() * rowFraction);

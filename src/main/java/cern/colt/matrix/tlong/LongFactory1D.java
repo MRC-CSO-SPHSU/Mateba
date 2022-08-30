@@ -11,6 +11,7 @@ package cern.colt.matrix.tlong;
 import cern.colt.matrix.tlong.impl.DenseLongMatrix1D;
 import cern.colt.matrix.tlong.impl.SparseLongMatrix1D;
 import cern.jet.math.tlong.LongFunctions;
+import cern.jet.random.tdouble.engine.MersenneTwister;
 
 /**
  * Factory for convenient construction of 1-d matrices holding <tt>int</tt>
@@ -221,7 +222,7 @@ public class LongFactory1D extends cern.colt.PersistentObject {
             return matrix;
 
         cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant sampler = new cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant(
-                n, size, new cern.jet.random.tdouble.engine.DoubleMersenneTwister());
+                n, size, new MersenneTwister());
         for (int i = size; --i >= 0;) {
             if (sampler.sampleNextElement()) {
                 matrix.set(i, value);

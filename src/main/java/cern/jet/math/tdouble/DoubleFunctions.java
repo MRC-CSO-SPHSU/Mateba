@@ -12,6 +12,7 @@ import cern.colt.function.tdouble.DoubleDoubleFunction;
 import cern.colt.function.tdouble.DoubleDoubleProcedure;
 import cern.colt.function.tdouble.DoubleFunction;
 import cern.colt.function.tdouble.DoubleProcedure;
+import cern.jet.random.tdouble.engine.MersenneTwister;
 
 // import com.imsl.math.Sfun;
 /**
@@ -1177,7 +1178,7 @@ public class DoubleFunctions extends Object {
      * Constructs a function that returns a new uniform random number in the
      * open unit interval <code>(0.0,1.0)</code> (excluding 0.0 and 1.0).
      * Currently the engine is
-     * {@link cern.jet.random.tdouble.engine.DoubleMersenneTwister} and is
+     * {@link MersenneTwister} and is
      * seeded with the current time.
      * <p>
      * Note that any random engine derived from

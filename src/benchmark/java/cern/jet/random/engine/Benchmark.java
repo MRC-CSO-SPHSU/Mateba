@@ -9,7 +9,7 @@ It is provided "as is" without expressed or implied warranty.
 package cern.jet.random.engine;
 
 import cern.jet.random.tdouble.engine.DRand;
-import cern.jet.random.tdouble.engine.DoubleMersenneTwister;
+import cern.jet.random.tdouble.engine.MersenneTwister;
 import cern.jet.random.tdouble.engine.DoubleRandomEngine;
 import cern.jet.random.tdouble.engine.MersenneTwister64;
 
@@ -112,7 +112,7 @@ public class Benchmark {
         double emptyLoop = timer.elapsedTime();
         System.out.println("empty loop timing done.");
 
-        gen = new DoubleMersenneTwister();
+        gen = new MersenneTwister();
         System.out.println("\n MersenneTwister:");
         timer.reset().start();
         for (int i = times; --i >= 0;)
@@ -244,7 +244,7 @@ public class Benchmark {
         // edu.cornell.lassp.houle.RngPack.MT19937B();
         // edu.cornell.lassp.houle.RngPack.RandomElement random = new
         // edu.stanford.mt.MersenneTwister();
-        DoubleRandomEngine random = new DoubleMersenneTwister();
+        DoubleRandomEngine random = new MersenneTwister();
         int _from = (int) from, _to = (int) to;
         cern.colt.Timer timer = new cern.colt.Timer().start();
         for (int j = 0, i = times; --i >= 0; j++) {

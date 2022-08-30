@@ -9,6 +9,7 @@ It is provided "as is" without expressed or implied warranty.
 package cern.jet.random.tdouble;
 
 import cern.jet.random.tdouble.engine.DoubleRandomEngine;
+import cern.jet.random.tdouble.engine.MersenneTwister;
 
 /**
  * Uniform distribution; <A HREF=
@@ -41,11 +42,11 @@ public class DoubleUniform extends AbstractContinousDoubleDistribution {
 
     /**
      * Constructs a uniform distribution with the given minimum and maximum,
-     * using a {@link cern.jet.random.tdouble.engine.DoubleMersenneTwister}
+     * using a {@link MersenneTwister}
      * seeded with the given seed.
      */
     public DoubleUniform(double min, double max, int seed) {
-        this(min, max, new cern.jet.random.tdouble.engine.DoubleMersenneTwister(seed));
+        this(min, max, new MersenneTwister(seed));
     }
 
     /**

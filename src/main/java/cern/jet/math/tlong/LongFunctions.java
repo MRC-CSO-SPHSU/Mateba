@@ -14,6 +14,7 @@ import cern.colt.function.tlong.LongLongProcedure;
 import cern.colt.function.tlong.LongProcedure;
 import cern.jet.math.tdouble.DoubleArithmetic;
 import cern.jet.math.tdouble.DoubleFunctions;
+import cern.jet.random.tdouble.engine.MersenneTwister;
 
 /**
  * Long Function objects to be passed to generic methods. Same as
@@ -688,7 +689,7 @@ public class LongFunctions extends Object {
      * number in the closed longerval <tt>[Long.MIN_VALUE,Long.MAX_VALUE]</tt>
      * (including <tt>Long.MIN_VALUE</tt> and <tt>Long.MAX_VALUE</tt>).
      * Currently the engine is
-     * {@link cern.jet.random.tdouble.engine.DoubleMersenneTwister} and is
+     * {@link MersenneTwister} and is
      * seeded with the current time.
      * <p>
      * Note that any random engine derived from
@@ -700,7 +701,7 @@ public class LongFunctions extends Object {
      * function evaluating methods.
      */
     public static LongFunction random() {
-        return new cern.jet.random.tdouble.engine.DoubleMersenneTwister(new java.util.Date());
+        return new MersenneTwister(new java.util.Date());
     }
 
     /**

@@ -9,6 +9,7 @@ It is provided "as is" without expressed or implied warranty.
 package cern.colt;
 
 import cern.colt.function.tint.IntComparator;
+import cern.jet.random.tdouble.engine.MersenneTwister;
 
 /**
  * Demonstrates how to use sorting.
@@ -131,7 +132,7 @@ class TestGenericSorting extends Object {
      * parameters and checking whether results are correct.
      */
     public static void testRandomly(int runs) {
-        cern.jet.random.tdouble.engine.DoubleRandomEngine engine = new cern.jet.random.tdouble.engine.DoubleMersenneTwister();
+        cern.jet.random.tdouble.engine.DoubleRandomEngine engine = new MersenneTwister();
         cern.jet.random.tdouble.DoubleUniform gen = new cern.jet.random.tdouble.DoubleUniform(engine);
 
         for (int run = 0; run < runs; run++) {
