@@ -14,7 +14,7 @@ import cern.jet.random.tdouble.engine.DoubleRandomEngine;
 
 /**
  * Factory constructing exact and approximate quantile finders for both known
- * and unknown <tt>N</tt>. Also see {@link hep.aida.tdouble.bin.QuantileDoubleBin1D},
+ * and unknown <tt>N</tt>. Also see {@link hep.aida.tdouble.bin.QuantileBin1D},
  * demonstrating how this package can be used.
  * 
  * The approx. algorithms compute approximate quantiles of large data sequences

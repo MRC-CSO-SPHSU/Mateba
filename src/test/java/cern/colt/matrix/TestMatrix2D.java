@@ -1576,7 +1576,7 @@ class TestMatrix2D {
 
         DenseDoubleMatrix1D d1Double = new DenseDoubleMatrix1D(temp);
 
-        hep.aida.tdouble.bin.DynamicDoubleBin1D d1ynamicBin = cern.colt.matrix.tdouble.algo.DoubleStatistic
+        hep.aida.tdouble.bin.DynamicBin1D d1ynamicBin = cern.colt.matrix.tdouble.algo.DoubleStatistic
                 .bin(d1Double);
 
         double max = d1ynamicBin.max();

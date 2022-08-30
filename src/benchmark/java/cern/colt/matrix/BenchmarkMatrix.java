@@ -1057,8 +1057,8 @@ public class BenchmarkMatrix {
         // String[] sliceNames = {"dense", "sparse"};
         // String[] sliceNames = {"dense", "sparse", "rowCompressed"};
         String[] sliceNames = types;
-        hep.aida.tdouble.bin.DoubleBinFunctions1D F = hep.aida.tdouble.bin.DoubleBinFunctions1D.functions;
-        hep.aida.tdouble.bin.DoubleBinFunction1D[] aggr = null; // {F.mean, F.median,
+        hep.aida.tdouble.bin.BinFunctions1D F = hep.aida.tdouble.bin.BinFunctions1D.functions;
+        hep.aida.tdouble.bin.BinFunction1D[] aggr = null; // {F.mean, F.median,
         // F.sum};
         String[] rowNames = new String[sizes.length];
         String[] colNames = new String[densities.length];
@@ -1127,8 +1127,8 @@ public class BenchmarkMatrix {
         }
         runTime.stop();
 
-        hep.aida.tdouble.bin.DoubleBinFunctions1D F = hep.aida.tdouble.bin.DoubleBinFunctions1D.functions;
-        hep.aida.tdouble.bin.DoubleBinFunction1D[] aggr = null; // {F.mean, F.median,
+        hep.aida.tdouble.bin.BinFunctions1D F = hep.aida.tdouble.bin.BinFunctions1D.functions;
+        hep.aida.tdouble.bin.BinFunction1D[] aggr = null; // {F.mean, F.median,
         // F.sum};
         String[] rowNames = null;
         String[] colNames = { "dense (y=1,n=0)", "size", "density", "flops/sec" };

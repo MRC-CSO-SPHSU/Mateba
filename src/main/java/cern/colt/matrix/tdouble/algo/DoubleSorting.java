@@ -606,13 +606,13 @@ public class DoubleSorting extends cern.colt.PersistentObject {
      * @return a new matrix view having rows sorted. <b>Note that the original
      *         matrix is left unaffected.</b>
      */
-    public DoubleMatrix2D sort(DoubleMatrix2D matrix, hep.aida.tdouble.bin.DoubleBinFunction1D aggregate) {
+    public DoubleMatrix2D sort(DoubleMatrix2D matrix, hep.aida.tdouble.bin.BinFunction1D aggregate) {
         // precompute aggregates over rows, as defined by "aggregate"
 
         // a bit clumsy, because Statistic.aggregate(...) is defined on columns,
         // so we need to transpose views
         DoubleMatrix2D tmp = matrix.like(1, matrix.rows());
-        hep.aida.tdouble.bin.DoubleBinFunction1D[] func = { aggregate };
+        hep.aida.tdouble.bin.BinFunction1D[] func = { aggregate };
         DoubleStatistic.aggregate(matrix.viewDice(), func, tmp);
         double[] aggr = tmp.viewRow(0).toArray();
         return sort(matrix, aggr);
@@ -861,7 +861,7 @@ public class DoubleSorting extends cern.colt.PersistentObject {
         System.out.print("now sorting - quick version with precomputation... ");
         timer.reset().start();
         // THE QUICK VERSION (takes some 10 secs)
-        A = sort.sort(A, hep.aida.tdouble.bin.DoubleBinFunctions1D.median);
+        A = sort.sort(A, hep.aida.tdouble.bin.BinFunctions1D.median);
         // A = sort.sort(A,hep.aida.bin.BinFunctions1D.sumLog);
         timer.stop().display();
 
@@ -871,9 +871,9 @@ public class DoubleSorting extends cern.colt.PersistentObject {
         // so we just show the first 5 rows
         if (print) {
             int r = Math.min(rows, 5);
-            hep.aida.tdouble.bin.DoubleBinFunction1D[] funs = { hep.aida.tdouble.bin.DoubleBinFunctions1D.median,
-                    hep.aida.tdouble.bin.DoubleBinFunctions1D.sumLog,
-                    hep.aida.tdouble.bin.DoubleBinFunctions1D.geometricMean };
+            hep.aida.tdouble.bin.BinFunction1D[] funs = { hep.aida.tdouble.bin.BinFunctions1D.median,
+                    hep.aida.tdouble.bin.BinFunctions1D.sumLog,
+                    hep.aida.tdouble.bin.BinFunctions1D.geometricMean };
             String[] rowNames = new String[r];
             String[] columnNames = new String[columns];
             for (int i = columns; --i >= 0;)

@@ -1,8 +1,5 @@
 package cern.jet.stat.quantile;
 
-import hep.aida.tdouble.bin.DynamicDoubleBin1D;
-import hep.aida.tdouble.bin.QuantileDoubleBin1D;
-
 import java.text.DecimalFormat;
 import java.util.Date;
 
@@ -55,9 +52,9 @@ public class TestQuantile1 {
          * Set up the QuantileBin1D object
          */
         DRand rand = new DRand(new Date());
-        QuantileDoubleBin1D qAccum = new QuantileDoubleBin1D(false, N, 1.e-4, 1.e-3, 200, rand, false, false, 2);
+        hep.aida.tdouble.bin.QuantileBin1D qAccum = new hep.aida.tdouble.bin.QuantileBin1D(false, N, 1.e-4, 1.e-3, 200, rand, false, false, 2);
 
-        DynamicDoubleBin1D dbin = new DynamicDoubleBin1D();
+        hep.aida.tdouble.bin.DynamicBin1D dbin = new hep.aida.tdouble.bin.DynamicBin1D();
 
         /*
          * Use a new random number generator to generate numExamples random

@@ -13,7 +13,7 @@ import cern.colt.list.tdouble.DoubleArrayList;
 /**
  * The interface shared by all quantile finders, no matter if they are exact or
  * approximate. It is usually completely sufficient to operate on this interface
- * only. Also see {@link hep.aida.tdouble.bin.QuantileDoubleBin1D},
+ * only. Also see {@link hep.aida.tdouble.bin.QuantileBin1D},
  * demonstrating how this package can be used.
  */
 public interface DoubleQuantileFinder extends java.io.Serializable {

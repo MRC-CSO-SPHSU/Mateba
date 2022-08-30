@@ -1,10 +1,6 @@
 package hep.aida.ref;
 
 import hep.aida.tdouble.DoubleIHistogram;
-import hep.aida.tdouble.DoubleIHistogram1D;
-import hep.aida.tdouble.DoubleIHistogram2D;
-import hep.aida.tdouble.ref.DoubleHistogram1D;
-import hep.aida.tdouble.ref.DoubleHistogram2D;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,11 +13,11 @@ import java.util.Random;
 public class Test {
     public static void main(String[] argv) {
         Random r = new Random();
-        DoubleIHistogram1D h1 = new DoubleHistogram1D("AIDA 1D Histogram", 40, -3, 3);
+        hep.aida.tdouble.IHistogram1D h1 = new hep.aida.tdouble.ref.Histogram1D("AIDA 1D Histogram", 40, -3, 3);
         for (int i = 0; i < 10000; i++)
             h1.fill(r.nextGaussian());
 
-        DoubleIHistogram2D h2 = new DoubleHistogram2D("AIDA 2D Histogram", 40, -3, 3, 40, -3, 3);
+        hep.aida.tdouble.IHistogram2D h2 = new hep.aida.tdouble.ref.Histogram2D("AIDA 2D Histogram", 40, -3, 3, 40, -3, 3);
         for (int i = 0; i < 10000; i++)
             h2.fill(r.nextGaussian(), r.nextGaussian());
 
@@ -35,7 +31,7 @@ public class Test {
         writeAsXML(h2.projectionY(), "projectionY.xml");
     }
 
-    private static void writeAsXML(DoubleIHistogram1D h, String filename) {
+    private static void writeAsXML(hep.aida.tdouble.IHistogram1D h, String filename) {
         try {
             PrintWriter out = new PrintWriter(new FileWriter(filename));
             out.println("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>");
@@ -73,7 +69,7 @@ public class Test {
         }
     }
 
-    private static void writeAsXML(DoubleIHistogram2D h, String filename) {
+    private static void writeAsXML(hep.aida.tdouble.IHistogram2D h, String filename) {
         try {
             PrintWriter out = new PrintWriter(new FileWriter(filename));
             out.println("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>");

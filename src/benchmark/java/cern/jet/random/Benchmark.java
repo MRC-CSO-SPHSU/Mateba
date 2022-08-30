@@ -64,7 +64,7 @@ public class Benchmark extends cern.colt.PersistentObject {
         for (int i = 0; i < size; i++)
             numbers.add(dist.nextDouble());
 
-        hep.aida.tdouble.bin.DynamicDoubleBin1D bin = new hep.aida.tdouble.bin.DynamicDoubleBin1D();
+        hep.aida.tdouble.bin.DynamicBin1D bin = new hep.aida.tdouble.bin.DynamicBin1D();
         bin.addAllOf(numbers);
         System.out.println(bin);
     }
@@ -249,7 +249,7 @@ public class Benchmark extends cern.colt.PersistentObject {
      * distribution.
      */
     public static void test2(int size, AbstractDoubleDistribution distribution) {
-        hep.aida.tdouble.bin.DynamicDoubleBin1D bin = new hep.aida.tdouble.bin.DynamicDoubleBin1D();
+        hep.aida.tdouble.bin.DynamicBin1D bin = new hep.aida.tdouble.bin.DynamicBin1D();
         for (int j = 0, i = size; --i >= 0; j++) {
             bin.add(distribution.nextDouble());
         }
@@ -262,8 +262,8 @@ public class Benchmark extends cern.colt.PersistentObject {
      * distribution.
      */
     public static void test2(int size, AbstractDoubleDistribution a, AbstractDoubleDistribution b) {
-        hep.aida.tdouble.bin.DynamicDoubleBin1D binA = new hep.aida.tdouble.bin.DynamicDoubleBin1D();
-        hep.aida.tdouble.bin.DynamicDoubleBin1D binB = new hep.aida.tdouble.bin.DynamicDoubleBin1D();
+        hep.aida.tdouble.bin.DynamicBin1D binA = new hep.aida.tdouble.bin.DynamicBin1D();
+        hep.aida.tdouble.bin.DynamicBin1D binB = new hep.aida.tdouble.bin.DynamicBin1D();
         for (int j = 0, i = size; --i >= 0; j++) {
             binA.add(a.nextDouble());
             binB.add(b.nextDouble());

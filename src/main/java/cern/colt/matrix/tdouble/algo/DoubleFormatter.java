@@ -501,8 +501,8 @@ public class DoubleFormatter extends AbstractFormatter {
         String rowAxisName = "CPU";
         String columnAxisName = "Year";
         String title = "CPU performance over time [nops/sec]";
-        hep.aida.tdouble.bin.DoubleBinFunctions1D F = hep.aida.tdouble.bin.DoubleBinFunctions1D.functions;
-        hep.aida.tdouble.bin.DoubleBinFunction1D[] aggr = { F.mean, F.rms, F.quantile(0.25), F.median,
+        hep.aida.tdouble.bin.BinFunctions1D F = hep.aida.tdouble.bin.BinFunctions1D.functions;
+        hep.aida.tdouble.bin.BinFunction1D[] aggr = { F.mean, F.rms, F.quantile(0.25), F.median,
                 F.quantile(0.75), F.stdDev, F.min, F.max };
         String format = "%1.2G";
         System.out.println(new DoubleFormatter(format).toTitleString(cern.colt.matrix.tdouble.DoubleFactory2D.dense
@@ -726,11 +726,11 @@ public class DoubleFormatter extends AbstractFormatter {
      * @param aggr
      *            the aggregation functions to be applied to columns and rows.
      * @return the matrix converted to a string.
-     * @see hep.aida.tdouble.bin.DoubleBinFunction1D
-     * @see hep.aida.tdouble.bin.DoubleBinFunctions1D
+     * @see hep.aida.tdouble.bin.BinFunction1D
+     * @see hep.aida.tdouble.bin.BinFunctions1D
      */
     public String toTitleString(DoubleMatrix2D matrix, String[] rowNames, String[] columnNames, String rowAxisName,
-            String columnAxisName, String title, hep.aida.tdouble.bin.DoubleBinFunction1D[] aggr) {
+            String columnAxisName, String title, hep.aida.tdouble.bin.BinFunction1D[] aggr) {
         if (matrix.size() == 0)
             return "Empty matrix";
         if (aggr == null || aggr.length == 0)
@@ -851,12 +851,12 @@ public class DoubleFormatter extends AbstractFormatter {
      * @param aggr
      *            the aggregation functions to be applied to columns, rows.
      * @return the matrix converted to a string.
-     * @see hep.aida.tdouble.bin.DoubleBinFunction1D
-     * @see hep.aida.tdouble.bin.DoubleBinFunctions1D
+     * @see hep.aida.tdouble.bin.BinFunction1D
+     * @see hep.aida.tdouble.bin.BinFunctions1D
      */
     public String toTitleString(DoubleMatrix3D matrix, String[] sliceNames, String[] rowNames, String[] columnNames,
             String sliceAxisName, String rowAxisName, String columnAxisName, String title,
-            hep.aida.tdouble.bin.DoubleBinFunction1D[] aggr) {
+            hep.aida.tdouble.bin.BinFunction1D[] aggr) {
         if (matrix.size() == 0)
             return "Empty matrix";
         StringBuffer buf = new StringBuffer();
