@@ -8,6 +8,10 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix;
 
+import java.awt.*;
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Abstract base class for arbitrary-dimensional matrices holding objects or
  * primitive data types such as <code>int</code>, <code>float</code>, etc. First
@@ -19,9 +23,10 @@ package cern.colt.matrix;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public abstract class AbstractMatrix extends cern.colt.PersistentObject {
-    private static final long serialVersionUID = 1L;
+public abstract class AbstractMatrix implements Serializable, Cloneable {
 
+    @Serial
+    private static final long serialVersionUID = -5845215790337504634L;
     protected boolean isNoView = true;
 
     // public static boolean debug = true;
@@ -67,5 +72,14 @@ public abstract class AbstractMatrix extends cern.colt.PersistentObject {
      * necessary.
      */
     public void trimToSize() {
+    }
+
+    @Override
+    public AbstractMatrix clone() {
+        try {
+            return (AbstractMatrix) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

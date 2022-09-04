@@ -12,6 +12,8 @@ import cern.colt.matrix.tlong.LongMatrix1D;
 import cern.colt.matrix.tlong.LongMatrix2D;
 import cern.colt.matrix.tlong.LongMatrix3D;
 
+import java.io.Serial;
+
 /**
  * 1-d matrix holding <tt>int</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
@@ -26,7 +28,8 @@ public class WrapperLongMatrix1D extends LongMatrix1D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 5502909789992488047L;
     /*
      * The elements of the matrix.
      */

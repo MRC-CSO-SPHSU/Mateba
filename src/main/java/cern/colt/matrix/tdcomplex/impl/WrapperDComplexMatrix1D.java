@@ -13,6 +13,8 @@ import cern.colt.matrix.tdcomplex.DComplexMatrix2D;
 import cern.colt.matrix.tdcomplex.DComplexMatrix3D;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 
+import java.io.Serial;
+
 /**
  * 1-d matrix holding <tt>complex</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
@@ -20,7 +22,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class WrapperDComplexMatrix1D extends DComplexMatrix1D {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -2679602367689805393L;
     /*
      * The elements of the matrix.
      */

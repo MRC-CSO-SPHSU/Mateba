@@ -8,6 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdouble.algo;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -156,8 +158,8 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
-public class DoubleProperty extends cern.colt.PersistentObject {
-    private static final long serialVersionUID = 1L;
+public class DoubleProperty implements Serializable, Cloneable {
+
 
     /**
      * The default Property object; currently has <tt>tolerance()==1.0E-9</tt>.
@@ -173,6 +175,8 @@ public class DoubleProperty extends cern.colt.PersistentObject {
      * A Property object with <tt>tolerance()==1.0E-12</tt>.
      */
     public static final DoubleProperty TWELVE = new DoubleProperty(1.0E-12);
+    @Serial
+    private static final long serialVersionUID = -6771227887604516750L;
 
     protected double tolerance;
 
@@ -1590,5 +1594,14 @@ public class DoubleProperty extends cern.colt.PersistentObject {
             }
         }
         return 0;
+    }
+
+    @Override
+    public DoubleProperty clone() {
+        try {
+            return (DoubleProperty) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

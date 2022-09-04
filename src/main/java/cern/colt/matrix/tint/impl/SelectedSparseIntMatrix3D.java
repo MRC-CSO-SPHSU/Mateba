@@ -14,6 +14,8 @@ import cern.colt.matrix.tint.IntMatrix1D;
 import cern.colt.matrix.tint.IntMatrix2D;
 import cern.colt.matrix.tint.IntMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Selection view on sparse 3-d matrices holding <tt>int</tt> elements. First
  * see the <a href="package-summary.html">package summary</a> and javadoc <a
@@ -53,11 +55,9 @@ import cern.colt.matrix.tint.IntMatrix3D;
  * @version 1.0, 09/24/99
  */
 class SelectedSparseIntMatrix3D extends IntMatrix3D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = -5175282939954452955L;
     /**
      * The elements of this matrix.
      */

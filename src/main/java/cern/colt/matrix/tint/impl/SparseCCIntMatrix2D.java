@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tint.impl;
 
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.concurrent.Future;
 
@@ -120,7 +121,8 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  */
 public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1908742803031757723L;
     /*
      * Internal storage.
      */

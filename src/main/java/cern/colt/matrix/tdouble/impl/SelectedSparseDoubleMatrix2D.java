@@ -13,6 +13,8 @@ import cern.colt.matrix.AbstractMatrix2D;
 import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 
+import java.io.Serial;
+
 /**
  * Selection view on sparse 2-d matrices holding <tt>double</tt> elements. First
  * see the <a href="package-summary.html">package summary</a> and javadoc <a
@@ -52,11 +54,9 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
  * @version 1.0, 09/24/99
  */
 class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = 1828007225700148531L;
     /*
      * The elements of the matrix.
      */

@@ -11,6 +11,9 @@ package cern.colt.matrix.tdcomplex;
 import cern.colt.matrix.tdcomplex.impl.DenseDComplexMatrix3D;
 import cern.colt.matrix.tdcomplex.impl.SparseDComplexMatrix3D;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Factory for convenient construction of 3-d matrices holding <tt>complex</tt>
  * cells. Use idioms like <tt>ComplexFactory3D.dense.make(4,4,4)</tt> to
@@ -35,8 +38,7 @@ import cern.colt.matrix.tdcomplex.impl.SparseDComplexMatrix3D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  * @version 1.0, 12/10/2007
  */
-public class DComplexFactory3D extends cern.colt.PersistentObject {
-    private static final long serialVersionUID = 1L;
+public class DComplexFactory3D implements Serializable, Cloneable {
 
     /**
      * A factory producing dense matrices.
@@ -47,6 +49,8 @@ public class DComplexFactory3D extends cern.colt.PersistentObject {
      * A factory producing sparse matrices.
      */
     public static final DComplexFactory3D sparse = new DComplexFactory3D();
+    @Serial
+    private static final long serialVersionUID = -6077913991389000607L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -109,5 +113,14 @@ public class DComplexFactory3D extends cern.colt.PersistentObject {
      */
     public DComplexMatrix3D random(int slices, int rows, int columns) {
         return make(slices, rows, columns).assign(cern.jet.math.tdcomplex.DComplexFunctions.random());
+    }
+
+    @Override
+    public DComplexFactory3D clone() {
+        try {
+            return (DComplexFactory3D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

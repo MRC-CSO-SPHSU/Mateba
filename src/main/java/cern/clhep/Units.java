@@ -11,6 +11,7 @@ package cern.clhep;
 /**
  * High Energy Physics coherent system of Units based on Geant4 (a simulation toolkit for HEP).
  */
+@SuppressWarnings("unused")
 public final class Units {
 
     public static final double millimeter = 1.0;

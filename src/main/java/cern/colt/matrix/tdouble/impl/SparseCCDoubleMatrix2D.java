@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdouble.impl;
 
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.concurrent.Future;
 
@@ -130,7 +131,8 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  */
 public class SparseCCDoubleMatrix2D extends WrapperDoubleMatrix2D {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1108012242125769279L;
     /*
      * Internal storage.
      */

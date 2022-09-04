@@ -27,6 +27,7 @@ import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.WrapperDoubleMatrix1D;
 import cern.jet.math.tdouble.DoubleFunctions;
+import cern.jet.random.engine.MersenneTwister;
 
 /**
  * Quick and dirty tests.
@@ -284,8 +285,7 @@ class TestMatrix2D {
         // --> 560
 
         System.out.println(matrix.assign(F.random()));
-        System.out.println(matrix.assign(new cern.jet.random.tdouble.Poisson(5, cern.jet.random.tdouble.Poisson
-                .makeDefaultGenerator())));
+        System.out.println(matrix.assign(new cern.jet.random.Poisson(5, cern.jet.random.Poisson.makeDefaultGenerator())));
 
     }
 
@@ -693,8 +693,8 @@ class TestMatrix2D {
 
         double mean = 5.0;
         double stdDev = 3.0;
-        cern.jet.random.tdouble.Normal random = new cern.jet.random.tdouble.Normal(mean, stdDev,
-                new cern.jet.random.tdouble.engine.DoubleMersenneTwister());
+        cern.jet.random.Normal random = new cern.jet.random.Normal(mean, stdDev,
+                new MersenneTwister());
 
         System.out.println("sampling...");
         double value = 2;
@@ -1483,7 +1483,7 @@ class TestMatrix2D {
          */
     }
 
-    public static double[][] randomMatrix(int dof, cern.jet.random.tdouble.engine.DoubleMersenneTwister RANDOM) {
+    public static double[][] randomMatrix(int dof, MersenneTwister RANDOM) {
         double[][] m = new double[dof][dof];
         /*
          * for (int i = 0; i < dof; ++i) { for (int j = i - 1, n = i + 1; j <=
@@ -1575,7 +1575,7 @@ class TestMatrix2D {
 
         DenseDoubleMatrix1D d1Double = new DenseDoubleMatrix1D(temp);
 
-        hep.aida.tdouble.bin.DynamicDoubleBin1D d1ynamicBin = cern.colt.matrix.tdouble.algo.DoubleStatistic
+        hep.aida.bin.DynamicBin1D d1ynamicBin = cern.colt.matrix.tdouble.algo.DoubleStatistic
                 .bin(d1Double);
 
         double max = d1ynamicBin.max();

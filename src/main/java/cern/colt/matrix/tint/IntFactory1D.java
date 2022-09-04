@@ -8,9 +8,15 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tint;
 
+import cern.colt.list.tint.IntArrayList;
 import cern.colt.matrix.tint.impl.DenseIntMatrix1D;
 import cern.colt.matrix.tint.impl.SparseIntMatrix1D;
 import cern.jet.math.tint.IntFunctions;
+import cern.jet.random.sampling.RandomSamplingAssistant;
+import cern.jet.random.engine.MersenneTwister;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * Factory for convenient construction of 1-d matrices holding <tt>int</tt>
@@ -37,11 +43,7 @@ import cern.jet.math.tint.IntFunctions;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class IntFactory1D extends cern.colt.PersistentObject {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+public class IntFactory1D implements Serializable, Cloneable {
 
     /**
      * A factory producing dense matrices.
@@ -52,6 +54,8 @@ public class IntFactory1D extends cern.colt.PersistentObject {
      * A factory producing sparse matrices.
      */
     public static final IntFactory1D sparse = new IntFactory1D();
+    @Serial
+    private static final long serialVersionUID = 4424123406054804492L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -158,7 +162,7 @@ public class IntFactory1D extends cern.colt.PersistentObject {
      *            The values to be filled into the new matrix.
      * @return a new matrix.
      */
-    public IntMatrix1D make(cern.colt.list.tint.AbstractIntList values) {
+    public IntMatrix1D make(IntArrayList values) {
         int size = values.size();
         IntMatrix1D vector = make(size);
         for (int i = size; --i >= 0;)
@@ -203,7 +207,7 @@ public class IntFactory1D extends cern.colt.PersistentObject {
      * 
      * @throws IllegalArgumentException
      *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant
+     * @see cern.jet.random.sampling.RandomSamplingAssistant
      */
     public IntMatrix1D sample(int size, int value, int nonZeroFraction) {
         double epsilon = 1e-09;
@@ -220,8 +224,7 @@ public class IntFactory1D extends cern.colt.PersistentObject {
         if (n == 0)
             return matrix;
 
-        cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant sampler = new cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant(
-                n, size, new cern.jet.random.tdouble.engine.DoubleMersenneTwister());
+        RandomSamplingAssistant sampler = new RandomSamplingAssistant( n, size, new MersenneTwister());
         for (int i = size; --i >= 0;) {
             if (sampler.sampleNextElement()) {
                 matrix.set(i, value);
@@ -247,5 +250,14 @@ public class IntFactory1D extends cern.colt.PersistentObject {
         for (int i = size; --i >= 0;)
             list.set(i, values.get(i));
         return list;
+    }
+
+    @Override
+    public IntFactory1D clone() {
+        try {
+            return (IntFactory1D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

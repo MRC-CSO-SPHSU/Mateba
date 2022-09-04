@@ -17,12 +17,10 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
 public interface DoubleMatrix2DMatrix2DFunction {
     /**
      * Applies a function to two arguments.
-     * 
-     * @param x
-     *            the first argument passed to the function.
-     * @param y
-     *            the second argument passed to the function.
+     *
+     * @param x the first argument passed to the function.
+     * @param y the second argument passed to the function.
      * @return the result of the function.
      */
-    abstract public double apply(DoubleMatrix2D x, DoubleMatrix2D y);
+    double apply(DoubleMatrix2D x, DoubleMatrix2D y);
 }

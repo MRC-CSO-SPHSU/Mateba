@@ -12,7 +12,7 @@ package cern.colt;
  * A handy stopwatch for benchmarking. Like a real stop watch used on ancient
  * running tracks you can start the watch, stop it, start it again, stop it
  * again, display the elapsed time and reset the watch.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
@@ -30,8 +30,46 @@ public class Timer {
     }
 
     /**
+     * Shows how to use a timer in convenient ways.
+     */
+    public static void test(int size) {
+        // benchmark this piece
+        Timer t = new Timer().start();
+        int j = 0;
+        for (int i = 0; i < size; i++) {
+            j++;
+        }
+        t.stop();
+        t.display();
+        System.out.println("I finished the test using " + t);
+
+        // do something we do not want to benchmark
+        j = 0;
+        for (int i = 0; i < size; i++) {
+            j++;
+        }
+
+        // benchmark another piece and add to last benchmark
+        t.start();
+        j = 0;
+        for (int i = 0; i < size; i++) {
+            j++;
+        }
+        t.stop().display();
+
+        // benchmark yet another piece independently
+        t.reset(); // set timer to zero
+        t.start();
+        j = 0;
+        for (int i = 0; i < size; i++) {
+            j++;
+        }
+        t.stop().display();
+    }
+
+    /**
      * Prints the elapsed time on System.out
-     * 
+     *
      * @return <tt>this</tt> (for convenience only).
      */
     public Timer display() {
@@ -74,9 +112,8 @@ public class Timer {
      * <tt>T = this - other</tt>; Constructs and returns a new timer which is
      * the difference of the receiver and the other timer. The new timer is not
      * started.
-     * 
-     * @param other
-     *            the timer to subtract.
+     *
+     * @param other the timer to subtract.
      * @return a new timer.
      */
     public Timer minus(Timer other) {
@@ -96,9 +133,8 @@ public class Timer {
      * <tt>T = this + other</tt>; Constructs and returns a new timer which is
      * the sum of the receiver and the other timer. The new timer is not
      * started.
-     * 
-     * @param other
-     *            the timer to add.
+     *
+     * @param other the timer to add.
      * @return a new timer.
      */
     public Timer plus(Timer other) {
@@ -109,7 +145,7 @@ public class Timer {
 
     /**
      * Resets the timer.
-     * 
+     *
      * @return <tt>this</tt> (for convenience only).
      */
     public Timer reset() {
@@ -127,7 +163,7 @@ public class Timer {
 
     /**
      * Starts the timer.
-     * 
+     *
      * @return <tt>this</tt> (for convenience only).
      */
     public Timer start() {
@@ -137,7 +173,7 @@ public class Timer {
 
     /**
      * Stops the timer. You can start it again later, if necessary.
-     * 
+     *
      * @return <tt>this</tt> (for convenience only).
      */
     public Timer stop() {
@@ -146,44 +182,6 @@ public class Timer {
         }
         baseTime = 0;
         return this;
-    }
-
-    /**
-     * Shows how to use a timer in convenient ways.
-     */
-    public static void test(int size) {
-        // benchmark this piece
-        Timer t = new Timer().start();
-        int j = 0;
-        for (int i = 0; i < size; i++) {
-            j++;
-        }
-        t.stop();
-        t.display();
-        System.out.println("I finished the test using " + t);
-
-        // do something we do not want to benchmark
-        j = 0;
-        for (int i = 0; i < size; i++) {
-            j++;
-        }
-
-        // benchmark another piece and add to last benchmark
-        t.start();
-        j = 0;
-        for (int i = 0; i < size; i++) {
-            j++;
-        }
-        t.stop().display();
-
-        // benchmark yet another piece independently
-        t.reset(); // set timer to zero
-        t.start();
-        j = 0;
-        for (int i = 0; i < size; i++) {
-            j++;
-        }
-        t.stop().display();
     }
 
     /**

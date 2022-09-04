@@ -8,6 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tint.algo;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -112,15 +114,14 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
-public class IntProperty extends cern.colt.PersistentObject {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+public class IntProperty implements Serializable, Cloneable {
+
     /**
      * The default Property object;.
      */
     public static final IntProperty DEFAULT = new IntProperty();
+    @Serial
+    private static final long serialVersionUID = -6444109280713351510L;
 
     /**
      * Constructs an instance with a tolerance of
@@ -1408,5 +1409,14 @@ public class IntProperty extends cern.colt.PersistentObject {
             }
         }
         return 0;
+    }
+
+    @Override
+    public IntProperty clone() {
+        try {
+            return (IntProperty) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

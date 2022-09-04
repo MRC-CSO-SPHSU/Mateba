@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tobject.impl;
 
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -25,7 +26,8 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -6650922023996632284L;
 
     /*
      * The non zero elements of the matrix.

@@ -14,6 +14,8 @@ import cern.colt.matrix.tdcomplex.DComplexMatrix2D;
 import cern.colt.matrix.tdcomplex.DComplexMatrix3D;
 import cern.colt.matrix.tdouble.DoubleMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Selection view on dense 3-d matrices holding <tt>complex</tt> elements.
  * <p>
@@ -37,8 +39,9 @@ import cern.colt.matrix.tdouble.DoubleMatrix3D;
  */
 class SelectedDenseDComplexMatrix3D extends DComplexMatrix3D {
 
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = 8975637393912943963L;
     /**
      * The elements of this matrix.
      */

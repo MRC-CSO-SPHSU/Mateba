@@ -8,7 +8,9 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tbit;
 
-import java.awt.Rectangle;
+import java.awt.*;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * Fixed sized (non resizable) n*m bit matrix. A bit matrix has a number of
@@ -37,16 +39,17 @@ import java.awt.Rectangle;
  * <tt>getQuick(...)</tt> and <tt>putQuick(...)</tt>.
  * <p>
  * <b>Note</b> that this implementation is not synchronized.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  * @see BitVector
  * @see QuickBitVector
  * @see java.util.BitSet
  */
-public class BitMatrix extends cern.colt.PersistentObject {
-    private static final long serialVersionUID = 1L;
+public class BitMatrix implements Serializable, Cloneable {
 
+    @Serial
+    private static final long serialVersionUID = 6505682441963015805L;
     protected int columns;
 
     protected int rows;
@@ -56,18 +59,15 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * bitIndex==row*columns + column columnOf(bitIndex)==bitIndex%columns
      * rowOf(bitIndex)==bitIndex/columns
      */
-    protected long bits[];
+    protected long[] bits;
 
     /**
      * Constructs a bit matrix with a given number of columns and rows. All bits
      * are initially <tt>false</tt>.
-     * 
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>columns &lt; 0 || rows &lt; 0</tt>.
+     *
+     * @param columns the number of columns the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @throws IllegalArgumentException if <tt>columns &lt; 0 || rows &lt; 0</tt>.
      */
     public BitMatrix(int columns, int rows) {
         elements(QuickBitVector.makeBitVector(columns * rows, 1), columns, rows);
@@ -79,13 +79,11 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * <code>true</code> if and only if it already had the value
      * <code>true</code> and the corresponding bit in the other bit matrix
      * argument has the value <code>true</code>.
-     * 
-     * @param other
-     *            a bit matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
-     *             .
+     *
+     * @param other a bit matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     *                                  .
      */
     public void and(BitMatrix other) {
         checkDimensionCompatibility(other);
@@ -96,13 +94,11 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * Clears all of the bits in receiver whose corresponding bit is set in the
      * other bit matrix. In other words, determines the difference (A\B) between
      * two bit matrices.
-     * 
-     * @param other
-     *            a bit matrix with which to mask the receiver.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
-     *             .
+     *
+     * @param other a bit matrix with which to mask the receiver.
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     *                                  .
      */
     public void andNot(BitMatrix other) {
         checkDimensionCompatibility(other);
@@ -125,7 +121,7 @@ public class BitMatrix extends cern.colt.PersistentObject {
     protected void checkDimensionCompatibility(BitMatrix other) {
         if (columns != other.columns() || rows != other.rows())
             throw new IllegalArgumentException("Incompatible dimensions: (columns,rows)=(" + columns + "," + rows
-                    + "), (other.columns,other.rows)=(" + other.columns() + "," + other.rows() + ")");
+                + "), (other.columns,other.rows)=(" + other.columns() + "," + other.rows() + ")");
     }
 
     /**
@@ -140,15 +136,19 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * that is equal to it. The clone of the bit matrix is another bit matrix
      * that has exactly the same bits set to <code>true</code> as this bit
      * matrix and the same number of columns and rows.
-     * 
+     *
      * @return a clone of this bit matrix.
      */
 
-    public Object clone() {
-        BitMatrix clone = (BitMatrix) super.clone();
-        if (this.bits != null)
-            clone.bits = this.bits.clone();
-        return clone;
+    public BitMatrix clone() {
+        try {
+            var clone =(BitMatrix) super.clone();
+            if (this.bits != null)
+                clone.bits = this.bits.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 
     /**
@@ -164,13 +164,13 @@ public class BitMatrix extends cern.colt.PersistentObject {
     protected void containsBox(int column, int row, int width, int height) {
         if (column < 0 || column + width > columns || row < 0 || row + height > rows)
             throw new IndexOutOfBoundsException("column:" + column + ", row:" + row + " ,width:" + width + ", height:"
-                    + height);
+                + height);
     }
 
     /**
      * Returns a shallow clone of the receiver; calls <code>clone()</code> and
      * casts the result.
-     * 
+     *
      * @return a shallow clone of the receiver.
      */
     public BitMatrix copy() {
@@ -188,10 +188,9 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * low, <b>the array is not copied</b>. So if subsequently you modify the
      * specified array directly via the [] operator, be sure you know what
      * you're doing.
-     * 
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns &lt; 0 || rows &lt; 0 || columns*rows &gt; bits.length*64</tt>
+     *
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns &lt; 0 || rows &lt; 0 || columns*rows &gt; bits.length*64</tt>
      */
     protected void elements(long[] bits, int columns, int rows) {
         if (columns < 0 || columns < 0 || columns * rows > bits.length * QuickBitVector.BITS_PER_UNIT)
@@ -207,20 +206,18 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * and is a <code>BitMatrix</code> object that has the same number of
      * columns and rows as the receiver and that has exactly the same bits set
      * to <code>true</code> as the receiver.
-     * 
-     * @param obj
-     *            the object to compare with.
+     *
+     * @param obj the object to compare with.
      * @return <code>true</code> if the objects are the same; <code>false</code>
-     *         otherwise.
+     * otherwise.
      */
 
     public boolean equals(Object obj) {
-        if (obj == null || !(obj instanceof BitMatrix))
+        if (obj == null || !(obj instanceof BitMatrix other))
             return false;
         if (this == obj)
             return true;
 
-        BitMatrix other = (BitMatrix) obj;
         if (columns != other.columns() || rows != other.rows())
             return false;
 
@@ -239,15 +236,13 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * <li><tt>state==false</tt> and the receiver is dense (
      * <tt>cardinality()</tt> is large compared to <tt>size()</tt>).
      * </ul>
-     * 
-     * @param state
-     *            element to search for.
-     * @param procedure
-     *            a procedure object taking as first argument the current column
-     *            and as second argument the current row. Stops iteration if the
-     *            procedure returns <tt>false</tt>, otherwise continues.
+     *
+     * @param state     element to search for.
+     * @param procedure a procedure object taking as first argument the current column
+     *                  and as second argument the current row. Stops iteration if the
+     *                  procedure returns <tt>false</tt>, otherwise continues.
      * @return <tt>false</tt> if the procedure stopped before all elements where
-     *         iterated over, <tt>true</tt> otherwise.
+     * iterated over, <tt>true</tt> otherwise.
      */
     public boolean forEachCoordinateInState(boolean state, final cern.colt.function.tint.IntIntProcedure procedure) {
         /*
@@ -271,7 +266,7 @@ public class BitMatrix extends cern.colt.PersistentObject {
 
         // for each coordinate of bits of partial unit
         long val = theBits[bits.length - 1];
-        for (int j = vector.numberOfBitsInPartialUnit(); --j >= 0;) {
+        for (int j = vector.numberOfBitsInPartialUnit(); --j >= 0; ) {
             long mask = val & (1L << j);
             if ((state && (mask != 0L)) || ((!state) && (mask == 0L))) {
                 if (!procedure.apply(column, row))
@@ -291,13 +286,13 @@ public class BitMatrix extends cern.colt.PersistentObject {
         else
             comparator = ~0L; // all 64 bits set
 
-        for (int i = vector.numberOfFullUnits(); --i >= 0;) {
+        for (int i = vector.numberOfFullUnits(); --i >= 0; ) {
             val = theBits[i];
             if (val != comparator) {
                 // at least one element within current unit matches.
                 // iterate over all bits within current unit.
                 if (state) {
-                    for (int j = bitsPerUnit; --j >= 0;) {
+                    for (int j = bitsPerUnit; --j >= 0; ) {
                         if (((val & (1L << j))) != 0L) {
                             if (!procedure.apply(column, row))
                                 return false;
@@ -308,7 +303,7 @@ public class BitMatrix extends cern.colt.PersistentObject {
                         }
                     }
                 } else { // unrolled comparison for speed.
-                    for (int j = bitsPerUnit; --j >= 0;) {
+                    for (int j = bitsPerUnit; --j >= 0; ) {
                         if (((val & (1L << j))) == 0L) {
                             if (!procedure.apply(column, row))
                                 return false;
@@ -325,7 +320,7 @@ public class BitMatrix extends cern.colt.PersistentObject {
                 if (column < 0) {
                     // avoid implementation with *, /, %
                     column += bitsPerUnit;
-                    for (int j = bitsPerUnit; --j >= 0;) {
+                    for (int j = bitsPerUnit; --j >= 0; ) {
                         if (--column < 0) {
                             column = columns - 1;
                             --row;
@@ -344,15 +339,12 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * Returns from the receiver the value of the bit at the specified
      * coordinate. The value is <tt>true</tt> if this bit is currently set;
      * otherwise, returns <tt>false</tt>.
-     * 
-     * @param column
-     *            the index of the column-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
+     *
+     * @param column the index of the column-coordinate.
+     * @param row    the index of the row-coordinate.
      * @return the value of the bit at the specified coordinate.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
      */
     public boolean get(int column, int row) {
         if (column < 0 || column >= columns || row < 0 || row >= rows)
@@ -365,18 +357,16 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * coordinate; <b>WARNING:</b> Does not check preconditions. The value is
      * <tt>true</tt> if this bit is currently set; otherwise, returns
      * <tt>false</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid values
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>column&gt;=0 && column&lt;columns() && row&gt;=0 && row&lt;rows()</tt>.
-     * 
-     * @param column
-     *            the index of the column-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
+     *
+     * @param column the index of the column-coordinate.
+     * @param row    the index of the row-coordinate.
      * @return the value of the bit at the specified coordinate.
      */
     public boolean getQuick(int column, int row) {
@@ -404,13 +394,11 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * if and only if it either already had the value <code>true</code> or the
      * corresponding bit in the other bit matrix argument has the value
      * <code>true</code>.
-     * 
-     * @param other
-     *            a bit matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
-     *             .
+     *
+     * @param other a bit matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     *                                  .
      */
     public void or(BitMatrix other) {
         checkDimensionCompatibility(other);
@@ -422,23 +410,18 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * <tt>height</tt> rows which is a copy of the contents of the given box.
      * The box ranges from <tt>[column,row]</tt> to
      * <tt>[column+width-1,row+height-1]</tt>, all inclusive.
-     * 
-     * @param column
-     *            the index of the column-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param width
-     *            the width of the box.
-     * @param height
-     *            the height of the box.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column&lt;0 || column+width&gt;columns() || row&lt;0 || row+height&gt;rows()</tt>
+     *
+     * @param column the index of the column-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param width  the width of the box.
+     * @param height the height of the box.
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column&lt;0 || column+width&gt;columns() || row&lt;0 || row+height&gt;rows()</tt>
      */
     public BitMatrix part(int column, int row, int width, int height) {
         if (column < 0 || column + width > columns || row < 0 || row + height > rows)
             throw new IndexOutOfBoundsException("column:" + column + ", row:" + row + " ,width:" + width + ", height:"
-                    + height);
+                + height);
         if (width <= 0 || height <= 0)
             return new BitMatrix(0, 0);
 
@@ -450,17 +433,13 @@ public class BitMatrix extends cern.colt.PersistentObject {
     /**
      * Sets the bit at the specified coordinate to the state specified by
      * <tt>value</tt>.
-     * 
-     * @param column
-     *            the index of the column-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param value
-     *            the value of the bit to be copied into the specified
-     *            coordinate.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
+     *
+     * @param column the index of the column-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param value  the value of the bit to be copied into the specified
+     *               coordinate.
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
      */
     public void put(int column, int row, boolean value) {
         if (column < 0 || column >= columns || row < 0 || row >= rows)
@@ -471,21 +450,18 @@ public class BitMatrix extends cern.colt.PersistentObject {
     /**
      * Sets the bit at the specified coordinate to the state specified by
      * <tt>value</tt>; <b>WARNING:</b> Does not check preconditions.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid values
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>column&gt;=0 && column&lt;columns() && row&gt;=0 && row&lt;rows()</tt>.
-     * 
-     * @param column
-     *            the index of the column-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param value
-     *            the value of the bit to be copied into the specified
-     *            coordinate.
+     *
+     * @param column the index of the column-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param value  the value of the bit to be copied into the specified
+     *               coordinate.
      */
     public void putQuick(int column, int row, boolean value) {
         QuickBitVector.put(bits, row * columns + column, value);
@@ -500,32 +476,23 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * <tt>width &lt;= 0 || height &lt;= 0</tt>. If <tt>source==this</tt> and
      * the source and destination box intersect in an ambiguous way, then
      * replaces as if using an intermediate auxiliary copy of the receiver.
-     * 
-     * @param column
-     *            the index of the column-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param width
-     *            the width of the box.
-     * @param height
-     *            the height of the box.
-     * @param source
-     *            the source matrix to copy from(may be identical to the
-     *            receiver).
-     * @param sourceColumn
-     *            the index of the source column-coordinate.
-     * @param sourceRow
-     *            the index of the source row-coordinate.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column&lt;0 || column+width&gt;columns() || row&lt;0 || row+height&gt;rows()</tt>
-     * @throws IndexOutOfBoundsException
-     *             if
-     * 
-     *             <tt>sourceColumn&lt;0 || sourceColumn+width&gt;source.columns() || sourceRow&lt;0 || sourceRow+height&gt;source.rows()</tt>
+     *
+     * @param column       the index of the column-coordinate.
+     * @param row          the index of the row-coordinate.
+     * @param width        the width of the box.
+     * @param height       the height of the box.
+     * @param source       the source matrix to copy from(may be identical to the
+     *                     receiver).
+     * @param sourceColumn the index of the source column-coordinate.
+     * @param sourceRow    the index of the source row-coordinate.
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column&lt;0 || column+width&gt;columns() || row&lt;0 || row+height&gt;rows()</tt>
+     * @throws IndexOutOfBoundsException if
+     *
+     *                                   <tt>sourceColumn&lt;0 || sourceColumn+width&gt;source.columns() || sourceRow&lt;0 || sourceRow+height&gt;source.rows()</tt>
      */
     public void replaceBoxWith(int column, int row, int width, int height, BitMatrix source, int sourceColumn,
-            int sourceRow) {
+                               int sourceRow) {
         this.containsBox(column, row, width, height);
         source.containsBox(sourceColumn, sourceRow, width, height);
         if (width <= 0 || height <= 0)
@@ -554,21 +521,15 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * The box ranges from <tt>[column,row]</tt> to
      * <tt>[column+width-1,row+height-1]</tt>, all inclusive. (Does nothing if
      * <tt>width &lt;= 0 || height &lt;= 0</tt>).
-     * 
-     * @param column
-     *            the index of the column-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param width
-     *            the width of the box.
-     * @param height
-     *            the height of the box.
-     * @param value
-     *            the value of the bit to be copied into the bits of the
-     *            specified box.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column&lt;0 || column+width&gt;columns() || row&lt;0 || row+height&gt;rows()</tt>
+     *
+     * @param column the index of the column-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param width  the width of the box.
+     * @param height the height of the box.
+     * @param value  the value of the bit to be copied into the bits of the
+     *               specified box.
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column&lt;0 || column+width&gt;columns() || row&lt;0 || row+height&gt;rows()</tt>
      */
     public void replaceBoxWith(int column, int row, int width, int height, boolean value) {
         containsBox(column, row, width, height);
@@ -626,13 +587,11 @@ public class BitMatrix extends cern.colt.PersistentObject {
      * <li>The bit initially has the value <code>false</code>, and the
      * corresponding bit in the argument has the value <code>true</code>.
      * </ul>
-     * 
-     * @param other
-     *            a bit matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
-     *             .
+     *
+     * @param other a bit matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     *                                  .
      */
     public void xor(BitMatrix other) {
         checkDimensionCompatibility(other);

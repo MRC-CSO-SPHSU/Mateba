@@ -12,6 +12,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.DoubleMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Selection view on dense 1-d matrices holding <tt>double</tt> elements. First
  * see the <a href="package-summary.html">package summary</a> and javadoc <a
@@ -53,11 +55,9 @@ import cern.colt.matrix.tdouble.DoubleMatrix3D;
  * @version 1.1, 08/22/2007
  */
 class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = 7103763593553549915L;
     /**
      * The elements of this matrix.
      */

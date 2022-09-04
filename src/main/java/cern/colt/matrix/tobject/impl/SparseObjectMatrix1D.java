@@ -14,6 +14,8 @@ import cern.colt.matrix.tobject.ObjectMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Sparse hashed 1-d matrix (aka <i>vector</i>) holding <tt>Object</tt>
  * elements. First see the <a href="package-summary.html">package summary</a>
@@ -63,7 +65,8 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 2825536925926697325L;
     /*
      * The elements of the matrix.
      */

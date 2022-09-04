@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdouble.algo;
 
-import hep.aida.tdouble.bin.DynamicDoubleBin1D;
+import cern.jet.random.engine.MersenneTwister;
 
 import java.util.concurrent.Future;
 
@@ -19,16 +19,27 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.DoubleMatrix3D;
 import cern.jet.math.tdouble.DoubleFunctions;
-import cern.jet.random.tdouble.engine.DoubleRandomEngine;
+import cern.jet.random.engine.RandomEngine;
+import cern.jet.random.sampling.RandomSampler;
+import cern.jet.stat.Descriptive;
 import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import hep.aida.IAxis;
+import hep.aida.IHistogram1D;
+import hep.aida.IHistogram2D;
+import hep.aida.IHistogram3D;
+import hep.aida.bin.BinFunction1D;
+import hep.aida.bin.DynamicBin1D;
+import hep.aida.ref.Histogram2D;
+import hep.aida.ref.Histogram3D;
+import hep.aida.ref.VariableAxis;
 
 /**
  * Basic statistics operations on matrices. Computation of covariance,
  * correlation, distance matrix. Random sampling views. Conversion to histograms
  * with and without OLAP cube operators. Conversion to bins with retrieval of
  * statistical bin measures. Also see {@link cern.jet.stat} and
- * {@link hep.aida.tdouble.bin}, in particular
- * {@link hep.aida.tdouble.bin.DynamicDoubleBin1D}.
+ * {@link hep.aida.bin}, in particular
+ * {@link hep.aida.bin.DynamicBin1D}.
  * <p>
  * Examples:
  * <table border="1" cellspacing="0" dwcopytype="CopyTableRow">
@@ -64,7 +75,7 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class DoubleStatistic extends Object {
+public class DoubleStatistic {
     private static final cern.jet.math.tdouble.DoubleFunctions F = cern.jet.math.tdouble.DoubleFunctions.functions;
 
     /**
@@ -165,12 +176,12 @@ public class DoubleStatistic extends Object {
      *            the matrix to hold the aggregation results.
      * @return <tt>result</tt> (for convenience only).
      * @see DoubleFormatter
-     * @see hep.aida.tdouble.bin.DoubleBinFunction1D
-     * @see hep.aida.tdouble.bin.DoubleBinFunctions1D
+     * @see hep.aida.bin.BinFunction1D
+     * @see hep.aida.bin.BinFunctions1D
      */
-    public static DoubleMatrix2D aggregate(DoubleMatrix2D matrix, hep.aida.tdouble.bin.DoubleBinFunction1D[] aggr,
+    public static DoubleMatrix2D aggregate(DoubleMatrix2D matrix, BinFunction1D[] aggr,
             DoubleMatrix2D result) {
-        DynamicDoubleBin1D bin = new DynamicDoubleBin1D();
+       var bin = new DynamicBin1D();
         double[] elements = new double[matrix.rows()];
         cern.colt.list.tdouble.DoubleArrayList values = new cern.colt.list.tdouble.DoubleArrayList(elements);
         for (int column = matrix.columns(); --column >= 0;) {
@@ -243,8 +254,8 @@ public class DoubleStatistic extends Object {
      *            the vector to analyze.
      * @return a bin holding the statistics measures of the vector.
      */
-    public static DynamicDoubleBin1D bin(DoubleMatrix1D vector) {
-        DynamicDoubleBin1D bin = new DynamicDoubleBin1D();
+    public static DynamicBin1D bin(DoubleMatrix1D vector) {
+        var  bin = new DynamicBin1D();
         bin.addAllOf(DoubleFactory1D.dense.toList(vector));
         return bin;
     }
@@ -374,7 +385,7 @@ public class DoubleStatistic extends Object {
      *             if
      *             <tt>x.size() != y.size() || y.size() != weights.size()</tt>.
      */
-    public static hep.aida.tdouble.DoubleIHistogram2D cube(DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D weights) {
+    public static IHistogram2D cube(DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D weights) {
         if (x.size() != y.size() || y.size() != weights.size())
             throw new IllegalArgumentException("vectors must have same size");
 
@@ -386,26 +397,26 @@ public class DoubleStatistic extends Object {
         // compute distinct values of x
         x.toArray(vals); // copy x into vals
         sorted.sort();
-        cern.jet.stat.tdouble.DoubleDescriptive.frequencies(sorted, distinct, null);
+        Descriptive.frequencies(sorted, distinct, null);
         // since bins are right-open [from,to) we need an additional dummy bin
         // so that the last distinct value does not fall into the overflow bin
         if (distinct.size() > 0)
             distinct.add(distinct.get(distinct.size() - 1) + epsilon);
         distinct.trimToSize();
-        hep.aida.tdouble.DoubleIAxis xaxis = new hep.aida.tdouble.ref.DoubleVariableAxis(distinct.elements());
+        IAxis xaxis = new VariableAxis(distinct.elements());
 
         // compute distinct values of y
         y.toArray(vals);
         sorted.sort();
-        cern.jet.stat.tdouble.DoubleDescriptive.frequencies(sorted, distinct, null);
+        Descriptive.frequencies(sorted, distinct, null);
         // since bins are right-open [from,to) we need an additional dummy bin
         // so that the last distinct value does not fall into the overflow bin
         if (distinct.size() > 0)
             distinct.add(distinct.get(distinct.size() - 1) + epsilon);
         distinct.trimToSize();
-        hep.aida.tdouble.DoubleIAxis yaxis = new hep.aida.tdouble.ref.DoubleVariableAxis(distinct.elements());
+        IAxis yaxis = new VariableAxis(distinct.elements());
 
-        hep.aida.tdouble.DoubleIHistogram2D histo = new hep.aida.tdouble.ref.DoubleHistogram2D("Cube", xaxis, yaxis);
+        IHistogram2D histo = new Histogram2D("Cube", xaxis, yaxis);
         return histogram(histo, x, y, weights);
     }
 
@@ -425,8 +436,8 @@ public class DoubleStatistic extends Object {
      *             <tt>x.size() != y.size() || x.size() != z.size() || x.size() != weights.size()</tt>
      *             .
      */
-    public static hep.aida.tdouble.DoubleIHistogram3D cube(DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D z,
-            DoubleMatrix1D weights) {
+    public static IHistogram3D cube(DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D z,
+                                    DoubleMatrix1D weights) {
         if (x.size() != y.size() || x.size() != z.size() || x.size() != weights.size())
             throw new IllegalArgumentException("vectors must have same size");
 
@@ -438,37 +449,37 @@ public class DoubleStatistic extends Object {
         // compute distinct values of x
         x.toArray(vals); // copy x into vals
         sorted.sort();
-        cern.jet.stat.tdouble.DoubleDescriptive.frequencies(sorted, distinct, null);
+        Descriptive.frequencies(sorted, distinct, null);
         // since bins are right-open [from,to) we need an additional dummy bin
         // so that the last distinct value does not fall into the overflow bin
         if (distinct.size() > 0)
             distinct.add(distinct.get(distinct.size() - 1) + epsilon);
         distinct.trimToSize();
-        hep.aida.tdouble.DoubleIAxis xaxis = new hep.aida.tdouble.ref.DoubleVariableAxis(distinct.elements());
+        IAxis xaxis = new VariableAxis(distinct.elements());
 
         // compute distinct values of y
         y.toArray(vals);
         sorted.sort();
-        cern.jet.stat.tdouble.DoubleDescriptive.frequencies(sorted, distinct, null);
+        Descriptive.frequencies(sorted, distinct, null);
         // since bins are right-open [from,to) we need an additional dummy bin
         // so that the last distinct value does not fall into the overflow bin
         if (distinct.size() > 0)
             distinct.add(distinct.get(distinct.size() - 1) + epsilon);
         distinct.trimToSize();
-        hep.aida.tdouble.DoubleIAxis yaxis = new hep.aida.tdouble.ref.DoubleVariableAxis(distinct.elements());
+        IAxis yaxis = new VariableAxis(distinct.elements());
 
         // compute distinct values of z
         z.toArray(vals);
         sorted.sort();
-        cern.jet.stat.tdouble.DoubleDescriptive.frequencies(sorted, distinct, null);
+        Descriptive.frequencies(sorted, distinct, null);
         // since bins are right-open [from,to) we need an additional dummy bin
         // so that the last distinct value does not fall into the overflow bin
         if (distinct.size() > 0)
             distinct.add(distinct.get(distinct.size() - 1) + epsilon);
         distinct.trimToSize();
-        hep.aida.tdouble.DoubleIAxis zaxis = new hep.aida.tdouble.ref.DoubleVariableAxis(distinct.elements());
+        IAxis zaxis = new VariableAxis(distinct.elements());
 
-        hep.aida.tdouble.DoubleIHistogram3D histo = new hep.aida.tdouble.ref.DoubleHistogram3D("Cube", xaxis, yaxis,
+        var histo = new Histogram3D("Cube", xaxis, yaxis,
                 zaxis);
         return histogram(histo, x, y, z, weights);
     }
@@ -572,8 +583,7 @@ public class DoubleStatistic extends Object {
      * 
      * @return <tt>histo</tt> (for convenience only).
      */
-    public static hep.aida.tdouble.DoubleIHistogram1D histogram(hep.aida.tdouble.DoubleIHistogram1D histo,
-            DoubleMatrix1D vector) {
+    public static IHistogram1D histogram(IHistogram1D histo,  DoubleMatrix1D vector) {
         for (int i = (int) vector.size(); --i >= 0;) {
             histo.fill(vector.getQuick(i));
         }
@@ -585,8 +595,8 @@ public class DoubleStatistic extends Object {
      * 
      * @return <tt>histo</tt> (for convenience only).
      */
-    public static hep.aida.tdouble.DoubleIHistogram1D histogram(final hep.aida.tdouble.DoubleIHistogram1D histo,
-            final DoubleMatrix2D matrix) {
+    public static IHistogram1D histogram(final IHistogram1D histo,
+                                                          final DoubleMatrix2D matrix) {
         histo.fill_2D((double[]) matrix.elements(), matrix.rows(), matrix.columns(), (int) matrix.index(0, 0), matrix
                 .rowStride(), matrix.columnStride());
         return histo;
@@ -598,8 +608,8 @@ public class DoubleStatistic extends Object {
      * 
      * @return <tt>histo</tt> (for convenience only).
      */
-    public static hep.aida.tdouble.DoubleIHistogram1D[][] histogram(
-            final hep.aida.tdouble.DoubleIHistogram1D[][] histo, final DoubleMatrix2D matrix, final int m, final int n) {
+    public static IHistogram1D[][] histogram(
+        final IHistogram1D[][] histo, final DoubleMatrix2D matrix, final int m, final int n) {
         int rows = matrix.rows();
         int columns = matrix.columns();
         if (m >= rows) {
@@ -664,8 +674,8 @@ public class DoubleStatistic extends Object {
      * @throws IllegalArgumentException
      *             if <tt>x.size() != y.size()</tt>.
      */
-    public static hep.aida.tdouble.DoubleIHistogram2D histogram(hep.aida.tdouble.DoubleIHistogram2D histo,
-            DoubleMatrix1D x, DoubleMatrix1D y) {
+    public static IHistogram2D histogram(IHistogram2D histo,
+                                                          DoubleMatrix1D x, DoubleMatrix1D y) {
         if (x.size() != y.size())
             throw new IllegalArgumentException("vectors must have same size");
         for (int i = (int) x.size(); --i >= 0;) {
@@ -682,8 +692,8 @@ public class DoubleStatistic extends Object {
      *             if
      *             <tt>x.size() != y.size() || y.size() != weights.size()</tt>.
      */
-    public static hep.aida.tdouble.DoubleIHistogram2D histogram(hep.aida.tdouble.DoubleIHistogram2D histo,
-            DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D weights) {
+    public static IHistogram2D histogram(IHistogram2D histo,
+                                                          DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D weights) {
         if (x.size() != y.size() || y.size() != weights.size())
             throw new IllegalArgumentException("vectors must have same size");
         for (int i = (int) x.size(); --i >= 0;) {
@@ -701,8 +711,8 @@ public class DoubleStatistic extends Object {
      *             <tt>x.size() != y.size() || x.size() != z.size() || x.size() != weights.size()</tt>
      *             .
      */
-    public static hep.aida.tdouble.DoubleIHistogram3D histogram(hep.aida.tdouble.DoubleIHistogram3D histo,
-            DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D z, DoubleMatrix1D weights) {
+    public static IHistogram3D histogram(IHistogram3D histo,
+                                                          DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D z, DoubleMatrix1D weights) {
         if (x.size() != y.size() || x.size() != z.size() || x.size() != weights.size())
             throw new IllegalArgumentException("vectors must have same size");
         for (int i = (int) x.size(); --i >= 0;) {
@@ -739,9 +749,9 @@ public class DoubleStatistic extends Object {
      *             if
      *             <tt>! (0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>
      *             .
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSampler
+     * @see cern.jet.random.sampling.RandomSampler
      */
-    public static DoubleMatrix1D viewSample(DoubleMatrix1D matrix, double fraction, DoubleRandomEngine randomGenerator) {
+    public static DoubleMatrix1D viewSample(DoubleMatrix1D matrix, double fraction, RandomEngine randomGenerator) {
         // check preconditions and allow for a little tolerance
         double epsilon = 1e-05f;
         if (fraction < 0 - epsilon || fraction > 1 + epsilon)
@@ -753,7 +763,7 @@ public class DoubleStatistic extends Object {
 
         // random generator seeded with current time
         if (randomGenerator == null)
-            randomGenerator = new cern.jet.random.tdouble.engine.DoubleMersenneTwister((int) System.currentTimeMillis());
+            randomGenerator = new MersenneTwister((int) System.currentTimeMillis());
 
         int ncolumns = (int) Math.round(matrix.size() * fraction);
         int max = ncolumns;
@@ -763,7 +773,7 @@ public class DoubleStatistic extends Object {
         // sample
         int n = ncolumns;
         int N = (int) matrix.size();
-        cern.jet.random.tdouble.sampling.DoubleRandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
+        RandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
         int[] selectedCols = new int[n];
         for (int i = 0; i < n; i++)
             selectedCols[i] = (int) selected[i];
@@ -836,10 +846,10 @@ public class DoubleStatistic extends Object {
      *             if
      *             <tt>! (0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>
      *             .
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSampler
+     * @see cern.jet.random.sampling.RandomSampler
      */
     public static DoubleMatrix2D viewSample(DoubleMatrix2D matrix, double rowFraction, double columnFraction,
-            DoubleRandomEngine randomGenerator) {
+            RandomEngine randomGenerator) {
         // check preconditions and allow for a little tolerance
         double epsilon = 1e-05f;
         if (rowFraction < 0 - epsilon || rowFraction > 1 + epsilon)
@@ -858,7 +868,7 @@ public class DoubleStatistic extends Object {
 
         // random generator seeded with current time
         if (randomGenerator == null)
-            randomGenerator = new cern.jet.random.tdouble.engine.DoubleMersenneTwister((int) System.currentTimeMillis());
+            randomGenerator = new MersenneTwister((int) System.currentTimeMillis());
 
         int nrows = (int) Math.round(matrix.rows() * rowFraction);
         int ncolumns = (int) Math.round(matrix.columns() * columnFraction);
@@ -869,7 +879,7 @@ public class DoubleStatistic extends Object {
         // sample rows
         int n = nrows;
         int N = matrix.rows();
-        cern.jet.random.tdouble.sampling.DoubleRandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
+        RandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
         int[] selectedRows = new int[n];
         for (int i = 0; i < n; i++)
             selectedRows[i] = (int) selected[i];
@@ -877,7 +887,7 @@ public class DoubleStatistic extends Object {
         // sample columns
         n = ncolumns;
         N = matrix.columns();
-        cern.jet.random.tdouble.sampling.DoubleRandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
+        RandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
         int[] selectedCols = new int[n];
         for (int i = 0; i < n; i++)
             selectedCols[i] = (int) selected[i];
@@ -910,10 +920,10 @@ public class DoubleStatistic extends Object {
      *             if
      *             <tt>! (0 <= sliceFraction <= 1 && 0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>
      *             .
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSampler
+     * @see cern.jet.random.sampling.RandomSampler
      */
     public static DoubleMatrix3D viewSample(DoubleMatrix3D matrix, double sliceFraction, double rowFraction,
-            double columnFraction, DoubleRandomEngine randomGenerator) {
+            double columnFraction, RandomEngine randomGenerator) {
         // check preconditions and allow for a little tolerance
         double epsilon = 1e-05f;
         if (sliceFraction < 0 - epsilon || sliceFraction > 1 + epsilon)
@@ -939,7 +949,7 @@ public class DoubleStatistic extends Object {
 
         // random generator seeded with current time
         if (randomGenerator == null)
-            randomGenerator = new cern.jet.random.tdouble.engine.DoubleMersenneTwister((int) System.currentTimeMillis());
+            randomGenerator = new MersenneTwister((int) System.currentTimeMillis());
 
         int nslices = (int) Math.round(matrix.slices() * sliceFraction);
         int nrows = (int) Math.round(matrix.rows() * rowFraction);
@@ -951,7 +961,7 @@ public class DoubleStatistic extends Object {
         // sample slices
         int n = nslices;
         int N = matrix.slices();
-        cern.jet.random.tdouble.sampling.DoubleRandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
+        RandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
         int[] selectedSlices = new int[n];
         for (int i = 0; i < n; i++)
             selectedSlices[i] = (int) selected[i];
@@ -959,7 +969,7 @@ public class DoubleStatistic extends Object {
         // sample rows
         n = nrows;
         N = matrix.rows();
-        cern.jet.random.tdouble.sampling.DoubleRandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
+        RandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
         int[] selectedRows = new int[n];
         for (int i = 0; i < n; i++)
             selectedRows[i] = (int) selected[i];
@@ -967,7 +977,7 @@ public class DoubleStatistic extends Object {
         // sample columns
         n = ncolumns;
         N = matrix.columns();
-        cern.jet.random.tdouble.sampling.DoubleRandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
+       RandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
         int[] selectedCols = new int[n];
         for (int i = 0; i < n; i++)
             selectedCols[i] = (int) selected[i];

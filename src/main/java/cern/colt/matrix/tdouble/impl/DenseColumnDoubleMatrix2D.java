@@ -9,6 +9,7 @@ It is provided "as is" without expressed or implied warranty.
 package cern.colt.matrix.tdouble.impl;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -78,8 +79,9 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  */
 public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
-    static final long serialVersionUID = 1020177651L;
 
+    @Serial
+    private static final long serialVersionUID = -821576368975746736L;
     private DoubleFFT_2D fft2;
 
     private DoubleDCT_2D dct2;

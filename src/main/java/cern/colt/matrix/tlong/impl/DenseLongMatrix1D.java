@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tlong.impl;
 
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -46,7 +47,8 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  */
 public class DenseLongMatrix1D extends LongMatrix1D {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 9064582668455249139L;
 
     /**
      * The elements of this matrix.

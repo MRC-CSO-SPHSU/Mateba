@@ -11,6 +11,8 @@ package cern.colt.matrix.tint.impl;
 import cern.colt.matrix.tint.IntMatrix1D;
 import cern.colt.matrix.tint.IntMatrix2D;
 
+import java.io.Serial;
+
 /**
  * 1-d matrix holding <tt>int</tt> elements; either a view wrapping another 2-d
  * matrix and therefore delegating calls to it.
@@ -19,11 +21,10 @@ import cern.colt.matrix.tint.IntMatrix2D;
  * @version 1.0, 09/24/99
  */
 class DelegateIntMatrix1D extends WrapperIntMatrix1D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+
+    @Serial
+    private static final long serialVersionUID = 2523852362221833216L;
     /*
      * The elements of the matrix.
      */

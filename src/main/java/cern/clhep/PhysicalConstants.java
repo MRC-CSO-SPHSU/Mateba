@@ -11,6 +11,7 @@ package cern.clhep;
 /**
  * High Energy Physics coherent Physical Constants based on Geant4 (a simulation toolkit for HEP).
  */
+@SuppressWarnings("unused")
 public final class PhysicalConstants {
     /**
      * Little trick to allow for "aliasing", that is, renaming this class. Normally you would write

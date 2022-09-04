@@ -42,8 +42,6 @@ import java.util.concurrent.ThreadFactory;
 
 import cern.colt.function.tdcomplex.DComplexDComplexDComplexFunction;
 import cern.colt.function.tdouble.DoubleDoubleFunction;
-import cern.colt.function.tfcomplex.FComplexFComplexFComplexFunction;
-import cern.colt.function.tfloat.FloatFloatFunction;
 import cern.colt.function.tint.IntIntFunction;
 import cern.colt.function.tlong.LongLongFunction;
 import cern.colt.function.tobject.ObjectObjectFunction;
@@ -314,64 +312,6 @@ public class ConcurrencyUtils {
         try {
             for (int j = 0; j < size; j++) {
                 results[j] = (double[]) futures[j].get();
-            }
-            a = results[0];
-            for (int j = 1; j < size; j++) {
-                a = aggr.apply(a, results[j]);
-            }
-        } catch (ExecutionException ex) {
-            ex.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return a;
-    }
-
-    /**
-     * Waits for all threads to complete computation and aggregates the result.
-     * 
-     * @param futures
-     *            handles to running threads
-     * @param aggr
-     *            an aggregation function
-     * @return the result of aggregation
-     */
-    public static float[] waitForCompletion(Future<?>[] futures, FComplexFComplexFComplexFunction aggr) {
-        int size = futures.length;
-        float[][] results = new float[size][2];
-        float[] a = null;
-        try {
-            for (int j = 0; j < size; j++) {
-                results[j] = (float[]) futures[j].get();
-            }
-            a = results[0];
-            for (int j = 1; j < size; j++) {
-                a = aggr.apply(a, results[j]);
-            }
-        } catch (ExecutionException ex) {
-            ex.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return a;
-    }
-
-    /**
-     * Waits for all threads to complete computation and aggregates the result.
-     * 
-     * @param futures
-     *            handles to running threads
-     * @param aggr
-     *            an aggregation function
-     * @return the result of aggregation
-     */
-    public static float waitForCompletion(Future<?>[] futures, FloatFloatFunction aggr) {
-        int size = futures.length;
-        Float[] results = new Float[size];
-        float a = 0;
-        try {
-            for (int j = 0; j < size; j++) {
-                results[j] = (Float) futures[j].get();
             }
             a = results[0];
             for (int j = 1; j < size; j++) {

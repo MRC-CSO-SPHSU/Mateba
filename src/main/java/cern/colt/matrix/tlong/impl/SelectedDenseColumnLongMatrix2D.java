@@ -12,6 +12,8 @@ import cern.colt.matrix.AbstractMatrix2D;
 import cern.colt.matrix.tlong.LongMatrix1D;
 import cern.colt.matrix.tlong.LongMatrix2D;
 
+import java.io.Serial;
+
 /**
  * Selection view on dense 2-d matrices holding <tt>long</tt> elements. First
  * see the <a href="package-summary.html">package summary</a> and javadoc <a
@@ -57,7 +59,8 @@ class SelectedDenseColumnLongMatrix2D extends LongMatrix2D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 7519230519056706464L;
 
     /**
      * The elements of this matrix.

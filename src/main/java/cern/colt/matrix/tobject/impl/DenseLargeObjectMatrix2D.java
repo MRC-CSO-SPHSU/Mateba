@@ -11,6 +11,8 @@ package cern.colt.matrix.tobject.impl;
 import cern.colt.matrix.tobject.ObjectMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 
+import java.io.Serial;
+
 /**
  * Dense 2-d matrix holding <tt>Object</tt> elements. First see the <a
  * href="package-summary.html">package summary</a> and javadoc <a
@@ -32,7 +34,8 @@ import cern.colt.matrix.tobject.ObjectMatrix2D;
  */
 public class DenseLargeObjectMatrix2D extends WrapperObjectMatrix2D {
 
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -1410761907384260575L;
 
     private Object[][] elements;
 

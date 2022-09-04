@@ -11,6 +11,8 @@ package cern.colt.matrix.tlong.impl;
 import cern.colt.matrix.tlong.LongMatrix1D;
 import cern.colt.matrix.tlong.LongMatrix2D;
 
+import java.io.Serial;
+
 /**
  * Dense 2-d matrix holding <tt>long</tt> elements. First see the <a
  * href="package-summary.html">package summary</a> and javadoc <a
@@ -32,8 +34,9 @@ import cern.colt.matrix.tlong.LongMatrix2D;
  */
 public class DenseLargeLongMatrix2D extends WrapperLongMatrix2D {
 
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = -6197202822344913096L;
     private long[][] elements;
 
     public DenseLargeLongMatrix2D(int rows, int columns) {

@@ -16,6 +16,8 @@ import cern.colt.matrix.tint.IntMatrix1D;
 import cern.colt.matrix.tint.IntMatrix2D;
 import cern.colt.matrix.tint.IntMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Flexible, well human readable matrix print formatting; By default decimal
  * point aligned. Currenly works on 1-d, 2-d and 3-d matrices. Note that in most
@@ -285,10 +287,9 @@ import cern.colt.matrix.tint.IntMatrix3D;
  * @version 1.2, 11/30/99
  */
 public class IntFormatter extends AbstractFormatter {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+
+    @Serial
+    private static final long serialVersionUID = 3099284298520908757L;
 
     /**
      * Constructs and returns a matrix formatter with format <tt>"%G"</tt>.

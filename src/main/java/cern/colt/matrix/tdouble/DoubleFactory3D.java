@@ -12,6 +12,9 @@ import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix3D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix3D;
 import cern.jet.math.tdouble.DoubleFunctions;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Factory for convenient construction of 3-d matrices holding <tt>double</tt>
  * cells. Use idioms like <tt>DoubleFactory3D.dense.make(4,4,4)</tt> to
@@ -37,8 +40,7 @@ import cern.jet.math.tdouble.DoubleFunctions;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class DoubleFactory3D extends cern.colt.PersistentObject {
-    private static final long serialVersionUID = 1L;
+public class DoubleFactory3D implements Serializable, Cloneable {
 
     /**
      * A factory producing dense matrices.
@@ -49,6 +51,8 @@ public class DoubleFactory3D extends cern.colt.PersistentObject {
      * A factory producing sparse matrices.
      */
     public static final DoubleFactory3D sparse = new DoubleFactory3D();
+    @Serial
+    private static final long serialVersionUID = -8957119501607384814L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -133,5 +137,14 @@ public class DoubleFactory3D extends cern.colt.PersistentObject {
      */
     public DoubleMatrix3D random(int slices, int rows, int columns) {
         return make(slices, rows, columns).assign(cern.jet.math.tdouble.DoubleFunctions.random());
+    }
+
+    @Override
+    public DoubleFactory3D clone() {
+        try {
+            return (DoubleFactory3D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

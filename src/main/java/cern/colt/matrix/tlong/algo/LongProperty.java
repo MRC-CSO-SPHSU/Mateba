@@ -8,6 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tlong.algo;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -112,15 +114,14 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
-public class LongProperty extends cern.colt.PersistentObject {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+public class LongProperty implements Serializable, Cloneable{
+
     /**
      * The default Property object;.
      */
     public static final LongProperty DEFAULT = new LongProperty();
+    @Serial
+    private static final long serialVersionUID = 5786562208801662784L;
 
     /**
      * Constructs an instance with a tolerance of
@@ -135,11 +136,7 @@ public class LongProperty extends cern.colt.PersistentObject {
     protected static String blanks(int length) {
         if (length < 0)
             length = 0;
-        StringBuffer buf = new StringBuffer(length);
-        for (int k = 0; k < length; k++) {
-            buf.append(' ');
-        }
-        return buf.toString();
+        return " ".repeat(length);
     }
 
     /**
@@ -1409,5 +1406,14 @@ public class LongProperty extends cern.colt.PersistentObject {
             }
         }
         return 0;
+    }
+
+    @Override
+    public LongProperty clone() {
+        try {
+            return (LongProperty) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

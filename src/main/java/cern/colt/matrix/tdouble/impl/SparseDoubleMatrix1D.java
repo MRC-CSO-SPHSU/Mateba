@@ -14,6 +14,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.DoubleMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Sparse hashed 1-d matrix (aka <i>vector</i>) holding <tt>double</tt>
  * elements. First see the <a href="package-summary.html">package summary</a>
@@ -63,10 +65,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix3D;
  * @version 1.1, 08/22/2007
  */
 public class SparseDoubleMatrix1D extends DoubleMatrix1D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -6016782348668502705L;
     /*
      * The elements of the matrix.
      */

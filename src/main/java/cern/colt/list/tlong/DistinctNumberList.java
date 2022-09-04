@@ -8,6 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.list.tlong;
 
+import java.io.Serial;
+
 /**
  * Resizable compressed list holding numbers; based on the fact that a number
  * from a large list with few distinct values need not take more than
@@ -46,34 +48,32 @@ package cern.colt.list.tlong;
  * value to a <tt>long</tt> value and back <b>without losing any precision</b>:
  * <p>
  * <b>Example usage:</b>
- * 
+ *
  * <pre>
  * DistinctNumberList list = ... instantiation goes here
  * double d1 = 1.234;
  * list.add(Double.doubleToLongBits(d1));
  * double d2 = Double.longBitsToDouble(list.get(0));
  * if (d1!=d2) System.out.println(&quot;This is impossible!&quot;);
- * 
+ *
  * DistinctNumberList list2 = ... instantiation goes here
  * float f1 = 1.234f;
  * list2.add((long) Float.floatToIntBits(f1));
  * float f2 = Float.intBitsToFloat((int)list2.get(0));
  * if (f1!=f2) System.out.println(&quot;This is impossible!&quot;);
  * </pre>
- * 
+ *
+ * @author wolfgang.hoschek@cern.ch
+ * @version 1.0, 09/24/99
  * @see LongArrayList
  * @see MinMaxNumberList
  * @see java.lang.Float
  * @see java.lang.Double
- * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
  */
-public class DistinctNumberList extends cern.colt.list.tlong.AbstractLongList {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+public class DistinctNumberList extends LongArrayList {
 
+    @Serial
+    private static final long serialVersionUID = -5241282344959057397L;
     protected long[] distinctValues;
 
     protected MinMaxNumberList elements;
@@ -81,13 +81,11 @@ public class DistinctNumberList extends cern.colt.list.tlong.AbstractLongList {
     /**
      * Constructs an empty list with the specified initial capacity and the
      * specified distinct values allowed to be hold in this list.
-     * 
-     * @param distinctValues
-     *            an array sorted ascending containing the distinct values
-     *            allowed to be hold in this list.
-     * @param initialCapacity
-     *            the number of elements the receiver can hold without
-     *            auto-expanding itself by allocating new internal memory.
+     *
+     * @param distinctValues  an array sorted ascending containing the distinct values
+     *                        allowed to be hold in this list.
+     * @param initialCapacity the number of elements the receiver can hold without
+     *                        auto-expanding itself by allocating new internal memory.
      */
     public DistinctNumberList(long[] distinctValues, int initialCapacity) {
         setUp(distinctValues, initialCapacity);
@@ -95,9 +93,8 @@ public class DistinctNumberList extends cern.colt.list.tlong.AbstractLongList {
 
     /**
      * Appends the specified element to the end of this list.
-     * 
-     * @param element
-     *            element to be appended to this list.
+     *
+     * @param element element to be appended to this list.
      */
 
     public void add(long element) {
@@ -120,9 +117,8 @@ public class DistinctNumberList extends cern.colt.list.tlong.AbstractLongList {
      * Ensures that the receiver can hold at least the specified number of
      * elements without needing to allocate new internal memory. If necessary,
      * allocates new internal memory and increases the capacity of the receiver.
-     * 
-     * @param minCapacity
-     *            the desired minimum capacity.
+     *
+     * @param minCapacity the desired minimum capacity.
      */
 
     public void ensureCapacity(int minCapacity) {
@@ -136,9 +132,8 @@ public class DistinctNumberList extends cern.colt.list.tlong.AbstractLongList {
      * exception! <b>You should only use this method when you are absolutely
      * sure that the index is within bounds.</b> Precondition (unchecked):
      * <tt>index &gt;= 0 && index &lt; size()</tt>.
-     * 
-     * @param index
-     *            index of element to return.
+     *
+     * @param index index of element to return.
      */
 
     public long getQuick(int index) {
@@ -150,15 +145,12 @@ public class DistinctNumberList extends cern.colt.list.tlong.AbstractLongList {
      * <code>from</code>, inclusive and <code>to</code>, inclusive. Shifts any
      * succeeding elements to the left (reduces their index). This call shortens
      * the list by <tt>(to - from + 1)</tt> elements.
-     * 
-     * @param from
-     *            index of first element to be removed.
-     * @param to
-     *            index of last element to be removed.
-     * @exception IndexOutOfBoundsException
-     *                index is out of range (
-     *                <tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>
-     *                ).
+     *
+     * @param from index of first element to be removed.
+     * @param to   index of last element to be removed.
+     * @throws IndexOutOfBoundsException index is out of range (
+     *                                   <tt>size()&gt;0 && (from&lt;0 || from&gt;to || to&gt;=size())</tt>
+     *                                   ).
      */
 
     public void removeFromTo(int from, int to) {
@@ -173,11 +165,9 @@ public class DistinctNumberList extends cern.colt.list.tlong.AbstractLongList {
      * throwing any exception! <b>You should only use this method when you are
      * absolutely sure that the index is within bounds.</b> Precondition
      * (unchecked): <tt>index &gt;= 0 && index &lt; size()</tt>.
-     * 
-     * @param index
-     *            index of element to replace.
-     * @param element
-     *            element to be stored at the specified position.
+     *
+     * @param index   index of element to replace.
+     * @param element element to be stored at the specified position.
      */
 
     public void setQuick(int index, long element) {
@@ -198,17 +188,14 @@ public class DistinctNumberList extends cern.colt.list.tlong.AbstractLongList {
     /**
      * Sets the receiver to an empty list with the specified initial capacity
      * and the specified distinct values allowed to be hold in this list.
-     * 
-     * @param distinctValues
-     *            an array sorted ascending containing the distinct values
-     *            allowed to be hold in this list.
-     * @param initialCapacity
-     *            the number of elements the receiver can hold without
-     *            auto-expanding itself by allocating new internal memory.
+     *
+     * @param distinctValues  an array sorted ascending containing the distinct values
+     *                        allowed to be hold in this list.
+     * @param initialCapacity the number of elements the receiver can hold without
+     *                        auto-expanding itself by allocating new internal memory.
      */
     protected void setUp(long[] distinctValues, int initialCapacity) {
         this.distinctValues = distinctValues;
-        // java.util.Arrays.sort(this.distinctElements);
         this.elements = new MinMaxNumberList(0, distinctValues.length - 1, initialCapacity);
     }
 

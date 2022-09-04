@@ -12,6 +12,8 @@ import cern.colt.matrix.AbstractMatrix2D;
 import cern.colt.matrix.tint.IntMatrix1D;
 import cern.colt.matrix.tint.IntMatrix2D;
 
+import java.io.Serial;
+
 /**
  * Selection view on dense 2-d matrices holding <tt>int</tt> elements. First see
  * the <a href="package-summary.html">package summary</a> and javadoc <a
@@ -54,11 +56,9 @@ import cern.colt.matrix.tint.IntMatrix2D;
  * @version 1.1, 08/22/2007
  */
 class SelectedDenseColumnIntMatrix2D extends IntMatrix2D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = -6455116342716064401L;
     /**
      * The elements of this matrix.
      */

@@ -9,6 +9,7 @@ It is provided "as is" without expressed or implied warranty.
 package cern.colt.matrix.tint.impl;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -67,7 +68,9 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  */
 public class DenseColumnIntMatrix2D extends IntMatrix2D {
-    static final long serialVersionUID = 1L;
+
+    @Serial
+    private static final long serialVersionUID = 3331864156691205557L;
     protected int[] elements;
 
     /**

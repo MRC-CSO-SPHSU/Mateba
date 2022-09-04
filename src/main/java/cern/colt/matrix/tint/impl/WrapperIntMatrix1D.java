@@ -12,6 +12,8 @@ import cern.colt.matrix.tint.IntMatrix1D;
 import cern.colt.matrix.tint.IntMatrix2D;
 import cern.colt.matrix.tint.IntMatrix3D;
 
+import java.io.Serial;
+
 /**
  * 1-d matrix holding <tt>int</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
@@ -23,10 +25,8 @@ import cern.colt.matrix.tint.IntMatrix3D;
  * @version 1.1, 08/22/2007
  */
 public class WrapperIntMatrix1D extends IntMatrix1D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 934241998707921666L;
     /*
      * The elements of the matrix.
      */

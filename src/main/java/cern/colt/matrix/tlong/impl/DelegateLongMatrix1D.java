@@ -11,6 +11,8 @@ package cern.colt.matrix.tlong.impl;
 import cern.colt.matrix.tlong.LongMatrix1D;
 import cern.colt.matrix.tlong.LongMatrix2D;
 
+import java.io.Serial;
+
 /**
  * 1-d matrix holding <tt>int</tt> elements; either a view wrapping another 2-d
  * matrix and therefore delegating calls to it.
@@ -19,11 +21,9 @@ import cern.colt.matrix.tlong.LongMatrix2D;
  * @version 1.0, 09/24/99
  */
 class DelegateLongMatrix1D extends WrapperLongMatrix1D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = -5462140304483691772L;
     /*
      * The elements of the matrix.
      */

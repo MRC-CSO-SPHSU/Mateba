@@ -16,6 +16,8 @@ import cern.colt.matrix.tobject.ObjectMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Flexible, well human readable matrix print formatting. Each cell is converted
  * using {@link Object#toString()}. For examples see
@@ -29,7 +31,8 @@ public class ObjectFormatter extends AbstractFormatter {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 4880855117806511073L;
 
     /**
      * Constructs and returns a matrix formatter with alignment <tt>LEFT</tt>.

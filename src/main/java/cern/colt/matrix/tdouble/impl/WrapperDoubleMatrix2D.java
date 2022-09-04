@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdouble.impl;
 
+import java.io.Serial;
 import java.util.concurrent.Future;
 
 import cern.colt.list.tdouble.DoubleArrayList;
@@ -27,10 +28,9 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+
+    @Serial
+    private static final long serialVersionUID = 547027388080982622L;
     /*
      * The elements of the matrix.
      */

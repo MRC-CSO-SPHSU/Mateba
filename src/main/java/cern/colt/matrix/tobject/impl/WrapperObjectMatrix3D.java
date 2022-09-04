@@ -12,6 +12,8 @@ import cern.colt.matrix.tobject.ObjectMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix3D;
 
+import java.io.Serial;
+
 /**
  * 3-d matrix holding <tt>Object</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
@@ -23,7 +25,8 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -6883628016662874249L;
     /*
      * The elements of the matrix.
      */

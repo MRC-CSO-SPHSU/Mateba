@@ -8,10 +8,14 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdcomplex;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import cern.colt.matrix.tdcomplex.impl.DenseDComplexMatrix1D;
 import cern.colt.matrix.tdcomplex.impl.SparseDComplexMatrix1D;
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.sampling.RandomSamplingAssistant;
 
 /**
  * Factory for convenient construction of 1-d matrices holding <tt>complex</tt>
@@ -36,8 +40,8 @@ import cern.colt.matrix.tdcomplex.impl.SparseDComplexMatrix1D;
  * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
-public class DComplexFactory1D extends cern.colt.PersistentObject {
-    private static final long serialVersionUID = 1L;
+public class DComplexFactory1D implements Serializable, Cloneable {
+
 
     /**
      * A factory producing dense matrices.
@@ -48,6 +52,8 @@ public class DComplexFactory1D extends cern.colt.PersistentObject {
      * A factory producing sparse matrices.
      */
     public static final DComplexFactory1D sparse = new DComplexFactory1D();
+    @Serial
+    private static final long serialVersionUID = 2072776789685885862L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -92,14 +98,13 @@ public class DComplexFactory1D extends cern.colt.PersistentObject {
             return make(0);
 
         int size = 0;
-        for (int i = 0; i < parts.length; i++)
-            size += parts[i].size();
+        for (DComplexMatrix1D part : parts) size += part.size();
 
         DComplexMatrix1D vector = make(size);
         size = 0;
-        for (int i = 0; i < parts.length; i++) {
-            vector.viewPart(size, (int) parts[i].size()).assign(parts[i]);
-            size += parts[i].size();
+        for (DComplexMatrix1D part : parts) {
+            vector.viewPart(size, (int) part.size()).assign(part);
+            size += part.size();
         }
 
         return vector;
@@ -172,7 +177,7 @@ public class DComplexFactory1D extends cern.colt.PersistentObject {
      * 
      * @throws IllegalArgumentException
      *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSampler
+     * @see cern.jet.random.sampling.RandomSampler
      */
     public DComplexMatrix1D sample(int size, double[] value, double nonZeroFraction) {
         double epsilon = 1e-09;
@@ -189,8 +194,7 @@ public class DComplexFactory1D extends cern.colt.PersistentObject {
         if (n == 0)
             return matrix;
 
-        cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant sampler = new cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant(
-                n, size, new cern.jet.random.tdouble.engine.DoubleMersenneTwister());
+        var sampler = new RandomSamplingAssistant(n, size, new MersenneTwister());
         for (int i = 0; i < size; i++) {
             if (sampler.sampleNextElement()) {
                 matrix.setQuick(i, value);
@@ -215,5 +219,14 @@ public class DComplexFactory1D extends cern.colt.PersistentObject {
         for (int i = 0; i < size; i++)
             list.set(i, values.getQuick(i));
         return list;
+    }
+
+    @Override
+    public DComplexFactory1D clone() {
+        try {
+            return (DComplexFactory1D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
