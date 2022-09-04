@@ -1,8 +1,8 @@
 package hep.aida.bin;
 
-import cern.colt.buffer.tdouble.DoubleBuffer1D;
-import cern.colt.buffer.tdouble.DoubleBuffer1DConsumer;
-import cern.colt.list.tdouble.DoubleArrayList;
+import cern.mateba.buffer.tdouble.DoubleBuffer1D;
+import cern.mateba.buffer.tdouble.DoubleBuffer1DConsumer;
+import cern.mateba.list.tdouble.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 import org.jetbrains.annotations.NotNull;
 

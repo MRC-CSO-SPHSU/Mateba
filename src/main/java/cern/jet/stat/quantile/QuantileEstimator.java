@@ -8,8 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.stat.quantile;
 
-import cern.colt.list.tdouble.DoubleArrayList;
-import cern.colt.list.tobject.ObjectArrayList;
+import cern.mateba.list.tdouble.DoubleArrayList;
+import cern.mateba.list.tobject.ObjectArrayList;
 import cern.jet.stat.Utils;
 
 import java.io.Serial;
@@ -196,7 +196,7 @@ abstract class QuantileEstimator implements QuantileFinder {
      * @return <tt>false</tt> if the procedure stopped before all elements where
      *         iterated over, <tt>true</tt> otherwise.
      */
-    public boolean forEach(cern.colt.function.tdouble.DoubleProcedure procedure) {
+    public boolean forEach(cern.mateba.function.tdouble.DoubleProcedure procedure) {
         return this.bufferSet.forEach(procedure);
     }
 
@@ -267,7 +267,7 @@ abstract class QuantileEstimator implements QuantileFinder {
             triggerPositions[i] = Utils.epsilonCeiling(phis.get(i) * totalSize) - 1;
         }
 
-        // System.out.println("triggerPositions="+cern.colt.Arrays.toString(triggerPositions));
+        // System.out.println("triggerPositions="+cern.mateba.Arrays.toString(triggerPositions));
         // System.out.println("starting to determine quantiles...");
         // System.out.println(bufferSet);
 

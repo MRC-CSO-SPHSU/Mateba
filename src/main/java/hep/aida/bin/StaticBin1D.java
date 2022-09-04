@@ -1,6 +1,6 @@
 package hep.aida.bin;
 
-import cern.colt.list.tdouble.DoubleArrayList;
+import cern.mateba.list.tdouble.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 import org.jetbrains.annotations.NotNull;
 

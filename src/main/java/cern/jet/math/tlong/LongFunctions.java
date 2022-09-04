@@ -8,10 +8,10 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.math.tlong;
 
-import cern.colt.function.tlong.LongFunction;
-import cern.colt.function.tlong.LongLongFunction;
-import cern.colt.function.tlong.LongLongProcedure;
-import cern.colt.function.tlong.LongProcedure;
+import cern.mateba.function.tlong.LongFunction;
+import cern.mateba.function.tlong.LongLongFunction;
+import cern.mateba.function.tlong.LongLongProcedure;
+import cern.mateba.function.tlong.LongProcedure;
 import cern.jet.math.tdouble.DoubleArithmetic;
 import cern.jet.math.tdouble.DoubleFunctions;
 import cern.jet.random.engine.MersenneTwister;

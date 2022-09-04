@@ -1,5 +1,5 @@
 ----------------------------------------------------------------------------------------------------------
-Packages cern.colt.* , cern.jet.*, cern.clhep
+Packages cern.mateba.* , cern.jet.*, cern.clhep
 ----------------------------------------------------------------------------------------------------------
 
 Copyright (c) 1999 CERN - European Organization for Nuclear Research.

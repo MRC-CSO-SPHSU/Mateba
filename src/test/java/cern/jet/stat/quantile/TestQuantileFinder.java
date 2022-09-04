@@ -8,12 +8,10 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.stat.quantile;
 
-import cern.colt.Timer;
-import cern.colt.list.tdouble.DoubleArrayList;
-import cern.colt.list.tint.IntArrayList;
+import cern.mateba.Timer;
+import cern.mateba.list.tdouble.DoubleArrayList;
+import cern.mateba.list.tint.IntArrayList;
 import cern.jet.stat.Utils;
-import cern.jet.stat.quantile.Buffer;
-import cern.jet.stat.quantile.QuantileFinder;
 
 /**
  * A class holding test cases for exact and approximate quantile finders.
@@ -25,7 +23,7 @@ class TestQuantileFinder {
      * 
      * @return int[]
      * @param list
-     *            cern.colt.list.DoubleArrayList
+     *            cern.mateba.list.DoubleArrayList
      * @param element
      *            the element to search for
      */
@@ -445,7 +443,7 @@ class TestQuantileFinder {
             /*
              * final DoubleArrayList buffer = new
              * DoubleArrayList((int)exactFinder.size()); exactFinder.forEach(
-             * new cern.colt.function.DoubleFunction() { public void
+             * new cern.mateba.function.DoubleFunction() { public void
              * apply(double element) { buffer.add(element); } } );
              */
 

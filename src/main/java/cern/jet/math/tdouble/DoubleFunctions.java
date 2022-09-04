@@ -8,10 +8,10 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.math.tdouble;
 
-import cern.colt.function.tdouble.DoubleDoubleFunction;
-import cern.colt.function.tdouble.DoubleDoubleProcedure;
-import cern.colt.function.tdouble.DoubleFunction;
-import cern.colt.function.tdouble.DoubleProcedure;
+import cern.mateba.function.tdouble.DoubleDoubleFunction;
+import cern.mateba.function.tdouble.DoubleDoubleProcedure;
+import cern.mateba.function.tdouble.DoubleFunction;
+import cern.mateba.function.tdouble.DoubleProcedure;
 import cern.jet.random.engine.MersenneTwister;
 
 // import com.imsl.math.Sfun;
@@ -27,13 +27,13 @@ import cern.jet.random.engine.MersenneTwister;
  * result value. Function objects are comparable to function pointers in C used
  * for call-backs.
  * <p>
- * Unary functions are of type {@link cern.colt.function.tdouble.DoubleFunction}
+ * Unary functions are of type {@link cern.mateba.function.tdouble.DoubleFunction}
  * , binary functions of type
- * {@link cern.colt.function.tdouble.DoubleDoubleFunction}. All can be retrieved
+ * {@link cern.mateba.function.tdouble.DoubleDoubleFunction}. All can be retrieved
  * via <tt>public 
  static final</tt> variables named after the function. Unary predicates are of
- * type {@link cern.colt.function.tdouble.DoubleProcedure}, binary predicates of
- * type {@link cern.colt.function.tdouble.DoubleDoubleProcedure}. All can be
+ * type {@link cern.mateba.function.tdouble.DoubleProcedure}, binary predicates of
+ * type {@link cern.mateba.function.tdouble.DoubleDoubleProcedure}. All can be
  * retrieved via <tt>public 
  static final</tt> variables named <tt>isXXX</tt>.
  * 
@@ -876,7 +876,7 @@ public class DoubleFunctions extends Object {
         System.out.println(g.apply(a, b));
 
         // emptyLoop
-        cern.colt.Timer emptyLoop = new cern.colt.Timer().start();
+        cern.mateba.Timer emptyLoop = new cern.mateba.Timer().start();
         a = 0;
         b = 0;
         double sum = 0;
@@ -888,7 +888,7 @@ public class DoubleFunctions extends Object {
         emptyLoop.stop().display();
         System.out.println("empty sum=" + sum);
 
-        cern.colt.Timer timer = new cern.colt.Timer().start();
+        cern.mateba.Timer timer = new cern.mateba.Timer().start();
         a = 0;
         b = 0;
         sum = 0;

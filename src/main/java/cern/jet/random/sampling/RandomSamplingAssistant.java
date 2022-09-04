@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.random.sampling;
 
-import cern.colt.list.tboolean.BooleanArrayList;
+import cern.mateba.list.tboolean.BooleanArrayList;
 import cern.jet.random.engine.RandomEngine;
 
 import java.io.Serial;
@@ -160,8 +160,8 @@ public class RandomSamplingAssistant implements Cloneable, Serializable {
     public static void test(long n, long N) {
         RandomSamplingAssistant assistant = new RandomSamplingAssistant(n, N, null);
 
-        cern.colt.list.tlong.LongArrayList sample = new cern.colt.list.tlong.LongArrayList((int) n);
-        cern.colt.Timer timer = new cern.colt.Timer().start();
+        cern.mateba.list.tlong.LongArrayList sample = new cern.mateba.list.tlong.LongArrayList((int) n);
+        cern.mateba.Timer timer = new cern.mateba.Timer().start();
 
         for (long i = 0; i < N; i++) {
             if (assistant.sampleNextElement()) {
@@ -184,7 +184,7 @@ public class RandomSamplingAssistant implements Cloneable, Serializable {
         for (int i = 0; i < N; i++)
             elements[i] = i;
 
-        cern.colt.Timer timer = new cern.colt.Timer().start();
+        cern.mateba.Timer timer = new cern.mateba.Timer().start();
 
         int[] sample = sampleArray(n, elements);
 

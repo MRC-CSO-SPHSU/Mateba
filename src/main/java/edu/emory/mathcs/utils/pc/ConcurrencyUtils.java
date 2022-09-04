@@ -11,7 +11,7 @@
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is Parallel Colt.
+ * The Original Code is Mateba.
  *
  * The Initial Developer of the Original Code is
  * Piotr Wendykier, Emory University.
@@ -40,11 +40,11 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 
-import cern.colt.function.tdcomplex.DComplexDComplexDComplexFunction;
-import cern.colt.function.tdouble.DoubleDoubleFunction;
-import cern.colt.function.tint.IntIntFunction;
-import cern.colt.function.tlong.LongLongFunction;
-import cern.colt.function.tobject.ObjectObjectFunction;
+import cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction;
+import cern.mateba.function.tdouble.DoubleDoubleFunction;
+import cern.mateba.function.tint.IntIntFunction;
+import cern.mateba.function.tlong.LongLongFunction;
+import cern.mateba.function.tobject.ObjectObjectFunction;
 
 
 /**

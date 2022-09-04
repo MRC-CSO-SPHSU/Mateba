@@ -14,7 +14,7 @@ package cern.jet.math.tdcomplex;
  * <tt>matrix.assign(otherMatrix,function)</tt> methods.
  */
 
-public class DComplexPlusMultSecond implements cern.colt.function.tdcomplex.DComplexDComplexDComplexFunction {
+public class DComplexPlusMultSecond implements cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction {
     /**
      * Public read/write access to avoid frequent object construction.
      */

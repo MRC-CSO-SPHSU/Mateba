@@ -162,7 +162,7 @@ public class BinFunctions1D {
             }
 
             public String name() {
-                return new cern.colt.matrix.FormerFactory().create("%1.2G").form(percentage * 100) + "% Q.";
+                return new cern.mateba.matrix.FormerFactory().create("%1.2G").form(percentage * 100) + "% Q.";
             }
         };
     }

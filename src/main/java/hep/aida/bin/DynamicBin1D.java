@@ -1,18 +1,17 @@
 package hep.aida.bin;
 
-import cern.colt.buffer.tdouble.DoubleBuffer1D;
-import cern.colt.function.tdouble.DoubleDoubleFunction;
-import cern.colt.function.tdouble.DoubleFunction;
-import cern.colt.list.tdouble.DoubleArrayList;
-import cern.colt.list.tint.IntArrayList;
-import cern.colt.map.tdouble.AbstractDoubleIntMap;
-import cern.colt.map.tdouble.OpenDoubleIntHashMap;
+import cern.mateba.buffer.tdouble.DoubleBuffer1D;
+import cern.mateba.function.tdouble.DoubleDoubleFunction;
+import cern.mateba.function.tdouble.DoubleFunction;
+import cern.mateba.list.tdouble.DoubleArrayList;
+import cern.mateba.list.tint.IntArrayList;
+import cern.mateba.map.tdouble.AbstractDoubleIntMap;
+import cern.mateba.map.tdouble.OpenDoubleIntHashMap;
 import cern.jet.random.AbstractDistribution;
 import cern.jet.random.Uniform;
 import cern.jet.random.engine.RandomEngine;
 import cern.jet.random.sampling.RandomSamplingAssistant;
 import cern.jet.stat.Descriptive;
-import cern.jet.stat.quantile.Buffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serial;
@@ -569,8 +568,8 @@ public class DynamicBin1D extends QuantileBin1D {
      * 	 double[] v2 = {10,11,12,13,14,15,16,17,18,19,  20,  30,31,32,33,34,35,36,37,38,39};
      * 	 hep.aida.bin.DynamicBin1D X = new hep.aida.bin.DynamicBin1D();
      * 	 hep.aida.bin.DynamicBin1D Y = new hep.aida.bin.DynamicBin1D();
-     * 	 X.addAllOf(new cern.colt.list.DoubleArrayList(v1));
-     * 	 Y.addAllOf(new cern.colt.list.DoubleArrayList(v2));
+     * 	 X.addAllOf(new cern.mateba.list.DoubleArrayList(v1));
+     * 	 Y.addAllOf(new cern.mateba.list.DoubleArrayList(v2));
      * 	 cern.jet.random.engine.RandomEngine random = new cern.jet.random.engine.MersenneTwister();
      *
      * 	 // bootstrap resampling of differences of means:

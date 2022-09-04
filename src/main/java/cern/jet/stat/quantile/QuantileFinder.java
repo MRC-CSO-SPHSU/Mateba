@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.stat.quantile;
 
-import cern.colt.list.tdouble.DoubleArrayList;
+import cern.mateba.list.tdouble.DoubleArrayList;
 
 import java.io.Serializable;
 
@@ -34,7 +34,7 @@ public interface QuantileFinder extends Serializable {
      *
      * @param values the list of which all values shall be added.
      */
-    void addAllOf(cern.colt.list.tdouble.DoubleArrayList values);
+    void addAllOf(cern.mateba.list.tdouble.DoubleArrayList values);
 
     /**
      * Adds the part of the specified list between indexes <tt>from</tt>
@@ -68,7 +68,7 @@ public interface QuantileFinder extends Serializable {
      * @return <tt>false</tt> if the procedure stopped before all elements where
      * iterated over, <tt>true</tt> otherwise.
      */
-    boolean forEach(cern.colt.function.tdouble.DoubleProcedure procedure);
+    boolean forEach(cern.mateba.function.tdouble.DoubleProcedure procedure);
 
     /**
      * Returns the number of elements currently needed to store all contained

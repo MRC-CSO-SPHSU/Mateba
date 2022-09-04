@@ -3,13 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.uog</groupId>
-    <artifactId>parallelcolt</artifactId>
-    <version>0.11.5-SNAPSHOT</version>
-    <name>ParallelColt</name>
-    <description>Parallel Colt is a multithreaded version of Colt - a library for high performance scientific computing in
-    Java. It contains efficient algorithms for data analysis, linear algebra, multidimensional arrays, Fourier
-    transforms, statistics and histogramming.</description>
-    <url>https://github.com/MRC-CSO-SPHSU/ParallelColt</url>
+    <artifactId>mateba</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
+    <name>Mateba</name>
+    <url>https://github.com/MRC-CSO-SPHSU/Mateba</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -20,7 +17,7 @@
 
     <licenses>
         <license>
-            <comments>packages cern.colt.* cern.jet.* cern.clhep.*</comments>
+            <comments>packages cern.mateba.* cern.jet.* cern.clhep.*</comments>
             <name>CERN Public License</name>
             <url>https://acs.lbl.gov/software/colt/license.html</url>
             <distribution>repo</distribution>
@@ -34,9 +31,9 @@
     </licenses>
 
     <scm>
-        <url>git@github.com:MRC-CSO-SPHSU/ParallelColt.git</url>
-        <connection>scm:git:git@github.com:MRC-CSO-SPHSU/ParallelColt.git</connection>
-        <developerConnection>scm:git:git@github.com:MRC-CSO-SPHSU/ParallelColt.git</developerConnection>
+        <url>git@github.com:MRC-CSO-SPHSU/Mateba.git</url>
+        <connection>scm:git:git@github.com:MRC-CSO-SPHSU/Mateba.git</connection>
+        <developerConnection>scm:git:git@github.com:MRC-CSO-SPHSU/Mateba.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
@@ -164,14 +161,14 @@
                 <version>3.0.0-M7</version>
                 <configuration>
                     <excludes>
-                        <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleCGAMGTest.java</exclude>
-                        <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleCGSAMGTest.java</exclude>
-                        <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleQMRAMGTest.java</exclude>
-                        <exclude>cern/colt/matrix/tdouble/algo/solver/DoubleIRTest.java</exclude>
-                        <exclude>cern/colt/matrix/tfloat/algo/solver/FloatCGAMGTest.java</exclude>
-                        <exclude>cern/colt/matrix/tfloat/algo/solver/FloatCGSAMGTest.java</exclude>
-                        <exclude>cern/colt/matrix/tfloat/algo/solver/FloatQMRAMGTest.java</exclude>
-                        <exclude>cern/colt/matrix/tfloat/algo/solver/FloatIRTest.java</exclude>
+                        <exclude>cern/mateba/matrix/tdouble/algo/solver/DoubleCGAMGTest.java</exclude>
+                        <exclude>cern/mateba/matrix/tdouble/algo/solver/DoubleCGSAMGTest.java</exclude>
+                        <exclude>cern/mateba/matrix/tdouble/algo/solver/DoubleQMRAMGTest.java</exclude>
+                        <exclude>cern/mateba/matrix/tdouble/algo/solver/DoubleIRTest.java</exclude>
+                        <exclude>cern/mateba/matrix/tfloat/algo/solver/FloatCGAMGTest.java</exclude>
+                        <exclude>cern/mateba/matrix/tfloat/algo/solver/FloatCGSAMGTest.java</exclude>
+                        <exclude>cern/mateba/matrix/tfloat/algo/solver/FloatQMRAMGTest.java</exclude>
+                        <exclude>cern/mateba/matrix/tfloat/algo/solver/FloatIRTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -216,7 +213,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.4.1</version>
                 <configuration>
-                    <doctitle>&lt;h2&gt;&lt;a target=_top href=${project.url} &gt;Parallel Colt&lt;/a&gt;
+                    <doctitle>&lt;h2&gt;&lt;a target=_top href=${project.url} &gt;Mateba&lt;/a&gt;
             &lt;/h2&gt;&lt;h4&gt;Open Source Libraries for High Performance Scientific and Technical Computing in
             Java&lt;/h4&gt;&lt;hr&gt;</doctitle>
                     <show>public</show>
@@ -224,9 +221,9 @@
                     <use>true</use>
                     <splitindex>true</splitindex>
                     <version>true</version>
-                    <windowtitle>Parallel Colt ${project.version} - API Specification</windowtitle>
-                    <header>&lt;b&gt;Parallel Colt ${project.version}&lt;/b&gt;</header>
-                    <bottom>&lt;font size=-1 &gt;Jump to the &lt;a target=_top href=${project.url} &gt;Parallel Colt
+                    <windowtitle>Mateba ${project.version} - API Specification</windowtitle>
+                    <header>&lt;b&gt;Mateba ${project.version}&lt;/b&gt;</header>
+                    <bottom>&lt;font size=-1 &gt;Jump to the &lt;a target=_top href=${project.url} &gt;Mateba
             Homepage&lt;/a&gt;</bottom>
                     <failOnError>false</failOnError>
                 </configuration>

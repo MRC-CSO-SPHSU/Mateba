@@ -19,7 +19,7 @@ package cern.jet.math.tdcomplex;
  * reasons publicly accessible. Intended to be passed to
  * <tt>matrix.assign(function)</tt> methods.
  */
-public final class DComplexMult implements cern.colt.function.tdcomplex.DComplexDComplexFunction {
+public final class DComplexMult implements cern.mateba.function.tdcomplex.DComplexDComplexFunction {
     /**
      * Public read/write access to avoid frequent object construction.
      */

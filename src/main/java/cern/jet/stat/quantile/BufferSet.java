@@ -247,7 +247,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
      *            the procedure to be applied. Stops iteration if the procedure
      *            returns <tt>false</tt>, otherwise continues.
      */
-    public boolean forEach(cern.colt.function.tdouble.DoubleProcedure procedure) {
+    public boolean forEach(cern.mateba.function.tdouble.DoubleProcedure procedure) {
         for (int i = buffers.length; --i >= 0;) {
             for (int w = buffers[i].weight(); --w >= 0;) {
                 if (!(buffers[i].values.forEach(procedure)))

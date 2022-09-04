@@ -21,7 +21,7 @@ package cern.jet.math.tint;
  * performance reasons publicly accessible. Intended to be passed to
  * <tt>matrix.assign(otherMatrix,function)</tt> methods.
  */
-public final class IntPlusMultFirst implements cern.colt.function.tint.IntIntFunction {
+public final class IntPlusMultFirst implements cern.mateba.function.tint.IntIntFunction {
     /**
      * Public read/write access to avoid frequent object construction.
      */

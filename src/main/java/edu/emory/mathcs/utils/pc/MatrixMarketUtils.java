@@ -28,22 +28,22 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import cern.colt.matrix.AbstractMatrix;
-import cern.colt.matrix.io.MatrixInfo;
-import cern.colt.matrix.io.MatrixSize;
-import cern.colt.matrix.io.MatrixVectorReader;
-import cern.colt.matrix.tdcomplex.DComplexFactory1D;
-import cern.colt.matrix.tdcomplex.DComplexFactory2D;
-import cern.colt.matrix.tdcomplex.impl.DenseDComplexMatrix1D;
-import cern.colt.matrix.tdcomplex.impl.DenseDComplexMatrix2D;
-import cern.colt.matrix.tdcomplex.impl.SparseDComplexMatrix1D;
-import cern.colt.matrix.tdcomplex.impl.SparseDComplexMatrix2D;
-import cern.colt.matrix.tdouble.DoubleFactory1D;
-import cern.colt.matrix.tdouble.DoubleFactory2D;
-import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
-import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
-import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix1D;
-import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
+import cern.mateba.matrix.AbstractMatrix;
+import cern.mateba.matrix.io.MatrixInfo;
+import cern.mateba.matrix.io.MatrixSize;
+import cern.mateba.matrix.io.MatrixVectorReader;
+import cern.mateba.matrix.tdcomplex.DComplexFactory1D;
+import cern.mateba.matrix.tdcomplex.DComplexFactory2D;
+import cern.mateba.matrix.tdcomplex.impl.DenseDComplexMatrix1D;
+import cern.mateba.matrix.tdcomplex.impl.DenseDComplexMatrix2D;
+import cern.mateba.matrix.tdcomplex.impl.SparseDComplexMatrix1D;
+import cern.mateba.matrix.tdcomplex.impl.SparseDComplexMatrix2D;
+import cern.mateba.matrix.tdouble.DoubleFactory1D;
+import cern.mateba.matrix.tdouble.DoubleFactory2D;
+import cern.mateba.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import cern.mateba.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import cern.mateba.matrix.tdouble.impl.SparseDoubleMatrix1D;
+import cern.mateba.matrix.tdouble.impl.SparseDoubleMatrix2D;
 
 /**
  * Utility class for reading data in MatrixMarket format.

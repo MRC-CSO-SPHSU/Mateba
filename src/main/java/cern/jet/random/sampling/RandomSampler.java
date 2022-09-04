@@ -686,7 +686,7 @@ public class RandomSampler implements Serializable, Cloneable {
         long[] values = new long[chunkSize];
         long chunks = n / chunkSize;
 
-        cern.colt.Timer timer = new cern.colt.Timer().start();
+        cern.mateba.Timer timer = new cern.mateba.Timer().start();
         for (long t = times; --t >= 0;) {
             RandomSampler sampler = new RandomSampler(n, N, low,
                     AbstractDistribution.makeDefaultGenerator());

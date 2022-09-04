@@ -8,9 +8,9 @@
  */
 package cern.jet.random.engine;
 
-import cern.colt.function.tdouble.DoubleFunction;
-import cern.colt.function.tint.IntFunction;
-import cern.colt.function.tlong.LongFunction;
+import cern.mateba.function.tdouble.DoubleFunction;
+import cern.mateba.function.tint.IntFunction;
+import cern.mateba.function.tlong.LongFunction;
 import lombok.val;
 import org.apache.commons.math3.random.RandomGenerator;
 import org.jetbrains.annotations.Contract;

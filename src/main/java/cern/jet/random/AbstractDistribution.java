@@ -8,8 +8,8 @@
  */
 package cern.jet.random;
 
-import cern.colt.function.tdouble.DoubleFunction;
-import cern.colt.function.tint.IntFunction;
+import cern.mateba.function.tdouble.DoubleFunction;
+import cern.mateba.function.tint.IntFunction;
 import cern.jet.random.engine.MersenneTwister;
 import cern.jet.random.engine.RandomEngine;
 import lombok.Getter;

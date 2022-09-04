@@ -8,12 +8,11 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.random.sampling;
 
-import cern.colt.list.tboolean.BooleanArrayList;
+import cern.mateba.list.tboolean.BooleanArrayList;
 import cern.jet.random.AbstractDistribution;
 import cern.jet.random.Uniform;
 import cern.jet.random.engine.RandomEngine;
 
-import java.awt.*;
 import java.io.Serial;
 import java.io.Serializable;
 
@@ -157,7 +156,7 @@ public class WeightedRandomSampler implements Serializable, Cloneable {
         WeightedRandomSampler sampler = new WeightedRandomSampler();
         sampler.setWeight(weight);
 
-        cern.colt.list.tint.IntArrayList sample = new cern.colt.list.tint.IntArrayList();
+        cern.mateba.list.tint.IntArrayList sample = new cern.mateba.list.tint.IntArrayList();
         for (int i = 0; i < size; i++) {
             if (sampler.sampleNextElement())
                 sample.add(i);

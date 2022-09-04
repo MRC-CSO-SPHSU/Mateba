@@ -1,13 +1,13 @@
 package hep.aida.ref;
 
-import cern.colt.list.tobject.ObjectArrayList;
-import cern.colt.matrix.Former;
-import cern.colt.matrix.FormerFactory;
-import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import cern.colt.matrix.tdouble.DoubleMatrix3D;
-import cern.colt.matrix.tdouble.algo.DoubleFormatter;
-import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
-import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix3D;
+import cern.mateba.list.tobject.ObjectArrayList;
+import cern.mateba.matrix.Former;
+import cern.mateba.matrix.FormerFactory;
+import cern.mateba.matrix.tdouble.DoubleMatrix2D;
+import cern.mateba.matrix.tdouble.DoubleMatrix3D;
+import cern.mateba.matrix.tdouble.algo.DoubleFormatter;
+import cern.mateba.matrix.tdouble.impl.DenseDoubleMatrix2D;
+import cern.mateba.matrix.tdouble.impl.DenseDoubleMatrix3D;
 import hep.aida.IAxis;
 import hep.aida.IHistogram1D;
 import hep.aida.IHistogram2D;
@@ -16,7 +16,7 @@ import hep.aida.bin.BinFunction1D;
 import hep.aida.bin.BinFunctions1D;
 
 /**
- * Histogram conversions, for example to String and XML format; This class requires the Colt distribution, whereas the
+ * Histogram conversions, for example to String and XML format; This class requires the Mateba distribution, whereas the
  * rest of the package is entirely stand-alone.
  */
 @SuppressWarnings("unused")

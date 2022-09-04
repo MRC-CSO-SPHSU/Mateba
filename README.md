@@ -1,7 +1,7 @@
-ParallelColt
+Mateba
 ============
 
-Parallel Colt is a multithreaded version of
+Mateba is a multithreaded version of
 [Colt](http://acs.lbl.gov/software/colt/) - a library for high
 performance scientific computing in Java. It contains efficient
 algorithms for data analysis, linear algebra, multi-dimensional arrays,
@@ -10,7 +10,7 @@ Fourier transforms, statistics and histogramming.
 License and Copyright
 ---------------------
 
-### Packages cern.colt.\* , cern.jet.\* , cern.clhep.\*
+### Packages cern.mateba.\* , cern.jet.\* , cern.clhep.\*
 
 Copyright (C) 1999 CERN - European Organization for Nuclear Research.
 
@@ -32,5 +32,5 @@ related to military applications is expressly forbidden. The software
 and documentation made available under the terms of this license are
 provided with no warranty. 
 
-[![Build Status](https://secure.travis-ci.org/rwl/ParallelColt.png)](http://travis-ci.org/rwl/ParallelColt)
+[![Build Status](https://secure.travis-ci.org/rwl/Mateba.png)](http://travis-ci.org/rwl/Mateba)
 

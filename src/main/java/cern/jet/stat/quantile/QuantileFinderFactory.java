@@ -517,8 +517,8 @@ public class QuantileFinderFactory {
      * 
      * @return the equi-depth phi's
      */
-    public static cern.colt.list.tdouble.DoubleArrayList newEquiDepthPhis(int quantiles) {
-        cern.colt.list.tdouble.DoubleArrayList phis = new cern.colt.list.tdouble.DoubleArrayList(quantiles - 1);
+    public static cern.mateba.list.tdouble.DoubleArrayList newEquiDepthPhis(int quantiles) {
+        cern.mateba.list.tdouble.DoubleArrayList phis = new cern.mateba.list.tdouble.DoubleArrayList(quantiles - 1);
         for (int i = 1; i <= quantiles - 1; i++)
             phis.add(i / (double) quantiles);
         return phis;

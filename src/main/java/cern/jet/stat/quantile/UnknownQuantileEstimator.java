@@ -8,8 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.stat.quantile;
 
-import cern.colt.list.tdouble.DoubleArrayList;
-import cern.colt.list.tobject.ObjectArrayList;
+import cern.mateba.list.tdouble.DoubleArrayList;
+import cern.mateba.list.tobject.ObjectArrayList;
 import cern.jet.random.engine.RandomEngine;
 import cern.jet.random.sampling.WeightedRandomSampler;
 import cern.jet.stat.Utils;

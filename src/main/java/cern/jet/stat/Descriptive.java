@@ -8,8 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.stat;
 
-import cern.colt.list.tdouble.DoubleArrayList;
-import cern.colt.list.tint.IntArrayList;
+import cern.mateba.list.tdouble.DoubleArrayList;
+import cern.mateba.list.tint.IntArrayList;
 
 /**
  * Basic descriptive statistics.

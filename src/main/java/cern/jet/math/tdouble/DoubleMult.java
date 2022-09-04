@@ -19,7 +19,7 @@ package cern.jet.math.tdouble;
  * reasons publicly accessible. Intended to be passed to
  * <tt>matrix.assign(function)</tt> methods.
  */
-public final class DoubleMult implements cern.colt.function.tdouble.DoubleFunction {
+public final class DoubleMult implements cern.mateba.function.tdouble.DoubleFunction {
     /**
      * Public read/write access to avoid frequent object construction.
      */

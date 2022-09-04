@@ -25,20 +25,20 @@ package edu.emory.mathcs.utils;
 
 import java.util.concurrent.Future;
 
-import cern.colt.list.tdouble.DoubleArrayList;
-import cern.colt.list.tint.IntArrayList;
-import cern.colt.matrix.tdcomplex.DComplexFactory1D;
-import cern.colt.matrix.tdcomplex.DComplexFactory2D;
-import cern.colt.matrix.tdcomplex.DComplexMatrix1D;
-import cern.colt.matrix.tdcomplex.DComplexMatrix2D;
-import cern.colt.matrix.tdouble.DoubleFactory1D;
-import cern.colt.matrix.tdouble.DoubleFactory2D;
-import cern.colt.matrix.tdouble.DoubleMatrix1D;
-import cern.colt.matrix.tdouble.DoubleMatrix2D;
-import cern.colt.matrix.tint.IntFactory1D;
-import cern.colt.matrix.tint.IntFactory2D;
-import cern.colt.matrix.tint.IntMatrix1D;
-import cern.colt.matrix.tint.IntMatrix2D;
+import cern.mateba.list.tdouble.DoubleArrayList;
+import cern.mateba.list.tint.IntArrayList;
+import cern.mateba.matrix.tdcomplex.DComplexFactory1D;
+import cern.mateba.matrix.tdcomplex.DComplexFactory2D;
+import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
+import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
+import cern.mateba.matrix.tdouble.DoubleFactory1D;
+import cern.mateba.matrix.tdouble.DoubleFactory2D;
+import cern.mateba.matrix.tdouble.DoubleMatrix1D;
+import cern.mateba.matrix.tdouble.DoubleMatrix2D;
+import cern.mateba.matrix.tint.IntFactory1D;
+import cern.mateba.matrix.tint.IntFactory2D;
+import cern.mateba.matrix.tint.IntMatrix1D;
+import cern.mateba.matrix.tint.IntMatrix2D;
 import cern.jet.math.tdcomplex.DComplexFunctions;
 import cern.jet.math.tdouble.DoubleFunctions;
 import cern.jet.math.tint.IntFunctions;
@@ -46,7 +46,7 @@ import cern.jet.math.tint.IntFunctions;
 //import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
- * Utility class for translating Octave/Numpy code to Colt.
+ * Utility class for translating Octave/Numpy code to Mateba.
  *
  * @author Richard Lincoln
  */

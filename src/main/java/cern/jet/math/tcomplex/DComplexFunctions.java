@@ -1,14 +1,14 @@
 package cern.jet.math.tdcomplex;
 
-import cern.colt.function.tdcomplex.DComplexDComplexDComplexFunction;
-import cern.colt.function.tdcomplex.DComplexDComplexFunction;
-import cern.colt.function.tdcomplex.DComplexDComplexRealProcedure;
-import cern.colt.function.tdcomplex.DComplexDComplexRealRealFunction;
-import cern.colt.function.tdcomplex.DComplexProcedure;
-import cern.colt.function.tdcomplex.DComplexRealDComplexFunction;
-import cern.colt.function.tdcomplex.DComplexRealFunction;
-import cern.colt.function.tdcomplex.RealDComplexDComplexFunction;
-import cern.colt.function.tdcomplex.RealDComplexFunction;
+import cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction;
+import cern.mateba.function.tdcomplex.DComplexDComplexFunction;
+import cern.mateba.function.tdcomplex.DComplexDComplexRealProcedure;
+import cern.mateba.function.tdcomplex.DComplexDComplexRealRealFunction;
+import cern.mateba.function.tdcomplex.DComplexProcedure;
+import cern.mateba.function.tdcomplex.DComplexRealDComplexFunction;
+import cern.mateba.function.tdcomplex.DComplexRealFunction;
+import cern.mateba.function.tdcomplex.RealDComplexDComplexFunction;
+import cern.mateba.function.tdcomplex.RealDComplexFunction;
 
 /**
  * Complex function objects to be passed to generic methods.

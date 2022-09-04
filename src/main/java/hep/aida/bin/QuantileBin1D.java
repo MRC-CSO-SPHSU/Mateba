@@ -1,7 +1,7 @@
 package hep.aida.bin;
 
 
-import cern.colt.list.tdouble.DoubleArrayList;
+import cern.mateba.list.tdouble.DoubleArrayList;
 import cern.jet.random.engine.MersenneTwister;
 import cern.jet.random.engine.RandomEngine;
 import cern.jet.stat.quantile.QuantileFinder;

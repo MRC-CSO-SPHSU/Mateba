@@ -8,7 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.stat.quantile;
 
-import cern.colt.list.tdouble.DoubleArrayList;
+import cern.mateba.list.tdouble.DoubleArrayList;
 
 import java.io.Serial;
 
@@ -123,7 +123,7 @@ public class ExactQuantileFinder implements QuantileFinder, Cloneable {
      * @return <tt>false</tt> if the procedure stopped before all elements where
      *         iterated over, <tt>true</tt> otherwise.
      */
-    public boolean forEach(cern.colt.function.tdouble.DoubleProcedure procedure) {
+    public boolean forEach(cern.mateba.function.tdouble.DoubleProcedure procedure) {
         double[] theElements = buffer.elements();
         int theSize = (int) size();
 

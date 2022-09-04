@@ -21,7 +21,7 @@ package cern.jet.math.tlong;
  * performance reasons publicly accessible. Longended to be passed to
  * <tt>matrix.assign(otherMatrix,function)</tt> methods.
  */
-public final class LongPlusMultSecond implements cern.colt.function.tlong.LongLongFunction {
+public final class LongPlusMultSecond implements cern.mateba.function.tlong.LongLongFunction {
     /**
      * Public read/write access to avoid frequent object construction.
      */

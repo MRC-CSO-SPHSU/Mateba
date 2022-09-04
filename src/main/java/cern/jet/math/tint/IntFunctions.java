@@ -8,10 +8,10 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.math.tint;
 
-import cern.colt.function.tint.IntFunction;
-import cern.colt.function.tint.IntIntFunction;
-import cern.colt.function.tint.IntIntProcedure;
-import cern.colt.function.tint.IntProcedure;
+import cern.mateba.function.tint.IntFunction;
+import cern.mateba.function.tint.IntIntFunction;
+import cern.mateba.function.tint.IntIntProcedure;
+import cern.mateba.function.tint.IntProcedure;
 import cern.jet.math.tdouble.DoubleArithmetic;
 import cern.jet.math.tdouble.DoubleFunctions;
 import cern.jet.random.engine.MersenneTwister;
