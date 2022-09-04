@@ -13,6 +13,8 @@ import cern.colt.matrix.tobject.ObjectMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Selection view on sparse 1-d matrices holding <tt>Object</tt> elements. First
  * see the <a href="package-summary.html">package summary</a> and javadoc <a
@@ -54,7 +56,8 @@ class SelectedSparseObjectMatrix1D extends ObjectMatrix1D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 4082179555090016993L;
 
     /*
      * The elements of the matrix.

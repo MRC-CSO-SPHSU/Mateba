@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.map.tdouble;
 
+import java.io.Serial;
 import java.util.concurrent.Future;
 
 import cern.colt.function.tdouble.LongDoubleProcedure;
@@ -34,10 +35,8 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * @see java.util.HashMap
  */
 public abstract class AbstractLongDoubleMap extends AbstractMap {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 100760275683592193L;
 
     // public static int hashCollisions = 0; // for debug only
     /**

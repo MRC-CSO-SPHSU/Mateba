@@ -14,7 +14,7 @@ import cern.colt.function.tint.IntIntProcedure;
 import cern.colt.function.tint.IntProcedure;
 import cern.jet.math.tdouble.DoubleArithmetic;
 import cern.jet.math.tdouble.DoubleFunctions;
-import cern.jet.random.tdouble.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister;
 
 /**
  * Int Function objects to be passed to generic methods. Same as
@@ -693,7 +693,7 @@ public class IntFunctions extends Object {
      * seeded with the current time.
      * <p>
      * Note that any random engine derived from
-     * {@link cern.jet.random.tdouble.engine.DoubleRandomEngine} and any random
+     * {@link cern.jet.random.tdouble.engine.RandomEngine} and any random
      * distribution derived from
      * {@link cern.jet.random.tdouble.AbstractDoubleDistribution} are function
      * objects, because they implement the proper longerfaces. Thus, if you are

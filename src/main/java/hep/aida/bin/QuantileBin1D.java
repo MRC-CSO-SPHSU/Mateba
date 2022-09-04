@@ -1,9 +1,13 @@
 package hep.aida.bin;
 
-import cern.colt.list.ArrayList;
-import cern.jet.random.RandomEngine;
+
+import cern.colt.list.tdouble.DoubleArrayList;
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.engine.RandomEngine;
 import cern.jet.stat.quantile.QuantileFinder;
 import cern.jet.stat.quantile.QuantileFinderFactory;
+import hep.aida.IAxis;
+import hep.aida.ref.Converter;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serial;
@@ -160,7 +164,7 @@ public class QuantileBin1D extends MightyStaticBin1D {
      * @throws IndexOutOfBoundsException if {@code list.size() > 0 && (from < 0 || from > to || to >= list.size())}.
      */
 
-    public synchronized void addAllOfFromTo(final @NotNull ArrayList list, final int from, final int to) {
+    public synchronized void addAllOfFromTo(final @NotNull DoubleArrayList list, final int from, final int to) {
         super.addAllOfFromTo(list, from, to);
         if (this.finder != null) this.finder.addAllOfFromTo(list, from, to);
     }
@@ -178,7 +182,7 @@ public class QuantileBin1D extends MightyStaticBin1D {
      * @return a deep copy of the receiver.
      */
 
-    public synchronized Object clone() {
+    public synchronized QuantileBin1D clone() {
         QuantileBin1D clone = (QuantileBin1D) super.clone();
         if (this.finder != null)
             clone.finder = (QuantileFinder) clone.finder.clone();
@@ -223,7 +227,7 @@ public class QuantileBin1D extends MightyStaticBin1D {
      * @return the phi quantile element.
      */
     public synchronized double quantile(final double phi) {
-        return quantiles(new ArrayList(new double[]{phi})).get(0);
+        return quantiles(new DoubleArrayList(new double[]{phi})).get(0);
     }
 
     /**
@@ -245,7 +249,7 @@ public class QuantileBin1D extends MightyStaticBin1D {
      *             {@code (0.0,1.0]}. {@code percentages} must be sorted ascending.
      * @return the quantiles.
      */
-    public synchronized ArrayList quantiles(final @NotNull ArrayList phis) {
+    public synchronized DoubleArrayList quantiles(final @NotNull DoubleArrayList phis) {
         return finder.quantileElements(phis);
     }
 
@@ -368,7 +372,7 @@ public class QuantileBin1D extends MightyStaticBin1D {
      * Finally, the statistics measures of an interval {@code I} are computed by summing up (integrating) the measures
      * of its sub-intervals.
      */
-    public synchronized MightyStaticBin1D[] splitApproximately(final @NotNull ArrayList percentages, final int k) {
+    public synchronized MightyStaticBin1D[] splitApproximately(final @NotNull DoubleArrayList percentages, final int k) {
         int percentSize = percentages.size();
         if (k < 1 || percentSize < 2)
             throw new IllegalArgumentException();
@@ -387,7 +391,7 @@ public class QuantileBin1D extends MightyStaticBin1D {
             }
         }
 
-        double[] quantiles = quantiles(new ArrayList(subbins)).elements();
+        double[] quantiles = quantiles(new DoubleArrayList(subbins)).elements();
 
         MightyStaticBin1D[] splitBins = new MightyStaticBin1D[noOfBins];
         int maxOrderForSumOfPowers = getMaxOrderForSumOfPowers();
@@ -461,13 +465,13 @@ public class QuantileBin1D extends MightyStaticBin1D {
      * For each interval boundary of the axis (including -infinity and
      * +infinity), computes the percentage (quantile inverse) of elements less
      * than the boundary. Then lets
-     * {@link #splitApproximately(ArrayList, int)} do the real work.
+     * {@link #splitApproximately(DoubleArrayList, int)} do the real work.
      *
      * @param axis an axis defining interval boundaries.
      * @param k    the desired number of sub-intervals per interval.
      */
     public synchronized MightyStaticBin1D[] splitApproximately(final @NotNull IAxis axis, final int k) {
-        ArrayList percentages = new ArrayList(new Converter().edges(axis));
+        DoubleArrayList percentages = new DoubleArrayList(new Converter().edges(axis));
         percentages.beforeInsert(0, Double.NEGATIVE_INFINITY);
         percentages.add(Double.POSITIVE_INFINITY);
         for (int i = percentages.size(); --i >= 0; ) {

@@ -12,7 +12,7 @@ import cern.colt.function.tdouble.DoubleDoubleFunction;
 import cern.colt.function.tdouble.DoubleDoubleProcedure;
 import cern.colt.function.tdouble.DoubleFunction;
 import cern.colt.function.tdouble.DoubleProcedure;
-import cern.jet.random.tdouble.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister;
 
 // import com.imsl.math.Sfun;
 /**
@@ -1182,7 +1182,7 @@ public class DoubleFunctions extends Object {
      * seeded with the current time.
      * <p>
      * Note that any random engine derived from
-     * {@link cern.jet.random.tdouble.engine.DoubleRandomEngine} and any random
+     * {@link cern.jet.random.tdouble.engine.RandomEngine} and any random
      * distribution derived from
      * {@link cern.jet.random.tdouble.AbstractDoubleDistribution} are function
      * objects, because they implement the proper interfaces. Thus, if you are

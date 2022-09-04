@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tlong.impl;
 
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -73,8 +74,9 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class DenseLongMatrix3D extends LongMatrix3D {
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = 7245505990771475834L;
     /**
      * The elements of this matrix. elements are stored in slice major, then row
      * major, then column major, in order of significance, i.e.

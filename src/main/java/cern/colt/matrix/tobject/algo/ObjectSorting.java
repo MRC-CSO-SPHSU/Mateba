@@ -14,6 +14,9 @@ import cern.colt.matrix.tobject.ObjectMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix3D;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Matrix quicksorts and mergesorts. Use idioms like
  * <tt>Sorting.quickSort.sort(...)</tt> and <tt>Sorting.mergeSort.sort(...)</tt>
@@ -43,11 +46,12 @@ import cern.colt.matrix.tobject.ObjectMatrix3D;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.1, 25/May/2000
  */
-public class ObjectSorting extends cern.colt.PersistentObject {
+public class ObjectSorting implements Serializable, Cloneable{
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -1674113577210807428L;
 
     /**
      * A prefabricated quicksort.
@@ -433,5 +437,14 @@ public class ObjectSorting extends cern.colt.PersistentObject {
         // view the matrix according to the reordered slice indexes
         // take all rows and columns in the original order
         return matrix.viewSelection(sliceIndexes, null, null);
+    }
+
+    @Override
+    public ObjectSorting clone() {
+        try {
+            return (ObjectSorting) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

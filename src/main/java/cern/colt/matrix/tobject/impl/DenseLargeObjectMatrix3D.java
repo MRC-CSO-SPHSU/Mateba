@@ -10,6 +10,8 @@ package cern.colt.matrix.tobject.impl;
 
 import cern.colt.matrix.tobject.ObjectMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Dense 3-d matrix holding <tt>Object</tt> elements. First see the <a
  * href="package-summary.html">package summary</a> and javadoc <a
@@ -31,7 +33,8 @@ import cern.colt.matrix.tobject.ObjectMatrix3D;
  */
 public class DenseLargeObjectMatrix3D extends WrapperObjectMatrix3D {
 
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -4436178977940944699L;
 
     private Object[][][] elements;
 

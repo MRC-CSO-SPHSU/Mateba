@@ -8,10 +8,16 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tlong;
 
+import cern.colt.list.tlong.LongArrayList;
 import cern.colt.matrix.tlong.impl.DenseLongMatrix1D;
 import cern.colt.matrix.tlong.impl.SparseLongMatrix1D;
 import cern.jet.math.tlong.LongFunctions;
-import cern.jet.random.tdouble.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.sampling.RandomSamplingAssistant;
+
+import java.awt.*;
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * Factory for convenient construction of 1-d matrices holding <tt>int</tt>
@@ -38,11 +44,7 @@ import cern.jet.random.tdouble.engine.MersenneTwister;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class LongFactory1D extends cern.colt.PersistentObject {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+public class LongFactory1D implements Serializable, Cloneable {
 
     /**
      * A factory producing dense matrices.
@@ -53,6 +55,8 @@ public class LongFactory1D extends cern.colt.PersistentObject {
      * A factory producing sparse matrices.
      */
     public static final LongFactory1D sparse = new LongFactory1D();
+    @Serial
+    private static final long serialVersionUID = -7650582137755421921L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -159,7 +163,7 @@ public class LongFactory1D extends cern.colt.PersistentObject {
      *            The values to be filled into the new matrix.
      * @return a new matrix.
      */
-    public LongMatrix1D make(cern.colt.list.tlong.AbstractLongList values) {
+    public LongMatrix1D make(LongArrayList values) {
         int size = values.size();
         LongMatrix1D vector = make(size);
         for (int i = size; --i >= 0;)
@@ -204,7 +208,7 @@ public class LongFactory1D extends cern.colt.PersistentObject {
      * 
      * @throws IllegalArgumentException
      *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant
+     * @see cern.jet.random.sampling.RandomSamplingAssistant
      */
     public LongMatrix1D sample(int size, int value, int nonZeroFraction) {
         double epsilon = 1e-09;
@@ -221,8 +225,7 @@ public class LongFactory1D extends cern.colt.PersistentObject {
         if (n == 0)
             return matrix;
 
-        cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant sampler = new cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant(
-                n, size, new MersenneTwister());
+       RandomSamplingAssistant sampler = new RandomSamplingAssistant( n, size, new MersenneTwister());
         for (int i = size; --i >= 0;) {
             if (sampler.sampleNextElement()) {
                 matrix.set(i, value);
@@ -248,5 +251,14 @@ public class LongFactory1D extends cern.colt.PersistentObject {
         for (int i = size; --i >= 0;)
             list.set(i, values.get(i));
         return list;
+    }
+
+    @Override
+    public LongFactory1D clone() {
+        try {
+            return (LongFactory1D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

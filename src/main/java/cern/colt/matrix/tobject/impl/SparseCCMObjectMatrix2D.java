@@ -10,6 +10,8 @@ package cern.colt.matrix.tobject.impl;
 
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 
+import java.io.Serial;
+
 /**
  * Sparse column-compressed-modified 2-d matrix holding <tt>Object</tt> elements.
  * Each column is stored as SparseObjectMatrix1D.
@@ -19,7 +21,8 @@ import cern.colt.matrix.tobject.ObjectMatrix2D;
  */
 public class SparseCCMObjectMatrix2D extends WrapperObjectMatrix2D {
 
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -4140568062932591807L;
     private SparseObjectMatrix1D[] elements;
 
     /**

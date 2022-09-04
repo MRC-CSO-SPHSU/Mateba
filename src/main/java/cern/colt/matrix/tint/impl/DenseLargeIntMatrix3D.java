@@ -10,6 +10,8 @@ package cern.colt.matrix.tint.impl;
 
 import cern.colt.matrix.tint.IntMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Dense 3-d matrix holding <tt>int</tt> elements. First see the <a
  * href="package-summary.html">package summary</a> and javadoc <a
@@ -31,8 +33,8 @@ import cern.colt.matrix.tint.IntMatrix3D;
  */
 public class DenseLargeIntMatrix3D extends WrapperIntMatrix3D {
 
-    private static final long serialVersionUID = 1L;
-
+    @Serial
+    private static final long serialVersionUID = -1929672935924638581L;
     private int[][][] elements;
 
     public DenseLargeIntMatrix3D(int slices, int rows, int columns) {

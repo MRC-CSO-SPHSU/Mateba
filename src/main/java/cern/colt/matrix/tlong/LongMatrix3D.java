@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tlong;
 
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -40,10 +41,9 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  */
 public abstract class LongMatrix3D extends AbstractMatrix3D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+
+    @Serial
+    private static final long serialVersionUID = -9064306559860314125L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from

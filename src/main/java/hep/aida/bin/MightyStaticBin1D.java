@@ -1,5 +1,7 @@
 package hep.aida.bin;
 
+import cern.colt.list.tdouble.DoubleArrayList;
+import cern.jet.stat.Descriptive;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serial;
@@ -70,7 +72,7 @@ public class MightyStaticBin1D extends StaticBin1D {
      * @throws IndexOutOfBoundsException if {@code list.size() > 0 && (from < 0 || from > to || to >= list.size())}
      *                                   .
      */
-    public synchronized void addAllOfFromTo(final @NotNull ArrayList list, final int from, final int to) {
+    public synchronized void addAllOfFromTo(final @NotNull DoubleArrayList list, final int from, final int to) {
         super.addAllOfFromTo(list, from, to);
 
         if (this.sumOfPowers != null) {
@@ -243,7 +245,7 @@ public class MightyStaticBin1D extends StaticBin1D {
         if (!hasSumOfPowers(k)) return Double.NaN;
 
         int maxOrder = Math.min(k, getMaxOrderForSumOfPowers());
-        ArrayList sumOfPows = new ArrayList(maxOrder + 1);
+        var sumOfPows = new DoubleArrayList(maxOrder + 1);
         sumOfPows.add(size());
         sumOfPows.add(sum());
         sumOfPows.add(sumOfSquares());

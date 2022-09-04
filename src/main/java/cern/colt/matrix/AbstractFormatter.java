@@ -8,6 +8,9 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Abstract base class for flexible, well human readable matrix print
  * formatting. Value type independent. A single cell is formatted via a format
@@ -23,8 +26,7 @@ package cern.colt.matrix;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public abstract class AbstractFormatter extends cern.colt.PersistentObject {
-    private static final long serialVersionUID = 1L;
+public abstract class AbstractFormatter implements Serializable, Cloneable {
 
     /**
      * The alignment string aligning the cells of a column to the left.
@@ -69,6 +71,8 @@ public abstract class AbstractFormatter extends cern.colt.PersistentObject {
      * <tt>"\n\n"</tt>.
      */
     public static final String DEFAULT_SLICE_SEPARATOR = "\n\n";
+    @Serial
+    private static final long serialVersionUID = 5162429376798960380L;
 
     /**
      * The default format string for formatting a single cell value; currently
@@ -149,8 +153,8 @@ public abstract class AbstractFormatter extends cern.colt.PersistentObject {
             int maxWidth = minColumnWidth;
             int maxLead = Integer.MIN_VALUE;
             // int maxTrail = Integer.MIN_VALUE;
-            for (int row = 0; row < rows; row++) {
-                String s = strings[row][column];
+            for (String[] string : strings) {
+                String s = string[column];
                 maxWidth = Math.max(maxWidth, s.length());
                 if (isDecimal)
                     maxLead = Math.max(maxLead, lead(s));
@@ -164,8 +168,8 @@ public abstract class AbstractFormatter extends cern.colt.PersistentObject {
 
         // format each row according to alignment parameters
         // StringBuffer total = new StringBuffer();
-        for (int row = 0; row < rows; row++) {
-            alignRow(strings[row], maxColWidth, maxColLead);
+        for (String[] string : strings) {
+            alignRow(string, maxColWidth, maxColLead);
         }
 
     }
@@ -175,16 +179,13 @@ public abstract class AbstractFormatter extends cern.colt.PersistentObject {
      */
     protected int alignmentCode(String alignment) {
         // {-1,0,1,2} = {left,centered,right,decimal point}
-        if (alignment.equals(LEFT))
-            return -1;
-        else if (alignment.equals(CENTER))
-            return 0;
-        else if (alignment.equals(RIGHT))
-            return 1;
-        else if (alignment.equals(DECIMAL))
-            return 2;
-        else
-            throw new IllegalArgumentException("unknown alignment: " + alignment);
+        return switch (alignment) {
+            case LEFT -> -1;
+            case CENTER -> 0;
+            case RIGHT -> 1;
+            case DECIMAL -> 2;
+            default -> throw new IllegalArgumentException("unknown alignment: " + alignment);
+        };
     }
 
     /**
@@ -192,29 +193,33 @@ public abstract class AbstractFormatter extends cern.colt.PersistentObject {
      * (left,centered,right,decimal).
      */
     protected void alignRow(String[] row, int[] maxColWidth, int[] maxColLead) {
-        StringBuffer s = new StringBuffer();
+        StringBuilder s = new StringBuilder();
 
         int columns = row.length;
         for (int column = 0; column < columns; column++) {
             s.setLength(0);
             String c = row[column];
-            if (alignment.equals(RIGHT)) {
-                s.append(blanks(maxColWidth[column] - s.length()));
-                s.append(c);
-            } else if (alignment.equals(DECIMAL)) {
-                s.append(blanks(maxColLead[column] - lead(c)));
-                s.append(c);
-                s.append(blanks(maxColWidth[column] - s.length()));
-            } else if (alignment.equals(CENTER)) {
-                s.append(blanks((maxColWidth[column] - c.length()) / 2));
-                s.append(c);
-                s.append(blanks(maxColWidth[column] - s.length()));
-
-            } else if (alignment.equals(LEFT)) {
-                s.append(c);
-                s.append(blanks(maxColWidth[column] - s.length()));
-            } else
-                throw new InternalError();
+            switch (alignment) {
+                case RIGHT -> {
+                    s.append(blanks(maxColWidth[column] - s.length()));
+                    s.append(c);
+                }
+                case DECIMAL -> {
+                    s.append(blanks(maxColLead[column] - lead(c)));
+                    s.append(c);
+                    s.append(blanks(maxColWidth[column] - s.length()));
+                }
+                case CENTER -> {
+                    s.append(blanks((maxColWidth[column] - c.length()) / 2));
+                    s.append(c);
+                    s.append(blanks(maxColWidth[column] - s.length()));
+                }
+                case LEFT -> {
+                    s.append(c);
+                    s.append(blanks(maxColWidth[column] - s.length()));
+                }
+                default -> throw new InternalError();
+            }
 
             row[column] = s.toString();
         }
@@ -229,11 +234,7 @@ public abstract class AbstractFormatter extends cern.colt.PersistentObject {
         if (length < blanksCache.length)
             return blanksCache[length];
 
-        StringBuffer buf = new StringBuffer(length);
-        for (int k = 0; k < length; k++) {
-            buf.append(' ');
-        }
-        return buf.toString();
+        return " ".repeat(length);
     }
 
     /**
@@ -276,11 +277,7 @@ public abstract class AbstractFormatter extends cern.colt.PersistentObject {
             return blanks(length);
         if (length < 0)
             length = 0;
-        StringBuffer buf = new StringBuffer(length);
-        for (int k = 0; k < length; k++) {
-            buf.append(character);
-        }
-        return buf.toString();
+        return String.valueOf(character).repeat(length);
     }
 
     /**
@@ -413,8 +410,8 @@ public abstract class AbstractFormatter extends cern.colt.PersistentObject {
         int rows = strings.length;
         int columns = strings.length <= 0 ? 0 : strings[0].length;
 
-        StringBuffer total = new StringBuffer();
-        StringBuffer s = new StringBuffer();
+        StringBuilder total = new StringBuilder();
+        StringBuilder s = new StringBuilder();
         for (int row = 0; row < rows; row++) {
             s.setLength(0);
             for (int column = 0; column < columns; column++) {
@@ -439,9 +436,18 @@ public abstract class AbstractFormatter extends cern.colt.PersistentObject {
     protected String toString(AbstractMatrix2D matrix) {
         String[][] strings = this.format(matrix);
         align(strings);
-        StringBuffer total = new StringBuffer(toString(strings));
+        StringBuilder total = new StringBuilder(toString(strings));
         if (printShape)
             total.insert(0, shape(matrix) + "\n");
         return total.toString();
+    }
+
+    @Override
+    public AbstractFormatter clone() {
+        try {
+            return (AbstractFormatter) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

@@ -11,6 +11,9 @@ package cern.colt.matrix.tobject;
 import cern.colt.matrix.tobject.impl.DenseObjectMatrix3D;
 import cern.colt.matrix.tobject.impl.SparseObjectMatrix3D;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Factory for convenient construction of 3-d matrices holding <tt>Object</tt>
  * cells. Use idioms like <tt>ObjectFactory3D.dense.make(4,4,4)</tt> to
@@ -34,11 +37,12 @@ import cern.colt.matrix.tobject.impl.SparseObjectMatrix3D;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class ObjectFactory3D extends cern.colt.PersistentObject {
+public class ObjectFactory3D implements Serializable, Cloneable{
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -4192785125265951692L;
 
     /**
      * A factory producing dense matrices.
@@ -99,5 +103,14 @@ public class ObjectFactory3D extends cern.colt.PersistentObject {
      */
     public ObjectMatrix3D make(int slices, int rows, int columns, Object initialValue) {
         return make(slices, rows, columns).assign(initialValue);
+    }
+
+    @Override
+    public ObjectFactory3D clone() {
+        try {
+            return (ObjectFactory3D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

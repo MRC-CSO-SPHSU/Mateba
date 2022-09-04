@@ -10,6 +10,8 @@ package cern.colt.matrix.tlong.impl;
 
 import cern.colt.matrix.tlong.LongMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Dense 3-d matrix holding <tt>long</tt> elements. First see the <a
  * href="package-summary.html">package summary</a> and javadoc <a
@@ -31,8 +33,8 @@ import cern.colt.matrix.tlong.LongMatrix3D;
  */
 public class DenseLargeLongMatrix3D extends WrapperLongMatrix3D {
 
-    private static final long serialVersionUID = 1L;
-
+    @Serial
+    private static final long serialVersionUID = -74927824506915605L;
     private long[][][] elements;
 
     public DenseLargeLongMatrix3D(int slices, int rows, int columns) {

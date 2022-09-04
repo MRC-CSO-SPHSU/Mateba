@@ -8,7 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt;
 
-import cern.jet.random.tdouble.engine.MersenneTwister;
+import cern.jet.random.Uniform;
+import cern.jet.random.engine.MersenneTwister;
 
 /**
  * Generically reorders (permutes) arbitrary shaped data (for example, an array,
@@ -102,7 +103,7 @@ import cern.jet.random.tdouble.engine.MersenneTwister;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 10-Oct-99
  */
-public class GenericPermuting extends Object {
+public class GenericPermuting {
     /**
      * Makes this class non instantiable, but still let's others inherit from
      * it.
@@ -179,8 +180,7 @@ public class GenericPermuting extends Object {
             // Note that this is perhaps not what you want...
             for (int i = N; --i >= 0;)
                 permutation[i] = i;
-            cern.jet.random.tdouble.DoubleUniform gen = new cern.jet.random.tdouble.DoubleUniform(
-                    new MersenneTwister((int) p));
+            var gen = new Uniform(new MersenneTwister((int) p));
             for (int i = 0; i < N - 1; i++) {
                 int random = gen.nextIntFromTo(i, N - 1);
 

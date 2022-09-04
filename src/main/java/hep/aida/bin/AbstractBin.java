@@ -1,7 +1,5 @@
 package hep.aida.bin;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.Serial;
 import java.io.Serializable;
 

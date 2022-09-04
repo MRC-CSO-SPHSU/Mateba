@@ -14,6 +14,8 @@ import cern.colt.list.tdouble.DoubleArrayList;
 import cern.colt.list.tint.IntArrayList;
 import cern.colt.map.AbstractMap;
 
+import java.io.Serial;
+
 /**
  * Abstract base class for hash maps holding (key,value) associations of type
  * <tt>(double-->int)</tt>. First see the <a href="package-summary.html">package
@@ -31,10 +33,9 @@ import cern.colt.map.AbstractMap;
  * @see java.util.HashMap
  */
 public abstract class AbstractDoubleIntMap extends AbstractMap {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 9168751096399217008L;
+
 
     // public static int hashCollisions = 0; // for debug only
     /**

@@ -2,6 +2,8 @@ package cern.colt.matrix.tdouble.impl;
 
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 
+import java.io.Serial;
+
 /**
  * Sparse column-compressed-modified 2-d matrix holding <tt>double</tt>
  * elements. Each column is stored as SparseDoubleMatrix1D.
@@ -10,8 +12,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
  * 
  */
 public class SparseCCMDoubleMatrix2D extends WrapperDoubleMatrix2D {
-
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1814983437993171805L;
     private SparseDoubleMatrix1D[] elements;
 
     /**

@@ -8,6 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix;
 
+import java.io.Serial;
+
 /**
  * Abstract base class for 3-d matrices holding objects or primitive data types
  * such as <code>int</code>, <code>double</code>, etc. First see the <a
@@ -20,8 +22,9 @@ package cern.colt.matrix;
  * @version 1.0, 09/24/99
  */
 public abstract class AbstractMatrix3D extends AbstractMatrix {
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = -2158240557406187670L;
     /** the number of slices this matrix (view) has */
     protected int slices;
 
@@ -383,7 +386,7 @@ public abstract class AbstractMatrix3D extends AbstractMatrix {
      */
 
     public long size() {
-        return slices * rows * columns;
+        return (long) slices * rows * columns;
     }
 
     /**

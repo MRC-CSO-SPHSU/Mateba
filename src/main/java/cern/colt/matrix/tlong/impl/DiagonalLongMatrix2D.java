@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tlong.impl;
 
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -25,7 +26,8 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class DiagonalLongMatrix2D extends WrapperLongMatrix2D {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -403145918215444335L;
 
     /*
      * The non zero elements of the matrix.

@@ -8,14 +8,24 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.stat;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * An abstract set of buffers; internally used for computing approximate
  * quantiles.
  */
-public abstract class BufferSet extends cern.colt.PersistentObject {
+public abstract class BufferSet implements Serializable, Cloneable {
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 5924069290045755548L;
+
+    @Override
+    public BufferSet clone() {
+        try {
+            return (BufferSet) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

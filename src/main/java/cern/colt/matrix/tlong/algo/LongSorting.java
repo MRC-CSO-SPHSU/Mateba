@@ -15,6 +15,9 @@ import cern.colt.matrix.tlong.LongMatrix2D;
 import cern.colt.matrix.tlong.LongMatrix3D;
 import cern.colt.matrix.tlong.impl.DenseLongMatrix1D;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Matrix quicksorts and mergesorts. Use idioms like
  * <tt>Sorting.quickSort.sort(...)</tt> and <tt>Sorting.mergeSort.sort(...)</tt>
@@ -47,11 +50,7 @@ import cern.colt.matrix.tlong.impl.DenseLongMatrix1D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  * 
  */
-public class LongSorting extends cern.colt.PersistentObject {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+public class LongSorting implements Serializable, Cloneable{
 
     /**
      * A prefabricated quicksort.
@@ -62,10 +61,10 @@ public class LongSorting extends cern.colt.PersistentObject {
      * A prefabricated mergesort.
      */
     public static final LongSorting mergeSort = new LongSorting() {
-        /**
-         * 
-         */
-        private static final long serialVersionUID = 1L;
+
+
+        @Serial
+        private static final long serialVersionUID = 3577291184938757524L;
 
         protected void runSort(int[] a, int fromIndex, int toIndex, IntComparator c) {
             cern.colt.Sorting.mergeSort(a, fromIndex, toIndex, c);
@@ -75,6 +74,8 @@ public class LongSorting extends cern.colt.PersistentObject {
             cern.colt.GenericSorting.mergeSort(fromIndex, toIndex, c, swapper);
         }
     };
+    @Serial
+    private static final long serialVersionUID = 293970358093272389L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -603,5 +604,14 @@ public class LongSorting extends cern.colt.PersistentObject {
         // view the matrix according to the reordered slice indexes
         // take all rows and columns in the original order
         return matrix.viewSelection(sliceIndexes, null, null);
+    }
+
+    @Override
+    public LongSorting clone() {
+        try {
+            return (LongSorting) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

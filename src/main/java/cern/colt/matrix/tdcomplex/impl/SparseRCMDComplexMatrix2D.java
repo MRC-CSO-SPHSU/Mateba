@@ -10,6 +10,8 @@ package cern.colt.matrix.tdcomplex.impl;
 
 import cern.colt.matrix.tdcomplex.DComplexMatrix2D;
 
+import java.io.Serial;
+
 /**
  * Sparse row-compressed-modified 2-d matrix holding <tt>complex</tt> elements.
  * Each row is stored as SparseDComplexMatrix1D.
@@ -19,7 +21,9 @@ import cern.colt.matrix.tdcomplex.DComplexMatrix2D;
  */
 public class SparseRCMDComplexMatrix2D extends WrapperDComplexMatrix2D {
 
-    private static final long serialVersionUID = 1L;
+
+    @Serial
+    private static final long serialVersionUID = -2096626870182002757L;
     private SparseDComplexMatrix1D[] elements;
 
     /**

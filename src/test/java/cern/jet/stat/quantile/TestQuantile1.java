@@ -3,8 +3,8 @@ package cern.jet.stat.quantile;
 import java.text.DecimalFormat;
 import java.util.Date;
 
-import cern.jet.random.tdouble.DoubleUniform;
-import cern.jet.random.tdouble.engine.DRand;
+import cern.jet.random.Uniform;
+import cern.jet.random.engine.MersenneTwister;
 
 /**
  * A class to test the QuantileBin1D code. The command line is "java
@@ -51,16 +51,16 @@ public class TestQuantile1 {
         /*
          * Set up the QuantileBin1D object
          */
-        DRand rand = new DRand(new Date());
-        hep.aida.tdouble.bin.QuantileBin1D qAccum = new hep.aida.tdouble.bin.QuantileBin1D(false, N, 1.e-4, 1.e-3, 200, rand, false, false, 2);
+        var rand = new MersenneTwister(new Date());
+        hep.aida.bin.QuantileBin1D qAccum = new hep.aida.bin.QuantileBin1D(false, N, 1.e-4, 1.e-3, 200, rand, false, false, 2);
 
-        hep.aida.tdouble.bin.DynamicBin1D dbin = new hep.aida.tdouble.bin.DynamicBin1D();
+        hep.aida.bin.DynamicBin1D dbin = new hep.aida.bin.DynamicBin1D();
 
         /*
          * Use a new random number generator to generate numExamples random
          * gaussians, and add them to the QuantileBin1D
          */
-        DoubleUniform dataRand = new DoubleUniform(new DRand(7757));
+        var dataRand = new Uniform(new MersenneTwister(7757));
         for (int i = 1; i <= numExamples; i++) {
             double gauss = dataRand.nextDouble();
             qAccum.add(gauss);

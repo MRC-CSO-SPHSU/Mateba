@@ -14,6 +14,8 @@ import cern.colt.list.tdouble.DoubleArrayList;
 import cern.colt.list.tlong.LongArrayList;
 import cern.colt.map.AbstractMap;
 
+import java.io.Serial;
+
 /**
  * Abstract base class for hash maps holding (key,value) associations of type
  * <tt>(double-->long)</tt>. First see the <a
@@ -31,10 +33,8 @@ import cern.colt.map.AbstractMap;
  * @see java.util.HashMap
  */
 public abstract class AbstractDoubleLongMap extends AbstractMap {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -2467915577199977763L;
 
     // public static int hashCollisions = 0; // for debug only
     /**

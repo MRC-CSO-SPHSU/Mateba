@@ -12,6 +12,8 @@ import cern.colt.matrix.tobject.ObjectMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix3D;
 
+import java.io.Serial;
+
 /**
  * 2-d matrix holding <tt>Object</tt> elements; a view wrapping another 3-d matrix
  * and therefore delegating calls to it.
@@ -19,7 +21,8 @@ import cern.colt.matrix.tobject.ObjectMatrix3D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class DelegateObjectMatrix2D extends ObjectMatrix2D {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 3895600671046356003L;
 
     /*
      * The elements of the matrix.

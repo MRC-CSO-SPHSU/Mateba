@@ -1,7 +1,8 @@
 package hep.aida.bin;
 
-import cern.colt.buffer.BufferConsumer;
-import cern.colt.list.ArrayList;
+import cern.colt.buffer.tdouble.DoubleBuffer1D;
+import cern.colt.buffer.tdouble.DoubleBuffer1DConsumer;
+import cern.colt.list.tdouble.DoubleArrayList;
 import cern.jet.stat.Descriptive;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +20,7 @@ import java.io.Serial;
  * @see <a href="package-tree.html">tree view</a>
  */
 @SuppressWarnings("unused")
-public abstract class AbstractBin1D extends AbstractBin implements BufferConsumer {
+public abstract class AbstractBin1D extends AbstractBin implements DoubleBuffer1DConsumer {
 
     @Serial
     private static final long serialVersionUID = 3476788492463209410L;
@@ -42,7 +43,7 @@ public abstract class AbstractBin1D extends AbstractBin implements BufferConsume
      *
      * @param list the list of which all values shall be added.
      */
-    public final synchronized void addAllOf(final @NotNull ArrayList list) {
+    public final synchronized void addAllOf(final @NotNull DoubleArrayList list) {
         addAllOfFromTo(list, 0, list.size() - 1);
     }
 
@@ -55,7 +56,7 @@ public abstract class AbstractBin1D extends AbstractBin implements BufferConsume
      * @param to   the index of the last element to be added (inclusive).
      * @throws IndexOutOfBoundsException if {@code list.size() > 0 && (from < 0 || from > to || to >= list.size())}.
      */
-    public synchronized void addAllOfFromTo(final @NotNull ArrayList list, final int from, final int to) {
+    public synchronized void addAllOfFromTo(final @NotNull DoubleArrayList list, final int from, final int to) {
         for (int i = from; i <= to; i++) add(list.getQuick(i));
     }
 
@@ -68,8 +69,8 @@ public abstract class AbstractBin1D extends AbstractBin implements BufferConsume
      *                 the receiver.
      * @return a streaming buffer having the receiver as target.
      */
-    public synchronized Buffer buffered(final int capacity) {
-        return new Buffer(this, capacity);
+    public synchronized DoubleBuffer1D buffered(final int capacity) {
+        return new DoubleBuffer1D(this, capacity);
     }
 
     /**

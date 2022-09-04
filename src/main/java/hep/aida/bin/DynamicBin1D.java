@@ -1,10 +1,18 @@
 package hep.aida.bin;
 
+import cern.colt.buffer.tdouble.DoubleBuffer1D;
+import cern.colt.function.tdouble.DoubleDoubleFunction;
+import cern.colt.function.tdouble.DoubleFunction;
 import cern.colt.list.tdouble.DoubleArrayList;
 import cern.colt.list.tint.IntArrayList;
 import cern.colt.map.tdouble.AbstractDoubleIntMap;
 import cern.colt.map.tdouble.OpenDoubleIntHashMap;
-import cern.jet.stat.tdouble.quantile.DoubleBuffer;
+import cern.jet.random.AbstractDistribution;
+import cern.jet.random.Uniform;
+import cern.jet.random.engine.RandomEngine;
+import cern.jet.random.sampling.RandomSamplingAssistant;
+import cern.jet.stat.Descriptive;
+import cern.jet.stat.quantile.Buffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serial;
@@ -24,7 +32,7 @@ import java.util.Objects;
  * For high performance, add data in large chunks (buffers) via method {@link #addAllOf} rather than piecewise via
  * method {@link #add}.
  * <p>
- * If your favourite statistics measure is not directly provided by this class, check out {@link Descriptive} in
+ * If your favourite statistics measure is not directly provided by this class, check out {@link cern.jet.stat.Descriptive} in
  * combination with methods {@link #elements()} and {@link #sortedElements()}.
  * <p>
  *
@@ -174,10 +182,10 @@ public class DynamicBin1D extends QuantileBin1D {
      *
      * @return a deep copy of the receiver.
      */
-    public synchronized Object clone() {
+    public synchronized DynamicBin1D clone() {
         DynamicBin1D clone = (DynamicBin1D) super.clone();
-        if (this.elements != null) clone.elements = clone.elements.copy();
-        if (this.sortedElements != null) clone.sortedElements = clone.sortedElements.copy();
+        if (this.elements != null) clone.elements = clone.elements.clone();
+        if (this.sortedElements != null) clone.sortedElements = clone.sortedElements.clone();
         return clone;
     }
 
@@ -224,7 +232,7 @@ public class DynamicBin1D extends QuantileBin1D {
      * @implNote safe since we are already synchronized.
      */
     public synchronized DoubleArrayList elements() {
-        return elements_unsafe().copy();
+        return elements_unsafe().clone();
     }
 
     /**
@@ -299,7 +307,7 @@ public class DynamicBin1D extends QuantileBin1D {
      */
     public synchronized void frequencies(final @NotNull DoubleArrayList distinctElements,
                                          final @NotNull IntArrayList frequencies) {
-        Descriptive.frequencies(sortedElements_unsafe(), distinctElements, frequencies);
+       Descriptive.frequencies(sortedElements_unsafe(), distinctElements, frequencies);
     }
 
     /**
@@ -453,7 +461,7 @@ public class DynamicBin1D extends QuantileBin1D {
      * @throws IllegalArgumentException if {@code !withReplacement && n > size()}.
      */
     public synchronized void sample(final int n, final boolean withReplacement, RandomEngine randomGenerator,
-                                    cern.colt.buffer.tdouble.DoubleBuffer buffer) {
+                                    DoubleBuffer1D buffer) {
         if (randomGenerator == null)
             randomGenerator = AbstractDistribution.makeDefaultGenerator();
         buffer.clear();
@@ -618,7 +626,7 @@ public class DynamicBin1D extends QuantileBin1D {
      */
     public synchronized DynamicBin1D sampleBootstrap(final @NotNull DynamicBin1D other, final int resamples,
                                                      RandomEngine randomGenerator,
-                                                     final @NotNull DoubleBinBinFunction1D function) {
+                                                     final @NotNull BinBinFunction1D function) {
         if (randomGenerator == null)
             randomGenerator = AbstractDistribution.makeDefaultGenerator();
 
@@ -626,14 +634,14 @@ public class DynamicBin1D extends QuantileBin1D {
         int s1 = size();
         int s2 = other.size();
 
-        DynamicBin1D sample1 = new DynamicBin1D();
-        DoubleBuffer buffer1 = sample1.buffered(Math.min(maxCapacity, s1));
+        var sample1 = new DynamicBin1D();
+        var buffer1 = sample1.buffered(Math.min(maxCapacity, s1));
 
-        DynamicBin1D sample2 = new DynamicBin1D();
-        DoubleBuffer buffer2 = sample2.buffered(Math.min(maxCapacity, s2));
+        var sample2 = new DynamicBin1D();
+        var buffer2 = sample2.buffered(Math.min(maxCapacity, s2));
 
-        DynamicBin1D bootstrap = new DynamicBin1D();
-        DoubleBuffer bootBuffer = bootstrap.buffered(Math.min(maxCapacity, resamples));
+        var bootstrap = new DynamicBin1D();
+        var bootBuffer = bootstrap.buffered(Math.min(maxCapacity, resamples));
 
         for (int i = resamples; --i >= 0; ) {
             sample1.clear();
@@ -706,7 +714,7 @@ public class DynamicBin1D extends QuantileBin1D {
      * @implNote Safe since we are already synchronized.
      */
     public synchronized DoubleArrayList sortedElements() {
-        return sortedElements_unsafe().copy();
+        return sortedElements_unsafe().clone();
     }
 
     /**

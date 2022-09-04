@@ -12,7 +12,11 @@ import cern.colt.matrix.tlong.impl.DenseLongMatrix2D;
 import cern.colt.matrix.tlong.impl.SparseLongMatrix2D;
 import cern.colt.matrix.tlong.impl.SparseRCLongMatrix2D;
 import cern.jet.math.tlong.LongFunctions;
-import cern.jet.random.tdouble.engine.MersenneTwister;
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.sampling.RandomSamplingAssistant;
+import org.netlib.util.Second;
+
+import java.io.Serializable;
 
 /**
  * Factory for convenient construction of 2-d matrices holding <tt>int</tt>
@@ -87,11 +91,8 @@ import cern.jet.random.tdouble.engine.MersenneTwister;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class LongFactory2D extends cern.colt.PersistentObject {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+public class LongFactory2D implements Serializable, Cloneable{
+
 
     /**
      * A factory producing dense matrices.
@@ -978,7 +979,7 @@ public class LongFactory2D extends cern.colt.PersistentObject {
      * 
      * @throws IllegalArgumentException
      *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant
+     * @see cern.jet.random.sampling.RandomSamplingAssistant
      */
     public LongMatrix2D sample(int rows, int columns, int value, int nonZeroFraction) {
         LongMatrix2D matrix = make(rows, columns);
@@ -996,7 +997,7 @@ public class LongFactory2D extends cern.colt.PersistentObject {
      * 
      * @throws IllegalArgumentException
      *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant
+     * @see cern.jet.random.sampling.RandomSamplingAssistant
      */
     public LongMatrix2D sample(LongMatrix2D matrix, int value, int nonZeroFraction) {
         int rows = matrix.rows();
@@ -1016,8 +1017,7 @@ public class LongFactory2D extends cern.colt.PersistentObject {
         if (n == 0)
             return matrix;
 
-        cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant sampler = new cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant(
-                n, size, new MersenneTwister());
+        RandomSamplingAssistant sampler = new RandomSamplingAssistant( n, size, new MersenneTwister());
         for (int i = 0; i < size; i++) {
             if (sampler.sampleNextElement()) {
                 int row = (i / columns);
@@ -1027,5 +1027,14 @@ public class LongFactory2D extends cern.colt.PersistentObject {
         }
 
         return matrix;
+    }
+
+    @Override
+    public LongFactory2D clone() {
+        try {
+            return (LongFactory2D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

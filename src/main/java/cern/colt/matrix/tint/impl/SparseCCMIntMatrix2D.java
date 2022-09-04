@@ -10,6 +10,8 @@ package cern.colt.matrix.tint.impl;
 
 import cern.colt.matrix.tint.IntMatrix2D;
 
+import java.io.Serial;
+
 /**
  * Sparse column-compressed-modified 2-d matrix holding <tt>int</tt> elements.
  * Each column is stored as SparseIntMatrix1D.
@@ -18,8 +20,8 @@ import cern.colt.matrix.tint.IntMatrix2D;
  * 
  */
 public class SparseCCMIntMatrix2D extends WrapperIntMatrix2D {
-
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -3329696520009235509L;
     private SparseIntMatrix1D[] elements;
 
     /**

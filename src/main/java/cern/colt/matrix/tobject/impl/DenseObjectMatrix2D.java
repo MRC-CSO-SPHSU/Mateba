@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tobject.impl;
 
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -66,7 +67,8 @@ public class DenseObjectMatrix2D extends ObjectMatrix2D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -7629870486267755504L;
     /**
      * The elements of this matrix. elements are stored in row major, i.e.
      * index==row*columns + column columnOf(index)==index%columns

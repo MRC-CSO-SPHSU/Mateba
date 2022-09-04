@@ -16,6 +16,10 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.DoubleMatrix3D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import hep.aida.bin.BinFunction1D;
+import hep.aida.bin.BinFunctions1D;
+
+import java.io.Serial;
 
 /**
  * Flexible, well human readable matrix print formatting; By default decimal
@@ -286,7 +290,9 @@ import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
  * @version 1.2, 11/30/99
  */
 public class DoubleFormatter extends AbstractFormatter {
-    private static final long serialVersionUID = 1L;
+
+    @Serial
+    private static final long serialVersionUID = 101955519187237065L;
 
     /**
      * Constructs and returns a matrix formatter with format <tt>"%G"</tt>.
@@ -501,9 +507,9 @@ public class DoubleFormatter extends AbstractFormatter {
         String rowAxisName = "CPU";
         String columnAxisName = "Year";
         String title = "CPU performance over time [nops/sec]";
-        hep.aida.tdouble.bin.BinFunctions1D F = hep.aida.tdouble.bin.BinFunctions1D.functions;
-        hep.aida.tdouble.bin.BinFunction1D[] aggr = { F.mean, F.rms, F.quantile(0.25), F.median,
-                F.quantile(0.75), F.stdDev, F.min, F.max };
+        BinFunction1D[] aggr = {BinFunctions1D.mean, BinFunctions1D.rms, BinFunctions1D.quantile(0.25),
+                                BinFunctions1D.median, BinFunctions1D.quantile(0.75), BinFunctions1D.stdDev,
+                                BinFunctions1D.min, BinFunctions1D.max};
         String format = "%1.2G";
         System.out.println(new DoubleFormatter(format).toTitleString(cern.colt.matrix.tdouble.DoubleFactory2D.dense
                 .make(values), rowNames, columnNames, rowAxisName, columnAxisName, title, aggr));
@@ -726,11 +732,11 @@ public class DoubleFormatter extends AbstractFormatter {
      * @param aggr
      *            the aggregation functions to be applied to columns and rows.
      * @return the matrix converted to a string.
-     * @see hep.aida.tdouble.bin.BinFunction1D
-     * @see hep.aida.tdouble.bin.BinFunctions1D
+     * @see hep.aida.bin.BinFunction1D
+     * @see hep.aida.bin.BinFunctions1D
      */
     public String toTitleString(DoubleMatrix2D matrix, String[] rowNames, String[] columnNames, String rowAxisName,
-            String columnAxisName, String title, hep.aida.tdouble.bin.BinFunction1D[] aggr) {
+            String columnAxisName, String title, BinFunction1D[] aggr) {
         if (matrix.size() == 0)
             return "Empty matrix";
         if (aggr == null || aggr.length == 0)
@@ -743,13 +749,13 @@ public class DoubleFormatter extends AbstractFormatter {
         // column
         // aggregations
 
-        cern.colt.matrix.tdouble.algo.DoubleStatistic.aggregate(matrix, aggr, colStats); // aggregate
+        DoubleStatistic.aggregate(matrix, aggr, colStats); // aggregate
         // an
         // entire
         // column
         // at a
         // time
-        cern.colt.matrix.tdouble.algo.DoubleStatistic.aggregate(matrix.viewDice(), aggr, rowStats.viewDice()); // aggregate
+        DoubleStatistic.aggregate(matrix.viewDice(), aggr, rowStats.viewDice()); // aggregate
         // an
         // entire
         // row
@@ -851,12 +857,12 @@ public class DoubleFormatter extends AbstractFormatter {
      * @param aggr
      *            the aggregation functions to be applied to columns, rows.
      * @return the matrix converted to a string.
-     * @see hep.aida.tdouble.bin.BinFunction1D
-     * @see hep.aida.tdouble.bin.BinFunctions1D
+     * @see hep.aida.bin.BinFunction1D
+     * @see hep.aida.bin.BinFunctions1D
      */
     public String toTitleString(DoubleMatrix3D matrix, String[] sliceNames, String[] rowNames, String[] columnNames,
             String sliceAxisName, String rowAxisName, String columnAxisName, String title,
-            hep.aida.tdouble.bin.BinFunction1D[] aggr) {
+            BinFunction1D[] aggr) {
         if (matrix.size() == 0)
             return "Empty matrix";
         StringBuffer buf = new StringBuffer();

@@ -9,6 +9,7 @@ It is provided "as is" without expressed or implied warranty.
 package cern.colt.matrix.tint.impl;
 
 import java.io.IOException;
+import java.io.Serial;
 
 import cern.colt.map.tlong.AbstractLongIntMap;
 import cern.colt.map.tlong.OpenLongIntHashMap;
@@ -88,11 +89,9 @@ import cern.colt.matrix.tint.IntMatrix2D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class SparseIntMatrix2D extends IntMatrix2D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = 1370834855403889671L;
     /*
      * The elements of the matrix.
      */

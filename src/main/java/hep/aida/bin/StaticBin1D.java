@@ -1,5 +1,7 @@
 package hep.aida.bin;
 
+import cern.colt.list.tdouble.DoubleArrayList;
+import cern.jet.stat.Descriptive;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serial;
@@ -24,11 +26,11 @@ import java.io.Serial;
 public class StaticBin1D extends AbstractBin1D implements Cloneable {
 
     /**
-     * Function arguments used by method {@link #addAllOf(ArrayList)} For memory tuning only. Avoids allocating a new
-     * array of arguments each time {@link #addAllOf(ArrayList)} is called.
+     * Function arguments used by method {@link #addAllOf(DoubleArrayList)} For memory tuning only. Avoids allocating a new
+     * array of arguments each time {@link #addAllOf(DoubleArrayList)} is called.
      * <p>
      * Each bin does not need its own set of argument vars since they are declared as {@code static}.
-     * {@link #addAllOf(ArrayList)} of this class uses only 4 entries. Subclasses computing additional incremental
+     * {@link #addAllOf(DoubleArrayList)} of this class uses only 4 entries. Subclasses computing additional incremental
      * statistics may need more arguments. So, to be on the safe side we allocate space for 20 args. Be sure you access
      * these arguments only in synchronized blocks like synchronized (arguments) { do it }
      * <p>
@@ -61,7 +63,7 @@ public class StaticBin1D extends AbstractBin1D implements Cloneable {
      */
 
     public synchronized void add(final double element) {
-        this.addAllOf(new ArrayList(new double[]{element}));
+        this.addAllOf(new DoubleArrayList(new double[]{element}));
     }
 
     /**
@@ -73,7 +75,7 @@ public class StaticBin1D extends AbstractBin1D implements Cloneable {
      * @param to   the index of the last element to be added (inclusive).
      * @throws IndexOutOfBoundsException if {@code list.size() > 0 && (from < 0 || from > to || to >= list.size())}.
      */
-    public synchronized void addAllOfFromTo(final @NotNull ArrayList list, final int from, final int to) {
+    public synchronized void addAllOfFromTo(final @NotNull DoubleArrayList list, final int from, final int to) {
         synchronized (arguments) {
 
             arguments[0] = this.min;

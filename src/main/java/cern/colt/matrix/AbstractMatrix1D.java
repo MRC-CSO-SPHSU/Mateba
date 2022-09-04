@@ -8,6 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix;
 
+import java.io.Serial;
+
 /**
  * Abstract base class for 1-d matrices (aka <i>vectors</i>) holding objects or
  * primitive data types such as <code>int</code>, <code>double</code>, etc.
@@ -20,8 +22,9 @@ package cern.colt.matrix;
  * @version 1.0, 09/24/99
  */
 public abstract class AbstractMatrix1D extends AbstractMatrix {
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = -7170337676610100368L;
     /** the number of cells this matrix (view) has */
     protected int size;
 

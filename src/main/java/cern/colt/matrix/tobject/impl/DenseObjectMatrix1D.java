@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tobject.impl;
 
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -44,7 +45,8 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -7509232094163050783L;
     /**
      * The elements of this matrix.
      */

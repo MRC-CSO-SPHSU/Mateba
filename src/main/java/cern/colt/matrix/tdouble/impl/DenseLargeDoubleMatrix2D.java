@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdouble.impl;
 
+import java.io.Serial;
 import java.util.concurrent.Future;
 
 import org.jtransforms.dct.DoubleDCT_1D;
@@ -45,8 +46,9 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  */
 public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = -5535611503516836874L;
     private double[][] elements;
 
     private DoubleFFT_2D fft2;

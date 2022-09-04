@@ -12,6 +12,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.DoubleMatrix3D;
 
+import java.io.Serial;
+
 /**
  * 1-d matrix holding <tt>double</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
@@ -22,10 +24,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix3D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class WrapperDoubleMatrix1D extends DoubleMatrix1D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -1781386719428870967L;
     /*
      * The elements of the matrix.
      */

@@ -16,58 +16,52 @@ import cern.colt.list.tlong.LongArrayList;
 import cern.colt.map.HashFunctions;
 import cern.colt.map.PrimeFinder;
 
+import java.io.Serial;
+
 /**
  * Hash map holding (key,value) associations of type <tt>(long-->int)</tt>;
  * Automatically grows and shrinks as needed; Implemented using open addressing
  * with double hashing. First see the <a href="package-summary.html">package
  * summary</a> and javadoc <a href="package-tree.html">tree view</a> to get the
  * broad picture.
- * 
+ * <p>
  * Overrides many methods for performance reasons only.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  * @see java.util.HashMap
  */
 public class OpenLongIntHashMap extends AbstractLongIntMap {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    protected static final byte FREE = 0;
+    protected static final byte FULL = 1;
+    protected static final byte REMOVED = 2;
+    @Serial
+    private static final long serialVersionUID = 439055651305674351L;
     /**
      * The hash table keys.
-     * 
+     *
      * @serial
      */
-    protected long table[];
-
+    protected long[] table;
     /**
      * The hash table values.
-     * 
+     *
      * @serial
      */
-    protected int values[];
-
+    protected int[] values;
     /**
      * The state of each hash table entry (FREE, FULL, REMOVED).
-     * 
+     *
      * @serial
      */
-    protected byte state[];
-
+    protected byte[] state;
     /**
      * The number of table entries in state==FREE.
-     * 
+     *
      * @serial
      */
     protected int freeEntries;
-
-    protected static final byte FREE = 0;
-
-    protected static final byte FULL = 1;
-
-    protected static final byte REMOVED = 2;
 
     /**
      * Constructs an empty map with default capacity and default load factors.
@@ -79,11 +73,9 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
     /**
      * Constructs an empty map with the specified initial capacity and default
      * load factors.
-     * 
-     * @param initialCapacity
-     *            the initial capacity of the map.
-     * @throws IllegalArgumentException
-     *             if the initial capacity is less than zero.
+     *
+     * @param initialCapacity the initial capacity of the map.
+     * @throws IllegalArgumentException if the initial capacity is less than zero.
      */
     public OpenLongIntHashMap(int initialCapacity) {
         this(initialCapacity, defaultMinLoadFactor, defaultMaxLoadFactor);
@@ -92,18 +84,14 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
     /**
      * Constructs an empty map with the specified initial capacity and the
      * specified minimum and maximum load factor.
-     * 
-     * @param initialCapacity
-     *            the initial capacity.
-     * @param minLoadFactor
-     *            the minimum load factor.
-     * @param maxLoadFactor
-     *            the maximum load factor.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
-     *             .
+     *
+     * @param initialCapacity the initial capacity.
+     * @param minLoadFactor   the minimum load factor.
+     * @param maxLoadFactor   the maximum load factor.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
+     *                                  .
      */
     public OpenLongIntHashMap(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
         setUp(initialCapacity, minLoadFactor, maxLoadFactor);
@@ -126,12 +114,12 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
 
     /**
      * Returns a deep copy of the receiver.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
 
-    public Object clone() {
-        OpenLongIntHashMap copy = (OpenLongIntHashMap) super.clone();
+    public OpenLongIntHashMap clone() {
+        var copy = (OpenLongIntHashMap) super.clone();
         copy.table = copy.table.clone();
         copy.values = copy.values.clone();
         copy.state = copy.state.clone();
@@ -140,7 +128,7 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
 
     /**
      * Returns <tt>true</tt> if the receiver contains the specified key.
-     * 
+     *
      * @return <tt>true</tt> if the receiver contains the specified key.
      */
 
@@ -150,7 +138,7 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
 
     /**
      * Returns <tt>true</tt> if the receiver contains the specified value.
-     * 
+     *
      * @return <tt>true</tt> if the receiver contains the specified value.
      */
 
@@ -168,9 +156,8 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
      * Calling this method before <tt>put()</tt>ing a large number of
      * associations boosts performance, because the receiver will grow only once
      * instead of potentially many times and hash collisions get less probable.
-     * 
-     * @param minCapacity
-     *            the desired minimum capacity.
+     *
+     * @param minCapacity the desired minimum capacity.
      */
 
     public void ensureCapacity(int minCapacity) {
@@ -189,16 +176,15 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
      * if it is no particular order. This is necessary so that, for example,
      * methods <tt>keys</tt> and <tt>values</tt> will yield association pairs,
      * not two uncorrelated lists.
-     * 
-     * @param procedure
-     *            the procedure to be applied. Stops iteration if the procedure
-     *            returns <tt>false</tt>, otherwise continues.
+     *
+     * @param procedure the procedure to be applied. Stops iteration if the procedure
+     *                  returns <tt>false</tt>, otherwise continues.
      * @return <tt>false</tt> if the procedure stopped before all keys where
-     *         iterated over, <tt>true</tt> otherwise.
+     * iterated over, <tt>true</tt> otherwise.
      */
 
     public boolean forEachKey(LongProcedure procedure) {
-        for (int i = table.length; i-- > 0;) {
+        for (int i = table.length; i-- > 0; ) {
             if (state[i] == FULL)
                 if (!procedure.apply(table[i]))
                     return false;
@@ -210,16 +196,15 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
      * Applies a procedure to each (key,value) pair of the receiver, if any.
      * Iteration order is guaranteed to be <i>identical</i> to the order used by
      * method {@link #forEachKey(LongProcedure)}.
-     * 
-     * @param procedure
-     *            the procedure to be applied. Stops iteration if the procedure
-     *            returns <tt>false</tt>, otherwise continues.
+     *
+     * @param procedure the procedure to be applied. Stops iteration if the procedure
+     *                  returns <tt>false</tt>, otherwise continues.
      * @return <tt>false</tt> if the procedure stopped before all keys where
-     *         iterated over, <tt>true</tt> otherwise.
+     * iterated over, <tt>true</tt> otherwise.
      */
 
     public boolean forEachPair(final LongIntProcedure procedure) {
-        for (int i = table.length; i-- > 0;) {
+        for (int i = table.length; i-- > 0; ) {
             if (state[i] == FULL)
                 if (!procedure.apply(table[i], values[i]))
                     return false;
@@ -232,11 +217,10 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
      * idea to first check with {@link #containsKey(long)} whether the given key
      * has a value associated or not, i.e. whether there exists an association
      * for the given key or not.
-     * 
-     * @param key
-     *            the key to be searched for.
+     *
+     * @param key the key to be searched for.
      * @return the value associated with the specified key; <tt>0</tt> if no
-     *         such key is present.
+     * such key is present.
      */
 
     public int get(long key) {
@@ -247,19 +231,18 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
     }
 
     /**
-     * @param key
-     *            the key to be added to the receiver.
+     * @param key the key to be added to the receiver.
      * @return the index where the key would need to be inserted, if it is not
-     *         already contained. Returns -index-1 if the key is already
-     *         contained at slot index. Therefore, if the returned index < 0,
-     *         then it is already contained at slot -index-1. If the returned
-     *         index >= 0, then it is NOT already contained and should be
-     *         inserted at slot index.
+     * already contained. Returns -index-1 if the key is already
+     * contained at slot index. Therefore, if the returned index < 0,
+     * then it is already contained at slot -index-1. If the returned
+     * index >= 0, then it is NOT already contained and should be
+     * inserted at slot index.
      */
     protected int indexOfInsertion(long key) {
         // System.out.println("key="+key);
-        final long tab[] = table;
-        final byte stat[] = state;
+        final long[] tab = table;
+        final byte[] stat = state;
         final int length = tab.length;
 
         final int hash = HashFunctions.hash(key) & 0x7FFFFFFF;
@@ -305,14 +288,13 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
     }
 
     /**
-     * @param key
-     *            the key to be searched in the receiver.
+     * @param key the key to be searched in the receiver.
      * @return the index where the key is contained in the receiver, returns -1
-     *         if the key was not found.
+     * if the key was not found.
      */
     protected int indexOfKey(long key) {
-        final long tab[] = table;
-        final byte stat[] = state;
+        final long[] tab = table;
+        final byte[] stat = state;
         final int length = tab.length;
 
         final int hash = HashFunctions.hash(key) & 0x7FFFFFFF;
@@ -338,16 +320,15 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
     }
 
     /**
-     * @param value
-     *            the value to be searched in the receiver.
+     * @param value the value to be searched in the receiver.
      * @return the index where the value is contained in the receiver, returns
-     *         -1 if the value was not found.
+     * -1 if the value was not found.
      */
     protected int indexOfValue(int value) {
-        final int val[] = values;
-        final byte stat[] = state;
+        final int[] val = values;
+        final byte[] stat = state;
 
-        for (int i = stat.length; --i >= 0;) {
+        for (int i = stat.length; --i >= 0; ) {
             if (stat[i] == FULL && val[i] == value)
                 return i;
         }
@@ -361,11 +342,10 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
      * exists an association from a key to this value. Search order is
      * guaranteed to be <i>identical</i> to the order used by method
      * {@link #forEachKey(LongProcedure)}.
-     * 
-     * @param value
-     *            the value to search for.
+     *
+     * @param value the value to search for.
      * @return the first key for which holds <tt>get(key) == value</tt>; returns
-     *         <tt>Long.MIN_VALUE</tt> if no such key exists.
+     * <tt>Long.MIN_VALUE</tt> if no such key exists.
      */
 
     public long keyOf(int value) {
@@ -385,9 +365,8 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
      * {@link #forEachKey(LongProcedure)}.
      * <p>
      * This method can be used to iterate over the keys of the receiver.
-     * 
-     * @param list
-     *            the list to be filled, can have any size.
+     *
+     * @param list the list to be filled, can have any size.
      */
 
     public void keys(LongArrayList list) {
@@ -398,7 +377,7 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
         byte[] stat = state;
 
         int j = 0;
-        for (int i = tab.length; i-- > 0;) {
+        for (int i = tab.length; i-- > 0; ) {
             if (stat[i] == FULL)
                 elements[j++] = tab[i];
         }
@@ -412,7 +391,7 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
      * order used by method {@link #forEachKey(LongProcedure)}.
      * <p>
      * <b>Example:</b> <br>
-     * 
+     *
      * <pre>
      *   LongIntProcedure condition = new LongIntProcedure() { // match even keys only
      *   public boolean apply(int key, int value) { return key%2==0; }
@@ -420,22 +399,19 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
      *   keys = (8,7,6), values = (1,2,2) --&gt; keyList = (6,8), valueList = (2,1)
      * &lt;/tt&gt;
      * </pre>
-     * 
-     * @param condition
-     *            the condition to be matched. Takes the current key as first
-     *            and the current value as second argument.
-     * @param keyList
-     *            the list to be filled with keys, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param condition the condition to be matched. Takes the current key as first
+     *                  and the current value as second argument.
+     * @param keyList   the list to be filled with keys, can have any size.
+     * @param valueList the list to be filled with values, can have any size.
      */
 
     public void pairsMatching(final LongIntProcedure condition, final LongArrayList keyList,
-            final IntArrayList valueList) {
+                              final IntArrayList valueList) {
         keyList.clear();
         valueList.clear();
 
-        for (int i = table.length; i-- > 0;) {
+        for (int i = table.length; i-- > 0; ) {
             if (state[i] == FULL && condition.apply(table[i], values[i])) {
                 keyList.add(table[i]);
                 valueList.add(values[i]);
@@ -446,14 +422,12 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
     /**
      * Associates the given key with the given value. Replaces any old
      * <tt>(key,someOtherValue)</tt> association, if existing.
-     * 
-     * @param key
-     *            the key the value shall be associated with.
-     * @param value
-     *            the value to be associated.
+     *
+     * @param key   the key the value shall be associated with.
+     * @param value the value to be associated.
      * @return <tt>true</tt> if the receiver did not already contain such a key;
-     *         <tt>false</tt> if the receiver did already contain such a key -
-     *         the new value has now replaced the formerly associated value.
+     * <tt>false</tt> if the receiver did already contain such a key -
+     * the new value has now replaced the formerly associated value.
      */
 
     public boolean put(long key, int value) {
@@ -500,13 +474,13 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
         int oldCapacity = table.length;
         // if (oldCapacity == newCapacity) return;
 
-        long oldTable[] = table;
-        int oldValues[] = values;
-        byte oldState[] = state;
+        long[] oldTable = table;
+        int[] oldValues = values;
+        byte[] oldState = state;
 
-        long newTable[] = new long[newCapacity];
-        int newValues[] = new int[newCapacity];
-        byte newState[] = new byte[newCapacity];
+        long[] newTable = new long[newCapacity];
+        int[] newValues = new int[newCapacity];
+        byte[] newState = new byte[newCapacity];
 
         this.lowWaterMark = chooseLowWaterMark(newCapacity, this.minLoadFactor);
         this.highWaterMark = chooseHighWaterMark(newCapacity, this.maxLoadFactor);
@@ -516,7 +490,7 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
         this.state = newState;
         this.freeEntries = newCapacity - this.distinct; // delta
 
-        for (int i = oldCapacity; i-- > 0;) {
+        for (int i = oldCapacity; i-- > 0; ) {
             if (oldState[i] == FULL) {
                 long element = oldTable[i];
                 int index = indexOfInsertion(element);
@@ -530,11 +504,10 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
     /**
      * Removes the given key with its associated element from the receiver, if
      * present.
-     * 
-     * @param key
-     *            the key to be removed from the receiver.
+     *
+     * @param key the key to be removed from the receiver.
      * @return <tt>true</tt> if the receiver contained the specified key,
-     *         <tt>false</tt> otherwise.
+     * <tt>false</tt> otherwise.
      */
 
     public boolean removeKey(long key) {
@@ -561,18 +534,14 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
 
     /**
      * Initializes the receiver.
-     * 
-     * @param initialCapacity
-     *            the initial capacity of the receiver.
-     * @param minLoadFactor
-     *            the minLoadFactor of the receiver.
-     * @param maxLoadFactor
-     *            the maxLoadFactor of the receiver.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
-     *             .
+     *
+     * @param initialCapacity the initial capacity of the receiver.
+     * @param minLoadFactor   the minLoadFactor of the receiver.
+     * @param maxLoadFactor   the maxLoadFactor of the receiver.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
+     *                                  .
      */
 
     protected void setUp(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
@@ -632,9 +601,8 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
      * {@link #forEachKey(LongProcedure)}.
      * <p>
      * This method can be used to iterate over the values of the receiver.
-     * 
-     * @param list
-     *            the list to be filled, can have any size.
+     *
+     * @param list the list to be filled, can have any size.
      */
 
     public void values(IntArrayList list) {
@@ -645,7 +613,7 @@ public class OpenLongIntHashMap extends AbstractLongIntMap {
         byte[] stat = state;
 
         int j = 0;
-        for (int i = stat.length; i-- > 0;) {
+        for (int i = stat.length; i-- > 0; ) {
             if (stat[i] == FULL)
                 elements[j++] = val[i];
         }

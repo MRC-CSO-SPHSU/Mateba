@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdcomplex;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -33,7 +34,8 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  */
 public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -3891105229583853376L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -1285,7 +1287,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
             return new double[] { 0, 0 };
 
         // setup
-        IntArrayList indexesCopy = nonZeroIndexes.copy();
+        IntArrayList indexesCopy = nonZeroIndexes.clone();
         indexesCopy.trimToSize();
         indexesCopy.quickSort();
         int[] nonZeroIndexElements = indexesCopy.elements();

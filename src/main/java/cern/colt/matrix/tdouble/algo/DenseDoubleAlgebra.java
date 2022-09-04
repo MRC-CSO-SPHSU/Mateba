@@ -8,6 +8,8 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdouble.algo;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -45,8 +47,7 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
-public class DenseDoubleAlgebra extends cern.colt.PersistentObject {
-    private static final long serialVersionUID = 1L;
+public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * A default Algebra object; has {@link DoubleProperty#DEFAULT} attached for
@@ -69,6 +70,8 @@ public class DenseDoubleAlgebra extends cern.colt.PersistentObject {
      * <tt>property().setTolerance(...)</tt>) will throw an exception.
      */
     public static final DenseDoubleAlgebra ZERO;
+    @Serial
+    private static final long serialVersionUID = 8908304692994912856L;
 
     /**
      * The property object attached to this instance.

@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdcomplex.impl;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -57,8 +58,9 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  */
 public class DenseDComplexMatrix2D extends DComplexMatrix2D {
-    static final long serialVersionUID = 1020177651L;
 
+    @Serial
+    private static final long serialVersionUID = -7756254378374691841L;
     private DoubleFFT_2D fft2;
 
     /**

@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tobject.impl;
 
+import java.io.Serial;
 import java.util.Arrays;
 
 import cern.colt.list.tint.IntArrayList;
@@ -39,7 +40,8 @@ import cern.colt.matrix.tobject.ObjectMatrix2D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class SparseRCObjectMatrix2D extends WrapperObjectMatrix2D {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -362999293754738801L;
 
     private static int searchFromTo(int[] list, int key, int from, int to) {
         while (from <= to) {

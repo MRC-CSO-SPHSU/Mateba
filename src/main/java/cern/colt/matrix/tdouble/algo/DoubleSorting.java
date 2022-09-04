@@ -16,6 +16,12 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.DoubleMatrix3D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
+import cern.jet.random.engine.MersenneTwister;
+import hep.aida.bin.BinFunction1D;
+import hep.aida.bin.BinFunctions1D;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * Matrix quicksorts and mergesorts. Use idioms like
@@ -49,11 +55,7 @@ import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  * 
  */
-public class DoubleSorting extends cern.colt.PersistentObject {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+public class DoubleSorting implements Serializable, Cloneable{
 
     /**
      * A prefabricated quicksort.
@@ -64,10 +66,10 @@ public class DoubleSorting extends cern.colt.PersistentObject {
      * A prefabricated mergesort.
      */
     public static final DoubleSorting mergeSort = new DoubleSorting() {
-        /**
-         * 
-         */
-        private static final long serialVersionUID = 1L;
+
+
+        @Serial
+        private static final long serialVersionUID = -230972689646290702L;
 
         protected void runSort(int[] a, int fromIndex, int toIndex, IntComparator c) {
             cern.colt.Sorting.mergeSort(a, fromIndex, toIndex, c);
@@ -77,6 +79,8 @@ public class DoubleSorting extends cern.colt.PersistentObject {
             cern.colt.GenericSorting.mergeSort(fromIndex, toIndex, c, swapper);
         }
     };
+    @Serial
+    private static final long serialVersionUID = -3727249744645764503L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -606,13 +610,13 @@ public class DoubleSorting extends cern.colt.PersistentObject {
      * @return a new matrix view having rows sorted. <b>Note that the original
      *         matrix is left unaffected.</b>
      */
-    public DoubleMatrix2D sort(DoubleMatrix2D matrix, hep.aida.tdouble.bin.BinFunction1D aggregate) {
+    public DoubleMatrix2D sort(DoubleMatrix2D matrix, BinFunction1D aggregate) {
         // precompute aggregates over rows, as defined by "aggregate"
 
         // a bit clumsy, because Statistic.aggregate(...) is defined on columns,
         // so we need to transpose views
         DoubleMatrix2D tmp = matrix.like(1, matrix.rows());
-        hep.aida.tdouble.bin.BinFunction1D[] func = { aggregate };
+        BinFunction1D[] func = { aggregate };
         DoubleStatistic.aggregate(matrix.viewDice(), func, tmp);
         double[] aggr = tmp.viewRow(0).toArray();
         return sort(matrix, aggr);
@@ -837,7 +841,7 @@ public class DoubleSorting extends cern.colt.PersistentObject {
 
         final cern.jet.math.tdouble.DoubleFunctions F = cern.jet.math.tdouble.DoubleFunctions.functions;
         DoubleMatrix2D A = cern.colt.matrix.tdouble.DoubleFactory2D.dense.make(rows, columns);
-        A.assign(new cern.jet.random.tdouble.engine.DRand()); // initialize randomly
+        A.assign(new MersenneTwister()); // initialize randomly
         timer.stop().display();
 
         // also benchmark copying in its several implementation flavours
@@ -861,7 +865,7 @@ public class DoubleSorting extends cern.colt.PersistentObject {
         System.out.print("now sorting - quick version with precomputation... ");
         timer.reset().start();
         // THE QUICK VERSION (takes some 10 secs)
-        A = sort.sort(A, hep.aida.tdouble.bin.BinFunctions1D.median);
+        A = sort.sort(A, BinFunctions1D.median);
         // A = sort.sort(A,hep.aida.bin.BinFunctions1D.sumLog);
         timer.stop().display();
 
@@ -871,9 +875,9 @@ public class DoubleSorting extends cern.colt.PersistentObject {
         // so we just show the first 5 rows
         if (print) {
             int r = Math.min(rows, 5);
-            hep.aida.tdouble.bin.BinFunction1D[] funs = { hep.aida.tdouble.bin.BinFunctions1D.median,
-                    hep.aida.tdouble.bin.BinFunctions1D.sumLog,
-                    hep.aida.tdouble.bin.BinFunctions1D.geometricMean };
+            BinFunction1D[] funs = { BinFunctions1D.median,
+                    BinFunctions1D.sumLog,
+                    BinFunctions1D.geometricMean };
             String[] rowNames = new String[r];
             String[] columnNames = new String[columns];
             for (int i = columns; --i >= 0;)
@@ -889,7 +893,7 @@ public class DoubleSorting extends cern.colt.PersistentObject {
         A = B;
         cern.colt.matrix.tdouble.algo.DoubleMatrix1DComparator fun = new cern.colt.matrix.tdouble.algo.DoubleMatrix1DComparator() {
             public int compare(DoubleMatrix1D x, DoubleMatrix1D y) {
-                double a = cern.colt.matrix.tdouble.algo.DoubleStatistic.bin(x).median();
+                double a = DoubleStatistic.bin(x).median();
                 double b = cern.colt.matrix.tdouble.algo.DoubleStatistic.bin(y).median();
                 // double a = x.aggregate(F.plus,F.log);
                 // double b = y.aggregate(F.plus,F.log);
@@ -934,7 +938,7 @@ public class DoubleSorting extends cern.colt.PersistentObject {
 
         final cern.jet.math.tdouble.DoubleFunctions F = cern.jet.math.tdouble.DoubleFunctions.functions;
         DoubleMatrix2D A = cern.colt.matrix.tdouble.DoubleFactory2D.dense.make(rows, columns);
-        A.assign(new cern.jet.random.tdouble.engine.DRand()); // initialize randomly
+        A.assign(new MersenneTwister()); // initialize randomly
 
         double[] v1 = A.viewColumn(0).toArray();
         double[] v2 = A.viewColumn(0).toArray();
@@ -980,5 +984,16 @@ public class DoubleSorting extends cern.colt.PersistentObject {
         edu.emory.mathcs.utils.pc.ConcurrencyUtils.setNumberOfThreads(2);
         zdemo8(10000000);
         System.exit(0);
+    }
+
+    @Override
+    public DoubleSorting clone() {
+        try {
+            DoubleSorting clone = (DoubleSorting) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
