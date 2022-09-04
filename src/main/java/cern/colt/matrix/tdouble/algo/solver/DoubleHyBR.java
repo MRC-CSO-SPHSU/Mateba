@@ -31,7 +31,6 @@ import cern.colt.matrix.tdouble.impl.DenseColumnDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
-import cern.jet.stat.tdouble.DoubleDescriptive;
 
 /**
  * HyBR is a Hybrid Bidiagonalization Regularization method used for solving
@@ -217,7 +216,7 @@ public class DoubleHyBR extends AbstractDoubleIterativeSolver {
                         work = new DenseDoubleMatrix1D(Ub.rows());
                         Ub.zMult(v, work, 1, 0, true);
                         omegaList.add(Math.min(1, findOmega(work, sv)));
-                        omega = DoubleDescriptive.mean(omegaList);
+                        omega = cern.jet.stat.Descriptive.mean(omegaList);
                     }
                     f = new DenseDoubleMatrix1D(Vb.rows());
                     alpha = tikhonovSolver(Ub, sv, Vb, v, f);

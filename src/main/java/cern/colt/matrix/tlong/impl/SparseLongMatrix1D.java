@@ -14,6 +14,8 @@ import cern.colt.matrix.tlong.LongMatrix1D;
 import cern.colt.matrix.tlong.LongMatrix2D;
 import cern.colt.matrix.tlong.LongMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Sparse hashed 1-d matrix (aka <i>vector</i>) holding <tt>long</tt> elements.
  * First see the <a href="package-summary.html">package summary</a> and javadoc
@@ -64,7 +66,8 @@ public class SparseLongMatrix1D extends LongMatrix1D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -2399388234288248145L;
     /*
      * The elements of the matrix.
      */

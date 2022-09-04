@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdcomplex;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
@@ -36,7 +37,9 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  */
 public abstract class DComplexMatrix2D extends AbstractMatrix2D {
-    private static final long serialVersionUID = 1L;
+
+    @Serial
+    private static final long serialVersionUID = 2565900635081762854L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -232,7 +235,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
                         for (int r = firstRow; r < lastRow; r++) {
                             for (int c = 0; c < columns; c++) {
                                 elem = getQuick(r, c);
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     setQuick(r, c, f.apply(elem));
                                 }
                             }
@@ -246,7 +249,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < columns; c++) {
                     elem = getQuick(r, c);
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         setQuick(r, c, f.apply(elem));
                     }
                 }
@@ -281,7 +284,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
                         for (int r = firstRow; r < lastRow; r++) {
                             for (int c = 0; c < columns; c++) {
                                 elem = getQuick(r, c);
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     setQuick(r, c, value);
                                 }
                             }
@@ -295,7 +298,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < columns; c++) {
                     elem = getQuick(r, c);
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         setQuick(r, c, value);
                     }
                 }
@@ -830,7 +833,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
                                     cardinality++;
                             }
                         }
-                        return Integer.valueOf(cardinality);
+                        return cardinality;
                     }
                 });
             }
@@ -838,9 +841,9 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     results[j] = (Integer) futures[j].get();
                 }
-                cardinality = results[0].intValue();
+                cardinality = results[0];
                 for (int j = 1; j < nthreads; j++) {
-                    cardinality += results[j].intValue();
+                    cardinality += results[j];
                 }
             } catch (ExecutionException ex) {
                 ex.printStackTrace();
@@ -899,12 +902,9 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      */
 
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (obj == this)
             return true;
-        if (obj == null)
-            return false;
-        if (!(obj instanceof DComplexMatrix2D))
-            return false;
+        if (!(obj instanceof DComplexMatrix2D)) return false;
 
         return cern.colt.matrix.tdcomplex.algo.DComplexProperty.DEFAULT.equals(this, (DComplexMatrix2D) obj);
     }

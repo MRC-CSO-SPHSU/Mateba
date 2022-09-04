@@ -8,6 +8,9 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.map;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Abstract base class for hash maps holding objects or primitive data types
  * such as <code>int</code>, <code>float</code>, etc. as keys and/or values.
@@ -20,13 +23,11 @@ package cern.colt.map;
  * @version 1.0, 09/24/99
  * @see java.util.HashMap
  */
-public abstract class AbstractMap extends cern.colt.PersistentObject {
+public abstract class AbstractMap implements Serializable, Cloneable {
+    @Serial
+    private static final long serialVersionUID = -1848767795730144149L;
     // public static boolean debug = false; // debug only
 
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
     /**
      * The number of distinct associations in the map; its "size()".
@@ -219,5 +220,17 @@ public abstract class AbstractMap extends cern.colt.PersistentObject {
      * necessary.
      */
     public void trimToSize() {
+    }
+
+
+    @Override
+    public AbstractMap clone() {
+        try {
+            AbstractMap clone = (AbstractMap) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

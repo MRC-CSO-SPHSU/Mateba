@@ -9,6 +9,7 @@ It is provided "as is" without expressed or implied warranty.
 package cern.colt.matrix.tdouble.impl;
 
 import java.io.IOException;
+import java.io.Serial;
 
 import cern.colt.map.tdouble.AbstractLongDoubleMap;
 import cern.colt.map.tdouble.OpenLongDoubleHashMap;
@@ -89,11 +90,9 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class SparseDoubleMatrix2D extends DoubleMatrix2D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = 1521972972813643985L;
     /*
      * The elements of the matrix.
      */

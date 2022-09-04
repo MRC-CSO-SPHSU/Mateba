@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tobject.impl;
 
+import java.io.Serial;
 import java.util.concurrent.Future;
 
 import cern.colt.list.tint.IntArrayList;
@@ -29,7 +30,8 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -1262582589007628675L;
     /*
      * The elements of the matrix.
      */

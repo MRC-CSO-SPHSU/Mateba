@@ -5,6 +5,9 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.jet.math.tdcomplex.DComplexFunctions;
 import cern.jet.math.tdouble.DoubleFunctions;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Linear algebraic matrix operations operating on dense complex matrices.
  * 
@@ -12,13 +15,12 @@ import cern.jet.math.tdouble.DoubleFunctions;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  * @author Richard Lincoln (r.w.lincoln@gmail.com)
  */
-public class DenseDComplexAlgebra extends cern.colt.PersistentObject {
-    private static final long serialVersionUID = 1L;
+public class DenseDComplexAlgebra implements Serializable, Cloneable {
 
     /**
      * A default Algebra object; has {@link DComplexProperty#DEFAULT} attached for
      * tolerance. Allows ommiting to construct an Algebra object time and again.
-     * 
+     * <p>
      * Note that this Algebra object is immutable. Any attempt to assign a new
      * Property object to it (via method <tt>setProperty</tt>), or to alter the
      * tolerance of its property object (via
@@ -36,6 +38,8 @@ public class DenseDComplexAlgebra extends cern.colt.PersistentObject {
      * <tt>property().setTolerance(...)</tt>) will throw an exception.
      */
     public static final DenseDComplexAlgebra ZERO;
+    @Serial
+    private static final long serialVersionUID = -4218469929700579756L;
 
     /**
      * The property object attached to this instance.
@@ -102,4 +106,12 @@ public class DenseDComplexAlgebra extends cern.colt.PersistentObject {
         return d.aggregate(DoubleFunctions.max, DoubleFunctions.identity);
     }
 
+    @Override
+    public DenseDComplexAlgebra clone() {
+        try {
+            return (DenseDComplexAlgebra) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
+    }
 }

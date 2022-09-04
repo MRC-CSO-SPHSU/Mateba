@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdcomplex.impl;
 
+import java.io.Serial;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Future;
 
@@ -27,8 +28,9 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  */
 
 public class SparseDComplexMatrix3D extends DComplexMatrix3D {
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = 500591690474648526L;
     /*
      * The elements of the matrix.
      */

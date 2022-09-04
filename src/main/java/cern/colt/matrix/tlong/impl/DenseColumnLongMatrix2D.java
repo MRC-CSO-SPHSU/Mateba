@@ -9,6 +9,7 @@ It is provided "as is" without expressed or implied warranty.
 package cern.colt.matrix.tlong.impl;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -68,7 +69,9 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  */
 public class DenseColumnLongMatrix2D extends LongMatrix2D {
-    static final long serialVersionUID = 1020177651L;
+
+    @Serial
+    private static final long serialVersionUID = 6347118139095540763L;
     protected long[] elements;
 
     /**

@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdouble;
 
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -37,7 +38,9 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * 
  */
 public abstract class DoubleMatrix1D extends AbstractMatrix1D {
-    private static final long serialVersionUID = 1L;
+
+    @Serial
+    private static final long serialVersionUID = -4936282820790567935L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -1628,7 +1631,7 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
         length = tail - from;
         if (length <= 0)
             return 0;
-        IntArrayList indexesCopy = nonZeroIndexes.copy();
+        IntArrayList indexesCopy = nonZeroIndexes.clone();
         indexesCopy.trimToSize();
         indexesCopy.quickSort();
         int[] nonZeroIndexElements = indexesCopy.elements();

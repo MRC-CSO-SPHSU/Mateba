@@ -13,6 +13,8 @@ import cern.colt.matrix.tlong.LongMatrix1D;
 import cern.colt.matrix.tlong.LongMatrix2D;
 import cern.colt.matrix.tlong.LongMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Selection view on dense 3-d matrices holding <tt>int</tt> elements. First see
  * the <a href="package-summary.html">package summary</a> and javadoc <a
@@ -57,7 +59,8 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 1973313757175816533L;
 
     /**
      * The elements of this matrix.

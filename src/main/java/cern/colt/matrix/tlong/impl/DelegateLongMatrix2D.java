@@ -12,6 +12,8 @@ import cern.colt.matrix.tlong.LongMatrix1D;
 import cern.colt.matrix.tlong.LongMatrix2D;
 import cern.colt.matrix.tlong.LongMatrix3D;
 
+import java.io.Serial;
+
 /**
  * 2-d matrix holding <tt>long</tt> elements; a view wrapping another 3-d matrix
  * and therefore delegating calls to it.
@@ -19,7 +21,8 @@ import cern.colt.matrix.tlong.LongMatrix3D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class DelegateLongMatrix2D extends LongMatrix2D {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 4934295021328180099L;
 
     /*
      * The elements of the matrix.

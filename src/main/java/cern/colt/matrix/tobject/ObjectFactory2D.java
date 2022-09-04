@@ -11,6 +11,9 @@ package cern.colt.matrix.tobject;
 import cern.colt.matrix.tobject.impl.DenseObjectMatrix2D;
 import cern.colt.matrix.tobject.impl.SparseObjectMatrix2D;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Factory for convenient construction of 2-d matrices holding <tt>Object</tt>
  * cells. Also provides convenient methods to compose (concatenate) and
@@ -72,11 +75,12 @@ import cern.colt.matrix.tobject.impl.SparseObjectMatrix2D;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class ObjectFactory2D extends cern.colt.PersistentObject {
+public class ObjectFactory2D implements Serializable, Cloneable{
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 7930470387756737411L;
 
     /**
      * A factory producing dense matrices.
@@ -717,5 +721,14 @@ public class ObjectFactory2D extends cern.colt.PersistentObject {
             }
         }
         return matrix;
+    }
+
+    @Override
+    public ObjectFactory2D clone() {
+        try {
+            return (ObjectFactory2D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

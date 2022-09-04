@@ -13,6 +13,8 @@ import cern.colt.matrix.tdcomplex.DComplexMatrix2D;
 import cern.colt.matrix.tdcomplex.DComplexMatrix3D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 
+import java.io.Serial;
+
 /**
  * 2-d matrix holding <tt>complex</tt> elements; either a view wrapping another
  * 3-d matrix and therefore delegating calls to it.
@@ -20,8 +22,10 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class DelegateDComplexMatrix2D extends DComplexMatrix2D {
-    private static final long serialVersionUID = 1L;
 
+
+    @Serial
+    private static final long serialVersionUID = -3641147676464102654L;
     /*
      * The elements of the matrix.
      */

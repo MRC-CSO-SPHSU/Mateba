@@ -178,7 +178,7 @@ import cern.colt.function.tint.IntComparator;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 03-Jul-99
  */
-public class GenericSorting extends Object {
+public class GenericSorting {
     private static final int SMALL = 7;
 
     private static final int MEDIUM = 40;

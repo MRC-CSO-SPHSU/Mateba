@@ -14,6 +14,8 @@ import cern.colt.matrix.tint.IntMatrix1D;
 import cern.colt.matrix.tint.IntMatrix2D;
 import cern.colt.matrix.tint.IntMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Sparse hashed 1-d matrix (aka <i>vector</i>) holding <tt>int</tt> elements.
  * First see the <a href="package-summary.html">package summary</a> and javadoc
@@ -61,10 +63,9 @@ import cern.colt.matrix.tint.IntMatrix3D;
  * @version 1.1, 08/22/2007
  */
 public class SparseIntMatrix1D extends IntMatrix1D {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+
+    @Serial
+    private static final long serialVersionUID = -60679287600159772L;
     /*
      * The elements of the matrix.
      */

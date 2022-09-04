@@ -12,10 +12,8 @@ import cern.colt.Timer;
 import cern.colt.list.tdouble.DoubleArrayList;
 import cern.colt.list.tint.IntArrayList;
 import cern.jet.stat.Utils;
-import cern.jet.stat.tdouble.quantile.DoubleBuffer;
-import cern.jet.stat.tdouble.quantile.DoubleQuantileFinder;
-import cern.jet.stat.tdouble.quantile.DoubleQuantileFinderFactory;
-import cern.jet.stat.tdouble.quantile.ExactDoubleQuantileFinder;
+import cern.jet.stat.quantile.Buffer;
+import cern.jet.stat.quantile.QuantileFinder;
 
 /**
  * A class holding test cases for exact and approximate quantile finders.
@@ -65,14 +63,14 @@ class TestQuantileFinder {
      * Observed epsilon
      */
     public static double epsilon(DoubleArrayList sortedList, double phi, double element) {
-        double rank = cern.jet.stat.tdouble.DoubleDescriptive.rankInterpolated(sortedList, element);
+        double rank = cern.jet.stat.Descriptive.rankInterpolated(sortedList, element);
         return epsilon(sortedList.size(), phi, rank);
     }
 
     /**
      * Observed epsilon
      */
-    public static double epsilon(DoubleArrayList sortedList, DoubleQuantileFinder finder, double phi) {
+    public static double epsilon(DoubleArrayList sortedList, QuantileFinder finder, double phi) {
         double element = finder.quantileElements(new DoubleArrayList(new double[] { phi })).get(0);
         return epsilon(sortedList, phi, element);
     }
@@ -92,8 +90,8 @@ class TestQuantileFinder {
      * @param phis
      *            double[]
      */
-    public static double observedEpsilonAtPhi(double phi, ExactDoubleQuantileFinder exactFinder,
-            DoubleQuantileFinder approxFinder) {
+    public static double observedEpsilonAtPhi(double phi, cern.jet.stat.quantile.ExactQuantileFinder exactFinder,
+            QuantileFinder approxFinder) {
         int N = (int) exactFinder.size();
 
         int exactRank = (int) Utils.epsilonCeiling(phi * N) - 1;
@@ -133,8 +131,8 @@ class TestQuantileFinder {
      * @param phis
      *            double[]
      */
-    public static DoubleArrayList observedEpsilonsAtPhis(DoubleArrayList phis, ExactDoubleQuantileFinder exactFinder,
-            DoubleQuantileFinder approxFinder, double desiredEpsilon) {
+    public static DoubleArrayList observedEpsilonsAtPhis(DoubleArrayList phis, cern.jet.stat.quantile.ExactQuantileFinder exactFinder,
+                                                         QuantileFinder approxFinder, double desiredEpsilon) {
         DoubleArrayList epsilons = new DoubleArrayList(phis.size());
 
         for (int i = phis.size(); --i >= 0;) {
@@ -241,7 +239,7 @@ class TestQuantileFinder {
                             else
                                 known_N = false;
 
-                            DoubleQuantileFinder finder = DoubleQuantileFinderFactory.newDoubleQuantileFinder(known_N,
+                            QuantileFinder finder = cern.jet.stat.quantile.QuantileFinderFactory.newQuantileFinder(known_N,
                                     N, epsilon, delta, p, null);
                             // System.out.println(finder.getClass().getName());
                             /*
@@ -312,7 +310,7 @@ class TestQuantileFinder {
          */
 
         Timer timer = new Timer().start();
-        DoubleBuffer buffer;
+        Buffer buffer;
         int val;
         double f;
         int j;
@@ -340,8 +338,8 @@ class TestQuantileFinder {
         int chunks = Integer.parseInt(args[4]);
         boolean computeExactQuantilesAlso = args[5].equals("exact");
         boolean doShuffle = args[6].equals("shuffle");
-        double epsilon = new Double(args[7]).doubleValue();
-        double delta = new Double(args[8]).doubleValue();
+        double epsilon = Double.parseDouble(args[7]);
+        double delta = Double.parseDouble(args[8]);
         int quantiles = Integer.parseInt(args[9]);
         long max_N = Long.parseLong(args[10]);
 
@@ -353,9 +351,9 @@ class TestQuantileFinder {
 
         Timer timer = new Timer();
         Timer timer2 = new Timer();
-        DoubleQuantileFinder approxFinder;
+        QuantileFinder approxFinder;
 
-        approxFinder = DoubleQuantileFinderFactory.newDoubleQuantileFinder(false, max_N, epsilon, delta, quantiles,
+        approxFinder = cern.jet.stat.quantile.QuantileFinderFactory.newQuantileFinder(false, max_N, epsilon, delta, quantiles,
                 null);
         System.out.println(approxFinder);
         // new UnknownApproximateDoubleQuantileFinder(b,k);
@@ -370,7 +368,7 @@ class TestQuantileFinder {
          * System.out.println("samplingRate="+returnSamplingRate[0]);
          */
 
-        DoubleQuantileFinder exactFinder = DoubleQuantileFinderFactory.newDoubleQuantileFinder(false, -1, 0.0, delta,
+        QuantileFinder exactFinder = cern.jet.stat.quantile.QuantileFinderFactory.newQuantileFinder(false, -1, 0.0, delta,
                 quantiles, null);
         System.out.println(exactFinder);
 
@@ -452,7 +450,7 @@ class TestQuantileFinder {
              */
 
             DoubleArrayList observedEpsilons = observedEpsilonsAtPhis(new DoubleArrayList(phis),
-                    (ExactDoubleQuantileFinder) exactFinder, approxFinder, epsilon);
+                    (cern.jet.stat.quantile.ExactQuantileFinder) exactFinder, approxFinder, epsilon);
             System.out.println("observedEpsilons=" + observedEpsilons);
 
             double element = 1000.0f;

@@ -14,6 +14,7 @@ import cern.colt.function.tint.IntIntProcedure;
 import cern.colt.function.tint.IntProcedure;
 import cern.jet.math.tdouble.DoubleArithmetic;
 import cern.jet.math.tdouble.DoubleFunctions;
+import cern.jet.random.engine.MersenneTwister;
 
 /**
  * Int Function objects to be passed to generic methods. Same as
@@ -688,11 +689,11 @@ public class IntFunctions extends Object {
      * number in the closed longerval <tt>[Int.MIN_VALUE,Int.MAX_VALUE]</tt>
      * (including <tt>Int.MIN_VALUE</tt> and <tt>Int.MAX_VALUE</tt>). Currently
      * the engine is
-     * {@link cern.jet.random.tdouble.engine.DoubleMersenneTwister} and is
+     * {@link MersenneTwister} and is
      * seeded with the current time.
      * <p>
      * Note that any random engine derived from
-     * {@link cern.jet.random.tdouble.engine.DoubleRandomEngine} and any random
+     * {@link cern.jet.random.tdouble.engine.RandomEngine} and any random
      * distribution derived from
      * {@link cern.jet.random.tdouble.AbstractDoubleDistribution} are function
      * objects, because they implement the proper longerfaces. Thus, if you are
@@ -700,7 +701,7 @@ public class IntFunctions extends Object {
      * function evaluating methods.
      */
     public static IntFunction random() {
-        return new cern.jet.random.tdouble.engine.DoubleMersenneTwister(new java.util.Date());
+        return new MersenneTwister(new java.util.Date());
     }
 
     /**

@@ -10,28 +10,29 @@ package cern.colt.map.tint;
 
 import cern.colt.map.HashFunctions;
 
+import java.io.Serial;
+
 /**
  * Status: Experimental; Do not use for production yet. Hash map holding
  * (key,value) associations of type <tt>(int-->int)</tt>; Automatically grows
  * and shrinks as needed; Implemented using open addressing with double hashing.
  * First see the <a href="package-summary.html">package summary</a> and javadoc
  * <a href="package-tree.html">tree view</a> to get the broad picture.
- * 
+ * <p>
  * Implements open addressing with double hashing, using "Brent's variation".
  * Brent's variation slows insertions a bit down (not much) but reduces probes
  * (collisions) for successful searches, in particular for large load factors.
  * (It does not improve unsuccessful searches.) See D. Knuth, Searching and
  * Sorting, 3rd ed., p.533-545
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  * @see java.util.HashMap
  */
 public class QuickOpenIntIntHashMap extends OpenIntIntHashMap {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+
+    @Serial
+    private static final long serialVersionUID = -2538977880940183323L;
     public int totalProbesSaved = 0; // benchmark only
 
     /**
@@ -44,11 +45,9 @@ public class QuickOpenIntIntHashMap extends OpenIntIntHashMap {
     /**
      * Constructs an empty map with the specified initial capacity and default
      * load factors.
-     * 
-     * @param initialCapacity
-     *            the initial capacity of the map.
-     * @throws IllegalArgumentException
-     *             if the initial capacity is less than zero.
+     *
+     * @param initialCapacity the initial capacity of the map.
+     * @throws IllegalArgumentException if the initial capacity is less than zero.
      */
     public QuickOpenIntIntHashMap(int initialCapacity) {
         this(initialCapacity, defaultMinLoadFactor, defaultMaxLoadFactor);
@@ -57,18 +56,14 @@ public class QuickOpenIntIntHashMap extends OpenIntIntHashMap {
     /**
      * Constructs an empty map with the specified initial capacity and the
      * specified minimum and maximum load factor.
-     * 
-     * @param initialCapacity
-     *            the initial capacity.
-     * @param minLoadFactor
-     *            the minimum load factor.
-     * @param maxLoadFactor
-     *            the maximum load factor.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
-     *             .
+     *
+     * @param initialCapacity the initial capacity.
+     * @param minLoadFactor   the minimum load factor.
+     * @param maxLoadFactor   the maximum load factor.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
+     *                                  .
      */
     public QuickOpenIntIntHashMap(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
         setUp(initialCapacity, minLoadFactor, maxLoadFactor);
@@ -77,14 +72,12 @@ public class QuickOpenIntIntHashMap extends OpenIntIntHashMap {
     /**
      * Associates the given key with the given value. Replaces any old
      * <tt>(key,someOtherValue)</tt> association, if existing.
-     * 
-     * @param key
-     *            the key the value shall be associated with.
-     * @param value
-     *            the value to be associated.
+     *
+     * @param key   the key the value shall be associated with.
+     * @param value the value to be associated.
      * @return <tt>true</tt> if the receiver did not already contain such a key;
-     *         <tt>false</tt> if the receiver did already contain such a key -
-     *         the new value has now replaced the formerly associated value.
+     * <tt>false</tt> if the receiver did already contain such a key -
+     * the new value has now replaced the formerly associated value.
      */
 
     public boolean put(int key, int value) {
@@ -94,7 +87,7 @@ public class QuickOpenIntIntHashMap extends OpenIntIntHashMap {
          * but reduces probes (collisions) for successful searches, in
          * particular for large load factors. (It does not improve unsuccessful
          * searches.) See D. Knuth, Searching and Sorting, 3rd ed., p.533-545
-         * 
+         *
          * h1(key) = hash % M h2(key) = decrement = Max(1, hash/M % M) M is
          * prime = capacity = table.length probing positions are table[(h1-j*h2) %
          * M] for j=0,1,... (M and h2 could also be chosen differently, but h2
@@ -102,8 +95,8 @@ public class QuickOpenIntIntHashMap extends OpenIntIntHashMap {
          */
 
         int key0;
-        final int tab[] = table;
-        final byte stat[] = state;
+        final int[] tab = table;
+        final byte[] stat = state;
         final int length = tab.length;
 
         int hash = HashFunctions.hash(key) & 0x7FFFFFFF;
@@ -159,7 +152,7 @@ public class QuickOpenIntIntHashMap extends OpenIntIntHashMap {
          * cannot be moved out of the way, we try the next probe (p1). Now we
          * safe more than we loose if t>=3. We repeat this until we find that we
          * cannot gain or that we can indeed move p(x) out of the way.
-         * 
+         *
          * Note: Under the great majority of insertions t<=1, so the loop is
          * entered very infrequently.
          */
@@ -218,13 +211,13 @@ public class QuickOpenIntIntHashMap extends OpenIntIntHashMap {
         int oldCapacity = table.length;
         // if (oldCapacity == newCapacity) return;
 
-        int oldTable[] = table;
-        int oldValues[] = values;
-        byte oldState[] = state;
+        int[] oldTable = table;
+        int[] oldValues = values;
+        byte[] oldState = state;
 
-        int newTable[] = new int[newCapacity];
-        int newValues[] = new int[newCapacity];
-        byte newState[] = new byte[newCapacity];
+        int[] newTable = new int[newCapacity];
+        int[] newValues = new int[newCapacity];
+        byte[] newState = new byte[newCapacity];
 
         this.lowWaterMark = chooseLowWaterMark(newCapacity, this.minLoadFactor);
         this.highWaterMark = chooseHighWaterMark(newCapacity, this.maxLoadFactor);
@@ -236,7 +229,7 @@ public class QuickOpenIntIntHashMap extends OpenIntIntHashMap {
 
         int tmp = this.distinct;
         this.distinct = Integer.MIN_VALUE; // switch of watermarks
-        for (int i = oldCapacity; i-- > 0;) {
+        for (int i = oldCapacity; i-- > 0; ) {
             if (oldState[i] == FULL) {
                 put(oldTable[i], oldValues[i]);
                 /*

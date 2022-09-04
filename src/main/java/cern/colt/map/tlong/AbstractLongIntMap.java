@@ -14,6 +14,8 @@ import cern.colt.list.tint.IntArrayList;
 import cern.colt.list.tlong.LongArrayList;
 import cern.colt.map.AbstractMap;
 
+import java.io.Serial;
+
 /**
  * Abstract base class for hash maps holding (key,value) associations of type
  * <tt>(long-->int)</tt>. First see the <a href="package-summary.html">package
@@ -25,18 +27,17 @@ import cern.colt.map.AbstractMap;
  * Almost all methods are expressed in terms of
  * {@link #forEachKey(LongProcedure)}. As such they are fully functional, but
  * inefficient. Override them in subclasses if necessary.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  * @see java.util.HashMap
  */
 public abstract class AbstractLongIntMap extends AbstractMap {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -7814861120207060174L;
 
     // public static int hashCollisions = 0; // for debug only
+
     /**
      * Makes this class non instantiable, but still let's others inherit from
      * it.
@@ -47,10 +48,9 @@ public abstract class AbstractLongIntMap extends AbstractMap {
     /**
      * Assigns the result of a function to each value;
      * <tt>v[i] = function(v[i])</tt>.
-     * 
-     * @param function
-     *            a function object taking as argument the current association's
-     *            value.
+     *
+     * @param function a function object taking as argument the current association's
+     *                 value.
      */
     public void assign(final cern.colt.function.tint.IntFunction function) {
         copy().forEachPair(new cern.colt.function.tlong.LongIntProcedure() {
@@ -64,9 +64,8 @@ public abstract class AbstractLongIntMap extends AbstractMap {
     /**
      * Clears the receiver, then adds all (key,value) pairs of <tt>other</tt>
      * values to it.
-     * 
-     * @param other
-     *            the other map to be copied into the receiver.
+     *
+     * @param other the other map to be copied into the receiver.
      */
     public void assign(AbstractLongIntMap other) {
         clear();
@@ -80,7 +79,7 @@ public abstract class AbstractLongIntMap extends AbstractMap {
 
     /**
      * Returns <tt>true</tt> if the receiver contains the specified key.
-     * 
+     *
      * @return <tt>true</tt> if the receiver contains the specified key.
      */
     public boolean containsKey(final long key) {
@@ -93,7 +92,7 @@ public abstract class AbstractLongIntMap extends AbstractMap {
 
     /**
      * Returns <tt>true</tt> if the receiver contains the specified value.
-     * 
+     *
      * @return <tt>true</tt> if the receiver contains the specified value.
      */
     public boolean containsValue(final int value) {
@@ -107,7 +106,7 @@ public abstract class AbstractLongIntMap extends AbstractMap {
     /**
      * Returns a deep copy of the receiver; uses <code>clone()</code> and casts
      * the result.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
     public AbstractLongIntMap copy() {
@@ -119,7 +118,7 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * <tt>true</tt> if the given object is also a map and the two maps
      * represent the same mappings. More formally, two maps <tt>m1</tt> and
      * <tt>m2</tt> represent the same mappings iff
-     * 
+     *
      * <pre>
      * m1.forEachPair(
      *  new LongIntProcedure() {
@@ -137,15 +136,14 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      *  }
      * );
      * </pre>
-     * 
+     * <p>
      * This implementation first checks if the specified object is this map; if
      * so it returns <tt>true</tt>. Then, it checks if the specified object is a
      * map whose size is identical to the size of this set; if not, it it
      * returns <tt>false</tt>. If so, it applies the iteration as described
      * above.
-     * 
-     * @param obj
-     *            object to be compared for equality with this map.
+     *
+     * @param obj object to be compared for equality with this map.
      * @return <tt>true</tt> if the specified object is equal to this map.
      */
 
@@ -153,9 +151,8 @@ public abstract class AbstractLongIntMap extends AbstractMap {
         if (obj == this)
             return true;
 
-        if (!(obj instanceof AbstractLongIntMap))
+        if (!(obj instanceof final AbstractLongIntMap other))
             return false;
-        final AbstractLongIntMap other = (AbstractLongIntMap) obj;
         if (other.size() != size())
             return false;
 
@@ -179,12 +176,11 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * if it is no particular order. This is necessary so that, for example,
      * methods <tt>keys</tt> and <tt>values</tt> will yield association pairs,
      * not two uncorrelated lists.
-     * 
-     * @param procedure
-     *            the procedure to be applied. Stops iteration if the procedure
-     *            returns <tt>false</tt>, otherwise continues.
+     *
+     * @param procedure the procedure to be applied. Stops iteration if the procedure
+     *                  returns <tt>false</tt>, otherwise continues.
      * @return <tt>false</tt> if the procedure stopped before all keys where
-     *         iterated over, <tt>true</tt> otherwise.
+     * iterated over, <tt>true</tt> otherwise.
      */
     public abstract boolean forEachKey(LongProcedure procedure);
 
@@ -192,12 +188,11 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * Applies a procedure to each (key,value) pair of the receiver, if any.
      * Iteration order is guaranteed to be <i>identical</i> to the order used by
      * method {@link #forEachKey(LongProcedure)}.
-     * 
-     * @param procedure
-     *            the procedure to be applied. Stops iteration if the procedure
-     *            returns <tt>false</tt>, otherwise continues.
+     *
+     * @param procedure the procedure to be applied. Stops iteration if the procedure
+     *                  returns <tt>false</tt>, otherwise continues.
      * @return <tt>false</tt> if the procedure stopped before all keys where
-     *         iterated over, <tt>true</tt> otherwise.
+     * iterated over, <tt>true</tt> otherwise.
      */
     public boolean forEachPair(final LongIntProcedure procedure) {
         return forEachKey(new LongProcedure() {
@@ -212,11 +207,10 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * idea to first check with {@link #containsKey(long)} whether the given key
      * has a value associated or not, i.e. whether there exists an association
      * for the given key or not.
-     * 
-     * @param key
-     *            the key to be searched for.
+     *
+     * @param key the key to be searched for.
      * @return the value associated with the specified key; <tt>0</tt> if no
-     *         such key is present.
+     * such key is present.
      */
     public abstract int get(long key);
 
@@ -226,11 +220,10 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * exists an association from a key to this value. Search order is
      * guaranteed to be <i>identical</i> to the order used by method
      * {@link #forEachKey(LongProcedure)}.
-     * 
-     * @param value
-     *            the value to search for.
+     *
+     * @param value the value to search for.
      * @return the first key for which holds <tt>get(key) == value</tt>; returns
-     *         <tt>Long.MIN_VALUE</tt> if no such key exists.
+     * <tt>Long.MIN_VALUE</tt> if no such key exists.
      */
     public long keyOf(final int value) {
         final long[] foundKey = new long[1];
@@ -254,7 +247,7 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * {@link #forEachKey(LongProcedure)}.
      * <p>
      * This method can be used to iterate over the keys of the receiver.
-     * 
+     *
      * @return the keys.
      */
     public LongArrayList keys() {
@@ -271,9 +264,8 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * {@link #forEachKey(LongProcedure)}.
      * <p>
      * This method can be used to iterate over the keys of the receiver.
-     * 
-     * @param list
-     *            the list to be filled, can have any size.
+     *
+     * @param list the list to be filled, can have any size.
      */
     public void keys(final LongArrayList list) {
         list.clear();
@@ -295,9 +287,8 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * <p>
      * <b>Example:</b> <br>
      * <tt>keys = (8,7,6), values = (1,2,2) --> keyList = (8,6,7)</tt>
-     * 
-     * @param keyList
-     *            the list to be filled, can have any size.
+     *
+     * @param keyList the list to be filled, can have any size.
      */
     public void keysSortedByValue(final LongArrayList keyList) {
         pairsSortedByValue(keyList, new IntArrayList(size()));
@@ -311,7 +302,7 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * order used by method {@link #forEachKey(LongProcedure)}.
      * <p>
      * <b>Example:</b> <br>
-     * 
+     *
      * <pre>
      *   LongIntProcedure condition = new LongIntProcedure() { // match even keys only
      *   public boolean apply(long key, int value) { return key%2==0; }
@@ -319,17 +310,14 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      *   keys = (8,7,6), values = (1,2,2) --&gt; keyList = (6,8), valueList = (2,1)
      * &lt;/tt&gt;
      * </pre>
-     * 
-     * @param condition
-     *            the condition to be matched. Takes the current key as first
-     *            and the current value as second argument.
-     * @param keyList
-     *            the list to be filled with keys, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param condition the condition to be matched. Takes the current key as first
+     *                  and the current value as second argument.
+     * @param keyList   the list to be filled with keys, can have any size.
+     * @param valueList the list to be filled with values, can have any size.
      */
     public void pairsMatching(final LongIntProcedure condition, final LongArrayList keyList,
-            final IntArrayList valueList) {
+                              final IntArrayList valueList) {
         keyList.clear();
         valueList.clear();
 
@@ -352,17 +340,15 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * <p>
      * <b>Example:</b> <br>
      * <tt>keys = (8,7,6), values = (1,2,2) --> keyList = (6,7,8), valueList = (2,2,1)</tt>
-     * 
-     * @param keyList
-     *            the list to be filled with keys, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param keyList   the list to be filled with keys, can have any size.
+     * @param valueList the list to be filled with values, can have any size.
      */
     public void pairsSortedByKey(final LongArrayList keyList, final IntArrayList valueList) {
         keys(keyList);
         keyList.sort();
         valueList.setSize(keyList.size());
-        for (int i = keyList.size(); --i >= 0;) {
+        for (int i = keyList.size(); --i >= 0; ) {
             valueList.setQuick(i, get(keyList.getQuick(i)));
         }
     }
@@ -377,11 +363,9 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * <p>
      * <b>Example:</b> <br>
      * <tt>keys = (8,7,6), values = (1,2,2) --> keyList = (8,6,7), valueList = (1,2,2)</tt>
-     * 
-     * @param keyList
-     *            the list to be filled with keys, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param keyList   the list to be filled with keys, can have any size.
+     * @param valueList the list to be filled with values, can have any size.
      */
     public void pairsSortedByValue(final LongArrayList keyList, final IntArrayList valueList) {
         keys(keyList);
@@ -414,25 +398,22 @@ public abstract class AbstractLongIntMap extends AbstractMap {
     /**
      * Associates the given key with the given value. Replaces any old
      * <tt>(key,someOtherValue)</tt> association, if existing.
-     * 
-     * @param key
-     *            the key the value shall be associated with.
-     * @param value
-     *            the value to be associated.
+     *
+     * @param key   the key the value shall be associated with.
+     * @param value the value to be associated.
      * @return <tt>true</tt> if the receiver did not already contain such a key;
-     *         <tt>false</tt> if the receiver did already contain such a key -
-     *         the new value has now replaced the formerly associated value.
+     * <tt>false</tt> if the receiver did already contain such a key -
+     * the new value has now replaced the formerly associated value.
      */
     public abstract boolean put(long key, int value);
 
     /**
      * Removes the given key with its associated element from the receiver, if
      * present.
-     * 
-     * @param key
-     *            the key to be removed from the receiver.
+     *
+     * @param key the key to be removed from the receiver.
      * @return <tt>true</tt> if the receiver contained the specified key,
-     *         <tt>false</tt> otherwise.
+     * <tt>false</tt> otherwise.
      */
     public abstract boolean removeKey(long key);
 
@@ -450,9 +431,9 @@ public abstract class AbstractLongIntMap extends AbstractMap {
         int maxIndex = theKeys.size() - 1;
         for (int i = 0; i <= maxIndex; i++) {
             long key = theKeys.get(i);
-            buf.append(String.valueOf(key));
+            buf.append(key);
             buf.append("->");
-            buf.append(String.valueOf(get(key)));
+            buf.append(get(key));
             if (i < maxIndex)
                 buf.append(", ");
         }
@@ -473,9 +454,9 @@ public abstract class AbstractLongIntMap extends AbstractMap {
         int maxIndex = theKeys.size() - 1;
         for (int i = 0; i <= maxIndex; i++) {
             long key = theKeys.get(i);
-            buf.append(String.valueOf(key));
+            buf.append(key);
             buf.append("->");
-            buf.append(String.valueOf(get(key)));
+            buf.append(get(key));
             if (i < maxIndex)
                 buf.append(", ");
         }
@@ -490,7 +471,7 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * {@link #forEachKey(LongProcedure)}.
      * <p>
      * This method can be used to iterate over the values of the receiver.
-     * 
+     *
      * @return the values.
      */
     public IntArrayList values() {
@@ -507,9 +488,8 @@ public abstract class AbstractLongIntMap extends AbstractMap {
      * {@link #forEachKey(LongProcedure)}.
      * <p>
      * This method can be used to iterate over the values of the receiver.
-     * 
-     * @param list
-     *            the list to be filled, can have any size.
+     *
+     * @param list the list to be filled, can have any size.
      */
     public void values(final IntArrayList list) {
         list.clear();

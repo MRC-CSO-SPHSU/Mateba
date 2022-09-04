@@ -10,6 +10,11 @@ package cern.colt.matrix.tdcomplex;
 
 import cern.colt.matrix.tdcomplex.impl.DenseDComplexMatrix2D;
 import cern.colt.matrix.tdcomplex.impl.SparseDComplexMatrix2D;
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.sampling.RandomSamplingAssistant;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 /**
  * Factory for convenient construction of 2-d matrices holding <tt>complex</tt>
@@ -84,8 +89,8 @@ import cern.colt.matrix.tdcomplex.impl.SparseDComplexMatrix2D;
  * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
-public class DComplexFactory2D extends cern.colt.PersistentObject {
-    private static final long serialVersionUID = 1L;
+public class DComplexFactory2D implements Serializable, Cloneable {
+
 
     /**
      * A factory producing dense matrices.
@@ -96,6 +101,8 @@ public class DComplexFactory2D extends cern.colt.PersistentObject {
      * A factory producing sparse hash matrices.
      */
     public static final DComplexFactory2D sparse = new DComplexFactory2D();
+    @Serial
+    private static final long serialVersionUID = 4011047648011305625L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -651,7 +658,7 @@ public class DComplexFactory2D extends cern.colt.PersistentObject {
      * 
      * @throws IllegalArgumentException
      *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSampler
+     * @see cern.jet.random.sampling.RandomSampler
      */
     public DComplexMatrix2D sample(int rows, int columns, double[] value, double nonZeroFraction) {
         DComplexMatrix2D matrix = make(rows, columns);
@@ -669,7 +676,7 @@ public class DComplexFactory2D extends cern.colt.PersistentObject {
      * 
      * @throws IllegalArgumentException
      *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSampler
+     * @see cern.jet.random.sampling.RandomSampler
      */
     public DComplexMatrix2D sample(DComplexMatrix2D matrix, double[] value, double nonZeroFraction) {
         int rows = matrix.rows();
@@ -689,8 +696,7 @@ public class DComplexFactory2D extends cern.colt.PersistentObject {
         if (n == 0)
             return matrix;
 
-        cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant sampler = new cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant(
-                n, size, new cern.jet.random.tdouble.engine.DoubleMersenneTwister());
+        RandomSamplingAssistant sampler = new RandomSamplingAssistant(n, size, new MersenneTwister());
         for (int i = 0; i < size; i++) {
             if (sampler.sampleNextElement()) {
                 int row = (i / columns);
@@ -700,5 +706,14 @@ public class DComplexFactory2D extends cern.colt.PersistentObject {
         }
 
         return matrix;
+    }
+
+    @Override
+    public DComplexFactory2D clone() {
+        try {
+            return (DComplexFactory2D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

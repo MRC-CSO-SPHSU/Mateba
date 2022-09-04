@@ -11,6 +11,10 @@ package cern.colt.matrix.tdouble;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.SparseDoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
+import cern.jet.random.engine.MersenneTwister;
+import cern.jet.random.sampling.RandomSamplingAssistant;
+
+import java.io.Serializable;
 
 /**
  * Factory for convenient construction of 2-d matrices holding <tt>double</tt>
@@ -88,8 +92,7 @@ import cern.jet.math.tdouble.DoubleFunctions;
  * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
-public class DoubleFactory2D extends cern.colt.PersistentObject {
-    private static final long serialVersionUID = 1L;
+public class DoubleFactory2D implements Serializable, Cloneable {
 
     /**
      * A factory producing dense matrices.
@@ -713,9 +716,8 @@ public class DoubleFactory2D extends cern.colt.PersistentObject {
 
         DoubleMatrix2D A = ascending(2, 2);
         DoubleMatrix2D B = descending(2, 2);
-        DoubleMatrix2D _ = null;
 
-        DoubleMatrix2D[][] parts4 = { { A, _, A, _ }, { _, A, _, B } };
+        DoubleMatrix2D[][] parts4 = { { A, null, A, null }, { null, A, null, B } };
         System.out.println("\n" + compose(parts4));
         // System.out.println("\n"+cern.colt.matrixpattern.Converting.toHTML(make(parts4).toString()));
 
@@ -728,12 +730,12 @@ public class DoubleFactory2D extends cern.colt.PersistentObject {
         System.out.println("\n\n");
         DoubleMatrix2D matrix;
         DoubleMatrix2D A, B, C, D;
-        DoubleMatrix2D _ = null;
+
         A = make(2, 2, 1);
         B = make(4, 4, 2);
         C = make(4, 3, 3);
         D = make(2, 2, 4);
-        DoubleMatrix2D[][] parts1 = { { _, A, _ }, { B, _, C }, { _, D, _ } };
+        DoubleMatrix2D[][] parts1 = { { null, A, null }, { B, null, C }, { null, D, null } };
         matrix = compose(parts1);
         System.out.println("\n" + matrix);
 
@@ -993,7 +995,7 @@ public class DoubleFactory2D extends cern.colt.PersistentObject {
      * 
      * @throws IllegalArgumentException
      *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSampler
+     * @see cern.jet.random.sampling.RandomSampler
      */
     public DoubleMatrix2D sample(DoubleMatrix2D matrix, double value, double nonZeroFraction) {
         int rows = matrix.rows();
@@ -1013,8 +1015,7 @@ public class DoubleFactory2D extends cern.colt.PersistentObject {
         if (n == 0)
             return matrix;
 
-        cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant sampler = new cern.jet.random.tdouble.sampling.DoubleRandomSamplingAssistant(
-                n, size, new cern.jet.random.tdouble.engine.DoubleMersenneTwister());
+        RandomSamplingAssistant sampler = new RandomSamplingAssistant(n, size, new MersenneTwister());
         for (int i = 0; i < size; i++) {
             if (sampler.sampleNextElement()) {
                 int row = (i / columns);
@@ -1036,7 +1037,7 @@ public class DoubleFactory2D extends cern.colt.PersistentObject {
      * 
      * @throws IllegalArgumentException
      *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
-     * @see cern.jet.random.tdouble.sampling.DoubleRandomSampler
+     * @see cern.jet.random.sampling.RandomSampler
      */
     public DoubleMatrix2D sample(int rows, int columns, double value, double nonZeroFraction) {
         DoubleMatrix2D matrix = make(rows, columns);

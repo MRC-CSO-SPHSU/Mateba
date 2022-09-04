@@ -12,6 +12,8 @@ import cern.colt.matrix.tdouble.DoubleMatrix1D;
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.DoubleMatrix3D;
 
+import java.io.Serial;
+
 /**
  * 1-d matrix holding <tt>double</tt> elements; a view wrapping another 2-d
  * matrix and therefore delegating calls to it.
@@ -21,8 +23,9 @@ import cern.colt.matrix.tdouble.DoubleMatrix3D;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class DelegateDoubleMatrix1D extends DoubleMatrix1D {
-    private static final long serialVersionUID = 1L;
 
+    @Serial
+    private static final long serialVersionUID = 3527510837289039065L;
     /*
      * The elements of the matrix.
      */

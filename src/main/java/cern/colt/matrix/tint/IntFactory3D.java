@@ -12,6 +12,9 @@ import cern.colt.matrix.tint.impl.DenseIntMatrix3D;
 import cern.colt.matrix.tint.impl.SparseIntMatrix3D;
 import cern.jet.math.tint.IntFunctions;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Factory for convenient construction of 3-d matrices holding <tt>int</tt>
  * cells. Use idioms like <tt>IntFactory3D.dense.make(4,4,4)</tt> to construct
@@ -37,11 +40,8 @@ import cern.jet.math.tint.IntFunctions;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class IntFactory3D extends cern.colt.PersistentObject {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+public class IntFactory3D implements Serializable, Cloneable {
+
 
     /**
      * A factory producing dense matrices.
@@ -52,6 +52,8 @@ public class IntFactory3D extends cern.colt.PersistentObject {
      * A factory producing sparse matrices.
      */
     public static final IntFactory3D sparse = new IntFactory3D();
+    @Serial
+    private static final long serialVersionUID = 8208025202596336777L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -137,5 +139,14 @@ public class IntFactory3D extends cern.colt.PersistentObject {
      */
     public IntMatrix3D random(int slices, int rows, int columns) {
         return make(slices, rows, columns).assign(cern.jet.math.tint.IntFunctions.random());
+    }
+
+    @Override
+    public IntFactory3D clone() {
+        try {
+            return (IntFactory3D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

@@ -8,13 +8,12 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdouble.algo.decomposition;
 
-import org.netlib.lapack.LAPACK;
-
 import cern.colt.matrix.tdouble.DoubleMatrix2D;
 import cern.colt.matrix.tdouble.algo.DoubleProperty;
 import cern.colt.matrix.tdouble.impl.DenseColumnDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.tdouble.impl.DiagonalDoubleMatrix2D;
+import com.github.fommil.netlib.LAPACK;
 
 /**
  * 

@@ -28,7 +28,7 @@ import cern.colt.matrix.tdouble.DoubleMatrix2D;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class DoublePartitioning extends Object {
+public class DoublePartitioning {
     /**
      * Makes this class non instantiable, but still let's others inherit from
      * it.

@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tdcomplex.impl;
 
+import java.io.Serial;
 import java.util.concurrent.Future;
 
 import cern.colt.matrix.tdcomplex.DComplexMatrix1D;
@@ -24,7 +25,8 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 7135468699001067012L;
     /*
      * The elements of the matrix.
      */

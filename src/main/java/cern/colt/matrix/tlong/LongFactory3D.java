@@ -12,6 +12,9 @@ import cern.colt.matrix.tlong.impl.DenseLongMatrix3D;
 import cern.colt.matrix.tlong.impl.SparseLongMatrix3D;
 import cern.jet.math.tlong.LongFunctions;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Factory for convenient construction of 3-d matrices holding <tt>int</tt>
  * cells. Use idioms like <tt>LongFactory3D.dense.make(4,4,4)</tt> to construct
@@ -37,11 +40,8 @@ import cern.jet.math.tlong.LongFunctions;
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class LongFactory3D extends cern.colt.PersistentObject {
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
+public class LongFactory3D implements Serializable, Cloneable{
+
 
     /**
      * A factory producing dense matrices.
@@ -52,6 +52,8 @@ public class LongFactory3D extends cern.colt.PersistentObject {
      * A factory producing sparse matrices.
      */
     public static final LongFactory3D sparse = new LongFactory3D();
+    @Serial
+    private static final long serialVersionUID = 6487574626214342972L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
@@ -137,5 +139,14 @@ public class LongFactory3D extends cern.colt.PersistentObject {
      */
     public LongMatrix3D random(int slices, int rows, int columns) {
         return make(slices, rows, columns).assign(cern.jet.math.tlong.LongFunctions.random());
+    }
+
+    @Override
+    public LongFactory3D clone() {
+        try {
+            return (LongFactory3D) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

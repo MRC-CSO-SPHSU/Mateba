@@ -30,7 +30,7 @@ package cern.colt.matrix.tbit;
  * @see BitMatrix
  * @see java.util.BitSet
  */
-public class QuickBitVector extends Object {
+public class QuickBitVector {
     protected final static int ADDRESS_BITS_PER_UNIT = 6; // 64=2^6
 
     protected final static int BITS_PER_UNIT = 64; // = 1 <<
@@ -61,7 +61,7 @@ public class QuickBitVector extends Object {
      * @return the bit mask having all bits between <tt>from</tt> and
      *         <tt>to</tt> set to 1.
      */
-    public static final long bitMaskWithBitsSetFromTo(int from, int to) {
+    public static long bitMaskWithBitsSetFromTo(int from, int to) {
         return pows[to - from + 1] << from;
 
         // This turned out to be slower:

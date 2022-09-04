@@ -13,6 +13,8 @@ import cern.colt.matrix.tobject.ObjectMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 import cern.colt.matrix.tobject.ObjectMatrix3D;
 
+import java.io.Serial;
+
 /**
  * Selection view on dense 3-d matrices holding <tt>Object</tt> elements. First
  * see the <a href="package-summary.html">package summary</a> and javadoc <a
@@ -55,7 +57,8 @@ class SelectedDenseObjectMatrix3D extends ObjectMatrix3D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -8899755054042315422L;
 
     /**
      * The elements of this matrix.

@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tlong.impl;
 
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.concurrent.Future;
 
@@ -130,7 +131,8 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * @version 0.9, 04/14/2000
  */
 public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = 2486030274803588391L;
 
     private static int searchFromTo(int[] list, int key, int from, int to) {
         while (from <= to) {

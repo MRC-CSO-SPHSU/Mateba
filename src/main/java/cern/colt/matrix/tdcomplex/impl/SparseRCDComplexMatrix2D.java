@@ -8,6 +8,7 @@
  */
 package cern.colt.matrix.tdcomplex.impl;
 
+import java.io.Serial;
 import java.util.Arrays;
 import java.util.concurrent.Future;
 
@@ -43,9 +44,11 @@ import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class SparseRCDComplexMatrix2D extends WrapperDComplexMatrix2D {
-	private static final long serialVersionUID = 1L;
 
-	private static int searchFromTo(int[] list, int key, int from, int to) {
+    @Serial
+    private static final long serialVersionUID = 2254600152270540739L;
+
+    private static int searchFromTo(int[] list, int key, int from, int to) {
 		while (from <= to) {
 			if (list[from] == key) {
 				return from;

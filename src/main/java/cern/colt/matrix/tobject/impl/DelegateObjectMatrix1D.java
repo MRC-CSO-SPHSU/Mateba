@@ -11,6 +11,8 @@ package cern.colt.matrix.tobject.impl;
 import cern.colt.matrix.tobject.ObjectMatrix1D;
 import cern.colt.matrix.tobject.ObjectMatrix2D;
 
+import java.io.Serial;
+
 /**
  * 1-d matrix holding <tt>Object</tt> elements; either a view wrapping another 2-d
  * matrix and therefore delegating calls to it.
@@ -21,7 +23,8 @@ class DelegateObjectMatrix1D extends WrapperObjectMatrix1D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -2217848292420735145L;
 
     /*
      * The elements of the matrix.

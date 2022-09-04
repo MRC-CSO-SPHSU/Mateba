@@ -8,6 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.colt.matrix.tobject;
 
+import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
@@ -35,7 +36,8 @@ public abstract class ObjectMatrix1D extends AbstractMatrix1D {
     /**
      * 
      */
-    private static final long serialVersionUID = 1L;
+    @Serial
+    private static final long serialVersionUID = -5067334077324466881L;
 
     /**
      * Makes this class non instantiable, but still let's others inherit from
