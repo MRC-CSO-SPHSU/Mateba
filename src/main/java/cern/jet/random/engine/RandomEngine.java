@@ -20,9 +20,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Random;
 
-import static utils.Utils.absInt;
-import static utils.Utils.absLong;
-
 /**
  * Abstract base class for uniform pseudo-random number generating engines.
  * <p>
@@ -50,12 +47,20 @@ public abstract class RandomEngine extends Random implements RandomGenerator, Do
     private static final long serialVersionUID = -3722884246173327714L;
 
     /**
+     * Constant: {@value}
+     */
+    private final static double longFactorClosed = (1L << 53) - 1;
+    private final static double longFactorOpenRight = 1L << 53;
+    private final static double longFactorOpen = 1L << 52;
+    private final static double longFactorOpenLeft = 1L << 53;
+
+    /**
      * Constructs and returns a new uniform random number engine seeded with the current time. Currently, this is
      * {@link MersenneTwister}.
      */
     @Contract(" -> new")
     public static @NotNull RandomEngine makeDefault() {
-        return new MersenneTwister((int) System.currentTimeMillis());
+        return new MersenneTwister(System.currentTimeMillis());
     }
 
     /**
@@ -66,32 +71,39 @@ public abstract class RandomEngine extends Random implements RandomGenerator, Do
      * @param l A {@code long} number.
      * @return a double in the {@code [0, 1]} range.
      * @implSpec {@code Long.MIN_VALUE} is mapped to {@code 0} to make sure all numbers from {@code [0, Long.MAX_VALUE]}
-     * have the same frequency of appearance (no zero bias whatsoever). In addition, endpoints skip the evaluation step
-     * and return 0 and 1 immediately. Finally, the result is divided by {@code Long.MAX_VALUE} to avoid extra rounding
-     * errors.
-     * @implNote This could be done with a LUT of some sort which "my RAM sticks are too small to contain".
+     * have the same frequency of appearance (no zero bias whatsoever).
+     * @implNote This could be done with a LUT of some sort which "my RAM sticks are too small to contain". An extra
+     * shift {@code >>>} is used to match the reference implementation.
      */
-    static public double doubleFromLong(final long l) { // fixme see the original JDK implementation with >>> 11
-        if (l == Long.MIN_VALUE || l == 0) return 0;
-        return l == Long.MAX_VALUE || l == -Long.MAX_VALUE ? 1 : (double) absLong(l) / Long.MAX_VALUE; // fixme replace w/ multiplication by power of two?
+    static double doubleFromLongClosed(final long l) {
+        return (l >>> 11) / longFactorClosed;
     }
 
     /**
-     * Converts an {@code int} (32 bit) number from the range {@code [Integer.MIN_VALUE, Integer.MAX_VALUE]} to a
-     * (64 bit) {@code double} in the {@code [0, 1]} range. According to the convention {@code []} denote that both
-     * endpoints are included.
+     * Range {@code [0, 1)}.
      *
-     * @param i An {@code int} number.
-     * @return a double in the {@code [0, 1]} range.
-     * @implSpec {@code Integer.MIN_VALUE} is mapped to {@code 0} to make sure all numbers from
-     * {@code [0, Integer.MAX_VALUE]} have the same frequency of appearance (not bias whatsoever). In addition,
-     * endpoints skip the evaluation step and return 0 and 1 immediately. Finally, the result is divided by
-     * {@code Integer.MAX_VALUE} to avoid extra rounding errors.
-     * @implNote This could be done with a LUT of some sort which "my RAM sticks are too small to contain".
+     * @see #doubleFromLongClosed(long)
      */
-    static public double doubleFromInt(final int i) {
-        if (i == Integer.MIN_VALUE || i == 0) return 0;
-        return i == Integer.MAX_VALUE || i == -Integer.MAX_VALUE ? 1 : (double) absInt(i) / Integer.MAX_VALUE;
+    static double doubleFromLongOpenRight(final long l) {
+        return (l >>> 11) / longFactorOpenRight;
+    }
+
+    /**
+     * Range {@code (0, 1]}.
+     *
+     * @see #doubleFromLongClosed(long)
+     */
+    static double doubleFromLongOpenLeft(final long l) {
+        return ((l >>> 11) + 1) / longFactorOpenLeft;
+    }
+
+    /**
+     * Range {@code (0, 1)}.
+     *
+     * @see #doubleFromLongClosed(long)
+     */
+    static double doubleFromLongOpen(final long l) {
+        return ((l >>> 12) + 0.5) / longFactorOpen;
     }
 
     /**
@@ -140,15 +152,6 @@ public abstract class RandomEngine extends Random implements RandomGenerator, Do
     }
 
     /**
-     * Generates a random number on [0,1]-real-interval.
-     *
-     * @implSpec Division is used to avoid rounding errors.
-     */
-    public double genrand64Real1() {// fixme validate this
-        return (nextLong() >> 11) * (1.0 / 9007199254740991.0);
-    }// fixme see above
-
-    /**
      * Equivalent to {@code raw()}. This has the effect that random engines can now be used as function objects,
      * returning a random number upon function evaluation.
      */
@@ -194,49 +197,12 @@ public abstract class RandomEngine extends Random implements RandomGenerator, Do
      * @throws IllegalArgumentException when the provided type is not supported.
      */
     final public double nextDouble(final @NotNull unitIntervalTypes type) {
-        switch (type) {
-            case CLOSED:
-                return doubleFromLong(nextLong());
-            case OPEN: {
-                double nextDouble;
-                do {
-                    nextDouble = doubleFromLong(nextLong());
-                } while (!(nextDouble > 0.0 && nextDouble < 1.0));
-                return nextDouble;
-            }
-            case OPEN_LEFT: {
-                double nextDouble;
-                do {
-                    nextDouble = doubleFromLong(nextLong());
-                } while (nextDouble == 0.);
-                return nextDouble;
-
-            }
-            case OPEN_RIGHT: {
-                double nextDouble;
-                do {
-                    nextDouble = doubleFromLong(nextLong());
-                } while (nextDouble == 1.);
-                return nextDouble;
-            }
-            default:
-                throw new IllegalArgumentException("The provided type is incorrect.");
-        }
-
-        /*
-         * nextLong == Long.MAX_VALUE --> 1.0 // fixme create a table of basic values for tests, this one is incorrect
-         * nextLong == Long.MIN_VALUE --> 0.0
-         * nextLong == Long.MAX_VALUE-1 --> 1.0
-         * nextLong == Long.MAX_VALUE-100000L --> 0.9999999999999946
-         * nextLong == Long.MIN_VALUE+1 --> 0.0
-         * nextLong == Long.MIN_VALUE-100000L --> 0.9999999999999946
-         * nextLong == 1L --> 0.5
-         * nextLong == -1L --> 0.5
-         * nextLong == 2L --> 0.5
-         * nextLong == -2L --> 0.5
-         * nextLong == 2L+100000L --> 0.5000000000000054
-         * nextLong == -2L-100000L --> 0.49999999999999456
-         */
+        return switch (type) {
+            case CLOSED -> doubleFromLongClosed(nextLong());
+            case OPEN -> doubleFromLongOpen(nextLong());
+            case OPEN_LEFT -> doubleFromLongOpenLeft(nextLong());
+            case OPEN_RIGHT -> doubleFromLongOpenRight(nextLong());
+        };
     }
 
     /**
@@ -519,6 +485,9 @@ public abstract class RandomEngine extends Random implements RandomGenerator, Do
         }
     }
 
+    /**
+     * An implementation of the {@link Cloneable} interface.
+     */
     @Override
     public RandomEngine clone() {
         try {
