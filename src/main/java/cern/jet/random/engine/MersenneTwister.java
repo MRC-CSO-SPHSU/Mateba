@@ -1,15 +1,9 @@
-/**
- * Copyright (C) 1999 CERN - European Organization for Nuclear Research.
- * Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose
- * is hereby granted without fee, provided that the above copyright notice appear in all copies and
- * that both that copyright notice and this permission notice appear in supporting documentation.
- * CERN makes no representations about the suitability of this software for any purpose.
- * It is provided "as is" without expressed or implied warranty.
- */
 package cern.jet.random.engine;
 
+import lombok.NonNull;
 import lombok.val;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serial;
 import java.util.Date;
@@ -18,67 +12,40 @@ import java.util.Date;
  * MersenneTwister (MT19937) is one of the strongest uniform pseudo-random number generators known so far; at the same
  * time it is quick. It produces uniformly distributed {@code int}'s and {@code long}'s in the closed intervals
  * {@code [Integer.MIN_VALUE,Integer.MAX_VALUE]} and {@code [Long.MIN_VALUE,Long.MAX_VALUE]}, respectively, as well as
- * {@code float}'s and {@code double}'s in all possible unit intervals from 0 to 1. The seed can be
- * any 32-bit {@code integer} or 64-bit {@code long} except {@code 0}; the seed should preferably be odd.
- * <p>
- * MersenneTwister generates random numbers in batches of 624 numbers at a time, so the caching and pipelining of modern
- * systems is exploited. The generator is implemented to generate the output by using the fastest arithmetic operations
- * only: 32-bit additions and bit operations (no division, no multiplication, no mod). These operations generate
- * sequences of 32 random bits ({@code int}'s). {@code long}'s are formed by concatenating two 32 bit {@code int}'s.
- * {@code float}'s are formed by dividing the interval {@code [0.0,1.0]} into 2<sup>32</sup> sub intervals, then
- * randomly choosing one subinterval. {@code double}'s are formed by dividing the interval {@code [0.0,1.0]} into
- * 2<sup>64</sup> sub intervals, then randomly choosing one subinterval.
+ * {@code double}'s in all possible unit intervals from 0 to 1. The seed can be any 32-bit {@code integer} or 64-bit
+ * {@code long} except {@code 0}; the seed should preferably be odd.
  *
- * @implSpec After M. Matsumoto and T. Nishimura, "Mersenne Twister: A 623-Dimensionally Equidistributed Uniform
- * Pseudo-Random Number Generator", ACM Transactions on Modeling and Computer Simulation, Vol. 8, No. 1, January 1998,
- * pp 3--30.
- * <dt>More info on <A HREF="http://www.math.keio.ac.jp/~matumoto/eindex.html">Masumoto's homepage</A>.
- * <dt>More info on <A HREF="http://www.ncsa.uiuc.edu/Apps/CMP/RNG/www-rng.html"> Pseudo-random number generators is on
- * the Web</A>.
- * <dt>Yet <A HREF="http://nhse.npac.syr.edu/random"> some more info</A>.
- * <p>
- * The correctness of this implementation has been verified against the published output sequence
- * <a href="http://www.math.keio.ac.jp/~nisimura/random/real2/mt19937-2.out">mt19937-2.out</a>
- * of the C-implementation <ahref="http://www.math.keio.ac.jp/~nisimura/random/real2/mt19937-2.c">mt19937-2.c</a>.
- * (Call {@code test(1000)} to print the sequence).
  * @implNote This implementation is <b>not synchronized</b>.
- * <p>
+ * @see <a href="https://dl.acm.org/doi/10.1145/272991.272995">Makoto Matsumoto and Takuji Nishimura. 1998. Mersenne
+ * twister: a 623-dimensionally equidistributed uniform pseudo-random number generator. ACM Trans. Model. Comput. Simul.
+ * 8, 1 (Jan. 1998), 3–30.</a>
+ * @see <a href="http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/VERSIONS/C-LANG/mt19937-64.c">mt19937-64.c</a>
  */
-public class MersenneTwister extends RandomEngine implements Cloneable {
-    private static final int NN = 312;
-    private static final int MM = 156;
-    private static final long MATRIX_A_U = 0xB502_6F5A_A966_19E9L;
-
-    /**
-     * Most significant 33 bits, upper mask.
-     */
-    private static final long UM_U = 0xFFFF_FFFF_8000_0000L;
-
-    /**
-     * Least significant 31 bits, lower mask.
-     */
-    private static final long LM_U = 0x7FFF_FFFFL;
-    private static final long[] mag01_U = {0L, MATRIX_A_U};
+// todo https://dl.acm.org/doi/pdf/10.1145/369534.369540 check this out for better version https://dl.acm.org/doi/10.1145/1132973.1132974
+public final class MersenneTwister extends RandomEngine { // fixme check that nextint/nextlong limits follow the convention to be passed to shuffle
     @Serial
     private static final long serialVersionUID = 8546229500601388477L;
 
-    /**
-     * mti==NN+1 means mt[NN] is not initialized
-     */
-    private static int mti = NN + 1;
+    private static final long DEFAULT_SEED = 5_489L;
+    private static final int RECURRENCE_DEGREE = 312;
+    private static final int MIDDLE_WORD = 156;
+    private static final long UPPER_MASK = 0xFFFF_FFFF_8000_0000L;
+    private static final long LOWER_MASK = 0x7FFF_FFFFL;
+    private static final long[] TWIST_MATRIX = {0L, 0xB502_6F5A_A966_19E9L};
+
+    private static final int RMD = RECURRENCE_DEGREE - MIDDLE_WORD;
+    private static final int RDM1 = RECURRENCE_DEGREE - 1;
+    private static final int RDP1 = RECURRENCE_DEGREE + 1;
+    private static final int MWM1 = MIDDLE_WORD - 1;
+    private int stateVectorIndex = RECURRENCE_DEGREE + 1;
+    private long[] stateVector = new long[RECURRENCE_DEGREE];
 
     /**
-     * The array for the state vector
-     */
-    private long[] mt_U; // fixme make final?
-
-    /**
-     * Constructs and returns a random number generator with a default seed, which is a <b>constant</b>. Thus using this
-     * constructor will yield generators that always produce exactly the same sequence. This method is mainly intended
-     * to ease testing and debugging.
+     * Constructs and returns a random number generator with a default seed, which is a <b>constant</b>. This
+     * constructor always yields generators that produce exactly the same sequence.
      */
     public MersenneTwister() {
-        this(5489L);
+        setSeed(0L);
     }
 
     /**
@@ -87,7 +54,7 @@ public class MersenneTwister extends RandomEngine implements Cloneable {
      * @param seed should not be 0, in such a case 5489 is silently substituted.
      */
     public MersenneTwister(final int seed) {
-        setSeed(seed);
+        setSeed((long) seed);
     }
 
     /**
@@ -96,6 +63,7 @@ public class MersenneTwister extends RandomEngine implements Cloneable {
      * @param seed should not be 0, in such a case 5489L is silently substituted.
      */
     public MersenneTwister(final long seed) {
+        System.out.println(stateVector.length);
         setSeed(seed);
     }
 
@@ -105,7 +73,7 @@ public class MersenneTwister extends RandomEngine implements Cloneable {
      * @param d typically {@code new java.util.Date()}
      */
     public MersenneTwister(final @NotNull Date d) {
-        this(d.getTime());
+        setSeed(d.getTime());
     }
 
     /**
@@ -115,81 +83,90 @@ public class MersenneTwister extends RandomEngine implements Cloneable {
      * @return a copy of the receiver.
      */
     @Override
-    public MersenneTwister clone() {
+    public @NonNull MersenneTwister clone() {
         val clone = (MersenneTwister) super.clone();
-        clone.mt_U = mt_U.clone();
+        clone.stateVector = this.stateVector.clone();
         return clone;
     }
 
     /**
-     * Generates a random number on [-2^63, 2^63-1]-interval.
+     * {@inheritDoc}
      */
-    public long nextLong() {
+    @Override
+    public long nextLong() {// todo check the idea with caching of mt i.e. cache == mt and mt = cache
         int i;
-        long x_U;
+        long nextValue;
 
-        if (mti >= NN) {// todo check the idea with caching of mt i.e. cache == mt and mt = cache
-            if (mti == NN + 1) setSeed(5_489L);
+        if (stateVectorIndex >= RECURRENCE_DEGREE) {
+            if (stateVectorIndex == RDP1) setSeed(5_489L);
 
-            for (i = 0; i < NN - MM; i++) {
-                x_U = mt_U[i] & UM_U | mt_U[i + 1] & LM_U;
-                mt_U[i] = mt_U[i + MM] ^ x_U >>> 1 ^ mag01_U[(int) (x_U & 1L)];
+            for (i = 0; i < RMD; i++) {
+                nextValue = stateVector[i] & UPPER_MASK | stateVector[i + 1] & LOWER_MASK;
+                stateVector[i] = stateVector[i + MIDDLE_WORD] ^ nextValue >>> 1 ^ TWIST_MATRIX[(int) (nextValue & 1L)];
             }
-            for (; i < NN - 1; i++) {
-                x_U = mt_U[i] & UM_U | mt_U[i + 1] & LM_U;
-                mt_U[i] = mt_U[i + (MM - NN)] ^ x_U >>> 1 ^ mag01_U[(int) (x_U & 1L)];
-            }
-            x_U = mt_U[NN - 1] & UM_U | mt_U[0] & LM_U;
-            mt_U[NN - 1] = mt_U[MM - 1] ^ x_U >>> 1 ^ mag01_U[(int) (x_U & 1L)];
 
-            mti = 0;
+            while (i < RDM1) {
+                nextValue = stateVector[i] & UPPER_MASK | stateVector[i + 1] & LOWER_MASK;
+                stateVector[i] = stateVector[i - RMD] ^ nextValue >>> 1 ^ TWIST_MATRIX[(int) (nextValue & 1L)];
+                i++;
+            }
+
+            nextValue = stateVector[RDM1] & UPPER_MASK | stateVector[0] & LOWER_MASK;
+            stateVector[RDM1] = stateVector[MWM1] ^ nextValue >>> 1 ^ TWIST_MATRIX[(int) (nextValue & 1L)];
+
+            stateVectorIndex = 0;
         }
 
-        x_U = mt_U[mti++];
+        nextValue = stateVector[stateVectorIndex++];
 
-        x_U ^= x_U >>> 29 & 0x5555555555555555L;
-        x_U ^= x_U << 17 & 0x71D67FFFEDA60000L;
-        x_U ^= x_U << 37 & 0xFFF7EEE000000000L;
-        x_U ^= x_U >>> 43;
+        nextValue ^= nextValue >>> 29 & 0x5555_5555_5555_5555L;
+        nextValue ^= nextValue << 17 & 0x71D6_7FFF_EDA6_0000L;
+        nextValue ^= nextValue << 37 & 0xFFF7_EEE0_0000_0000L;
+        nextValue ^= nextValue >>> 43;
 
-        return x_U;
+        return nextValue;
     }
 
-    /* initialize by an array with array-length */
-    /* init_key is the array for initializing keys */
+    /**
+     * Seeds the state array with another array of {@code long}.
+     *
+     * @param keys Additional values for seeding.
+     * @implSpec Does nothing when the input is empty
+     */
     @Override
-    public void setSeed(int[] initKey_U) {
-        mt_U = new long[NN];
-
-        int i = 1;
-        int j = 0;
-        int k = Math.max(NN, initKey_U.length);
+    public void setSeed(final int @Nullable [] keys) {
+        if (keys == null || keys.length == 0) return;
 
         setSeed(19_650_218L);
 
-        for (; k != 0; k--) {
-            mt_U[i] = (mt_U[i] ^ (mt_U[i - 1] ^ mt_U[i - 1] >>> 62) * 3_935_559_000_370_003_845L) + initKey_U[j] + j; /* non linear */
+        int i = 1;
+        int j = 0;
+        int k = Math.max(RECURRENCE_DEGREE, keys.length);
+
+        while (k != 0) {
+            stateVector[i] = (stateVector[i] ^ (stateVector[i - 1] ^ stateVector[i - 1] >>> 62) *
+                3_935_559_000_370_003_845L) + keys[j] + j;
             i++;
             j++;
-            if (i >= NN) {
-                mt_U[0] = mt_U[NN - 1];
+            if (i >= RECURRENCE_DEGREE) {
+                stateVector[0] = stateVector[RDM1];
                 i = 1;
             }
-            if (j >= initKey_U.length) {
-                j = 0;
-            }
+            if (j >= keys.length) j = 0;
+            k--;
         }
 
-        for (k = NN - 1; k != 0; k--) {
-            mt_U[i] = (mt_U[i] ^ (mt_U[i - 1] ^ mt_U[i - 1] >>> 62) * 2_862_933_555_777_941_757L) - i; /* non linear */
+        for (k = RDM1; k != 0; k--) {
+            stateVector[i] = (stateVector[i] ^ (stateVector[i - 1] ^ stateVector[i - 1] >>> 62) *
+                2_862_933_555_777_941_757L) - i;
             i++;
-            if (i >= NN) {
-                mt_U[0] = mt_U[NN - 1];
+            if (i >= RECURRENCE_DEGREE) {
+                stateVector[0] = stateVector[RDM1];
                 i = 1;
             }
         }
 
-        mt_U[0] = 1L << 63; /* MSB is 1; assuring non-zero initial array */
+        stateVector[0] = 1L << 63;
     }
 
     /**
@@ -203,13 +180,16 @@ public class MersenneTwister extends RandomEngine implements Cloneable {
     /**
      * Sets the receiver's seed. This method resets the receiver's entire internal state.
      *
-     * @param seed_U The seed.
+     * @param seed The seed.
+     * @implSpec When{@code seed = 0} uses the default value {@code 5489L}.
      */
-    public void setSeed(final long seed_U) {
-        mt_U = new long[NN];
-        mt_U[0] = seed_U == 0 ? 5489L : seed_U;
-        for (mti = 1; mti < NN; mti++) {
-            mt_U[mti] = 6_364_136_223_846_793_005L * (mt_U[mti - 1] ^ mt_U[mti - 1] >>> 62) + mti;
-        }
+    @Override
+    public void setSeed(final long seed) {
+        stateVector = new long[RECURRENCE_DEGREE];
+        stateVector[0] = seed == 0 ? DEFAULT_SEED : seed;
+
+        for (stateVectorIndex = 1; stateVectorIndex < RECURRENCE_DEGREE; stateVectorIndex++)
+            stateVector[stateVectorIndex] = 6_364_136_223_846_793_005L *
+                (stateVector[stateVectorIndex - 1] ^ stateVector[stateVectorIndex - 1] >>> 62) + stateVectorIndex;
     }
 }
