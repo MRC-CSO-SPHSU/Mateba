@@ -1,5 +1,14 @@
 Mateba
 ============
+[![Build Status](https://github.com/MRC-CSO-SPHSU/Mateba/actions/workflows/build.yml/badge.svg)](https://github.com/MRC-CSO-SPHSU/Mateba/actions)
+![](https://github.com/MRC-CSO-SPHSU/Mateba/actions/workflows/codeql-analysis.yml/badge.svg)
+
+
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=MRC-CSO-SPHSU_Mateba&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=MRC-CSO-SPHSU_Mateba)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=MRC-CSO-SPHSU_Mateba&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=MRC-CSO-SPHSU_Mateba)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=MRC-CSO-SPHSU_Mateba&metric=bugs)](https://sonarcloud.io/summary/new_code?id=MRC-CSO-SPHSU_Mateba)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=MRC-CSO-SPHSU_Mateba&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=MRC-CSO-SPHSU_Mateba)
+
 
 Mateba is a multithreaded version of
 [Colt](http://acs.lbl.gov/software/colt/) - a library for high
