@@ -6,6 +6,10 @@ import org.junit.jupiter.api.Test;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
@@ -14,6 +18,64 @@ import static cern.jet.random.engine.RandomEngine.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MersenneTwisterTest {
+
+    @Test
+    void testConstructor() throws Exception {
+        val atStartOfDayResult = LocalDate.of(1970, 1, 1).atStartOfDay();
+        var mt = new MersenneTwister(Date.from(atStartOfDayResult.atZone(ZoneId.of("UTC")).toInstant()));
+        var f = mt.getClass().getDeclaredField("stateVector");
+        f.setAccessible(true);
+        assertNotNull(f);
+        var value = f.get(mt);
+        assertEquals(312, Array.getLength(value));
+        assertEquals(5489L, Array.get(value, 0));
+        f = mt.getClass().getDeclaredField("stateVectorIndex");
+        f.setAccessible(true);
+        value = f.get(mt);
+        assertEquals(312, value);
+
+        mt = new MersenneTwister();
+        f = mt.getClass().getDeclaredField("stateVector");
+        f.setAccessible(true);
+        assertNotNull(f);
+        value = f.get(mt);
+        assertEquals(312, Array.getLength(value));
+        assertEquals(5489L, Array.get(value, 0));
+        f = mt.getClass().getDeclaredField("stateVectorIndex");
+        f.setAccessible(true);
+        value = f.get(mt);
+        assertEquals(312, value);
+
+        mt = new MersenneTwister(100L);
+        f = mt.getClass().getDeclaredField("stateVector");
+        f.setAccessible(true);
+        assertNotNull(f);
+        value = f.get(mt);
+        assertEquals(312, Array.getLength(value));
+        assertEquals(100L, Array.get(value, 0));
+        f = mt.getClass().getDeclaredField("stateVectorIndex");
+        f.setAccessible(true);
+        value = f.get(mt);
+        assertEquals(312, value);
+
+        mt = new MersenneTwister(100);
+        f = mt.getClass().getDeclaredField("stateVector");
+        f.setAccessible(true);
+        assertNotNull(f);
+        value = f.get(mt);
+        assertEquals(312, Array.getLength(value));
+        assertEquals(100L, Array.get(value, 0));
+        f = mt.getClass().getDeclaredField("stateVectorIndex");
+        f.setAccessible(true);
+        value = f.get(mt);
+        assertEquals(312, value);
+
+    }
+
+    @Test
+    void testConstructor9() {
+        assertThrows(NullPointerException.class, () -> new MersenneTwister((Date) null));
+    }
 
     @Test
     void actualValues() {
@@ -27,7 +89,7 @@ class MersenneTwisterTest {
         try (val is = getClass().getClassLoader().getResourceAsStream("long.txt")) {
             assert is != null;
             val referenceLongValues = new BufferedReader(new InputStreamReader(is)).lines().parallel().flatMapToLong(num ->
-                    LongStream.of(Long.parseUnsignedLong(num))).toArray();
+                LongStream.of(Long.parseUnsignedLong(num))).toArray();
             assertArrayEquals(referenceLongValues, actualLongValues);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -36,7 +98,7 @@ class MersenneTwisterTest {
         try (val is = getClass().getClassLoader().getResourceAsStream("double.txt")) {
             assert is != null;
             val referenceDoubleValues = new BufferedReader(new InputStreamReader(is)).lines().parallel()
-                    .flatMapToDouble(num -> DoubleStream.of(Double.parseDouble(num))).toArray();
+                .flatMapToDouble(num -> DoubleStream.of(Double.parseDouble(num))).toArray();
             for (int i = 0; i < 1000; i++)
                 assertTrue(Math.abs(referenceDoubleValues[i] - actualDoubleValues[i]) < 1.0E-15);
         } catch (IOException e) {
@@ -54,7 +116,8 @@ class MersenneTwisterTest {
     }
 
     @Test
-    void nextLong() {
+    void testNextLong() {
+        assertEquals(-3932459287431434586L, (new MersenneTwister()).nextLong());
     }
 
     @Test
