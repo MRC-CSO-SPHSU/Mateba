@@ -11,6 +11,7 @@ package cern.jet.random.engine;
 import cern.mateba.function.tdouble.DoubleFunction;
 import cern.mateba.function.tint.IntFunction;
 import cern.mateba.function.tlong.LongFunction;
+import lombok.Getter;
 import lombok.val;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -45,14 +46,6 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     private static final long serialVersionUID = -3722884246173327714L;
 
     /**
-     * Constant: {@value}
-     */
-    private final static double longFactorClosed = (1L << 53) - 1;
-    private final static double longFactorOpenRight = 1L << 53;
-    private final static double longFactorOpen = 1L << 52;
-    private final static double longFactorOpenLeft = 1L << 53;
-
-    /**
      * Constructs and returns a new uniform random number engine seeded with the current time. Currently, this is
      * {@link MersenneTwister}.
      */
@@ -74,7 +67,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
      * shift {@code >>>} is used to match the reference implementation.
      */
     static double doubleFromLongClosed(final long l) {
-        return (l >>> 11) / longFactorClosed;
+        return (l >>> 11) / unitIntervalTypes.CLOSED.getLongFactor();
     }
 
     /**
@@ -83,7 +76,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
      * @see #doubleFromLongClosed(long)
      */
     static double doubleFromLongOpenRight(final long l) {
-        return (l >>> 11) / longFactorOpenRight;
+        return (l >>> 11) / unitIntervalTypes.OPEN_RIGHT.getLongFactor();
     }
 
     /**
@@ -92,7 +85,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
      * @see #doubleFromLongClosed(long)
      */
     static double doubleFromLongOpenLeft(final long l) {
-        return ((l >>> 11) + 1) / longFactorOpenLeft;
+        return ((l >>> 11) + 1) / unitIntervalTypes.OPEN_LEFT.getLongFactor();
     }
 
     /**
@@ -101,7 +94,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
      * @see #doubleFromLongClosed(long)
      */
     static double doubleFromLongOpen(final long l) {
-        return ((l >>> 12) + 0.5) / longFactorOpen;
+        return ((l >>> 12) + 0.5) / unitIntervalTypes.OPEN.getLongFactor();
     }
 
     /**
@@ -496,6 +489,15 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     }
 
     public enum unitIntervalTypes {
-        OPEN, CLOSED, OPEN_LEFT, OPEN_RIGHT
+        OPEN (1L << 52),
+        CLOSED ((1L << 53) - 1),
+        OPEN_LEFT (1L << 53),
+        OPEN_RIGHT (1L << 53);
+
+        @Getter
+        private final double longFactor;
+        unitIntervalTypes(final double longFactor) {
+            this.longFactor = longFactor;
+        }
     }
 }
