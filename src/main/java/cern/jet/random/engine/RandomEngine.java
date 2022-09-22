@@ -12,12 +12,10 @@ import cern.mateba.function.tdouble.DoubleFunction;
 import cern.mateba.function.tint.IntFunction;
 import cern.mateba.function.tlong.LongFunction;
 import lombok.val;
-import org.apache.commons.math3.random.RandomGenerator;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.Random;
 
 /**
@@ -41,8 +39,8 @@ import java.util.Random;
  */
 
 @SuppressWarnings("unused")
-public abstract class RandomEngine extends Random implements RandomGenerator, DoubleFunction, IntFunction,
-    LongFunction, Serializable, Cloneable { // fixme now that we have a different default range, check other distributions as they depend on the uniform one.
+public abstract class RandomEngine extends Random implements DoubleFunction, IntFunction, LongFunction, Cloneable {
+    // fixme now that we have a different default range, check other distributions as they depend on the uniform one.
     @Serial
     private static final long serialVersionUID = -3722884246173327714L;
 

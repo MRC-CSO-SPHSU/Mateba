@@ -32,7 +32,6 @@ public final class MersenneTwister extends RandomEngine { // fixme check that ne
     private static final long UPPER_MASK = 0xFFFF_FFFF_8000_0000L;
     private static final long LOWER_MASK = 0x7FFF_FFFFL;
     private static final long[] TWIST_MATRIX = {0L, 0xB502_6F5A_A966_19E9L};
-
     private static final int RMD = RECURRENCE_DEGREE - MIDDLE_WORD;
     private static final int RDM1 = RECURRENCE_DEGREE - 1;
     private static final int RDP1 = RECURRENCE_DEGREE + 1;
@@ -133,7 +132,6 @@ public final class MersenneTwister extends RandomEngine { // fixme check that ne
      * @param keys Additional values for seeding.
      * @implSpec Does nothing when the input is empty
      */
-    @Override
     public void setSeed(final int @Nullable [] keys) {
         if (keys == null || keys.length == 0) return;
 
@@ -172,7 +170,6 @@ public final class MersenneTwister extends RandomEngine { // fixme check that ne
     /**
      * @see #nextLong()
      */
-    @Override
     public void setSeed(final int i) {
         setSeed((long) i);
     }
@@ -185,7 +182,7 @@ public final class MersenneTwister extends RandomEngine { // fixme check that ne
      */
     @Override
     public void setSeed(final long seed) {
-        stateVector = new long[RECURRENCE_DEGREE];
+        if (stateVector == null) stateVector = new long[RECURRENCE_DEGREE];
         stateVector[0] = seed == 0 ? DEFAULT_SEED : seed;
 
         for (stateVectorIndex = 1; stateVectorIndex < RECURRENCE_DEGREE; stateVectorIndex++)
