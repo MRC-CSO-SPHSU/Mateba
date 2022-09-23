@@ -44,6 +44,9 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     @Serial
     private static final long serialVersionUID = -3722884246173327714L;
 
+    private long bufferInt;
+    private boolean intFlag;
+
     /**
      * Constructs and returns a new uniform random number engine seeded with the current time. Currently, this is
      * {@link MersenneTwister}.
@@ -257,7 +260,11 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
      * {@code Integer.MAX_VALUE});
      */
     final public int nextInt() {
-        return (int) (nextLong() >> 32);
+        intFlag = !intFlag;
+        if (intFlag) {
+            bufferInt = nextLong();
+            return (int) (bufferInt >> 32);
+        } else return (int) (bufferInt << 32 >>> 32);
     }
 
     /**
