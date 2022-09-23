@@ -39,7 +39,6 @@ import java.util.Random;
  * @see java.util.Random
  */
 
-@SuppressWarnings("unused")
 public abstract class RandomEngine extends Random implements DoubleFunction, IntFunction, LongFunction, Cloneable {
     // fixme now that we have a different default range, check other distributions as they depend on the uniform one.
     @Serial
@@ -260,7 +259,6 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     final public int nextInt() {
         return (int) (nextLong() >> 32);
     }
-
 
     /**
      * Generates a random {@code int} in the range {@code [0, bound]} or {@code [bound, -1]} when {@code bound} is
@@ -489,13 +487,14 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     }
 
     public enum unitIntervalTypes {
-        OPEN (1L << 52),
-        CLOSED ((1L << 53) - 1),
-        OPEN_LEFT (1L << 53),
-        OPEN_RIGHT (1L << 53);
+        OPEN(1L << 52),
+        CLOSED((1L << 53) - 1),
+        OPEN_LEFT(1L << 53),
+        OPEN_RIGHT(1L << 53);
 
         @Getter
         private final double longFactor;
+
         unitIntervalTypes(final double longFactor) {
             this.longFactor = longFactor;
         }
