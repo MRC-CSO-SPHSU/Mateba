@@ -62,7 +62,6 @@ public final class MersenneTwister extends RandomEngine { // fixme check that ne
      * @param seed should not be 0, in such a case 5489L is silently substituted.
      */
     public MersenneTwister(final long seed) {
-        System.out.println(stateVector.length);
         setSeed(seed);
     }
 
