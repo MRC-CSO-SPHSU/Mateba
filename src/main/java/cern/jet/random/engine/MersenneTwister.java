@@ -91,7 +91,7 @@ public final class MersenneTwister extends RandomEngine { // fixme check that ne
      * {@inheritDoc}
      */
     @Override
-    public long nextLong() {// todo check the idea with caching of mt i.e. cache == mt and mt = cache
+    public long nextLong() {
         int i;
         long nextValue;
 
