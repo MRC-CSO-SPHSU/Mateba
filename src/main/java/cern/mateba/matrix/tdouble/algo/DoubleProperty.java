@@ -25,7 +25,7 @@ import cern.mateba.matrix.tdouble.impl.SparseCCDoubleMatrix2D;
 import cern.mateba.matrix.tdouble.impl.SparseDoubleMatrix1D;
 import cern.mateba.matrix.tdouble.impl.SparseRCDoubleMatrix2D;
 import cern.jet.math.tdouble.DoubleFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Tests matrices for linear algebraic properties (equality, tridiagonality,

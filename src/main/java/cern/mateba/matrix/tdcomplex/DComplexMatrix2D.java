@@ -18,7 +18,7 @@ import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.AbstractMatrix2D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
 import cern.jet.math.tdcomplex.DComplex;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Abstract base class for 2-d matrices holding <tt>complex</tt> elements.

@@ -17,7 +17,7 @@ import cern.mateba.list.tlong.LongArrayList;
 import cern.mateba.matrix.tlong.LongMatrix1D;
 import cern.mateba.matrix.tlong.LongMatrix2D;
 import cern.jet.math.tlong.LongFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Sparse row-compressed 2-d matrix holding <tt>long</tt> elements. First see

@@ -20,7 +20,7 @@ import cern.mateba.list.tlong.LongArrayList;
 import cern.mateba.matrix.AbstractMatrix2D;
 import cern.mateba.matrix.tlong.impl.DenseLongMatrix1D;
 import cern.mateba.matrix.tlong.impl.DenseLongMatrix2D;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Abstract base class for 2-d matrices holding <tt>int</tt> elements. First see

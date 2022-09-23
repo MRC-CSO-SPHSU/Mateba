@@ -16,7 +16,7 @@ import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix3D;
 import cern.mateba.matrix.tdouble.DoubleMatrix3D;
 import cern.mateba.matrix.tdouble.impl.DenseLargeDoubleMatrix3D;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * 3-d matrix holding <tt>complex</tt> elements; either a view wrapping another

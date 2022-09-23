@@ -6,7 +6,7 @@ import junit.framework.TestCase;
 import cern.mateba.function.tint.IntProcedure;
 import cern.mateba.list.tint.IntArrayList;
 import cern.jet.math.tint.IntFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 public abstract class IntMatrix3DTest extends TestCase {
     /**

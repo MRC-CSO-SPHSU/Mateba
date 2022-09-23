@@ -18,7 +18,7 @@ import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.AbstractMatrix1D;
 import cern.mateba.matrix.tdouble.DoubleMatrix1D;
 import cern.jet.math.tdcomplex.DComplex;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Abstract base class for 1-d matrices (aka <i>vectors</i>) holding

@@ -9,7 +9,7 @@ import cern.mateba.matrix.tdouble.DoubleFactory3D;
 import cern.mateba.matrix.tdouble.DoubleMatrix3D;
 import cern.jet.math.tdcomplex.DComplex;
 import cern.jet.math.tdcomplex.DComplexFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 public abstract class DComplexMatrix3DTest extends TestCase {
 

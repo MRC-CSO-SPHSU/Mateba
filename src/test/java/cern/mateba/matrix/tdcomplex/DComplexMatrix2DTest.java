@@ -11,7 +11,7 @@ import cern.mateba.matrix.tdouble.DoubleFactory2D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
 import cern.jet.math.tdcomplex.DComplex;
 import cern.jet.math.tdcomplex.DComplexFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 public abstract class DComplexMatrix2DTest extends TestCase {
     /**

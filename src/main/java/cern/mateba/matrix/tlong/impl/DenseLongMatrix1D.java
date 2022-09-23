@@ -18,7 +18,7 @@ import cern.mateba.list.tlong.LongArrayList;
 import cern.mateba.matrix.tlong.LongMatrix1D;
 import cern.mateba.matrix.tlong.LongMatrix2D;
 import cern.mateba.matrix.tlong.LongMatrix3D;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Dense 1-d matrix (aka <i>vector</i>) holding <tt>int</tt> elements. First see

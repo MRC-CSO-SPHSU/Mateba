@@ -19,7 +19,7 @@ import cern.mateba.matrix.tint.IntMatrix1D;
 import cern.mateba.matrix.tint.IntMatrix2D;
 import cern.mateba.matrix.tint.IntMatrix3D;
 import cern.jet.math.tint.IntFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Tests matrices for linear algebraic properties (equality, tridiagonality,

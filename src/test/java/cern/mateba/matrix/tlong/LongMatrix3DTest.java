@@ -7,7 +7,7 @@ import cern.mateba.function.tlong.LongProcedure;
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.list.tlong.LongArrayList;
 import cern.jet.math.tlong.LongFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 public abstract class LongMatrix3DTest extends TestCase {
     /**

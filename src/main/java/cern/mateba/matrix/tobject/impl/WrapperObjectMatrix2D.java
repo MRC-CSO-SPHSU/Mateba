@@ -15,7 +15,7 @@ import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.list.tobject.ObjectArrayList;
 import cern.mateba.matrix.tobject.ObjectMatrix1D;
 import cern.mateba.matrix.tobject.ObjectMatrix2D;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * 2-d matrix holding <tt>Object</tt> elements; either a view wrapping another

@@ -16,7 +16,7 @@ import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.tdcomplex.impl.DenseLargeDComplexMatrix2D;
 import cern.mateba.matrix.tdouble.DoubleMatrix1D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * 2-d matrix holding <tt>double</tt> elements; either a view wrapping another

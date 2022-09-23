@@ -9,7 +9,7 @@ import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.list.tlong.LongArrayList;
 import cern.mateba.matrix.tlong.impl.DenseLongMatrix1D;
 import cern.jet.math.tlong.LongFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 public abstract class LongMatrix2DTest extends TestCase {
     /**

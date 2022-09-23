@@ -19,7 +19,7 @@ import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.AbstractMatrix2D;
 import cern.mateba.matrix.tint.impl.DenseIntMatrix1D;
 import cern.mateba.matrix.tint.impl.DenseIntMatrix2D;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Abstract base class for 2-d matrices holding <tt>int</tt> elements. First see

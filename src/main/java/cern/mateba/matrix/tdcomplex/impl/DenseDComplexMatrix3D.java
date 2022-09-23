@@ -21,7 +21,7 @@ import cern.mateba.matrix.tdcomplex.DComplexMatrix3D;
 import cern.mateba.matrix.tdouble.DoubleMatrix3D;
 import cern.mateba.matrix.tdouble.impl.DenseDoubleMatrix3D;
 import org.jtransforms.fft.DoubleFFT_3D;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Dense 3-d matrix holding <tt>complex</tt> elements.

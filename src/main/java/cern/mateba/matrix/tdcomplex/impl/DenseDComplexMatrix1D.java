@@ -23,7 +23,7 @@ import cern.mateba.matrix.tdouble.impl.DenseDoubleMatrix1D;
 import cern.jet.math.tdcomplex.DComplex;
 import cern.jet.math.tdcomplex.DComplexFunctions;
 import org.jtransforms.fft.DoubleFFT_1D;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Dense 1-d matrix (aka <i>vector</i>) holding <tt>complex</tt> elements.

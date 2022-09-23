@@ -8,7 +8,7 @@ import cern.mateba.function.tdouble.DoubleProcedure;
 import cern.mateba.list.tdouble.DoubleArrayList;
 import cern.mateba.list.tint.IntArrayList;
 import cern.jet.math.tdouble.DoubleFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 public abstract class DoubleMatrix1DTest extends TestCase {
     /**

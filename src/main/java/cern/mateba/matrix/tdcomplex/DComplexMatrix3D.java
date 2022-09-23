@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.AbstractMatrix3D;
 import cern.mateba.matrix.tdouble.DoubleMatrix3D;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Abstract base class for 3-d matrices holding <tt>complex</tt> elements.

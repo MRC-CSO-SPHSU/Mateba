@@ -19,7 +19,7 @@ import cern.mateba.matrix.tlong.LongMatrix1D;
 import cern.mateba.matrix.tlong.LongMatrix2D;
 import cern.mateba.matrix.tlong.LongMatrix3D;
 import cern.jet.math.tlong.LongFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Tests matrices for linear algebraic properties (equality, tridiagonality,

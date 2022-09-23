@@ -22,7 +22,7 @@ import cern.jet.math.tdouble.DoubleFunctions;
 import cern.jet.random.engine.RandomEngine;
 import cern.jet.random.sampling.RandomSampler;
 import cern.jet.stat.Descriptive;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 import hep.aida.IAxis;
 import hep.aida.IHistogram1D;
 import hep.aida.IHistogram2D;

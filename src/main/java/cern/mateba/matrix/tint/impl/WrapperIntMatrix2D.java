@@ -14,7 +14,7 @@ import java.util.concurrent.Future;
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.tint.IntMatrix1D;
 import cern.mateba.matrix.tint.IntMatrix2D;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * 2-d matrix holding <tt>int</tt> elements; either a view wrapping another

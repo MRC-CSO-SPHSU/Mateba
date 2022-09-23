@@ -14,9 +14,9 @@ import cern.mateba.matrix.tdouble.algo.DenseDoubleAlgebra;
 import cern.mateba.matrix.tdouble.algo.SparseDoubleAlgebra;
 import cern.mateba.matrix.tdouble.impl.SparseRCDoubleMatrix2D;
 import cern.jet.math.tdcomplex.DComplexFunctions;
-import static edu.emory.mathcs.utils.pc.Utils.CNEG_ONE;
-import static edu.emory.mathcs.utils.pc.Utils.CONE;
-import static edu.emory.mathcs.utils.pc.Utils.CZERO;
+import static edu.emory.mathcs.utils.Utils.CNEG_ONE;
+import static edu.emory.mathcs.utils.Utils.CONE;
+import static edu.emory.mathcs.utils.Utils.CZERO;
 
 public class TestSparseDComplexCholeskyDecomposition {
     public static void main(String[] args) {

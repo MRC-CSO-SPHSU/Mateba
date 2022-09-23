@@ -19,7 +19,7 @@ import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
 import cern.jet.math.tdcomplex.DComplex;
 import edu.emory.mathcs.csparsej.tdcomplex.DZcs_common.DZcs;
 import edu.emory.mathcs.csparsej.tdcomplex.DZcs_transpose;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Sparse column-compressed 2-d matrix holding <tt>complex</tt> elements. First

@@ -7,7 +7,7 @@ import cern.mateba.matrix.tdouble.DoubleMatrix1DProcedure;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2DTest;
 import cern.jet.math.tdouble.DoubleFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 public class DiagonalDoubleMatrix2DTest extends DoubleMatrix2DTest {
 

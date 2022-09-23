@@ -6,7 +6,7 @@ import cern.mateba.matrix.tdcomplex.AllDComplexMatrixTests;
 import cern.mateba.matrix.tdouble.AllDoubleMatrixTests;
 import cern.mateba.matrix.tint.AllIntMatrixTests;
 import cern.mateba.matrix.tlong.AllLongMatrixTests;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 public class AllTests {
 

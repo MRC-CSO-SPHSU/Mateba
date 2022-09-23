@@ -24,7 +24,7 @@ import cern.mateba.matrix.io.MatrixSize;
 import cern.mateba.matrix.io.MatrixVectorReader;
 import cern.mateba.matrix.tlong.LongMatrix1D;
 import cern.mateba.matrix.tlong.LongMatrix2D;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Dense 2-d matrix holding <tt>long</tt> elements. First see the <a

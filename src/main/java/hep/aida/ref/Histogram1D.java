@@ -1,6 +1,6 @@
 package hep.aida.ref;
 
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 import hep.aida.IAxis;
 import hep.aida.IHistogram1D;
 

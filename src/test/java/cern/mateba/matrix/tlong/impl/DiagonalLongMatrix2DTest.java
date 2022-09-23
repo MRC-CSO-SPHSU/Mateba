@@ -7,7 +7,7 @@ import cern.mateba.matrix.tlong.LongMatrix1DProcedure;
 import cern.mateba.matrix.tlong.LongMatrix2D;
 import cern.mateba.matrix.tlong.LongMatrix2DTest;
 import cern.jet.math.tlong.LongFunctions;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 public class DiagonalLongMatrix2DTest extends LongMatrix2DTest {
 

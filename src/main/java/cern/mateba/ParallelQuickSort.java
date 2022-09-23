@@ -14,7 +14,7 @@ import cern.mateba.function.tdouble.DoubleComparator;
 import cern.mateba.function.tint.IntComparator;
 import cern.mateba.function.tlong.LongComparator;
 import cern.mateba.function.tshort.ShortComparator;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 import java.util.Comparator;
 import java.util.concurrent.ExecutionException;

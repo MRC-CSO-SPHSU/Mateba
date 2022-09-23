@@ -16,7 +16,7 @@ import cern.mateba.function.tlong.LongProcedure;
 import cern.mateba.list.tdouble.DoubleArrayList;
 import cern.mateba.list.tlong.LongArrayList;
 import cern.mateba.map.AbstractMap;
-import edu.emory.mathcs.utils.pc.ConcurrencyUtils;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Abstract base class for hash maps holding (key,value) associations of type
