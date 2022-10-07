@@ -183,6 +183,7 @@
                         <exclude>cern/mateba/matrix/tfloat/algo/solver/FloatQMRAMGTest.java</exclude>
                         <exclude>cern/mateba/matrix/tfloat/algo/solver/FloatIRTest.java</exclude>
                     </excludes>
+                    <argLine>-Xmx16240m</argLine>
                 </configuration>
             </plugin>
 

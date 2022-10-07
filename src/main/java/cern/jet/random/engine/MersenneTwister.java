@@ -22,7 +22,7 @@ import java.util.Date;
  * @see <a href="http://www.math.sci.hiroshima-u.ac.jp/m-mat/MT/VERSIONS/C-LANG/mt19937-64.c">mt19937-64.c</a>
  */
 // todo https://dl.acm.org/doi/pdf/10.1145/369534.369540 check this out for better version https://dl.acm.org/doi/10.1145/1132973.1132974
-public final class MersenneTwister extends RandomEngine { // fixme check that nextint/nextlong limits follow the convention to be passed to shuffle
+public class MersenneTwister extends RandomEngine { // fixme check that nextint/nextlong limits follow the convention to be passed to shuffle
     @Serial
     private static final long serialVersionUID = 8546229500601388477L;
 

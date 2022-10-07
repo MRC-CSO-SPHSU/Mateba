@@ -14,7 +14,7 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
-import static cern.jet.random.engine.RandomEngine.*;
+import static cern.jet.random.engine.RandomSupport.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MersenneTwisterTest {
@@ -189,5 +189,9 @@ class MersenneTwisterTest {
 
     @Test
     void testSetSeed1() {
+    }
+
+    @Test
+    void testBuffer() {
     }
 }
