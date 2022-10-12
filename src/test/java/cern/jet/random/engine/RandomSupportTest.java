@@ -14,14 +14,14 @@ class RandomSupportTest {
     @Test
     void fastLog2() {
         val log22 = Math.log(2);
-        IntStream.iterate(Integer.MAX_VALUE, i -> i >= 1, i -> i - 1).parallel().forEach(i ->
+        IntStream.iterate(Integer.MAX_VALUE, i -> i >= 1, i -> i - 1).forEach(i ->
             assertEquals((int) (Math.log(i) / log22), RandomSupport.fastLog2(i)));
     }
 
     @Test
     void testFastLog2() {
         val log22 = Math.log(2);
-        LongStream.iterate(Integer.MAX_VALUE, i -> i >= 1, i -> i - 1).parallel().forEach(i ->
+        LongStream.iterate(Integer.MAX_VALUE, i -> i >= 1, i -> i - 1).forEach(i ->
             assertEquals((long) (Math.log(i) / log22), RandomSupport.fastLog2(i)));
 
         assertNotEquals((long) (Math.log(Long.MAX_VALUE >> 2) / log22), RandomSupport.fastLog2(Long.MAX_VALUE / 4));
@@ -33,7 +33,7 @@ class RandomSupportTest {
     void fastDivisionByPowerOfTwo() {
         for (int j = 0; j <= 30; j++) {
             val divisor = 1 << j;
-            IntStream.iterate(Integer.MAX_VALUE, i -> i >= 0, i -> i - 1).parallel().forEach(i ->
+            IntStream.iterate(Integer.MAX_VALUE, i -> i >= 0, i -> i - 1).forEach(i ->
                 assertEquals((int) ((double) i / divisor), RandomSupport.fastDivisionByPowerOfTwo(i, divisor))
             );
         }
@@ -57,7 +57,7 @@ class RandomSupportTest {
         for (int j = 0; j <= 62; j++) {
             divisor = 1L << j;
             val finalDivisor = divisor;
-            LongStream.iterate(Integer.MAX_VALUE, i -> i >= 1, i -> i - 1).parallel().forEach(i ->
+            LongStream.iterate(Integer.MAX_VALUE, i -> i >= 1, i -> i - 1).forEach(i ->
                 assertEquals((long) ((double) i / finalDivisor), RandomSupport.fastDivisionByPowerOfTwo(i,
                     finalDivisor))
             );
