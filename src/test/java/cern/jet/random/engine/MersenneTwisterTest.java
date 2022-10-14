@@ -122,61 +122,61 @@ class MersenneTwisterTest {
 
     @Test
     void nextDouble() {
-        assertEquals(0x1.fffffffffffffp-2, doubleFromLongClosed(Long.MAX_VALUE));
-        assertEquals(0x1.fffffffffff9fp-2, doubleFromLongClosed(Long.MAX_VALUE - 100_000L));
-        assertEquals(0x1.fffffffffffffp-2, doubleFromLongClosed(Long.MAX_VALUE - 1));
-        assertEquals(0x1.ffffffffffffdp-3, doubleFromLongClosed(Long.MAX_VALUE / 2));
+        assertEquals(0x1.fffffffffffffp-2, doubleFromLongCC(Long.MAX_VALUE));
+        assertEquals(0x1.fffffffffff9fp-2, doubleFromLongCC(Long.MAX_VALUE - 100_000L));
+        assertEquals(0x1.fffffffffffffp-2, doubleFromLongCC(Long.MAX_VALUE - 1));
+        assertEquals(0x1.ffffffffffffdp-3, doubleFromLongCC(Long.MAX_VALUE / 2));
 
-        assertEquals(0x1.0000000000001p-1, doubleFromLongClosed(Long.MIN_VALUE));
-        assertEquals(0x1.fffffffffff9fp-2, doubleFromLongClosed(Long.MIN_VALUE - 100_000L));
-        assertEquals(0x1.0000000000001p-1, doubleFromLongClosed(Long.MIN_VALUE + 1));
-        assertEquals(0x1.8000000000001p-1, doubleFromLongClosed(Long.MIN_VALUE / 2));
+        assertEquals(0x1.0000000000001p-1, doubleFromLongCC(Long.MIN_VALUE));
+        assertEquals(0x1.fffffffffff9fp-2, doubleFromLongCC(Long.MIN_VALUE - 100_000L));
+        assertEquals(0x1.0000000000001p-1, doubleFromLongCC(Long.MIN_VALUE + 1));
+        assertEquals(0x1.8000000000001p-1, doubleFromLongCC(Long.MIN_VALUE / 2));
 
-        assertEquals(0.d, doubleFromLongClosed(0L));
-        assertEquals(0.d, doubleFromLongClosed(1L));
-        assertEquals(0.d, doubleFromLongClosed(2L));
-        assertEquals(1.d, doubleFromLongClosed(-1L));
-        assertEquals(1.d, doubleFromLongClosed(-2L));
+        assertEquals(0.d, doubleFromLongCC(0L));
+        assertEquals(0.d, doubleFromLongCC(1L));
+        assertEquals(0.d, doubleFromLongCC(2L));
+        assertEquals(1.d, doubleFromLongCC(-1L));
+        assertEquals(1.d, doubleFromLongCC(-2L));
 
-        assertEquals(0x1.8000000000001p-48, doubleFromLongClosed(2L + 100_000L));
-        assertEquals(0x1.fffffffffffdp-1, doubleFromLongClosed(-2L - 100000L));
+        assertEquals(0x1.8000000000001p-48, doubleFromLongCC(2L + 100_000L));
+        assertEquals(0x1.fffffffffffdp-1, doubleFromLongCC(-2L - 100000L));
     }
 
     @Test
     void testDoubleFromLongOpenRight() {
-        assertNotEquals(doubleFromLongClosed(Long.MAX_VALUE), doubleFromLongOpenRight(Long.MAX_VALUE));
-        assertNotEquals(doubleFromLongClosed(Long.MAX_VALUE - 100_000L), doubleFromLongOpenRight(Long.MAX_VALUE - 100_000L));
-        assertNotEquals(doubleFromLongClosed(Long.MAX_VALUE - 1), doubleFromLongOpenRight(Long.MAX_VALUE - 1));
-        assertNotEquals(doubleFromLongClosed(Long.MAX_VALUE / 2), doubleFromLongOpenRight(Long.MAX_VALUE / 2));
+        assertNotEquals(doubleFromLongCC(Long.MAX_VALUE), doubleFromLongCO(Long.MAX_VALUE));
+        assertNotEquals(doubleFromLongCC(Long.MAX_VALUE - 100_000L), doubleFromLongCO(Long.MAX_VALUE - 100_000L));
+        assertNotEquals(doubleFromLongCC(Long.MAX_VALUE - 1), doubleFromLongCO(Long.MAX_VALUE - 1));
+        assertNotEquals(doubleFromLongCC(Long.MAX_VALUE / 2), doubleFromLongCO(Long.MAX_VALUE / 2));
 
-        assertNotEquals(doubleFromLongClosed(Long.MIN_VALUE), doubleFromLongOpenRight(Long.MIN_VALUE));
-        assertNotEquals(doubleFromLongClosed(Long.MIN_VALUE - 100_000L), doubleFromLongOpenRight(Long.MIN_VALUE - 100_000L));
-        assertNotEquals(doubleFromLongClosed(Long.MIN_VALUE + 1), doubleFromLongOpenRight(Long.MIN_VALUE + 1));
-        assertNotEquals(doubleFromLongClosed(Long.MIN_VALUE / 2), doubleFromLongOpenRight(Long.MIN_VALUE / 2));
+        assertNotEquals(doubleFromLongCC(Long.MIN_VALUE), doubleFromLongCO(Long.MIN_VALUE));
+        assertNotEquals(doubleFromLongCC(Long.MIN_VALUE - 100_000L), doubleFromLongCO(Long.MIN_VALUE - 100_000L));
+        assertNotEquals(doubleFromLongCC(Long.MIN_VALUE + 1), doubleFromLongCO(Long.MIN_VALUE + 1));
+        assertNotEquals(doubleFromLongCC(Long.MIN_VALUE / 2), doubleFromLongCO(Long.MIN_VALUE / 2));
 
-        assertEquals(doubleFromLongClosed(0L), doubleFromLongOpenRight(0L));
-        assertEquals(doubleFromLongClosed(1L), doubleFromLongOpenRight(1L));
-        assertEquals(doubleFromLongClosed(2L), doubleFromLongOpenRight(2L));
-        assertNotEquals(doubleFromLongClosed(-1L), doubleFromLongOpenRight(-1L));
-        assertNotEquals(doubleFromLongClosed(-2L), doubleFromLongOpenRight(-2L));
+        assertEquals(doubleFromLongCC(0L), doubleFromLongCO(0L));
+        assertEquals(doubleFromLongCC(1L), doubleFromLongCO(1L));
+        assertEquals(doubleFromLongCC(2L), doubleFromLongCO(2L));
+        assertNotEquals(doubleFromLongCC(-1L), doubleFromLongCO(-1L));
+        assertNotEquals(doubleFromLongCC(-2L), doubleFromLongCO(-2L));
 
-        assertNotEquals(doubleFromLongClosed(2L + 100_000L), doubleFromLongOpenRight(2L + 100_000L));
-        assertNotEquals(doubleFromLongClosed(-2L - 100000L), doubleFromLongOpenRight(-2L - 100000L));
+        assertNotEquals(doubleFromLongCC(2L + 100_000L), doubleFromLongCO(2L + 100_000L));
+        assertNotEquals(doubleFromLongCC(-2L - 100000L), doubleFromLongCO(-2L - 100000L));
     }
 
     @Test
     void testDoubleFromLongOpen() {
-        assertNotEquals(0, doubleFromLongOpen(0L));
-        assertNotEquals(1., doubleFromLongOpen(-1L));
-        assertEquals(0x1.0p-53, doubleFromLongOpen(0L));
-        assertEquals(0x1.fffffffffffffp-1, doubleFromLongOpen(-1L));
+        assertNotEquals(0, doubleFromLongOO(0L));
+        assertNotEquals(1., doubleFromLongOO(-1L));
+        assertEquals(0x1.0p-53, doubleFromLongOO(0L));
+        assertEquals(0x1.fffffffffffffp-1, doubleFromLongOO(-1L));
     }
 
     @Test
     void testDoubleFromLongOpenLeft() {
-        assertNotEquals(0, doubleFromLongOpenLeft(0L));
-        assertEquals(0x1.0p-53, doubleFromLongOpenLeft(0L));
-        assertEquals(0x1.0p0, doubleFromLongOpenLeft(-1L));
+        assertNotEquals(0, doubleFromLongOC(0L));
+        assertEquals(0x1.0p-53, doubleFromLongOC(0L));
+        assertEquals(0x1.0p0, doubleFromLongOC(-1L));
     }
 
     @Test

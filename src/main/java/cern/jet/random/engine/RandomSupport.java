@@ -21,15 +21,15 @@ public class RandomSupport {
     final private static String BOUND_NAN = "Bound value is NaN.";
 
     static DoubleStream generateDoubleStream(final RandomEngine rng) {
-        return LongStream.generate(rng::nextLong).mapToDouble(RandomSupport::doubleFromLongOpenRight);
+        return LongStream.generate(rng::nextLong).mapToDouble(RandomSupport::doubleFromLongCO);
     }
 
-    static DoubleStream generateDoubleStream(final RandomEngine rng, final unitIntervalTypes type) {
+    static DoubleStream generateDoubleStream(final RandomEngine rng, final doubleUnitIntervalTypes type) {
         return switch (type) {
-            case CLOSED -> LongStream.generate(rng::nextLong).mapToDouble(RandomSupport::doubleFromLongClosed);
-            case OPEN -> LongStream.generate(rng::nextLong).mapToDouble(RandomSupport::doubleFromLongOpen);
-            case OPEN_LEFT -> LongStream.generate(rng::nextLong).mapToDouble(RandomSupport::doubleFromLongOpenLeft);
-            case OPEN_RIGHT -> LongStream.generate(rng::nextLong).mapToDouble(RandomSupport::doubleFromLongOpenRight);
+            case DOUBLE_CC -> LongStream.generate(rng::nextLong).mapToDouble(RandomSupport::doubleFromLongCC);
+            case DOUBLE_OO -> LongStream.generate(rng::nextLong).mapToDouble(RandomSupport::doubleFromLongOO);
+            case DOUBLE_OC -> LongStream.generate(rng::nextLong).mapToDouble(RandomSupport::doubleFromLongOC);
+            case DOUBLE_CO -> LongStream.generate(rng::nextLong).mapToDouble(RandomSupport::doubleFromLongCO);
         };
     }
 
@@ -190,35 +190,35 @@ public class RandomSupport {
      * @implNote This could be done with a LUT of some sort which "my RAM sticks are too small to contain". An extra
      * shift {@code >>>} is used to match the reference implementation.
      */
-    static double doubleFromLongClosed(final long l) {
-        return (l >>> 11) / unitIntervalTypes.CLOSED.getLongFactor();
+    static double doubleFromLongCC(final long l) {
+        return (l >>> 11) / doubleUnitIntervalTypes.DOUBLE_CC.getLongFactor();
     }
 
     /**
      * Range {@code [0, 1)}.
      *
-     * @see #doubleFromLongClosed(long)
+     * @see #doubleFromLongCC(long)
      */
-    static double doubleFromLongOpenRight(final long l) {
-        return (l >>> 11) / unitIntervalTypes.OPEN_RIGHT.getLongFactor(); // todo check factors and replace with reciprocals where suitable
+    static double doubleFromLongCO(final long l) {
+        return (l >>> 11) / doubleUnitIntervalTypes.DOUBLE_CO.getLongFactor(); // todo check factors and replace with reciprocals where suitable
     }
 
     /**
      * Range {@code (0, 1]}.
      *
-     * @see #doubleFromLongClosed(long)
+     * @see #doubleFromLongCC(long)
      */
-    static double doubleFromLongOpenLeft(final long l) {
-        return ((l >>> 11) + 1) / unitIntervalTypes.OPEN_LEFT.getLongFactor();
+    static double doubleFromLongOC(final long l) {
+        return ((l >>> 11) + 1) / doubleUnitIntervalTypes.DOUBLE_OC.getLongFactor();
     }
 
     /**
      * Range {@code (0, 1)}.
      *
-     * @see #doubleFromLongClosed(long)
+     * @see #doubleFromLongCC(long)
      */
-    static double doubleFromLongOpen(final long l) {
-        return ((l >>> 12) + 0.5) / unitIntervalTypes.OPEN.getLongFactor();
+    static double doubleFromLongOO(final long l) {
+        return ((l >>> 12) + 0.5) / doubleUnitIntervalTypes.DOUBLE_OO.getLongFactor();
     }
 
     /**
@@ -266,16 +266,16 @@ public class RandomSupport {
         return numerator & divisor - 1;
     }
 
-    public enum unitIntervalTypes {
-        OPEN(1L << 52),
-        CLOSED((1L << 53) - 1),
-        OPEN_LEFT(1L << 53),
-        OPEN_RIGHT(1L << 53);
+    public enum doubleUnitIntervalTypes {
+        DOUBLE_OO(1L << 52),
+        DOUBLE_CC((1L << 53) - 1),
+        DOUBLE_OC(1L << 53),
+        DOUBLE_CO(1L << 53);
 
         @Getter
         private final double longFactor;
 
-        unitIntervalTypes(final double longFactor) {
+        doubleUnitIntervalTypes(final double longFactor) {
             this.longFactor = longFactor;
         }
     }

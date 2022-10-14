@@ -72,11 +72,11 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
 
     /**
      * Generates a stream of {@code double} between {@code 0} and {@code 1} for different types of the unit interval
-     * {@link unitIntervalTypes}.
+     * {@link doubleUnitIntervalTypes}.
      * @param type Unit interval type.
      * @return a stream of {@code double}.
      */
-    final public @NonNull DoubleStream doubles(final @NonNull unitIntervalTypes type) {
+    final public @NonNull DoubleStream doubles(final @NonNull RandomSupport.doubleUnitIntervalTypes type) {
         return generateDoubleStream(this, type);
     }
 
@@ -88,7 +88,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     }
 
     final public @NonNull DoubleStream doubles(final double randomNumberOrigin, final double randomNumberBound,
-                                               final @NonNull unitIntervalTypes type) {
+                                               final @NonNull RandomSupport.doubleUnitIntervalTypes type) {
         val intervalLength = validateDoubleRange(randomNumberOrigin, randomNumberBound);
         // todo add a check th the case we might get infinite values?? is it even possible technically?
         return generateDoubleStream(this, type).map(i -> fma(i, intervalLength, randomNumberOrigin));//todo add trim
@@ -107,9 +107,9 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
 
     /**
      * @see #doubles(long)
-     * @see #doubles(unitIntervalTypes)
+     * @see #doubles(doubleUnitIntervalTypes)
      */
-    final public @NonNull DoubleStream doubles(final long streamSize, final @NonNull unitIntervalTypes type) {
+    final public @NonNull DoubleStream doubles(final long streamSize, final @NonNull RandomSupport.doubleUnitIntervalTypes type) {
         validateStreamSize(streamSize);
         return generateDoubleStream(this, type).limit(streamSize);
     }
@@ -124,7 +124,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     }
 
     final public @NonNull DoubleStream doubles(final long streamSize, final double randomNumberOrigin,
-                                               final double randomNumberBound, final @NonNull unitIntervalTypes type) {
+                                               final double randomNumberBound, final @NonNull RandomSupport.doubleUnitIntervalTypes type) {
         validateStreamSize(streamSize);
         val intervalLength = validateDoubleRange(randomNumberOrigin, randomNumberBound);
         // todo add a check th the case we might get infinite values?? is it even possible technically?
@@ -254,7 +254,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     @Override
     final public float nextFloat(final float randomNumberOrigin, final float randomNumberBound) {
         val intervalLength = validateFloatRange(randomNumberOrigin, randomNumberBound);
-        return (float) doubleFromLongOpenRight(nextLong()); // fixme broken, just a stub
+        return (float) doubleFromLongCO(nextLong()); // fixme broken, just a stub
     }
 
     /**
@@ -262,23 +262,23 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
      * 0.0 and excluding 1.0).
      *
      * @implSpec This implementation follows JDK convention in terms of included endpoints.
-     * @see #nextDouble(unitIntervalTypes)
+     * @see #nextDouble(doubleUnitIntervalTypes)
      */
     @Override
     final public double nextDouble() {
-        return doubleFromLongOpenRight(nextLong());
+        return doubleFromLongCO(nextLong());
     }
 
     @Override
     final public double nextDouble(final double bound) {
         validateDoubleBound(bound);
-        return doubleFromLongOpenRight(nextLong()); // fixme broken, just a stub
+        return doubleFromLongCO(nextLong()); // fixme broken, just a stub
     }
 
     @Override
     final public double nextDouble(final double randomNumberOrigin, final double randomNumberBound) {
         val rangeLength = validateDoubleRange(randomNumberOrigin, randomNumberBound);
-        return doubleFromLongOpenRight(nextLong()); // fixme broken, just a stub
+        return doubleFromLongCO(nextLong()); // fixme broken, just a stub
     }
 
     /**
@@ -485,17 +485,17 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
      * Generates a random {@code double} between 0 and 1. Inclusion of endpoints depends on {@code type}.
      *
      * @param type The interval type, one of the following values:
-     *             {@code OPEN} for {@code (0, 1)}, {@code CLOSED} for {@code  [0, 1]}, {@code OPEN_LEFT} for
-     *             {@code (0, 1]}, and {@code OPEN_RIGHT} for {@code  [0, 1)}.
+     *             {@code DOUBLE_OO} for {@code (0, 1)}, {@code DOUBLE_CC} for {@code  [0, 1]}, {@code DOUBLE_OC} for
+     *             {@code (0, 1]}, and {@code DOUBLE_CO} for {@code  [0, 1)}.
      * @return a random number from the provided interval.
      * @throws IllegalArgumentException when the provided type is not supported.
      */
-    final public double nextDouble(final @NotNull unitIntervalTypes type) {
+    final public double nextDouble(final @NotNull RandomSupport.doubleUnitIntervalTypes type) {
         return switch (type) {
-            case CLOSED -> doubleFromLongClosed(nextLong());
-            case OPEN -> doubleFromLongOpen(nextLong());
-            case OPEN_LEFT -> doubleFromLongOpenLeft(nextLong());
-            case OPEN_RIGHT -> doubleFromLongOpenRight(nextLong());
+            case DOUBLE_CC -> doubleFromLongCC(nextLong());
+            case DOUBLE_OO -> doubleFromLongOO(nextLong());
+            case DOUBLE_OC -> doubleFromLongOC(nextLong());
+            case DOUBLE_CO -> doubleFromLongCO(nextLong());
         };
     }
 
@@ -506,16 +506,16 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
      * @param bound The range limit, can be positive/negative.
      * @return a random {@code double } from the range.
      * @throws IllegalArgumentException when {bound == 0 || Double.isNaN(bound) || Double.isInfinite(bound)}.
-     * @see unitIntervalTypes
+     * @see doubleUnitIntervalTypes
      */
-    final public double nextDouble(final @NotNull unitIntervalTypes type, final double bound) {
+    final public double nextDouble(final @NotNull RandomSupport.doubleUnitIntervalTypes type, final double bound) {
         if (bound == 0 || Double.isNaN(bound) || Double.isInfinite(bound))
             throw new IllegalArgumentException("Bound can't be NaN/0.");
 
         return nextDouble(type) * bound; // todo check the original implementation for different round-off errors, also check corner cases
     }
 
-    final public double nextDouble(final @NotNull unitIntervalTypes type, double origin, double bound) {
+    final public double nextDouble(final @NotNull RandomSupport.doubleUnitIntervalTypes type, double origin, double bound) {
         if (Double.isNaN(bound) || Double.isNaN(origin)) throw new IllegalArgumentException("Invalid boundaries.");
         if (origin == bound) throw new IllegalArgumentException("Zero length interval.");
         if (origin > bound) throw new IllegalArgumentException("Input parameters form an unordered set.");
@@ -599,16 +599,16 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
      * @see #nextDouble()
      */
     final public double raw() {
-        return nextDouble(unitIntervalTypes.OPEN_RIGHT);
+        return nextDouble(doubleUnitIntervalTypes.DOUBLE_CO);
     }
 
     /**
      * Returns a 64 bit uniformly distributed random number between 0.0 and 1.0. Endpoints are included when a suitable
      * interval type is provided.
      *
-     * @see unitIntervalTypes
+     * @see doubleUnitIntervalTypes
      */
-    final public double raw(final @NonNull unitIntervalTypes type) {
+    final public double raw(final @NonNull RandomSupport.doubleUnitIntervalTypes type) {
         return nextDouble(type);// fixme check that this needs override
     }
 
