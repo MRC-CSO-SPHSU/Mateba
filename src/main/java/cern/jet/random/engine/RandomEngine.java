@@ -70,6 +70,12 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
         return generateDoubleStream(this);
     }
 
+    /**
+     * Generates a stream of {@code double} between {@code 0} and {@code 1} for different types of the unit interval
+     * {@link unitIntervalTypes}.
+     * @param type Unit interval type.
+     * @return a stream of {@code double}.
+     */
     final public @NonNull DoubleStream doubles(final @NonNull unitIntervalTypes type) {
         return generateDoubleStream(this, type);
     }
@@ -88,12 +94,21 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
         return generateDoubleStream(this, type).map(i -> fma(i, intervalLength, randomNumberOrigin));//todo add trim
     }
 
+    /**
+     * Generates a stream of {@code double} of a limited length.
+     * @param streamSize The stream length.
+     * @return a stream of {@code double}.
+     */
     @Override
     final public @NonNull DoubleStream doubles(final long streamSize) {
         validateStreamSize(streamSize);
         return generateDoubleStream(this).limit(streamSize);
     }
 
+    /**
+     * @see #doubles(long)
+     * @see #doubles(unitIntervalTypes)
+     */
     final public @NonNull DoubleStream doubles(final long streamSize, final @NonNull unitIntervalTypes type) {
         validateStreamSize(streamSize);
         return generateDoubleStream(this, type).limit(streamSize);
@@ -181,6 +196,11 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
         return generateLongStream(this); // fixme broken, just a stub
     }
 
+    /**
+     * Generates a stream of {@code long} of a limited length.
+     * @param streamSize The stream length.
+     * @return a stream of {@code long}.
+     */
     @Override
     final public @NonNull LongStream longs(final long streamSize) {
         validateStreamSize(streamSize);
