@@ -22,7 +22,10 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
+import static cern.jet.random.engine.FastMathSupport.map;
+import static cern.jet.random.engine.FastMathSupport.moduloPowerOfTwo;
 import static cern.jet.random.engine.RandomSupport.*;
+import static cern.jet.random.engine.Validators.*;
 import static java.lang.StrictMath.fma;
 
 /**
@@ -109,7 +112,8 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
      * @see #doubles(long)
      * @see #doubles(doubleUnitIntervalTypes)
      */
-    final public @NonNull DoubleStream doubles(final long streamSize, final @NonNull RandomSupport.doubleUnitIntervalTypes type) {
+    final public @NonNull DoubleStream doubles(final long streamSize,
+                                               final @NonNull RandomSupport.doubleUnitIntervalTypes type) {
         validateStreamSize(streamSize);
         return generateDoubleStream(this, type).limit(streamSize);
     }
@@ -546,7 +550,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
         if (bound == Integer.MAX_VALUE) return nonnegativeValue;
 
         val boundPrime = (long) (bound + 1);
-        val powerOfTwo = powerOfTwo(boundPrime);
+        val powerOfTwo = FastMathSupport.powerOfTwo(boundPrime);
         if (powerOfTwo) return (int) moduloPowerOfTwo(map(nextInt()), boundPrime);
 
         var value = map(nextInt());
@@ -584,7 +588,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
         if (bound == Long.MAX_VALUE) return nonnegativeValue;
 
         val boundPrime = bound + 1;
-        val powerOfTwo = powerOfTwo(boundPrime);
+        val powerOfTwo = FastMathSupport.powerOfTwo(boundPrime);
 
         if (powerOfTwo) {
             return moduloPowerOfTwo(map(nextLong()), boundPrime);

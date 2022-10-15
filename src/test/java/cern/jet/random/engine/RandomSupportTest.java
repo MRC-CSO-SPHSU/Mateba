@@ -4,71 +4,16 @@ import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doReturn;
 
 class RandomSupportTest {
-    @Test
-    void fastLog2() {
-        val log22 = Math.log(2);
-        IntStream.iterate(Integer.MAX_VALUE, i -> i >= 1, i -> i - 1).forEach(i ->
-            assertEquals((int) (Math.log(i) / log22), RandomSupport.fastLog2(i)));
-    }
 
     @Test
-    void testFastLog2() {
-        val log22 = Math.log(2);
-        LongStream.iterate(Integer.MAX_VALUE, i -> i >= 1, i -> i - 1).forEach(i ->
-            assertEquals((long) (Math.log(i) / log22), RandomSupport.fastLog2(i)));
-
-        assertNotEquals((long) (Math.log(Long.MAX_VALUE >> 2) / log22), RandomSupport.fastLog2(Long.MAX_VALUE / 4));
-        assertNotEquals((long) (Math.log(Long.MAX_VALUE >> 1) / log22), RandomSupport.fastLog2(Long.MAX_VALUE / 2));
-        assertNotEquals((long) (Math.log(Long.MAX_VALUE) / log22), RandomSupport.fastLog2(Long.MAX_VALUE));
-    }
-
-    @Test
-    void fastDivisionByPowerOfTwo() {
-        for (int j = 0; j <= 30; j++) {
-            val divisor = 1 << j;
-            IntStream.iterate(Integer.MAX_VALUE, i -> i >= 0, i -> i - 1).forEach(i ->
-                assertEquals((int) ((double) i / divisor), RandomSupport.fastDivisionByPowerOfTwo(i, divisor))
-            );
-        }
-    }
-
-    @Test
-    void testFastDivisionByPowerOfTwo2() {
-        long divisor;
-
-        for (int j = 0; j <= 62; j++) {
-            divisor = 1L << j;
-            val finalDivisor = divisor;
-            assertEquals((long) ((double) (Long.MAX_VALUE >> 16) / finalDivisor),
-                RandomSupport.fastDivisionByPowerOfTwo((Long.MAX_VALUE >> 16), finalDivisor), "%d power".formatted(j));
-        }
-
-        assertNotEquals((long) ((double) Long.MAX_VALUE / (1L << 60)),
-            RandomSupport.fastDivisionByPowerOfTwo((Long.MAX_VALUE >> 2), 1L << 60));
-
-
-        for (int j = 0; j <= 62; j++) {
-            divisor = 1L << j;
-            val finalDivisor = divisor;
-            LongStream.iterate(Integer.MAX_VALUE, i -> i >= 1, i -> i - 1).forEach(i ->
-                assertEquals((long) ((double) i / finalDivisor), RandomSupport.fastDivisionByPowerOfTwo(i,
-                    finalDivisor))
-            );
-        }
-    }
-
-    @Test
-    void generateNonNegativeIntInRangeNotIncludeBound() {
+    void generateNonNegativeIntInRangeNotIncludeBound() { // fixme improve this
         val rngMock = Mockito.mock(MersenneTwister.class, Mockito.CALLS_REAL_METHODS);
         doReturn(0).when(rngMock).nextInt();
-
 
         int j;
         val rng = new MersenneTwister(0L);
@@ -83,5 +28,44 @@ class RandomSupportTest {
             assertTrue(j < 13);
             assertTrue(j >= 0);
         }
+    }
+
+    @Test
+    void doubleFromLongCC() {
+        assertEquals(0., RandomSupport.doubleFromLongCC(0));
+        assertEquals(0.49999999999999994, RandomSupport.doubleFromLongCC(Long.MAX_VALUE));
+        assertEquals(0.5000000000000001, RandomSupport.doubleFromLongCC(Long.MIN_VALUE));
+        assertEquals(0.5000000000000002, RandomSupport.doubleFromLongCC(Long.MIN_VALUE + 2048));
+        assertEquals(1., RandomSupport.doubleFromLongCC(-1));
+    }
+
+    @Test
+    void doubleFromLongCO() {
+        assertEquals(0., RandomSupport.doubleFromLongCO(0));
+        assertEquals(0.4999999999999999, RandomSupport.doubleFromLongCO(Long.MAX_VALUE));
+        assertEquals(0.5, RandomSupport.doubleFromLongCO(Long.MIN_VALUE));
+        assertEquals(0.5, RandomSupport.doubleFromLongCO(Long.MIN_VALUE + 1));
+        assertEquals(0x1.0000000000001p-1, RandomSupport.doubleFromLongCO(Long.MIN_VALUE + 2048));
+        assertEquals(0.9999999999999999, RandomSupport.doubleFromLongCO(-1));
+    }
+
+    @Test
+    void doubleFromLongOC() {
+        assertEquals(0x1.0p-53, RandomSupport.doubleFromLongOC(0));
+        assertEquals(0.4999999999999999, RandomSupport.doubleFromLongOC(Long.MAX_VALUE - 2048));
+        assertEquals(0.5, RandomSupport.doubleFromLongOC(Long.MAX_VALUE - 2047));
+        assertEquals(0.5, RandomSupport.doubleFromLongOC(Long.MAX_VALUE));
+        assertEquals(0x1.0000000000001p-1, RandomSupport.doubleFromLongOC(Long.MIN_VALUE));
+        assertEquals(1., RandomSupport.doubleFromLongOC(-1));
+    }
+
+    @Test
+    void doubleFromLongOO() {
+        assertEquals(0x1.0p-53, RandomSupport.doubleFromLongOO(0));
+        assertEquals(0.9999999999999999, RandomSupport.doubleFromLongOO(-1));
+        assertEquals(0.4999999999999999, RandomSupport.doubleFromLongOO(Long.MAX_VALUE));
+        assertEquals(0.5000000000000001, RandomSupport.doubleFromLongOO(Long.MIN_VALUE));
+        assertEquals(0.5000000000000001, RandomSupport.doubleFromLongOO(Long.MIN_VALUE + 2048));
+        assertEquals(0.5000000000000003, RandomSupport.doubleFromLongOO(Long.MIN_VALUE + 4096));
     }
 }
