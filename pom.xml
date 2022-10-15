@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.uog</groupId>
     <artifactId>mateba</artifactId>
@@ -31,13 +31,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
-    <scm>
-        <url>git@github.com:MRC-CSO-SPHSU/Mateba.git</url>
-        <connection>scm:git:git@github.com:MRC-CSO-SPHSU/Mateba.git</connection>
-        <developerConnection>scm:git:git@github.com:MRC-CSO-SPHSU/Mateba.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
 
     <developers>
         <developer>
@@ -164,6 +157,7 @@
 
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -193,62 +187,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.3.0</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/benchmark/java</source>
-                                <source>src/benchmark/resources</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>release</releaseProfiles>
-                    <goals>deploy</goals>
-          <!-- need this for gpg plugin to work correctly -->
-                    <mavenExecutorId>forked-path</mavenExecutorId>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.1</version>
-                <configuration>
-                    <doctitle>&lt;h2&gt;&lt;a target=_top href=${project.url} &gt;Mateba&lt;/a&gt;
-            &lt;/h2&gt;&lt;h4&gt;Open Source Libraries for High Performance Scientific and Technical Computing in
-            Java&lt;/h4&gt;&lt;hr&gt;</doctitle>
-                    <show>public</show>
-                    <author>true</author>
-                    <use>true</use>
-                    <splitindex>true</splitindex>
-                    <version>true</version>
-                    <windowtitle>Mateba ${project.version} - API Specification</windowtitle>
-                    <header>&lt;b&gt;Mateba ${project.version}&lt;/b&gt;</header>
-                    <bottom>&lt;font size=-1 &gt;Jump to the &lt;a target=_top href=${project.url} &gt;Mateba
-            Homepage&lt;/a&gt;</bottom>
-                    <failOnError>false</failOnError>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.ec4j.maven</groupId>
                 <artifactId>editorconfig-maven-plugin</artifactId>
                 <version>0.1.1</version>
@@ -261,20 +199,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                <!-- See http://ec4j.github.io/editorconfig-maven-plugin/ for full configuration reference -->
-                    <excludes>
-                    <!-- Note that maven submodule directories and many non-source file patterns are excluded by default -->
-                    <!-- see https://github.com/ec4j/editorconfig-linters/blob/master/editorconfig-lint-api/src/main/java/org/ec4j/lint/api/Constants.java#L37 -->
-                    <!-- You can exclude further files from processing: -->
-                        <exclude>src/main/**/*.whatever</exclude>
-                    </excludes>
-                <!-- All files are included by default:
-                <includes>
-                  <include>**</include>
-                </includes>
-                -->
-                </configuration>
             </plugin>
 
             <plugin>
@@ -283,6 +207,7 @@
                 <version>0.8.8</version>
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
