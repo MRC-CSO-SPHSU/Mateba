@@ -1,5 +1,9 @@
 package cern.jet.random.engine;
 
+import lombok.val;
+
+import static java.lang.StrictMath.fma;
+
 public class FastMathSupport {
     /**
      * A helper method that calculates the integer part of a {@code log2} of any {@code int} number.
@@ -92,5 +96,22 @@ public class FastMathSupport {
      */
     static long moduloPowerOfTwo(final long numerator, final long divisor) {
         return numerator & divisor - 1;
+    }
+
+    /**
+     * A fast and mathematically correct division method for cases when divisor {@code y} is known in advance.
+     *
+     * @param x           The dividend.
+     * @param y           The divisor.
+     * @param reciprocalY The inverse of {@code y}.
+     * @return the {@code x / y} ratio.
+     * @see <a href="https://ieeexplore.ieee.org/document/1306999">N. Brisebarre, J. . -M. Muller and Saurabh Kumar
+     * Raina, "Accelerating correctly rounded floating-point division when the divisor is known in advance," in IEEE
+     * Transactions on Computers, vol. 53, no. 8, pp. 1069-1072, Aug. 2004</a>
+     */
+    static double fastDivision(final double x, final double y, final double reciprocalY) {
+        val q = x * reciprocalY;
+        val r = -fma(q, y, -x);
+        return fma(r, reciprocalY, q);
     }
 }

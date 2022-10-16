@@ -8,7 +8,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
+import static cern.jet.random.engine.FastMathSupport.fastDivision;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FastMathSupportTest {
     @Test
@@ -63,4 +65,12 @@ class FastMathSupportTest {
         );
     }
 
+    @Test
+    void testFastDivision() {
+        val x = 651_370_000_000L;
+        val y = (x / 3.1416) * 3.1416;
+        val invd = 1 / 3.1416;
+        assertNotEquals(x * invd * 3.1416, y);
+        assertEquals(fastDivision(x, 3.1416, 1 / 3.1416) * 3.1416, y);
+    }
 }
