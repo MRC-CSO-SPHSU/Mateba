@@ -76,6 +76,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     /**
      * Generates a stream of {@code double} between {@code 0} and {@code 1} for different types of the unit interval
      * {@link doubleUnitIntervalTypes}.
+     *
      * @param type Unit interval type.
      * @return a stream of {@code double}.
      */
@@ -99,6 +100,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
 
     /**
      * Generates a stream of {@code double} of a limited length.
+     *
      * @param streamSize The stream length.
      * @return a stream of {@code double}.
      */
@@ -202,6 +204,7 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
 
     /**
      * Generates a stream of {@code long} of a limited length.
+     *
      * @param streamSize The stream length.
      * @return a stream of {@code long}.
      */
@@ -233,7 +236,8 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     }
 
     @Override
-    final public void nextBytes(final byte @NonNull [] bytes) {} // fixme finish this
+    final public void nextBytes(final byte @NonNull [] bytes) {
+    } // fixme finish this
 
     /**
      * {@inheritDoc}
@@ -273,16 +277,25 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
         return doubleFromLongCO(nextLong());
     }
 
+    /**
+     * Origin defaults to 0.
+     *
+     * @see #nextDouble(double, double)
+     * @see <a href="https://dl.acm.org/doi/full/10.1145/3503512">Frédéric Goualard. 2022. Drawing Random Floating-point
+     * Numbers from an Interval. ACM Trans. Model. Comput. Simul. 32, 3, Article 16 (July 2022), 24 pages.</a>
+     */
     @Override
     final public double nextDouble(final double bound) {
         validateDoubleBound(bound);
-        return doubleFromLongCO(nextLong()); // fixme broken, just a stub
+        // todo add checks for the pair 0, bound
+        return gammaSectionCO(this, 0, bound);
     }
 
     @Override
     final public double nextDouble(final double randomNumberOrigin, final double randomNumberBound) {
         val rangeLength = validateDoubleRange(randomNumberOrigin, randomNumberBound);
-        return doubleFromLongCO(nextLong()); // fixme broken, just a stub
+        // todo add checks like above
+        return gammaSectionCO(this, randomNumberOrigin, randomNumberBound);
     }
 
     /**
@@ -312,28 +325,27 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     @Override
     public int nextInt(final int bound) {
         validateIntBound(bound);
-        if (bound > 0) return generateNonNegativeIntInRangeNotIncludeBound(this, bound);
-        return ~generateNonNegativeIntInRangeNotIncludeBound(this, ~bound);
+        if (bound > 0) return generateNextIntCO(this, bound);
+        return ~generateNextIntCO(this, ~bound);
     }
 // fixme add versions with a bool flag
 
     /**
      * Allows to switch between closed and semi-open intervals for random number generation.
-     * @param bound The conventional bound.
-     * @param includeBound A boolean flag, when {@code true} the bound is included, else is identical to
-     * {@link #nextInt(int)}.
-     * @return a random number in range.
      *
+     * @param bound        The conventional bound.
+     * @param includeBound A boolean flag, when {@code true} the bound is included, else is identical to
+     *                     {@link #nextInt(int)}.
+     * @return a random number in range.
      */
     public int nextInt(final int bound, boolean includeBound) {
         validateIntBound(bound);
         if (includeBound) {
-            if (bound > 0) return generateNonNegativeIntInRangeIncludeBound(this, bound);
-            else return ~generateNonNegativeIntInRangeIncludeBound(this, ~bound);
-        }
-        else {
-            if (bound > 0) return generateNonNegativeIntInRangeNotIncludeBound(this, bound);
-            else return ~generateNonNegativeIntInRangeNotIncludeBound(this, ~bound);
+            if (bound > 0) return generateNextIntCC(this, bound);
+            else return ~generateNextIntCC(this, ~bound);
+        } else {
+            if (bound > 0) return generateNextIntCO(this, bound);
+            else return ~generateNextIntCO(this, ~bound);
         }
     }
 
@@ -385,8 +397,8 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     @Override
     final public long nextLong(final long bound) {
         validateLongBound(bound);
-        if (bound > 0) return generateNonNegativeLongInRangeNotIncludeBound(this, bound);
-        else return ~generateNonNegativeLongInRangeNotIncludeBound(this, ~bound);
+        if (bound > 0) return generateNextLongCO(this, bound);
+        else return ~generateNextLongCO(this, ~bound);
     }
 
     /**
@@ -395,11 +407,10 @@ public abstract class RandomEngine extends Random implements DoubleFunction, Int
     final public long nextLong(final long bound, final boolean includeBound) {
         validateLongBound(bound);
         if (includeBound)
-            if (bound > 0) return generateNonNegativeLongInRangeIncludeBound(this, bound);
-            else return ~generateNonNegativeLongInRangeIncludeBound(this, ~bound);
-        else
-            if (bound > 0) return generateNonNegativeLongInRangeNotIncludeBound(this, bound);
-            else return ~generateNonNegativeLongInRangeNotIncludeBound(this, ~bound);
+            if (bound > 0) return generateNextLongCC(this, bound);
+            else return ~generateNextLongCC(this, ~bound);
+        else if (bound > 0) return generateNextLongCO(this, bound);
+        else return ~generateNextLongCO(this, ~bound);
     }
 
     /**

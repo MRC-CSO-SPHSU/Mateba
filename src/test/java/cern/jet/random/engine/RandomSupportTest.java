@@ -18,13 +18,13 @@ class RandomSupportTest {
         int j;
         val rng = new MersenneTwister(0L);
         for (int i = 0; i < Integer.MAX_VALUE; i++) {
-            j = RandomSupport.generateNonNegativeIntInRangeNotIncludeBound(rng, 2);
+            j = RandomSupport.generateNextIntCO(rng, 2);
             assertTrue(j < 2);
             assertTrue(j >= 0);
         }
 
         for (int i = 0; i < Integer.MAX_VALUE; i++) {
-            j = RandomSupport.generateNonNegativeIntInRangeNotIncludeBound(rng, 13);
+            j = RandomSupport.generateNextIntCO(rng, 13);
             assertTrue(j < 13);
             assertTrue(j >= 0);
         }

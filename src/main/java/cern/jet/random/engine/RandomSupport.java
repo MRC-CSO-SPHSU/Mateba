@@ -8,8 +8,7 @@ import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 import static cern.jet.random.engine.FastMathSupport.*;
-import static java.lang.StrictMath.fma;
-import static java.lang.StrictMath.multiplyHigh;
+import static java.lang.StrictMath.*;
 
 public class RandomSupport {
 
@@ -58,7 +57,7 @@ public class RandomSupport {
      * @see <a href="https://dl.acm.org/doi/pdf/10.1145/3230636">Daniel Lemire. 2019. Fast Random Integer Generation in
      * an Interval. ACM Trans. Model. Comput. Simul. 29, 1, Article 3 (January 2019), 12 pages.</a>
      */
-    static int generateNonNegativeIntInRangeNotIncludeBound(final RandomEngine rng, final int bound) {
+    static int generateNextIntCO(final RandomEngine rng, final int bound) {
         var nonnegativeValue = map(rng.nextInt());
         if (powerOfTwo(bound)) return (int) moduloPowerOfTwo(nonnegativeValue, bound);
         else {
@@ -92,15 +91,16 @@ public class RandomSupport {
      * @see <a href="https://dl.acm.org/doi/pdf/10.1145/3230636">Daniel Lemire. 2019. Fast Random Integer Generation in
      * an Interval. ACM Trans. Model. Comput. Simul. 29, 1, Article 3 (January 2019), 12 pages.</a>
      */
-    static int generateNonNegativeIntInRangeIncludeBound(final RandomEngine rng, final int bound) {
+    static int generateNextIntCC(final RandomEngine rng, final int bound) {
         if (bound == Integer.MAX_VALUE) return map(rng.nextInt());
-        else return generateNonNegativeIntInRangeNotIncludeBound(rng, bound + 1);
+        else return generateNextIntCO(rng, bound + 1);
     }
 
     /**
-     * @see #generateNonNegativeIntInRangeNotIncludeBound(RandomEngine, int)
+     * The bound is not included.
+     * @see #generateNextIntCO(RandomEngine, int)
      */
-    static long generateNonNegativeLongInRangeNotIncludeBound(final RandomEngine rng, final long bound) {
+    static long generateNextLongCO(final RandomEngine rng, final long bound) {
         var nonnegativeValue = map(rng.nextLong());
         if (powerOfTwo(bound)) return (int) moduloPowerOfTwo(nonnegativeValue, bound);
         else {
@@ -121,11 +121,12 @@ public class RandomSupport {
     }
 
     /**
-     * @see #generateNonNegativeIntInRangeIncludeBound(RandomEngine, int)
+     * The bound is included by default.
+     * @see #generateNextIntCC(RandomEngine, int)
      */
-    static long generateNonNegativeLongInRangeIncludeBound(final RandomEngine rng, final long bound) {
+    static long generateNextLongCC(final RandomEngine rng, final long bound) {
         if (bound == Long.MAX_VALUE) return map(rng.nextLong());
-        else return generateNonNegativeLongInRangeNotIncludeBound(rng, bound + 1);
+        else return generateNextLongCO(rng, bound + 1);
     }
 
     /**
@@ -174,6 +175,112 @@ public class RandomSupport {
      */
     static double doubleFromLongOO(final long l) {
         return ((l >>> 12) + 0.5) * doubleUnitIntervalTypes.DOUBLE_OO.getFactor();
+    }
+
+    /**
+     * Finds the smallest number that is {@code > x} and the largest that is {@code < y} and returns the largest of two.
+     * It is assumed that {@code x < y} always.
+     *
+     * @param x The low bound.
+     * @param y The high bound.
+     * @return the largest gap between two adjacent floating-point numbers between {@code x} and {@code y}.
+     */
+    static double gamma(final double x, final double y) {
+        val gammaUp = nextUp(x) - x;
+        val gammaDown = y - nextDown(y);
+        return max(gammaUp, gammaDown);
+    }
+
+    static long ceilLong(final double a, final double b, final double g) {
+        val bg = b / g;
+        val ag = a / g;
+        return protoCeilLong(a, b, ag, bg);
+    }
+
+    /**
+     * Correctly divides {@code b - a} by {@code gamma} that is always a power of {@code 2}.
+     * @param a The leftmost value.
+     * @param b The rightmost value.
+     * @param gamma The output of {@link #gamma(double, double)}.
+     * @param inverseG The inverse of {@code gamma} to speed up the calculations.
+     * @return The number of intervals in range.
+     * @see <a href="https://dl.acm.org/doi/full/10.1145/3503512">Frédéric Goualard. 2022. Drawing Random Floating-point
+     * Numbers from an Interval. ACM Trans. Model. Comput. Simul. 32, 3, Article 16 (July 2022), 24 pages.</a>
+     * @implSpec {@code ceil(b / g - a / g)} cannot be larger than {@code Long.MAX_VALUE} otherwise evaluation of
+     * {@link #protoCeilLong(double, double, double, double)} might result in a negative value.
+     */
+    static long ceilLong(final double a, final double b, final double gamma, final double inverseG) {
+        val bg = fastDivision(b, gamma, inverseG);
+        val ag = fastDivision(a, gamma, inverseG);
+        return protoCeilLong(a, b, ag, bg);
+    }
+
+    private static long protoCeilLong(final double a, final double b, final double ag, final double bg) {
+        val s = bg - ag;
+        val eps = abs(a) <= abs(b) ? -ag - (s - bg) : bg - (s + ag);
+        val si = (long) ceil(s);
+        return s != si ? si : si + (eps > 0 ? 1 : 0);
+    }
+
+    /**
+     * Generates uniformly distributed floating-point numbers in the {@code [a, b]} range.
+     * @param a The leftmost value of the interval.
+     * @param b The rightmost value of the interval.
+     * @return a number in the range.
+     * @see <a href="https://dl.acm.org/doi/full/10.1145/3503512">Frédéric Goualard. 2022. Drawing Random Floating-point
+     * Numbers from an Interval. ACM Trans. Model. Comput. Simul. 32, 3, Article 16 (July 2022), 24 pages.</a>
+     */
+    // todo ensure that range checks are in place
+    static double gammaSectionCC(RandomEngine rng, final double a, final double b) {
+        val g = gamma(a, b);
+        val hi = ceilLong(a, b, g, 1. / g);
+        val k = generateNextLongCC(rng, hi);
+        return abs(a) <= abs(b) ? (k == hi) ? a : fma(-k, g, b) : (k == hi) ? b : fma(k, g, a);
+    }
+
+    /**
+     * Generates uniformly distributed floating-point numbers in the {@code [a, b)} range.
+     * @param a The leftmost value of the interval.
+     * @param b The rightmost value of the interval (not included).
+     * @return a number in the range.
+     * @see <a href="https://dl.acm.org/doi/full/10.1145/3503512">Frédéric Goualard. 2022. Drawing Random Floating-point
+     * Numbers from an Interval. ACM Trans. Model. Comput. Simul. 32, 3, Article 16 (July 2022), 24 pages.</a>
+     */
+    static double gammaSectionCO(RandomEngine rng, final double a, final double b) {
+        val g = gamma(a, b);
+        val hi = ceilLong(a, b, g, 1. / g);
+        val k = rng.nextLong(1, hi);// fixme we must include the upper bound everywhere
+        return abs(a) <= abs(b) ? (k == hi) ? a : fma(-k, g, b) : fma(k - 1, g, a);
+    }
+
+    /**
+     * Generates uniformly distributed floating-point numbers in the {@code (a, b]} range.
+     * @param a The leftmost value of the interval (not included).
+     * @param b The rightmost value of the interval.
+     * @return a number in the range.
+     * @see <a href="https://dl.acm.org/doi/full/10.1145/3503512">Frédéric Goualard. 2022. Drawing Random Floating-point
+     * Numbers from an Interval. ACM Trans. Model. Comput. Simul. 32, 3, Article 16 (July 2022), 24 pages.</a>
+     */
+    static double gammaSectionOC(RandomEngine rng, final double a, final double b) {
+        val g = gamma(a, b);
+        val hi = ceilLong(a, b, g, 1. / g);
+        val k  = generateNextLongCC(rng, hi - 1);
+        return abs(a) <= abs(b) ? fma(-k, g, b) : (k == hi - 1) ? b : fma(k + 1, g, a);
+    }
+
+    /**
+     * Generates uniformly distributed floating-point numbers in the {@code (a, b)} range.
+     * @param a The leftmost value of the interval (not included).
+     * @param b The rightmost value of the interval (not included).
+     * @return a number in the range.
+     * @see <a href="https://dl.acm.org/doi/full/10.1145/3503512">Frédéric Goualard. 2022. Drawing Random Floating-point
+     * Numbers from an Interval. ACM Trans. Model. Comput. Simul. 32, 3, Article 16 (July 2022), 24 pages.</a>
+     */
+    static double gammaSectionOO(RandomEngine rng, final double a, final double b) {
+        val g = gamma(a, b);
+        val hi = ceilLong(a, b, g, 1. / g);
+        val k = rng.nextLong(1, hi - 1);// fixme we must include the upper bound everywhere
+        return abs(a) <= abs(b) ? fma(-k, g, b) : fma(k, g, a);
     }
 
     public enum doubleUnitIntervalTypes {
