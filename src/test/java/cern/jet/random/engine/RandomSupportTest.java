@@ -68,4 +68,10 @@ class RandomSupportTest {
         assertEquals(0.5000000000000001, RandomSupport.doubleFromLongOO(Long.MIN_VALUE + 2048));
         assertEquals(0.5000000000000003, RandomSupport.doubleFromLongOO(Long.MIN_VALUE + 4096));
     }
+
+    @Test
+    void testGamma() {
+        assertEquals(4.440892098500626E-16d, RandomSupport.gamma(2.0d, 3.0d));
+        assertEquals(4.440892098500626E-16d, RandomSupport.gamma(1.0d, 3.0d));
+    }
 }
