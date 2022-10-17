@@ -35,11 +35,11 @@ import cern.jet.random.engine.RandomEngine;
  * }
  * </pre>
  *
+ * @author wolfgang.hoschek@cern.ch
+ * @version 1.0, 09/24/99
  * @see MersenneTwister
  * @see java.util.Random
  * @see java.lang.Math
- * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
  */
 public class Distributions {
     /**
@@ -57,10 +57,8 @@ public class Distributions {
      * <tt>p(k) = p * (1-p)^k</tt> for <tt> k &gt;= 0</tt>.
      * <p>
      *
-     * @param k
-     *            the argument to the probability distribution function.
-     * @param p
-     *            the parameter of the probability distribution function.
+     * @param k the argument to the probability distribution function.
+     * @param p the parameter of the probability distribution function.
      */
     public static double geometricPdf(int k, double p) {
         if (k < 0)
@@ -80,10 +78,8 @@ public class Distributions {
      * Verlag, New York.
      * <p>
      *
-     * @param r
-     *            must be &gt; 0.
-     * @param nr
-     *            the number of the burr distribution (e.g. 2,7,8,10).
+     * @param r  must be &gt; 0.
+     * @param nr the number of the burr distribution (e.g. 2,7,8,10).
      */
     public static double nextBurr1(double r, int nr, RandomEngine randomGenerator) {
         /***********************************************************************
@@ -132,12 +128,9 @@ public class Distributions {
      * Verlag, New York.
      * <p>
      *
-     * @param r
-     *            must be &gt; 0.
-     * @param k
-     *            must be &gt; 0.
-     * @param nr
-     *            the number of the burr distribution (e.g. 3,4,5,6,9,12).
+     * @param r  must be &gt; 0.
+     * @param k  must be &gt; 0.
+     * @param nr the number of the burr distribution (e.g. 3,4,5,6,9,12).
      */
     public static double nextBurr2(double r, double k, int nr, RandomEngine randomGenerator) {
         /***********************************************************************
@@ -199,7 +192,7 @@ public class Distributions {
      * <p>
      *
      * @return a number in the open unit interval <code>(0.0,1.0)</code>
-     *         (excluding 0.0 and 1.0).
+     * (excluding 0.0 and 1.0).
      */
     public static double nextCauchy(RandomEngine randomGenerator) {
         return Math.tan(Math.PI * randomGenerator.raw());
@@ -232,9 +225,8 @@ public class Distributions {
      * HREF="http://www.cis.tu-graz.ac.at/stat/stadl/random.html">C-RAND /
      * WIN-RAND</A> library.
      *
-     * @param p
-     *            must satisfy <tt>0 &lt; p &lt; 1</tt>.
-     *            <p>
+     * @param p must satisfy <tt>0 &lt; p &lt; 1</tt>.
+     *          <p>
      */
     public static int nextGeometric(double p, RandomEngine randomGenerator) {
         /***********************************************************************
@@ -292,7 +284,7 @@ public class Distributions {
      * <p>
      *
      * @return a number in the open unit interval <code>(0.0,1.0)</code>
-     *         (excluding 0.0 and 1.0).
+     * (excluding 0.0 and 1.0).
      */
     public static double nextLaplace(RandomEngine randomGenerator) {
         double u = randomGenerator.raw();
@@ -320,10 +312,8 @@ public class Distributions {
      * Returns a power-law distributed random number with the given exponent and
      * lower cutoff.
      *
-     * @param alpha
-     *            the exponent
-     * @param cut
-     *            the lower cutoff
+     * @param alpha the exponent
+     * @param cut   the lower cutoff
      */
     public static double nextPowLaw(double alpha, double cut, RandomEngine randomGenerator) {
         return cut * Math.pow(randomGenerator.raw(), 1.0 / (alpha + 1.0));
@@ -373,10 +363,9 @@ public class Distributions {
      * variate generation', Springer-Verlag: Berlin. ISBN 3-540-96305-7 (also
      * 0-387-96305-7)
      *
-     * @param z
-     *            the skew of the distribution (must be &gt;1.0).
+     * @param z the skew of the distribution (must be &gt;1.0).
      * @return a zipfian distributed number in the closed interval
-     *         <tt>[1,Integer.MAX_VALUE]</tt>.
+     * <tt>[1,Integer.MAX_VALUE]</tt>.
      */
     public static int nextZipfInt(double z, RandomEngine randomGenerator) {
         /*

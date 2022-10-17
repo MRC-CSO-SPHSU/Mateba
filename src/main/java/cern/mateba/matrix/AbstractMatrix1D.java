@@ -17,7 +17,7 @@ import java.io.Serial;
  * <a href="package-tree.html">tree view</a> to get the broad picture.
  * <p>
  * <b>Note that this implementation is not synchronized.</b>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -25,10 +25,14 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
 
     @Serial
     private static final long serialVersionUID = -7170337676610100368L;
-    /** the number of cells this matrix (view) has */
+    /**
+     * the number of cells this matrix (view) has
+     */
     protected int size;
 
-    /** the index of the first element */
+    /**
+     * the index of the first element
+     */
     protected int zero;
 
     /**
@@ -48,9 +52,8 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
     protected int _offset(int absRank) {
@@ -59,9 +62,8 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
 
     /**
      * Returns the absolute rank of the given relative rank.
-     * 
-     * @param rank
-     *            the relative rank of the element.
+     *
+     * @param rank the relative rank of the element.
      * @return the absolute rank of the element.
      */
     protected int _rank(int rank) {
@@ -70,9 +72,8 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
 
     /**
      * Sanity check for operations requiring an index to be within bounds.
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>index < 0 || index >= size()</tt>.
+     *
+     * @throws IndexOutOfBoundsException if <tt>index < 0 || index >= size()</tt>.
      */
     protected void checkIndex(int index) {
         if (index < 0 || index >= size)
@@ -81,13 +82,12 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
 
     /**
      * Checks whether indexes are legal and throws an exception, if necessary.
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>! (0 <= indexes[i] < size())</tt> for any
-     *             i=0..indexes.length()-1.
+     *
+     * @throws IndexOutOfBoundsException if <tt>! (0 <= indexes[i] < size())</tt> for any
+     *                                   i=0..indexes.length()-1.
      */
     protected void checkIndexes(int[] indexes) {
-        for (int i = indexes.length; --i >= 0;) {
+        for (int i = indexes.length; --i >= 0; ) {
             int index = indexes[i];
             if (index < 0 || index >= size)
                 checkIndex(index);
@@ -97,9 +97,8 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
     /**
      * Checks whether the receiver contains the given range and throws an
      * exception, if necessary.
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>index<0 || index+width>size()</tt>.
+     *
+     * @throws IndexOutOfBoundsException if <tt>index<0 || index+width>size()</tt>.
      */
     protected void checkRange(int index, int width) {
         if (index < 0 || index + width > size)
@@ -108,9 +107,8 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
 
     /**
      * Sanity check for operations requiring two matrices with the same size.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>size() != B.size()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>size() != B.size()</tt>.
      */
     public void checkSize(AbstractMatrix1D B) {
         if (size != B.size)
@@ -121,9 +119,8 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
      * Returns the position of the element with the given relative rank within
      * the (virtual or non-virtual) internal 1-dimensional array. You may want
      * to override this method for performance.
-     * 
-     * @param rank
-     *            the rank of the element.
+     *
+     * @param rank the rank of the element.
      */
     public long index(int rank) {
         return _offset(_rank(rank));
@@ -131,11 +128,9 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
 
     /**
      * Sets up a matrix with a given number of cells.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size the number of cells the matrix shall have.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     protected void setUp(int size) {
         setUp(size, 0, 1);
@@ -143,16 +138,12 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
 
     /**
      * Sets up a matrix with the given parameters.
-     * 
-     * @param size
-     *            the number of elements the matrix shall have.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size   the number of elements the matrix shall have.
+     * @param zero   the index of the first element.
+     * @param stride the number of indexes between any two elements, i.e.
+     *               <tt>index(i+1)-index(i)</tt>.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     protected void setUp(int size, int zero, int stride) {
         if (size < 0)
@@ -181,11 +172,10 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
 
     /**
      * Returns the stride of the given dimension (axis, rank).
-     * 
-     * @dimension the index of the dimension.
+     *
      * @return the stride in the given dimension.
-     * @throws IllegalArgumentException
-     *             if <tt>dimension != 0</tt>.
+     * @throws IllegalArgumentException if <tt>dimension != 0</tt>.
+     * @dimension the index of the dimension.
      */
     protected int stride(int dimension) {
         if (dimension != 0)
@@ -216,9 +206,8 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
 
     /**
      * Self modifying version of viewPart().
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>index<0 || index+width>size()</tt>.
+     *
+     * @throws IndexOutOfBoundsException if <tt>index<0 || index+width>size()</tt>.
      */
     protected AbstractMatrix1D vPart(int index, int width) {
         checkRange(index, width);
@@ -230,9 +219,8 @@ public abstract class AbstractMatrix1D extends AbstractMatrix {
 
     /**
      * Self modifying version of viewStrides().
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>stride <= 0</tt>.
+     *
+     * @throws IndexOutOfBoundsException if <tt>stride <= 0</tt>.
      */
     protected AbstractMatrix1D vStrides(int stride) {
         if (stride <= 0)

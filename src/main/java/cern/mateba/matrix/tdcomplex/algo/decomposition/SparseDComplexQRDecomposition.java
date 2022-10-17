@@ -21,7 +21,7 @@ import edu.emory.mathcs.csparsej.tdcomplex.DZcs_common.DZcss;
  * For an <tt>m x n</tt> matrix <tt>A</tt> with <tt>m >= n</tt>, the QR
  * decomposition is an <tt>m x n</tt> orthogonal matrix <tt>Q</tt> and an
  * <tt>n x n</tt> upper triangular matrix <tt>R</tt> so that <tt>A = Q*R</tt>.
- * <P>
+ * <p>
  * The QR decompostion always exists, even if the matrix does not have full
  * rank. The primary use of the QR decomposition is in the least squares
  * solution of nonsquare systems of simultaneous linear equations. This will
@@ -30,11 +30,12 @@ import edu.emory.mathcs.csparsej.tdcomplex.DZcs_common.DZcss;
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class SparseDComplexQRDecomposition {
-    private DZcss S;
-    private DZcsn N;
+    private final DZcss S;
+    private final DZcsn N;
     private DComplexMatrix2D R;
     private DComplexMatrix2D V;
-    private int m, n;
+    private final int m;
+    private final int n;
     private boolean rcMatrix = false;
 
     /**
@@ -43,15 +44,11 @@ public class SparseDComplexQRDecomposition {
      * decomposed matrices can be retrieved via instance methods of the returned
      * decomposition object.
      *
-     * @param A
-     *            A rectangular matrix.
-     * @param order
-     *            ordering option (0 to 3); 0: natural ordering, 1: amd(A+A'),
-     *            2: amd(S'*S), 3: amd(A'*A)
-     * @throws IllegalArgumentException
-     *             if <tt>A</tt> is not sparse
-     * @throws IllegalArgumentException
-     *             if <tt>order</tt> is not in [0,3]
+     * @param A     A rectangular matrix.
+     * @param order ordering option (0 to 3); 0: natural ordering, 1: amd(A+A'),
+     *              2: amd(S'*S), 3: amd(A'*A)
+     * @throws IllegalArgumentException if <tt>A</tt> is not sparse
+     * @throws IllegalArgumentException if <tt>order</tt> is not in [0,3]
      */
     public SparseDComplexQRDecomposition(DComplexMatrix2D A, int order) {
         DComplexProperty.DEFAULT.checkSparse(A);
@@ -176,13 +173,10 @@ public class SparseDComplexQRDecomposition {
      * >= n) or underdetermined system (Ax=b, where m < n). Upon return
      * <tt>b</tt> is overridden with the result <tt>x</tt>.
      *
-     * @param b
-     *            right-hand side.
-     * @exception IllegalArgumentException
-     *                if <tt>b.size() != max(A.rows(), A.columns())</tt>.
-     * @exception IllegalArgumentException
-     *                if <tt>!this.hasFullRank()</tt> (<tt>A</tt> is rank
-     *                deficient).
+     * @param b right-hand side.
+     * @throws IllegalArgumentException if <tt>b.size() != max(A.rows(), A.columns())</tt>.
+     * @throws IllegalArgumentException if <tt>!this.hasFullRank()</tt> (<tt>A</tt> is rank
+     *                                  deficient).
      */
     public void solve(DComplexMatrix1D b) {
         if (b.size() != Math.max(m, n)) {
@@ -200,8 +194,7 @@ public class SparseDComplexQRDecomposition {
         if (m >= n) {
             DZcsa y = new DZcsa(S != null ? S.m2 : 1); /* get workspace */
             DZcs_ipvec.cs_ipvec(S.pinv, x, y, m); /* y(0:m-1) = b(p(0:m-1) */
-            for (int k = 0; k < n; k++) /* apply Householder refl. to x */
-            {
+            for (int k = 0; k < n; k++) /* apply Householder refl. to x */ {
                 DZcs_happly.cs_happly(N.L, k, N.B[k], y);
             }
             DZcs_usolve.cs_usolve(N.U, y); /* y = R\y */
@@ -210,8 +203,7 @@ public class SparseDComplexQRDecomposition {
             DZcsa y = new DZcsa(S != null ? S.m2 : 1); /* get workspace */
             DZcs_pvec.cs_pvec(S.q, x, y, m); /* y(q(0:m-1)) = b(0:m-1) */
             DZcs_utsolve.cs_utsolve(N.U, y); /* y = R'\y */
-            for (int k = m - 1; k >= 0; k--) /* apply Householder refl. to x */
-            {
+            for (int k = m - 1; k >= 0; k--) /* apply Householder refl. to x */ {
                 DZcs_happly.cs_happly(N.L, k, N.B[k], y);
             }
             DZcs_pvec.cs_pvec(S.pinv, y, x, n); /* x(0:n-1) = y(p(0:n-1)) */

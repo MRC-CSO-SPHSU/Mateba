@@ -30,7 +30,7 @@ public class Test2 {
     }
 
     public static void main(String[] argv) {
-        double[] bounds = { -30, 0, 30, 1000 };
+        double[] bounds = {-30, 0, 30, 1000};
         Random r = new Random();
         var h1 = new hep.aida.ref.Histogram1D("AIDA 1D Histogram", new hep.aida.ref.VariableAxis(bounds));
         // IHistogram1D h1 = new Histogram1D("AIDA 1D Histogram",2,-3,3);
@@ -38,7 +38,7 @@ public class Test2 {
             h1.fill(r.nextGaussian());
 
         hep.aida.IHistogram2D h2 = new hep.aida.ref.Histogram2D("AIDA 2D Histogram", new hep.aida.ref.VariableAxis(bounds),
-                new hep.aida.ref.VariableAxis(bounds));
+            new hep.aida.ref.VariableAxis(bounds));
         // IHistogram2D h2 = new Histogram2D("AIDA 2D Histogram",2,-3,3,
         // 2,-3,3);
         for (int i = 0; i < 10000; i++)

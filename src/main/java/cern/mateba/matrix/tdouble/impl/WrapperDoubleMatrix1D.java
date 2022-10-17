@@ -17,11 +17,10 @@ import java.io.Serial;
 /**
  * 1-d matrix holding <tt>double</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 09/24/99
  */
 public class WrapperDoubleMatrix1D extends DoubleMatrix1D {
     @Serial
@@ -72,7 +71,7 @@ public class WrapperDoubleMatrix1D extends DoubleMatrix1D {
     public DoubleMatrix1D viewFlip() {
         DoubleMatrix1D view = new WrapperDoubleMatrix1D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -99,7 +98,7 @@ public class WrapperDoubleMatrix1D extends DoubleMatrix1D {
         checkRange(index, width);
         WrapperDoubleMatrix1D view = new WrapperDoubleMatrix1D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -127,7 +126,7 @@ public class WrapperDoubleMatrix1D extends DoubleMatrix1D {
         // check for "all"
         if (indexes == null) {
             indexes = new int[size];
-            for (int i = size; --i >= 0;)
+            for (int i = size; --i >= 0; )
                 indexes[i] = i;
         }
 
@@ -136,7 +135,7 @@ public class WrapperDoubleMatrix1D extends DoubleMatrix1D {
 
         WrapperDoubleMatrix1D view = new WrapperDoubleMatrix1D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -169,7 +168,7 @@ public class WrapperDoubleMatrix1D extends DoubleMatrix1D {
             throw new IndexOutOfBoundsException("illegal stride: " + stride);
         WrapperDoubleMatrix1D view = new WrapperDoubleMatrix1D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 

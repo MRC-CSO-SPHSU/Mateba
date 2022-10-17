@@ -26,16 +26,15 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * represented by 2 double values in sequence, i.e. elements[row][2*column]
  * constitute the real part and elements[row][2*column+1] constitute the
  * imaginary part. Note that this implementation is not synchronized.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DenseLargeDComplexMatrix2D extends WrapperDComplexMatrix2D {
 
 
     @Serial
     private static final long serialVersionUID = 3281793216419269052L;
-    private double[][] elements;
+    private final double[][] elements;
 
     private DoubleFFT_2D fft2;
 
@@ -150,10 +149,8 @@ public class DenseLargeDComplexMatrix2D extends WrapperDComplexMatrix2D {
     /**
      * Computes the 2D inverse of the discrete Fourier transform (IDFT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void ifft2(boolean scale) {
@@ -169,9 +166,8 @@ public class DenseLargeDComplexMatrix2D extends WrapperDComplexMatrix2D {
     /**
      * Computes the inverse of the discrete Fourier transform (IDFT) of each
      * column of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void ifftColumns(final boolean scale) {
@@ -214,9 +210,8 @@ public class DenseLargeDComplexMatrix2D extends WrapperDComplexMatrix2D {
     /**
      * Computes the inverse of the discrete Fourier transform (IDFT) of each row
      * of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void ifftRows(final boolean scale) {
@@ -252,7 +247,7 @@ public class DenseLargeDComplexMatrix2D extends WrapperDComplexMatrix2D {
     }
 
     public double[] getQuick(int row, int column) {
-        return new double[] { elements[row][2 * column], elements[row][2 * column + 1] };
+        return new double[]{elements[row][2 * column], elements[row][2 * column + 1]};
     }
 
     public void setQuick(int row, int column, double[] value) {

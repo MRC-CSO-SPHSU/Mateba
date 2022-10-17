@@ -6,7 +6,6 @@
 package cern.jet.random;
 
 /**
- *
  * @author vvasuki
  */
 public class TestNormal {

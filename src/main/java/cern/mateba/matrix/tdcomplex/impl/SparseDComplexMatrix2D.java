@@ -21,11 +21,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Sparse hashed 2-d matrix holding <tt>complex</tt> elements.
- * 
+ * <p>
  * This implementation uses ConcurrentHashMap
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class SparseDComplexMatrix2D extends DComplexMatrix2D {
 
@@ -43,13 +42,11 @@ public class SparseDComplexMatrix2D extends DComplexMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public SparseDComplexMatrix2D(double[][] values) {
         this(values.length, values.length == 0 ? 0 : values[0].length);
@@ -59,15 +56,12 @@ public class SparseDComplexMatrix2D extends DComplexMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns and default
      * memory usage.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public SparseDComplexMatrix2D(int rows, int columns) {
         setUp(rows, columns);
@@ -76,30 +70,22 @@ public class SparseDComplexMatrix2D extends DComplexMatrix2D {
 
     /**
      * Constructs a view with the given parameters.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             or flip's are illegal.
+     *
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param elements     the cells.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(i,j+1)-index(i,j)</tt>.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  or flip's are illegal.
      */
     protected SparseDComplexMatrix2D(int rows, int columns, ConcurrentHashMap<Long, double[]> elements, int rowZero,
-            int columnZero, int rowStride, int columnStride) {
+                                     int columnZero, int rowStride, int columnStride) {
         setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = false;
@@ -116,10 +102,9 @@ public class SparseDComplexMatrix2D extends DComplexMatrix2D {
 
     public DComplexMatrix2D assign(DComplexMatrix2D source) {
         // overriden for performance only
-        if (!(source instanceof SparseDComplexMatrix2D)) {
+        if (!(source instanceof SparseDComplexMatrix2D other)) {
             return super.assign(source);
         }
-        SparseDComplexMatrix2D other = (SparseDComplexMatrix2D) source;
         if (other == this)
             return this; // nothing to do
         checkShape(other);
@@ -133,7 +118,7 @@ public class SparseDComplexMatrix2D extends DComplexMatrix2D {
     }
 
     public DComplexMatrix2D assign(final DComplexMatrix2D y,
-            cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
+                                   cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
         if (!this.isNoView)
             return super.assign(y, function);
 
@@ -164,9 +149,9 @@ public class SparseDComplexMatrix2D extends DComplexMatrix2D {
 
     public synchronized double[] getQuick(int row, int column) {
         double[] elem = this.elements.get((long) rowZero + (long) row * (long) rowStride + (long) columnZero
-                + (long) column * (long) columnStride);
+            + (long) column * (long) columnStride);
         if (elem != null) {
-            return new double[] { elem[0], elem[1] };
+            return new double[]{elem[0], elem[1]};
         } else {
             return new double[2];
         }
@@ -187,11 +172,9 @@ public class SparseDComplexMatrix2D extends DComplexMatrix2D {
      */
 
     protected boolean haveSharedCellsRaw(DComplexMatrix2D other) {
-        if (other instanceof SelectedSparseDComplexMatrix2D) {
-            SelectedSparseDComplexMatrix2D otherMatrix = (SelectedSparseDComplexMatrix2D) other;
+        if (other instanceof SelectedSparseDComplexMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseDComplexMatrix2D) {
-            SparseDComplexMatrix2D otherMatrix = (SparseDComplexMatrix2D) other;
+        } else if (other instanceof SparseDComplexMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -215,7 +198,7 @@ public class SparseDComplexMatrix2D extends DComplexMatrix2D {
 
     public synchronized void setQuick(int row, int column, double[] value) {
         long index = (long) rowZero + (long) row * (long) rowStride + (long) columnZero + (long) column
-                * (long) columnStride;
+            * (long) columnStride;
         if (value[0] == 0 && value[1] == 0)
             this.elements.remove(index);
         else
@@ -264,11 +247,11 @@ public class SparseDComplexMatrix2D extends DComplexMatrix2D {
 
     public synchronized void setQuick(int row, int column, double re, double im) {
         long index = (long) rowZero + (long) row * (long) rowStride + (long) columnZero + (long) column
-                * (long) columnStride;
+            * (long) columnStride;
         if (re == 0 && im == 0)
             this.elements.remove(index);
         else
-            this.elements.put(index, new double[] { re, im });
+            this.elements.put(index, new double[]{re, im});
 
     }
 

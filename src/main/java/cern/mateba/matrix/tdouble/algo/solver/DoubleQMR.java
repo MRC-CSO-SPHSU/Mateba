@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003-2006 Bjørn-Ove Heimsund
- * 
+ *
  * This file is part of MTJ.
- * 
+ *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the
  * Free Software Foundation; either version 2.1 of the License, or (at your
  * option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -34,7 +34,7 @@ import cern.jet.math.tdouble.DoubleFunctions;
  * Quasi-Minimal Residual method. QMR solves the unsymmetric linear system
  * <code>Ax = b</code> using the Quasi-Minimal Residual method. QMR uses two
  * preconditioners, and by default these are the same preconditioner.
- * 
+ *
  * @author Templates
  */
 public class DoubleQMR extends AbstractDoubleIterativeSolver {
@@ -52,16 +52,28 @@ public class DoubleQMR extends AbstractDoubleIterativeSolver {
     /**
      * Vectors for use in the iterative solution process
      */
-    private DoubleMatrix1D r, y, z, v, w, p, q, d, s, v_tld, w_tld, y_tld, z_tld, p_tld;
+    private final DoubleMatrix1D r;
+    private final DoubleMatrix1D y;
+    private final DoubleMatrix1D z;
+    private final DoubleMatrix1D v;
+    private final DoubleMatrix1D w;
+    private final DoubleMatrix1D p;
+    private final DoubleMatrix1D q;
+    private final DoubleMatrix1D d;
+    private final DoubleMatrix1D s;
+    private final DoubleMatrix1D v_tld;
+    private final DoubleMatrix1D w_tld;
+    private final DoubleMatrix1D y_tld;
+    private final DoubleMatrix1D z_tld;
+    private final DoubleMatrix1D p_tld;
 
     /**
      * Constructor for QMR. Uses the given vector as template for creating
      * scratch vectors. Typically, the solution or the right hand side vector
      * can be passed, and the template is not modified
-     * 
-     * @param template
-     *            Vector to use as template for the work vectors needed in the
-     *            solution process
+     *
+     * @param template Vector to use as template for the work vectors needed in the
+     *                 solution process
      */
     public DoubleQMR(DoubleMatrix1D template) {
         M1 = M;
@@ -87,14 +99,11 @@ public class DoubleQMR extends AbstractDoubleIterativeSolver {
      * scratch vectors. Typically, the solution or the right hand side vector
      * can be passed, and the template is not modified. Allows setting different
      * right and left preconditioners
-     * 
-     * @param template
-     *            Vector to use as template for the work vectors needed in the
-     *            solution process
-     * @param M1
-     *            Left preconditioner
-     * @param M2
-     *            Right preconditioner
+     *
+     * @param template Vector to use as template for the work vectors needed in the
+     *                 solution process
+     * @param M1       Left preconditioner
+     * @param M2       Right preconditioner
      */
     public DoubleQMR(DoubleMatrix1D template, DoublePreconditioner M1, DoublePreconditioner M2) {
         this.M1 = M1;
@@ -116,7 +125,7 @@ public class DoubleQMR extends AbstractDoubleIterativeSolver {
     }
 
     public DoubleMatrix1D solve(DoubleMatrix2D A, DoubleMatrix1D b, DoubleMatrix1D x)
-            throws IterativeSolverDoubleNotConvergedException {
+        throws IterativeSolverDoubleNotConvergedException {
         checkSizes(A, b, x);
 
         double rho = 0, rho_1 = 0, xi = 0, gamma = 1., gamma_1 = 0, theta = 0, theta_1 = 0, eta = -1., delta = 0, ep = 0, beta = 0;
@@ -135,11 +144,11 @@ public class DoubleQMR extends AbstractDoubleIterativeSolver {
 
             if (rho == 0)
                 throw new IterativeSolverDoubleNotConvergedException(DoubleNotConvergedException.Reason.Breakdown,
-                        "rho", iter);
+                    "rho", iter);
 
             if (xi == 0)
                 throw new IterativeSolverDoubleNotConvergedException(DoubleNotConvergedException.Reason.Breakdown,
-                        "xi", iter);
+                    "xi", iter);
 
             v.assign(v_tld, DoubleFunctions.multSecond(1 / rho));
             y.assign(DoubleFunctions.mult(1 / rho));
@@ -150,7 +159,7 @@ public class DoubleQMR extends AbstractDoubleIterativeSolver {
 
             if (delta == 0)
                 throw new IterativeSolverDoubleNotConvergedException(DoubleNotConvergedException.Reason.Breakdown,
-                        "delta", iter);
+                    "delta", iter);
 
             M2.apply(y, y_tld);
             M1.transApply(z, z_tld);
@@ -169,13 +178,13 @@ public class DoubleQMR extends AbstractDoubleIterativeSolver {
 
             if (ep == 0)
                 throw new IterativeSolverDoubleNotConvergedException(DoubleNotConvergedException.Reason.Breakdown,
-                        "ep", iter);
+                    "ep", iter);
 
             beta = ep / delta;
 
             if (beta == 0)
                 throw new IterativeSolverDoubleNotConvergedException(DoubleNotConvergedException.Reason.Breakdown,
-                        "beta", iter);
+                    "beta", iter);
 
             v_tld.assign(v, DoubleFunctions.multSecond(-beta)).assign(p_tld, DoubleFunctions.plus);
             M1.apply(v_tld, y);
@@ -194,7 +203,7 @@ public class DoubleQMR extends AbstractDoubleIterativeSolver {
 
             if (gamma == 0)
                 throw new IterativeSolverDoubleNotConvergedException(DoubleNotConvergedException.Reason.Breakdown,
-                        "gamma", iter);
+                    "gamma", iter);
 
             eta = -eta * rho_1 * gamma * gamma / (beta * gamma_1 * gamma_1);
 

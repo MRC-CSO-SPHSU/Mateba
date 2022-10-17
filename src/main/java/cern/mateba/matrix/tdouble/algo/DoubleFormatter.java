@@ -28,7 +28,7 @@ import java.io.Serial;
  * <tt>matrix.toString()</tt> and be happy with the default formatting. This
  * class is for advanced requirements.
  * <p>
- * 
+ *
  * <b>Examples:</b>
  * <p>
  * Examples demonstrate usage on 2-d matrices. 1-d and 3-d matrices formatting
@@ -39,16 +39,16 @@ import java.io.Serial;
  * </tr>
  * <tr>
  * <td>
- * 
+ *
  * <p>
  * <tt>double[][] values = {<br>
- {3, 0, -3.4, 0},<br>
- {5.1 ,0, +3.0123456789, 0}, <br>
- {16.37, 0.0, 2.5, 0}, <br>
- {-16.3, 0, -3.012345678E-4, -1},<br>
- {1236.3456789, 0, 7, -1.2}<br>
- };<br>
- matrix = new DenseDoubleMatrix2D(values);</tt>
+ * {3, 0, -3.4, 0},<br>
+ * {5.1 ,0, +3.0123456789, 0}, <br>
+ * {16.37, 0.0, 2.5, 0}, <br>
+ * {-16.3, 0, -3.012345678E-4, -1},<br>
+ * {1236.3456789, 0, 7, -1.2}<br>
+ * };<br>
+ * matrix = new DenseDoubleMatrix2D(values);</tt>
  * </p>
  * </td>
  * </tr>
@@ -66,104 +66,104 @@ import java.io.Serial;
  * <td><tt>%G </tt><br>
  * (default)</td>
  * <td align="left" valign="top"><tt>5&nbsp;x&nbsp;4&nbsp;matrix<br>
- &nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;<br>
- &nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;3.012346&nbsp;&nbsp;0&nbsp;&nbsp;<br>
- &nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;<br>
- &nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;-0.000301&nbsp;-1&nbsp;&nbsp;<br>
- 1236.345679&nbsp;0&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-1.2 
- </tt></td>
+ * &nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;3.012346&nbsp;&nbsp;0&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;<br>
+ * &nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;-0.000301&nbsp;-1&nbsp;&nbsp;<br>
+ * 1236.345679&nbsp;0&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-1.2
+ * </tt></td>
  * <td align="left" valign="top"><tt>{<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;&nbsp;3.012346,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;-0.000301,&nbsp;-1&nbsp;&nbsp;},<br>
- &nbsp;&nbsp;&nbsp;{1236.345679,&nbsp;0,&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;-1.2}<br>
- }; </tt></td>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;&nbsp;3.012346,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;-0.000301,&nbsp;-1&nbsp;&nbsp;},<br>
+ * &nbsp;&nbsp;&nbsp;{1236.345679,&nbsp;0,&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;-1.2}<br>
+ * }; </tt></td>
  * </tr>
  * <tr>
  * <td><tt>%1.10G</tt></td>
  * <td align="left" valign="top"><tt>5&nbsp;x&nbsp;4&nbsp;matrix<br>
- &nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;<br>
- &nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;3.0123456789&nbsp;&nbsp;0&nbsp;&nbsp;<br>
- &nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;<br>
- &nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;-0.0003012346&nbsp;-1&nbsp;&nbsp;<br>
- 1236.3456789&nbsp;0&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-1.2 
- </tt></td>
+ * &nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;3.0123456789&nbsp;&nbsp;0&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;<br>
+ * &nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;-0.0003012346&nbsp;-1&nbsp;&nbsp;<br>
+ * 1236.3456789&nbsp;0&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-1.2
+ * </tt></td>
  * <td align="left" valign="top"><tt>{<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;&nbsp;3.0123456789,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;-0.0003012346,&nbsp;-1&nbsp;&nbsp;},<br>
- &nbsp;&nbsp;&nbsp;{1236.3456789,&nbsp;0,&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;-1.2}<br>
- }; </tt></td>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;&nbsp;3.0123456789,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0&nbsp;&nbsp;},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0,&nbsp;-0.0003012346,&nbsp;-1&nbsp;&nbsp;},<br>
+ * &nbsp;&nbsp;&nbsp;{1236.3456789,&nbsp;0,&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;-1.2}<br>
+ * }; </tt></td>
  * </tr>
  * <tr>
  * <td><tt>%f</tt></td>
  * <td align="left" valign="top"> <tt> 5&nbsp;x&nbsp;4&nbsp;matrix<br>
- &nbsp;&nbsp;&nbsp;3.000000&nbsp;0.000000&nbsp;-3.400000&nbsp;&nbsp;0.000000<br>
- &nbsp;&nbsp;&nbsp;5.100000&nbsp;0.000000&nbsp;&nbsp;3.012346&nbsp;&nbsp;0.000000<br>
- &nbsp;&nbsp;16.370000&nbsp;0.000000&nbsp;&nbsp;2.500000&nbsp;&nbsp;0.000000<br>
- &nbsp;-16.300000&nbsp;0.000000&nbsp;-0.000301&nbsp;-1.000000<br>
- 1236.345679&nbsp;0.000000&nbsp;&nbsp;7.000000&nbsp;-1.200000 </tt></td>
+ * &nbsp;&nbsp;&nbsp;3.000000&nbsp;0.000000&nbsp;-3.400000&nbsp;&nbsp;0.000000<br>
+ * &nbsp;&nbsp;&nbsp;5.100000&nbsp;0.000000&nbsp;&nbsp;3.012346&nbsp;&nbsp;0.000000<br>
+ * &nbsp;&nbsp;16.370000&nbsp;0.000000&nbsp;&nbsp;2.500000&nbsp;&nbsp;0.000000<br>
+ * &nbsp;-16.300000&nbsp;0.000000&nbsp;-0.000301&nbsp;-1.000000<br>
+ * 1236.345679&nbsp;0.000000&nbsp;&nbsp;7.000000&nbsp;-1.200000 </tt></td>
  * <td align="left" valign="top"><tt> {<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;3.000000,&nbsp;0.000000,&nbsp;-3.400000,&nbsp;&nbsp;0.000000},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;5.100000,&nbsp;0.000000,&nbsp;&nbsp;3.012346,&nbsp;&nbsp;0.000000},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;16.370000,&nbsp;0.000000,&nbsp;&nbsp;2.500000,&nbsp;&nbsp;0.000000},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;-16.300000,&nbsp;0.000000,&nbsp;-0.000301,&nbsp;-1.000000},<br>
- &nbsp;&nbsp;&nbsp;{1236.345679,&nbsp;0.000000,&nbsp;&nbsp;7.000000,&nbsp;-1.200000}<br>
- }; </tt></td>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;3.000000,&nbsp;0.000000,&nbsp;-3.400000,&nbsp;&nbsp;0.000000},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;5.100000,&nbsp;0.000000,&nbsp;&nbsp;3.012346,&nbsp;&nbsp;0.000000},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;16.370000,&nbsp;0.000000,&nbsp;&nbsp;2.500000,&nbsp;&nbsp;0.000000},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;-16.300000,&nbsp;0.000000,&nbsp;-0.000301,&nbsp;-1.000000},<br>
+ * &nbsp;&nbsp;&nbsp;{1236.345679,&nbsp;0.000000,&nbsp;&nbsp;7.000000,&nbsp;-1.200000}<br>
+ * }; </tt></td>
  * </tr>
  * <tr>
  * <td><tt>%1.2f</tt></td>
  * <td align="left" valign="top"><tt>5&nbsp;x&nbsp;4&nbsp;matrix<br>
- &nbsp;&nbsp;&nbsp;3.00&nbsp;0.00&nbsp;-3.40&nbsp;&nbsp;0.00<br>
- &nbsp;&nbsp;&nbsp;5.10&nbsp;0.00&nbsp;&nbsp;3.01&nbsp;&nbsp;0.00<br>
- &nbsp;&nbsp;16.37&nbsp;0.00&nbsp;&nbsp;2.50&nbsp;&nbsp;0.00<br>
- &nbsp;-16.30&nbsp;0.00&nbsp;-0.00&nbsp;-1.00<br>
- 1236.35&nbsp;0.00&nbsp;&nbsp;7.00&nbsp;-1.20 </tt></td>
+ * &nbsp;&nbsp;&nbsp;3.00&nbsp;0.00&nbsp;-3.40&nbsp;&nbsp;0.00<br>
+ * &nbsp;&nbsp;&nbsp;5.10&nbsp;0.00&nbsp;&nbsp;3.01&nbsp;&nbsp;0.00<br>
+ * &nbsp;&nbsp;16.37&nbsp;0.00&nbsp;&nbsp;2.50&nbsp;&nbsp;0.00<br>
+ * &nbsp;-16.30&nbsp;0.00&nbsp;-0.00&nbsp;-1.00<br>
+ * 1236.35&nbsp;0.00&nbsp;&nbsp;7.00&nbsp;-1.20 </tt></td>
  * <td align="left" valign="top"><tt>{<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;3.00,&nbsp;0.00,&nbsp;-3.40,&nbsp;&nbsp;0.00},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;5.10,&nbsp;0.00,&nbsp;&nbsp;3.01,&nbsp;&nbsp;0.00},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;16.37,&nbsp;0.00,&nbsp;&nbsp;2.50,&nbsp;&nbsp;0.00},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;-16.30,&nbsp;0.00,&nbsp;-0.00,&nbsp;-1.00},<br>
- &nbsp;&nbsp;&nbsp;{1236.35,&nbsp;0.00,&nbsp;&nbsp;7.00,&nbsp;-1.20}<br>
- }; </tt></td>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;3.00,&nbsp;0.00,&nbsp;-3.40,&nbsp;&nbsp;0.00},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;5.10,&nbsp;0.00,&nbsp;&nbsp;3.01,&nbsp;&nbsp;0.00},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;16.37,&nbsp;0.00,&nbsp;&nbsp;2.50,&nbsp;&nbsp;0.00},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;-16.30,&nbsp;0.00,&nbsp;-0.00,&nbsp;-1.00},<br>
+ * &nbsp;&nbsp;&nbsp;{1236.35,&nbsp;0.00,&nbsp;&nbsp;7.00,&nbsp;-1.20}<br>
+ * }; </tt></td>
  * </tr>
  * <tr>
  * <td><tt>%0.2e</tt></td>
  * <td align="left" valign="top"><tt>5&nbsp;x&nbsp;4&nbsp;matrix<br>
- &nbsp;3.00e+000&nbsp;0.00e+000&nbsp;-3.40e+000&nbsp;&nbsp;0.00e+000<br>
- &nbsp;5.10e+000&nbsp;0.00e+000&nbsp;&nbsp;3.01e+000&nbsp;&nbsp;0.00e+000<br>
- &nbsp;1.64e+001&nbsp;0.00e+000&nbsp;&nbsp;2.50e+000&nbsp;&nbsp;0.00e+000<br>
- -1.63e+001&nbsp;0.00e+000&nbsp;-3.01e-004&nbsp;-1.00e+000<br>
- &nbsp;1.24e+003&nbsp;0.00e+000&nbsp;&nbsp;7.00e+000&nbsp;-1.20e+000 </tt></td>
+ * &nbsp;3.00e+000&nbsp;0.00e+000&nbsp;-3.40e+000&nbsp;&nbsp;0.00e+000<br>
+ * &nbsp;5.10e+000&nbsp;0.00e+000&nbsp;&nbsp;3.01e+000&nbsp;&nbsp;0.00e+000<br>
+ * &nbsp;1.64e+001&nbsp;0.00e+000&nbsp;&nbsp;2.50e+000&nbsp;&nbsp;0.00e+000<br>
+ * -1.63e+001&nbsp;0.00e+000&nbsp;-3.01e-004&nbsp;-1.00e+000<br>
+ * &nbsp;1.24e+003&nbsp;0.00e+000&nbsp;&nbsp;7.00e+000&nbsp;-1.20e+000 </tt></td>
  * <td align="left" valign="top"><tt>{<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;3.00e+000,&nbsp;0.00e+000,&nbsp;-3.40e+000,&nbsp;&nbsp;0.00e+000},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;5.10e+000,&nbsp;0.00e+000,&nbsp;&nbsp;3.01e+000,&nbsp;&nbsp;0.00e+000},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;1.64e+001,&nbsp;0.00e+000,&nbsp;&nbsp;2.50e+000,&nbsp;&nbsp;0.00e+000},<br>
- &nbsp;&nbsp;&nbsp;{-1.63e+001,&nbsp;0.00e+000,&nbsp;-3.01e-004,&nbsp;-1.00e+000},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;1.24e+003,&nbsp;0.00e+000,&nbsp;&nbsp;7.00e+000,&nbsp;-1.20e+000}<br>
- }; </tt></td>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;3.00e+000,&nbsp;0.00e+000,&nbsp;-3.40e+000,&nbsp;&nbsp;0.00e+000},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;5.10e+000,&nbsp;0.00e+000,&nbsp;&nbsp;3.01e+000,&nbsp;&nbsp;0.00e+000},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;1.64e+001,&nbsp;0.00e+000,&nbsp;&nbsp;2.50e+000,&nbsp;&nbsp;0.00e+000},<br>
+ * &nbsp;&nbsp;&nbsp;{-1.63e+001,&nbsp;0.00e+000,&nbsp;-3.01e-004,&nbsp;-1.00e+000},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;1.24e+003,&nbsp;0.00e+000,&nbsp;&nbsp;7.00e+000,&nbsp;-1.20e+000}<br>
+ * }; </tt></td>
  * </tr>
  * <tr>
  * <td><tt>null</tt></td>
  * <td align="left" valign="top"><tt>5&nbsp;x&nbsp;4&nbsp;matrix <br>
- &nbsp;&nbsp;&nbsp;3.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0<br>
- &nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0&nbsp;&nbsp;3.0123456789&nbsp;&nbsp;&nbsp;&nbsp;0.0<br>
- &nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0<br>
- &nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0&nbsp;-3.012345678E-4&nbsp;-1.0<br>
- 1236.3456789&nbsp;0.0&nbsp;&nbsp;7.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-1.2 
- </tt> <tt> </tt></td>
+ * &nbsp;&nbsp;&nbsp;3.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0<br>
+ * &nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0&nbsp;&nbsp;3.0123456789&nbsp;&nbsp;&nbsp;&nbsp;0.0<br>
+ * &nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0<br>
+ * &nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0&nbsp;-3.012345678E-4&nbsp;-1.0<br>
+ * 1236.3456789&nbsp;0.0&nbsp;&nbsp;7.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-1.2
+ * </tt> <tt> </tt></td>
  * <td align="left" valign="top"><tt> {<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;3.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0.0,&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0.0},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0.0,&nbsp;&nbsp;3.0123456789&nbsp;&nbsp;,&nbsp;&nbsp;0.0},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0.0,&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0.0},<br>
- &nbsp;&nbsp;&nbsp;{&nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0.0,&nbsp;-3.012345678E-4,&nbsp;-1.0},<br>
- &nbsp;&nbsp;&nbsp;{1236.3456789,&nbsp;0.0,&nbsp;&nbsp;7.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;-1.2}<br>
- }; </tt></td>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;3.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0.0,&nbsp;-3.4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0.0},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;&nbsp;5.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0.0,&nbsp;&nbsp;3.0123456789&nbsp;&nbsp;,&nbsp;&nbsp;0.0},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;&nbsp;16.37&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0.0,&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;&nbsp;0.0},<br>
+ * &nbsp;&nbsp;&nbsp;{&nbsp;-16.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;0.0,&nbsp;-3.012345678E-4,&nbsp;-1.0},<br>
+ * &nbsp;&nbsp;&nbsp;{1236.3456789,&nbsp;0.0,&nbsp;&nbsp;7.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,&nbsp;-1.2}<br>
+ * }; </tt></td>
  * </tr>
  * </table>
- * 
+ *
  * <p>
  * Here are some more elaborate examples, adding labels for axes, rows, columns,
  * title and some statistical aggregations.
@@ -173,85 +173,85 @@ import java.io.Serial;
  * <td nowrap>
  * <p>
  * <tt> double[][] values = {<br>
- {5 ,10, 20, 40 },<br>
- { 7, 8 , 6 , 7 },<br>
- {12 ,10, 20, 19 },<br>
- { 3, 1 , 5 , 6 }<br>
- }; <br>
- </tt><tt>String title = "CPU performance over time [nops/sec]";<br>
- String columnAxisName = "Year";<br>
- String rowAxisName = "CPU"; <br>
- String[] columnNames = {"1996", "1997", "1998", "1999"};<br>
- String[] rowNames = { "PowerBar", "Benzol", "Mercedes", "Sparcling"};<br>
- hep.aida.bin.BinFunctions1D F = hep.aida.bin.BinFunctions1D.functions; // alias<br>
- hep.aida.bin.BinFunction1D[] aggr = {F.mean, F.rms, F.quantile(0.25), F.median, F.quantile(0.75), F.stdDev, F.min, F.max};<br>
- String format = "%1.2G";<br>
- DoubleMatrix2D matrix = new DenseDoubleMatrix2D(values); <br>
- new Formatter(format).toTitleString(<br>
- &nbsp;&nbsp;&nbsp;matrix,rowNames,columnNames,rowAxisName,columnAxisName,title,aggr); </tt>
+ * {5 ,10, 20, 40 },<br>
+ * { 7, 8 , 6 , 7 },<br>
+ * {12 ,10, 20, 19 },<br>
+ * { 3, 1 , 5 , 6 }<br>
+ * }; <br>
+ * </tt><tt>String title = "CPU performance over time [nops/sec]";<br>
+ * String columnAxisName = "Year";<br>
+ * String rowAxisName = "CPU"; <br>
+ * String[] columnNames = {"1996", "1997", "1998", "1999"};<br>
+ * String[] rowNames = { "PowerBar", "Benzol", "Mercedes", "Sparcling"};<br>
+ * hep.aida.bin.BinFunctions1D F = hep.aida.bin.BinFunctions1D.functions; // alias<br>
+ * hep.aida.bin.BinFunction1D[] aggr = {F.mean, F.rms, F.quantile(0.25), F.median, F.quantile(0.75), F.stdDev, F.min, F.max};<br>
+ * String format = "%1.2G";<br>
+ * DoubleMatrix2D matrix = new DenseDoubleMatrix2D(values); <br>
+ * new Formatter(format).toTitleString(<br>
+ * &nbsp;&nbsp;&nbsp;matrix,rowNames,columnNames,rowAxisName,columnAxisName,title,aggr); </tt>
  * </p>
  * </td>
  * </tr>
  * <tr>
  * <td><tt>
- CPU&nbsp;performance&nbsp;over&nbsp;time&nbsp;[nops/sec]<br>
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Year<br>
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;1996&nbsp;&nbsp;1997&nbsp;&nbsp;1998&nbsp;&nbsp;1999&nbsp;&nbsp;|&nbsp;Mean&nbsp;&nbsp;RMS&nbsp;&nbsp;&nbsp;25%&nbsp;Q.&nbsp;Median&nbsp;75%&nbsp;Q.&nbsp;StdDev&nbsp;Min&nbsp;Max<br>
- ---------------------------------------------------------------------------------------<br>
- C&nbsp;PowerBar&nbsp;&nbsp;|&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;&nbsp;40&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.75&nbsp;23.05&nbsp;&nbsp;8.75&nbsp;&nbsp;15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;25&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;15.48&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;40&nbsp;<br>
- P&nbsp;Benzol&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.04&nbsp;&nbsp;6.75&nbsp;&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.25&nbsp;&nbsp;&nbsp;0.82&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;8&nbsp;<br>
- U&nbsp;Mercedes&nbsp;&nbsp;|&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;&nbsp;19&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;15.25&nbsp;15.85&nbsp;11.5&nbsp;&nbsp;&nbsp;15.5&nbsp;&nbsp;&nbsp;19.25&nbsp;&nbsp;&nbsp;4.99&nbsp;&nbsp;10&nbsp;&nbsp;20&nbsp;<br>
- &nbsp;&nbsp;Sparcling&nbsp;|&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;3.75&nbsp;&nbsp;4.21&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.25&nbsp;&nbsp;&nbsp;2.22&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;6&nbsp;<br>
- ---------------------------------------------------------------------------------------<br>
- &nbsp;&nbsp;Mean&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;6.75&nbsp;&nbsp;7.25&nbsp;12.75&nbsp;18&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
- &nbsp;&nbsp;RMS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;7.53&nbsp;&nbsp;8.14&nbsp;14.67&nbsp;22.62&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
- &nbsp;&nbsp;25%&nbsp;Q.&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;4.5&nbsp;&nbsp;&nbsp;6.25&nbsp;&nbsp;5.75&nbsp;&nbsp;6.75&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
- &nbsp;&nbsp;Median&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;&nbsp;&nbsp;&nbsp;13&nbsp;&nbsp;&nbsp;&nbsp;13&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
- &nbsp;&nbsp;75%&nbsp;Q.&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;8.25&nbsp;10&nbsp;&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;&nbsp;24.25&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
- &nbsp;&nbsp;StdDev&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;3.86&nbsp;&nbsp;4.27&nbsp;&nbsp;8.38&nbsp;15.81&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
- &nbsp;&nbsp;Min&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
- &nbsp;&nbsp;Max&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;&nbsp;19&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
- </tt></td>
+ * CPU&nbsp;performance&nbsp;over&nbsp;time&nbsp;[nops/sec]<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Year<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;1996&nbsp;&nbsp;1997&nbsp;&nbsp;1998&nbsp;&nbsp;1999&nbsp;&nbsp;|&nbsp;Mean&nbsp;&nbsp;RMS&nbsp;&nbsp;&nbsp;25%&nbsp;Q.&nbsp;Median&nbsp;75%&nbsp;Q.&nbsp;StdDev&nbsp;Min&nbsp;Max<br>
+ * ---------------------------------------------------------------------------------------<br>
+ * C&nbsp;PowerBar&nbsp;&nbsp;|&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;&nbsp;40&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;18.75&nbsp;23.05&nbsp;&nbsp;8.75&nbsp;&nbsp;15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;25&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;15.48&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;40&nbsp;<br>
+ * P&nbsp;Benzol&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.04&nbsp;&nbsp;6.75&nbsp;&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.25&nbsp;&nbsp;&nbsp;0.82&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;8&nbsp;<br>
+ * U&nbsp;Mercedes&nbsp;&nbsp;|&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;&nbsp;19&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;15.25&nbsp;15.85&nbsp;11.5&nbsp;&nbsp;&nbsp;15.5&nbsp;&nbsp;&nbsp;19.25&nbsp;&nbsp;&nbsp;4.99&nbsp;&nbsp;10&nbsp;&nbsp;20&nbsp;<br>
+ * &nbsp;&nbsp;Sparcling&nbsp;|&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;3.75&nbsp;&nbsp;4.21&nbsp;&nbsp;2.5&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.25&nbsp;&nbsp;&nbsp;2.22&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;6&nbsp;<br>
+ * ---------------------------------------------------------------------------------------<br>
+ * &nbsp;&nbsp;Mean&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;6.75&nbsp;&nbsp;7.25&nbsp;12.75&nbsp;18&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;RMS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;7.53&nbsp;&nbsp;8.14&nbsp;14.67&nbsp;22.62&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;25%&nbsp;Q.&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;4.5&nbsp;&nbsp;&nbsp;6.25&nbsp;&nbsp;5.75&nbsp;&nbsp;6.75&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;Median&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;&nbsp;&nbsp;&nbsp;13&nbsp;&nbsp;&nbsp;&nbsp;13&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;75%&nbsp;Q.&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;8.25&nbsp;10&nbsp;&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;&nbsp;24.25&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;StdDev&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;3.86&nbsp;&nbsp;4.27&nbsp;&nbsp;8.38&nbsp;15.81&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;Min&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;Max&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;12&nbsp;&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;&nbsp;19&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ * </tt></td>
  * </tr>
  * <tr>
  * <td nowrap><tt> same as above, but now without aggregations<br>
- aggr=null; </tt></td>
+ * aggr=null; </tt></td>
  * </tr>
  * <tr>
  * <td><tt> CPU&nbsp;performance&nbsp;over&nbsp;time&nbsp;[nops/sec]<br>
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Year<br>
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;1996&nbsp;1997&nbsp;1998&nbsp;1999<br>
- ---------------------------------<br>
- C&nbsp;PowerBar&nbsp;&nbsp;|&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;40&nbsp;&nbsp;<br>
- P&nbsp;Benzol&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;&nbsp;<br>
- U&nbsp;Mercedes&nbsp;&nbsp;|&nbsp;12&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;19&nbsp;&nbsp;<br>
- &nbsp;&nbsp;Sparcling&nbsp;|&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp; 
- </tt></td>
+ * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Year<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;1996&nbsp;1997&nbsp;1998&nbsp;1999<br>
+ * ---------------------------------<br>
+ * C&nbsp;PowerBar&nbsp;&nbsp;|&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;40&nbsp;&nbsp;<br>
+ * P&nbsp;Benzol&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;&nbsp;<br>
+ * U&nbsp;Mercedes&nbsp;&nbsp;|&nbsp;12&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;19&nbsp;&nbsp;<br>
+ * &nbsp;&nbsp;Sparcling&nbsp;|&nbsp;&nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;
+ * </tt></td>
  * </tr>
  * <tr>
  * <td nowrap>
  * <p>
  * <tt> same as above, but now without rows labeled<br>
- aggr=null;<br>
- rowNames=null;<br>
- rowAxisName=null; </tt>
+ * aggr=null;<br>
+ * rowNames=null;<br>
+ * rowAxisName=null; </tt>
  * </p>
  * </td>
  * </tr>
  * <tr>
  * <td><tt>
- CPU&nbsp;performance&nbsp;over&nbsp;time&nbsp;[nops/sec]<br>
- Year<br>
- 1996&nbsp;1997&nbsp;1998&nbsp;1999<br>
- -------------------<br>
- &nbsp;5&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;40&nbsp;&nbsp;<br>
- &nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;&nbsp;<br>
- 12&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;19&nbsp;&nbsp;<br>
- &nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;
- </tt></td>
+ * CPU&nbsp;performance&nbsp;over&nbsp;time&nbsp;[nops/sec]<br>
+ * Year<br>
+ * 1996&nbsp;1997&nbsp;1998&nbsp;1999<br>
+ * -------------------<br>
+ * &nbsp;5&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;40&nbsp;&nbsp;<br>
+ * &nbsp;7&nbsp;&nbsp;&nbsp;&nbsp;8&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;&nbsp;7&nbsp;&nbsp;<br>
+ * 12&nbsp;&nbsp;&nbsp;10&nbsp;&nbsp;&nbsp;20&nbsp;&nbsp;&nbsp;19&nbsp;&nbsp;<br>
+ * &nbsp;3&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;5&nbsp;&nbsp;&nbsp;&nbsp;6&nbsp;&nbsp;
+ * </tt></td>
  * </tr>
  * </table>
- * 
+ *
  * <p>
  * A column can be broader than specified by the parameter
  * <tt>minColumnWidth</tt> (because a cell may not fit into that width) but a
@@ -262,11 +262,11 @@ import java.io.Serial;
  * easier to see which column of matrix A corresponds to which column of matrix
  * B.
  * </p>
- * 
+ *
  * <p>
  * <b>Implementation:</b>
  * </p>
- * 
+ *
  * <p>
  * Note that this class is by no means ment to be used for high performance I/O
  * (serialization is much quicker). It is ment to produce well human readable
@@ -285,7 +285,7 @@ import java.io.Serial;
  * padded with leading and trailing blanks, as necessary to achieve decimal
  * point aligned, left justified formatting.
  * </p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.2, 11/30/99
  */
@@ -303,9 +303,8 @@ public class DoubleFormatter extends AbstractFormatter {
 
     /**
      * Constructs and returns a matrix formatter.
-     * 
-     * @param format
-     *            the given format used to convert a single cell value.
+     *
+     * @param format the given format used to convert a single cell value.
      */
     public DoubleFormatter(String format) {
         setFormat(format);
@@ -317,9 +316,9 @@ public class DoubleFormatter extends AbstractFormatter {
      */
     public static void demo1() {
         // parameters
-        double[][] values = { { 3, 0, -3.4, 0 }, { 5.1, 0, +3.0123456789, 0 }, { 16.37, 0.0, 2.5, 0 },
-                { -16.3, 0, -3.012345678E-4, -1 }, { 1236.3456789, 0, 7, -1.2 } };
-        String[] formats = { "%G", "%1.10G", "%f", "%1.2f", "%0.2e", null };
+        double[][] values = {{3, 0, -3.4, 0}, {5.1, 0, +3.0123456789, 0}, {16.37, 0.0, 2.5, 0},
+            {-16.3, 0, -3.012345678E-4, -1}, {1236.3456789, 0, 7, -1.2}};
+        String[] formats = {"%G", "%1.10G", "%f", "%1.2f", "%0.2e", null};
 
         // now the processing
         int size = formats.length;
@@ -348,17 +347,17 @@ public class DoubleFormatter extends AbstractFormatter {
     public static void demo2() {
         // parameters
         double[] values = {
-                // 5, 0.0, -0.0, -Double.NaN, Double.NaN, 0.0/0.0,
-                // Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
-                // Double.MIN_VALUE,
-                // Double.MAX_VALUE
-                5, 0.0, -0.0, -Double.NaN, Double.NaN, 0.0 / 0.0, Double.MIN_VALUE, Double.MAX_VALUE,
-                Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY
-        // Double.MIN_VALUE, Double.MAX_VALUE //, Double.NEGATIVE_INFINITY,
-        // Double.POSITIVE_INFINITY
+            // 5, 0.0, -0.0, -Double.NaN, Double.NaN, 0.0/0.0,
+            // Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
+            // Double.MIN_VALUE,
+            // Double.MAX_VALUE
+            5, 0.0, -0.0, -Double.NaN, Double.NaN, 0.0 / 0.0, Double.MIN_VALUE, Double.MAX_VALUE,
+            Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY
+            // Double.MIN_VALUE, Double.MAX_VALUE //, Double.NEGATIVE_INFINITY,
+            // Double.POSITIVE_INFINITY
         };
         // String[] formats = {"%G", "%1.10G", "%f", "%1.2f", "%0.2e"};
-        String[] formats = { "%G", "%1.19G" };
+        String[] formats = {"%G", "%1.19G"};
 
         // now the processing
         int size = formats.length;
@@ -371,7 +370,7 @@ public class DoubleFormatter extends AbstractFormatter {
             String format = formats[i];
             strings[i] = new DoubleFormatter(format).toString(matrix);
             for (int j = 0; j < matrix.size(); j++) {
-                System.out.println(String.valueOf(matrix.get(j)));
+                System.out.println(matrix.get(j));
             }
         }
 
@@ -394,8 +393,8 @@ public class DoubleFormatter extends AbstractFormatter {
 
         timer.reset().start();
         buf = new StringBuffer();
-        for (int i = size; --i >= 0;) {
-            for (int j = size; --j >= 0;) {
+        for (int i = size; --i >= 0; ) {
+            for (int j = size; --j >= 0; ) {
                 buf.append(matrix.getQuick(i, j));
             }
         }
@@ -405,8 +404,8 @@ public class DoubleFormatter extends AbstractFormatter {
         timer.reset().start();
         cern.mateba.matrix.Former format = new cern.mateba.matrix.FormerFactory().create("%G");
         buf = new StringBuffer();
-        for (int i = size; --i >= 0;) {
-            for (int j = size; --j >= 0;) {
+        for (int i = size; --i >= 0; ) {
+            for (int j = size; --j >= 0; ) {
                 buf.append(format.form(matrix.getQuick(i, j)));
             }
         }
@@ -431,22 +430,22 @@ public class DoubleFormatter extends AbstractFormatter {
      */
     public static void demo4() {
         // parameters
-        double[][] values = { { 3, 0, -3.4, 0 }, { 5.1, 0, +3.0123456789, 0 }, { 16.37, 0.0, 2.5, 0 },
-                { -16.3, 0, -3.012345678E-4, -1 }, { 1236.3456789, 0, 7, -1.2 } };
+        double[][] values = {{3, 0, -3.4, 0}, {5.1, 0, +3.0123456789, 0}, {16.37, 0.0, 2.5, 0},
+            {-16.3, 0, -3.012345678E-4, -1}, {1236.3456789, 0, 7, -1.2}};
         /*
          * double[][] values = { {3, 1, }, {5.1 ,16.37, } };
          */
         // String[] columnNames = { "he", "", "he", "four" };
         // String[] rowNames = { "hello", "du", null, "abcdef", "five" };
-        String[] columnNames = { "0.1", "0.3", "0.5", "0.7" };
-        String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2" };
+        String[] columnNames = {"0.1", "0.3", "0.5", "0.7"};
+        String[] rowNames = {"SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2"};
         // String[] columnNames = { "0.1", "0.3" };
         // String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8"};
 
         DoubleMatrix2D matrix = cern.mateba.matrix.tdouble.DoubleFactory2D.dense.make(values);
         System.out.println("\n\n"
-                + new DoubleFormatter("%G").toTitleString(matrix, rowNames, columnNames, "rowAxis", "colAxis",
-                        "VM Performance: Provider vs. matrix density"));
+            + new DoubleFormatter("%G").toTitleString(matrix, rowNames, columnNames, "rowAxis", "colAxis",
+            "VM Performance: Provider vs. matrix density"));
     }
 
     /**
@@ -454,21 +453,21 @@ public class DoubleFormatter extends AbstractFormatter {
      */
     public static void demo5() {
         // parameters
-        double[][] values = { { 3, 0, -3.4, 0 }, { 5.1, 0, +3.0123456789, 0 }, { 16.37, 0.0, 2.5, 0 },
-                { -16.3, 0, -3.012345678E-4, -1 }, { 1236.3456789, 0, 7, -1.2 } };
+        double[][] values = {{3, 0, -3.4, 0}, {5.1, 0, +3.0123456789, 0}, {16.37, 0.0, 2.5, 0},
+            {-16.3, 0, -3.012345678E-4, -1}, {1236.3456789, 0, 7, -1.2}};
         /*
          * double[][] values = { {3, 1, }, {5.1 ,16.37, } };
          */
         // String[] columnNames = { "he", "", "he", "four" };
         // String[] rowNames = { "hello", "du", null, "abcdef", "five" };
-        String[] columnNames = { "0.1", "0.3", "0.5", "0.7" };
-        String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2" };
+        String[] columnNames = {"0.1", "0.3", "0.5", "0.7"};
+        String[] rowNames = {"SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2"};
         // String[] columnNames = { "0.1", "0.3" };
         // String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8"};
 
         System.out.println(cern.mateba.matrix.tdouble.DoubleFactory2D.dense.make(values));
         System.out.println(new DoubleFormatter("%G").toTitleString(cern.mateba.matrix.tdouble.DoubleFactory2D.dense
-                .make(values), rowNames, columnNames, "vendor", "density", "title"));
+            .make(values), rowNames, columnNames, "vendor", "density", "title"));
     }
 
     /**
@@ -476,16 +475,16 @@ public class DoubleFormatter extends AbstractFormatter {
      */
     public static void demo6() {
         // parameters
-        double[][] values = { { 3, 0, -3.4, 0 }, { 5.1, 0, +3.0123456789, 0 }, { 16.37, 0.0, 2.5, 0 },
-                { -16.3, 0, -3.012345678E-4, -1 }, { 1236.3456789, 0, 7, -1.2 } };
+        double[][] values = {{3, 0, -3.4, 0}, {5.1, 0, +3.0123456789, 0}, {16.37, 0.0, 2.5, 0},
+            {-16.3, 0, -3.012345678E-4, -1}, {1236.3456789, 0, 7, -1.2}};
         /*
          * double[][] values = { {3, 1, }, {5.1 ,16.37, } };
          */
         // String[] columnNames = { "he", "", "he", "four" };
         // String[] rowNames = { "hello", "du", null, "abcdef", "five" };
         // String[] columnNames = { "0.1", "0.3", "0.5", "0.7" };
-        String[] columnNames = { "W", "X", "Y", "Z" };
-        String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2" };
+        String[] columnNames = {"W", "X", "Y", "Z"};
+        String[] rowNames = {"SunJDK1.2.2 classic", "IBMJDK1.1.8", "SunJDK1.3 Hotspot", "other1", "other2"};
         // String[] columnNames = { "0.1", "0.3" };
         // String[] rowNames = { "SunJDK1.2.2 classic", "IBMJDK1.1.8"};
 
@@ -494,25 +493,25 @@ public class DoubleFormatter extends AbstractFormatter {
         // Formatter().toSourceCode(cern.mateba.matrix.DoubleFactory2D.dense.make(values)));
         System.out.println(new DoubleFormatter().toString(cern.mateba.matrix.tdouble.DoubleFactory2D.dense.make(values)));
         System.out.println(new DoubleFormatter().toTitleString(cern.mateba.matrix.tdouble.DoubleFactory2D.dense
-                .make(values), rowNames, columnNames, "vendor", "density", "title"));
+            .make(values), rowNames, columnNames, "vendor", "density", "title"));
     }
 
     /**
      * Demonstrates how to use this class.
      */
     public static void demo7() {
-        double[][] values = { { 5, 10, 20, 40 }, { 7, 8, 6, 7 }, { 12, 10, 20, 19 }, { 3, 1, 5, 6 } };
-        String[] columnNames = { "1996", "1997", "1998", "1999" };
-        String[] rowNames = { "PowerBar", "Benzol", "Mercedes", "Sparcling" };
+        double[][] values = {{5, 10, 20, 40}, {7, 8, 6, 7}, {12, 10, 20, 19}, {3, 1, 5, 6}};
+        String[] columnNames = {"1996", "1997", "1998", "1999"};
+        String[] rowNames = {"PowerBar", "Benzol", "Mercedes", "Sparcling"};
         String rowAxisName = "CPU";
         String columnAxisName = "Year";
         String title = "CPU performance over time [nops/sec]";
         BinFunction1D[] aggr = {BinFunctions1D.mean, BinFunctions1D.rms, BinFunctions1D.quantile(0.25),
-                                BinFunctions1D.median, BinFunctions1D.quantile(0.75), BinFunctions1D.stdDev,
-                                BinFunctions1D.min, BinFunctions1D.max};
+            BinFunctions1D.median, BinFunctions1D.quantile(0.75), BinFunctions1D.stdDev,
+            BinFunctions1D.min, BinFunctions1D.max};
         String format = "%1.2G";
         System.out.println(new DoubleFormatter(format).toTitleString(cern.mateba.matrix.tdouble.DoubleFactory2D.dense
-                .make(values), rowNames, columnNames, rowAxisName, columnAxisName, title, aggr));
+            .make(values), rowNames, columnNames, rowAxisName, columnAxisName, title, aggr));
     }
 
     /**
@@ -534,7 +533,7 @@ public class DoubleFormatter extends AbstractFormatter {
      */
     public String[][] format(DoubleMatrix2D matrix) {
         String[][] strings = new String[matrix.rows()][matrix.columns()];
-        for (int row = matrix.rows(); --row >= 0;)
+        for (int row = matrix.rows(); --row >= 0; )
             strings[row] = formatRow(matrix.viewRow(row));
         return strings;
     }
@@ -572,9 +571,8 @@ public class DoubleFormatter extends AbstractFormatter {
     /**
      * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal
      * Java statement.
-     * 
-     * @param matrix
-     *            the matrix to format.
+     *
+     * @param matrix the matrix to format.
      */
     public String toSourceCode(DoubleMatrix1D matrix) {
         DoubleFormatter copy = (DoubleFormatter) this.clone();
@@ -588,9 +586,8 @@ public class DoubleFormatter extends AbstractFormatter {
     /**
      * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal
      * Java statement.
-     * 
-     * @param matrix
-     *            the matrix to format.
+     *
+     * @param matrix the matrix to format.
      */
     public String toSourceCode(DoubleMatrix2D matrix) {
         DoubleFormatter copy = (DoubleFormatter) this.clone();
@@ -606,9 +603,8 @@ public class DoubleFormatter extends AbstractFormatter {
     /**
      * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal
      * Java statement.
-     * 
-     * @param matrix
-     *            the matrix to format.
+     *
+     * @param matrix the matrix to format.
      */
     public String toSourceCode(DoubleMatrix3D matrix) {
         DoubleFormatter copy = (DoubleFormatter) this.clone();
@@ -625,9 +621,8 @@ public class DoubleFormatter extends AbstractFormatter {
 
     /**
      * Returns a string representation of the given matrix.
-     * 
-     * @param matrix
-     *            the matrix to convert.
+     *
+     * @param matrix the matrix to convert.
      */
     public String toString(DoubleMatrix1D matrix) {
         DoubleMatrix2D easy = matrix.like2D(1, (int) matrix.size());
@@ -637,9 +632,8 @@ public class DoubleFormatter extends AbstractFormatter {
 
     /**
      * Returns a string representation of the given matrix.
-     * 
-     * @param matrix
-     *            the matrix to convert.
+     *
+     * @param matrix the matrix to convert.
      */
     public String toString(DoubleMatrix2D matrix) {
         return super.toString(matrix);
@@ -647,9 +641,8 @@ public class DoubleFormatter extends AbstractFormatter {
 
     /**
      * Returns a string representation of the given matrix.
-     * 
-     * @param matrix
-     *            the matrix to convert.
+     *
+     * @param matrix the matrix to convert.
      */
     public String toString(DoubleMatrix3D matrix) {
         StringBuffer buf = new StringBuffer();
@@ -668,9 +661,8 @@ public class DoubleFormatter extends AbstractFormatter {
 
     /**
      * Returns a string representation of the given matrix.
-     * 
-     * @param matrix
-     *            the matrix to convert.
+     *
+     * @param matrix the matrix to convert.
      */
     protected String toString(AbstractMatrix2D matrix) {
         return this.toString((DoubleMatrix2D) matrix);
@@ -681,23 +673,17 @@ public class DoubleFormatter extends AbstractFormatter {
      * rows and columns labeled. Pass <tt>null</tt> to one or more parameters to
      * indicate that the corresponding decoration element shall not appear in
      * the string converted matrix.
-     * 
-     * @param matrix
-     *            The matrix to format.
-     * @param rowNames
-     *            The headers of all rows (to be put to the left of the matrix).
-     * @param columnNames
-     *            The headers of all columns (to be put to above the matrix).
-     * @param rowAxisName
-     *            The label of the y-axis.
-     * @param columnAxisName
-     *            The label of the x-axis.
-     * @param title
-     *            The overall title of the matrix to be formatted.
+     *
+     * @param matrix         The matrix to format.
+     * @param rowNames       The headers of all rows (to be put to the left of the matrix).
+     * @param columnNames    The headers of all columns (to be put to above the matrix).
+     * @param rowAxisName    The label of the y-axis.
+     * @param columnAxisName The label of the x-axis.
+     * @param title          The overall title of the matrix to be formatted.
      * @return the matrix converted to a string.
      */
     protected String toTitleString(DoubleMatrix2D matrix, String[] rowNames, String[] columnNames, String rowAxisName,
-            String columnAxisName, String title) {
+                                   String columnAxisName, String title) {
         if (matrix.size() == 0)
             return "Empty matrix";
         String[][] s = format(matrix);
@@ -706,8 +692,8 @@ public class DoubleFormatter extends AbstractFormatter {
         align(s);
         // this.alignment = oldAlignment;
         return new cern.mateba.matrix.tobject.algo.ObjectFormatter().toTitleString(
-                cern.mateba.matrix.tobject.ObjectFactory2D.dense.make(s), rowNames, columnNames, rowAxisName,
-                columnAxisName, title);
+            cern.mateba.matrix.tobject.ObjectFactory2D.dense.make(s), rowNames, columnNames, rowAxisName,
+            columnAxisName, title);
     }
 
     /**
@@ -716,27 +702,20 @@ public class DoubleFormatter extends AbstractFormatter {
      * Pass <tt>null</tt> to one or more parameters to indicate that the
      * corresponding decoration element shall not appear in the string converted
      * matrix.
-     * 
-     * @param matrix
-     *            The matrix to format.
-     * @param rowNames
-     *            The headers of all rows (to be put to the left of the matrix).
-     * @param columnNames
-     *            The headers of all columns (to be put to above the matrix).
-     * @param rowAxisName
-     *            The label of the y-axis.
-     * @param columnAxisName
-     *            The label of the x-axis.
-     * @param title
-     *            The overall title of the matrix to be formatted.
-     * @param aggr
-     *            the aggregation functions to be applied to columns and rows.
+     *
+     * @param matrix         The matrix to format.
+     * @param rowNames       The headers of all rows (to be put to the left of the matrix).
+     * @param columnNames    The headers of all columns (to be put to above the matrix).
+     * @param rowAxisName    The label of the y-axis.
+     * @param columnAxisName The label of the x-axis.
+     * @param title          The overall title of the matrix to be formatted.
+     * @param aggr           the aggregation functions to be applied to columns and rows.
      * @return the matrix converted to a string.
      * @see hep.aida.bin.BinFunction1D
      * @see hep.aida.bin.BinFunctions1D
      */
     public String toTitleString(DoubleMatrix2D matrix, String[] rowNames, String[] columnNames, String rowAxisName,
-            String columnAxisName, String title, BinFunction1D[] aggr) {
+                                String columnAxisName, String title, BinFunction1D[] aggr) {
         if (matrix.size() == 0)
             return "Empty matrix";
         if (aggr == null || aggr.length == 0)
@@ -780,8 +759,8 @@ public class DoubleFormatter extends AbstractFormatter {
         // copy strings into a large matrix holding the source matrix and all
         // aggregations
         cern.mateba.matrix.tobject.ObjectMatrix2D allStats = cern.mateba.matrix.tobject.ObjectFactory2D.dense.make(matrix
-                .rows()
-                + aggr.length, matrix.columns() + aggr.length + 1);
+            .rows()
+            + aggr.length, matrix.columns() + aggr.length + 1);
         allStats.viewPart(0, 0, matrix.rows() + aggr.length, matrix.columns()).assign(s1);
         allStats.viewColumn(matrix.columns()).assign("|");
         allStats.viewPart(0, matrix.columns() + 1, matrix.rows(), aggr.length).assign(s2);
@@ -812,7 +791,7 @@ public class DoubleFormatter extends AbstractFormatter {
 
         // turn large matrix into string
         String s = new cern.mateba.matrix.tobject.algo.ObjectFormatter().toTitleString(allStats, rowNames, columnNames,
-                rowAxisName, columnAxisName, title);
+            rowAxisName, columnAxisName, title);
 
         // insert a horizontal "----------------------" separation line above
         // the column stats
@@ -837,32 +816,23 @@ public class DoubleFormatter extends AbstractFormatter {
      * rows and columns labeled. Pass <tt>null</tt> to one or more parameters to
      * indicate that the corresponding decoration element shall not appear in
      * the string converted matrix.
-     * 
-     * @param matrix
-     *            The matrix to format.
-     * @param sliceNames
-     *            The headers of all slices (to be put above each slice).
-     * @param rowNames
-     *            The headers of all rows (to be put to the left of the matrix).
-     * @param columnNames
-     *            The headers of all columns (to be put to above the matrix).
-     * @param sliceAxisName
-     *            The label of the z-axis (to be put above each slice).
-     * @param rowAxisName
-     *            The label of the y-axis.
-     * @param columnAxisName
-     *            The label of the x-axis.
-     * @param title
-     *            The overall title of the matrix to be formatted.
-     * @param aggr
-     *            the aggregation functions to be applied to columns, rows.
+     *
+     * @param matrix         The matrix to format.
+     * @param sliceNames     The headers of all slices (to be put above each slice).
+     * @param rowNames       The headers of all rows (to be put to the left of the matrix).
+     * @param columnNames    The headers of all columns (to be put to above the matrix).
+     * @param sliceAxisName  The label of the z-axis (to be put above each slice).
+     * @param rowAxisName    The label of the y-axis.
+     * @param columnAxisName The label of the x-axis.
+     * @param title          The overall title of the matrix to be formatted.
+     * @param aggr           the aggregation functions to be applied to columns, rows.
      * @return the matrix converted to a string.
      * @see hep.aida.bin.BinFunction1D
      * @see hep.aida.bin.BinFunctions1D
      */
     public String toTitleString(DoubleMatrix3D matrix, String[] sliceNames, String[] rowNames, String[] columnNames,
-            String sliceAxisName, String rowAxisName, String columnAxisName, String title,
-            BinFunction1D[] aggr) {
+                                String sliceAxisName, String rowAxisName, String columnAxisName, String title,
+                                BinFunction1D[] aggr) {
         if (matrix.size() == 0)
             return "Empty matrix";
         StringBuffer buf = new StringBuffer();
@@ -870,7 +840,7 @@ public class DoubleFormatter extends AbstractFormatter {
             if (i != 0)
                 buf.append(sliceSeparator);
             buf.append(toTitleString(matrix.viewSlice(i), rowNames, columnNames, rowAxisName, columnAxisName, title
-                    + "\n" + sliceAxisName + "=" + sliceNames[i], aggr));
+                + "\n" + sliceAxisName + "=" + sliceNames[i], aggr));
         }
         return buf.toString();
     }
@@ -880,27 +850,19 @@ public class DoubleFormatter extends AbstractFormatter {
      * rows and columns labeled. Pass <tt>null</tt> to one or more parameters to
      * indicate that the corresponding decoration element shall not appear in
      * the string converted matrix.
-     * 
-     * @param matrix
-     *            The matrix to format.
-     * @param sliceNames
-     *            The headers of all slices (to be put above each slice).
-     * @param rowNames
-     *            The headers of all rows (to be put to the left of the matrix).
-     * @param columnNames
-     *            The headers of all columns (to be put to above the matrix).
-     * @param sliceAxisName
-     *            The label of the z-axis (to be put above each slice).
-     * @param rowAxisName
-     *            The label of the y-axis.
-     * @param columnAxisName
-     *            The label of the x-axis.
-     * @param title
-     *            The overall title of the matrix to be formatted.
+     *
+     * @param matrix         The matrix to format.
+     * @param sliceNames     The headers of all slices (to be put above each slice).
+     * @param rowNames       The headers of all rows (to be put to the left of the matrix).
+     * @param columnNames    The headers of all columns (to be put to above the matrix).
+     * @param sliceAxisName  The label of the z-axis (to be put above each slice).
+     * @param rowAxisName    The label of the y-axis.
+     * @param columnAxisName The label of the x-axis.
+     * @param title          The overall title of the matrix to be formatted.
      * @return the matrix converted to a string.
      */
     private String xtoTitleString(DoubleMatrix3D matrix, String[] sliceNames, String[] rowNames, String[] columnNames,
-            String sliceAxisName, String rowAxisName, String columnAxisName, String title) {
+                                  String sliceAxisName, String rowAxisName, String columnAxisName, String title) {
         if (matrix.size() == 0)
             return "Empty matrix";
         StringBuffer buf = new StringBuffer();
@@ -908,7 +870,7 @@ public class DoubleFormatter extends AbstractFormatter {
             if (i != 0)
                 buf.append(sliceSeparator);
             buf.append(toTitleString(matrix.viewSlice(i), rowNames, columnNames, rowAxisName, columnAxisName, title
-                    + "\n" + sliceAxisName + "=" + sliceNames[i]));
+                + "\n" + sliceAxisName + "=" + sliceNames[i]));
         }
         return buf.toString();
     }

@@ -8,6 +8,7 @@ package cern.mateba.function.tint;
  CERN makes no representations about the suitability of this software for any purpose. 
  It is provided "as is" without expressed or implied warranty.
  */
+
 /**
  * Interface that represents a function object: a function that takes a single
  * argument and returns a single value.
@@ -15,10 +16,9 @@ package cern.mateba.function.tint;
 public interface IntFunction {
     /**
      * Applies a function to an argument.
-     * 
-     * @param argument
-     *            argument passed to the function.
+     *
+     * @param argument argument passed to the function.
      * @return the result of the function.
      */
-    abstract public int apply(int argument);
+    int apply(int argument);
 }

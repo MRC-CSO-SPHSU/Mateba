@@ -39,12 +39,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * <tt>O(1)</tt> (i.e. constant time) for the basic operations <tt>get</tt>,
  * <tt>getQuick</tt>, <tt>set</tt>, <tt>setQuick</tt> and <tt>size</tt>,
  * <p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
+ * @version 1.0, 09/24/99
  */
 public class DenseLongMatrix1D extends LongMatrix1D {
     @Serial
@@ -59,9 +57,8 @@ public class DenseLongMatrix1D extends LongMatrix1D {
      * Constructs a matrix with a copy of the given values. The values are
      * copied. So subsequent changes in <tt>values</tt> are not reflected in the
      * matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      */
     public DenseLongMatrix1D(long[] values) {
         this(values.length);
@@ -71,11 +68,9 @@ public class DenseLongMatrix1D extends LongMatrix1D {
     /**
      * Constructs a matrix with a given number of cells. All entries are
      * initially <tt>0</tt>.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size the number of cells the matrix shall have.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public DenseLongMatrix1D(int size) {
         setUp(size);
@@ -84,20 +79,14 @@ public class DenseLongMatrix1D extends LongMatrix1D {
 
     /**
      * Constructs a matrix with the given parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @param isView
-     *            if true then a matrix view is constructed
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param zero     the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @param isView   if true then a matrix view is constructed
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public DenseLongMatrix1D(int size, long[] elements, int zero, int stride, boolean isView) {
         setUp(size, zero, stride);
@@ -106,7 +95,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
     }
 
     public long aggregate(final cern.mateba.function.tlong.LongLongFunction aggr,
-            final cern.mateba.function.tlong.LongFunction f) {
+                          final cern.mateba.function.tlong.LongFunction f) {
         if (size == 0)
             throw new IllegalArgumentException("size == 0");
         long a = 0;
@@ -187,7 +176,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
     }
 
     public long aggregate(final LongMatrix1D other, final cern.mateba.function.tlong.LongLongFunction aggr,
-            final cern.mateba.function.tlong.LongLongFunction f) {
+                          final cern.mateba.function.tlong.LongLongFunction f) {
         if (!(other instanceof DenseLongMatrix1D)) {
             return super.aggregate(other, aggr, f);
         }
@@ -280,12 +269,12 @@ public class DenseLongMatrix1D extends LongMatrix1D {
             // specialization for speed
             if (function instanceof cern.jet.math.tlong.LongMult) {
                 // x[i] = mult*x[i]
-                for (int k = size; --k >= 0;) {
+                for (int k = size; --k >= 0; ) {
                     elements[idx += stride] *= multiplicator;
                 }
             } else {
                 // the general case x[i] = f(x[i])
-                for (int k = size; --k >= 0;) {
+                for (int k = size; --k >= 0; ) {
                     elements[idx += stride] = function.apply(elements[idx]);
                 }
             }
@@ -294,7 +283,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
     }
 
     public LongMatrix1D assign(final cern.mateba.function.tlong.LongProcedure cond,
-            final cern.mateba.function.tlong.LongFunction function) {
+                               final cern.mateba.function.tlong.LongFunction function) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size >= ConcurrencyUtils.getThreadsBeginN_1D())) {
             nthreads = Math.min(nthreads, size);
@@ -308,7 +297,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
                     public void run() {
                         int idx = zero + firstIdx * stride;
                         for (int i = firstIdx; i < lastIdx; i++) {
-                            if (cond.apply(elements[idx]) == true) {
+                            if (cond.apply(elements[idx])) {
                                 elements[idx] = function.apply(elements[idx]);
                             }
                             idx += stride;
@@ -320,7 +309,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
         } else {
             int idx = zero;
             for (int i = 0; i < size; i++) {
-                if (cond.apply(elements[idx]) == true) {
+                if (cond.apply(elements[idx])) {
                     elements[idx] = function.apply(elements[idx]);
                 }
                 idx += stride;
@@ -343,7 +332,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
                     public void run() {
                         int idx = zero + firstIdx * stride;
                         for (int i = firstIdx; i < lastIdx; i++) {
-                            if (cond.apply(elements[idx]) == true) {
+                            if (cond.apply(elements[idx])) {
                                 elements[idx] = value;
                             }
                             idx += stride;
@@ -355,7 +344,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
         } else {
             int idx = zero;
             for (int i = 0; i < size; i++) {
-                if (cond.apply(elements[idx]) == true) {
+                if (cond.apply(elements[idx])) {
                     elements[idx] = value;
                 }
                 idx += stride;
@@ -398,7 +387,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
     public LongMatrix1D assign(final long[] values) {
         if (values.length != size)
             throw new IllegalArgumentException("Must have same number of cells: length=" + values.length + "size()="
-                    + size());
+                + size());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (isNoView) {
             System.arraycopy(values, 0, this.elements, 0, values.length);
@@ -441,7 +430,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
     public LongMatrix1D assign(final int[] values) {
         if (values.length != size)
             throw new IllegalArgumentException("Must have same number of cells: length=" + values.length + "size()="
-                    + size());
+                + size());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size >= ConcurrencyUtils.getThreadsBeginN_1D())) {
             nthreads = Math.min(nthreads, size);
@@ -479,11 +468,10 @@ public class DenseLongMatrix1D extends LongMatrix1D {
 
     public LongMatrix1D assign(LongMatrix1D source) {
         // overriden for performance only
-        if (!(source instanceof DenseLongMatrix1D)) {
+        if (!(source instanceof DenseLongMatrix1D other)) {
             super.assign(source);
             return this;
         }
-        DenseLongMatrix1D other = (DenseLongMatrix1D) source;
         if (other == this)
             return this;
         checkSize(other);
@@ -615,7 +603,6 @@ public class DenseLongMatrix1D extends LongMatrix1D {
                             long multiplicator = ((cern.jet.math.tlong.LongPlusMultSecond) function).multiplicator;
                             if (multiplicator == 0) {
                                 // x[i] = x[i] + 0*y[i]
-                                return;
                             } else if (multiplicator == 1) {
                                 // x[i] = x[i] + y[i]
                                 for (int k = firstIdx; k < lastIdx; k++) {
@@ -876,7 +863,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
                                 location = (idx - zero) / stride;
                             }
                         }
-                        return new long[] { maxValue, location };
+                        return new long[]{maxValue, location};
                     }
                 });
             }
@@ -909,7 +896,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
                 }
             }
         }
-        return new long[] { maxValue, location };
+        return new long[]{maxValue, location};
     }
 
     public long[] getMinLocation() {
@@ -937,7 +924,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
                                 location = (idx - zero) / stride;
                             }
                         }
-                        return new long[] { minValue, location };
+                        return new long[]{minValue, location};
                     }
                 });
             }
@@ -970,7 +957,7 @@ public class DenseLongMatrix1D extends LongMatrix1D {
                 }
             }
         }
-        return new long[] { minValue, location };
+        return new long[]{minValue, location};
     }
 
     public long getQuick(int index) {
@@ -1153,10 +1140,9 @@ public class DenseLongMatrix1D extends LongMatrix1D {
     }
 
     public long zDotProduct(LongMatrix1D y) {
-        if (!(y instanceof DenseLongMatrix1D)) {
+        if (!(y instanceof DenseLongMatrix1D yy)) {
             return super.zDotProduct(y);
         }
-        DenseLongMatrix1D yy = (DenseLongMatrix1D) y;
         final long[] elemsOther = yy.elements;
         int zeroThis = (int) index(0);
         int zeroOther = (int) yy.index(0);
@@ -1185,13 +1171,13 @@ public class DenseLongMatrix1D extends LongMatrix1D {
                         idxOther -= strideOtherF;
                         long sum = 0;
                         int min = lastIdx - firstIdx;
-                        for (int k = min / 4; --k >= 0;) {
+                        for (int k = min / 4; --k >= 0; ) {
                             sum += elements[idx += stride] * elemsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elemsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elemsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elemsOther[idxOther += strideOtherF];
+                                + elements[idx += stride] * elemsOther[idxOther += strideOtherF]
+                                + elements[idx += stride] * elemsOther[idxOther += strideOtherF]
+                                + elements[idx += stride] * elemsOther[idxOther += strideOtherF];
                         }
-                        for (int k = min % 4; --k >= 0;) {
+                        for (int k = min % 4; --k >= 0; ) {
                             sum += elements[idx += stride] * elemsOther[idxOther += strideOtherF];
                         }
                         return sum;
@@ -1214,13 +1200,13 @@ public class DenseLongMatrix1D extends LongMatrix1D {
         } else {
             zeroThis -= stride;
             zeroOther -= strideOther;
-            for (int k = size / 4; --k >= 0;) {
+            for (int k = size / 4; --k >= 0; ) {
                 sum += elements[zeroThis += stride] * elemsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther];
+                    + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther]
+                    + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther]
+                    + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther];
             }
-            for (int k = size % 4; --k >= 0;) {
+            for (int k = size % 4; --k >= 0; ) {
                 sum += elements[zeroThis += stride] * elemsOther[zeroOther += strideOther];
             }
         }
@@ -1228,10 +1214,9 @@ public class DenseLongMatrix1D extends LongMatrix1D {
     }
 
     public long zDotProduct(LongMatrix1D y, int from, int length) {
-        if (!(y instanceof DenseLongMatrix1D)) {
+        if (!(y instanceof DenseLongMatrix1D yy)) {
             return super.zDotProduct(y, from, length);
         }
-        DenseLongMatrix1D yy = (DenseLongMatrix1D) y;
 
         int tail = from + length;
         if (from < 0 || length < 0)
@@ -1267,13 +1252,13 @@ public class DenseLongMatrix1D extends LongMatrix1D {
                         idxOther -= strideOtherF;
                         long sum = 0;
                         int min = lastIdx - firstIdx;
-                        for (int k = min / 4; --k >= 0;) {
+                        for (int k = min / 4; --k >= 0; ) {
                             sum += elements[idx += stride] * elementsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elementsOther[idxOther += strideOtherF];
+                                + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
+                                + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
+                                + elements[idx += stride] * elementsOther[idxOther += strideOtherF];
                         }
-                        for (int k = min % 4; --k >= 0;) {
+                        for (int k = min % 4; --k >= 0; ) {
                             sum += elements[idx += stride] * elementsOther[idxOther += strideOtherF];
                         }
                         return sum;
@@ -1297,13 +1282,13 @@ public class DenseLongMatrix1D extends LongMatrix1D {
             zeroThis -= stride;
             zeroOther -= strideOther;
             int min = tail - from;
-            for (int k = min / 4; --k >= 0;) {
+            for (int k = min / 4; --k >= 0; ) {
                 sum += elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther];
+                    + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
+                    + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
+                    + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther];
             }
-            for (int k = min % 4; --k >= 0;) {
+            for (int k = min % 4; --k >= 0; ) {
                 sum += elements[zeroThis += stride] * elementsOther[zeroOther += strideOther];
             }
         }
@@ -1374,18 +1359,16 @@ public class DenseLongMatrix1D extends LongMatrix1D {
     }
 
     protected boolean haveSharedCellsRaw(LongMatrix1D other) {
-        if (other instanceof SelectedDenseLongMatrix1D) {
-            SelectedDenseLongMatrix1D otherMatrix = (SelectedDenseLongMatrix1D) other;
+        if (other instanceof SelectedDenseLongMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseLongMatrix1D) {
-            DenseLongMatrix1D otherMatrix = (DenseLongMatrix1D) other;
+        } else if (other instanceof DenseLongMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
     }
 
     public long index(int rank) {
-        return zero + rank * stride;
+        return zero + (long) rank * stride;
     }
 
     protected LongMatrix1D viewSelectionLike(int[] offsets) {

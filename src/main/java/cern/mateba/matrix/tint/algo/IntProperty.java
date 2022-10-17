@@ -25,7 +25,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * Tests matrices for linear algebraic properties (equality, tridiagonality,
  * symmetry, singularity, etc).
  * <p>
- * 
+ * <p>
  * Note that this implementation is not synchronized.
  * <p>
  * Here are some example properties
@@ -33,40 +33,40 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * <tr align="left" valign="top">
  * <td valign="middle" align="left"><tt>matrix</tt></td>
  * <td> <tt>4&nbsp;x&nbsp;4&nbsp;<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+ * 1&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;1&nbsp;0<br>
- 0&nbsp;1&nbsp;1&nbsp;1<br>
- 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;1&nbsp;0<br>
+ * 0&nbsp;1&nbsp;1&nbsp;1<br>
+ * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
  * <td><tt> 4&nbsp;x&nbsp;4<br>
- 0&nbsp;1&nbsp;1&nbsp;1<br>
- 0&nbsp;1&nbsp;1&nbsp;1<br>
- 0&nbsp;0&nbsp;0&nbsp;1<br>
- 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+ * 0&nbsp;1&nbsp;1&nbsp;1<br>
+ * 0&nbsp;1&nbsp;1&nbsp;1<br>
+ * 0&nbsp;0&nbsp;0&nbsp;1<br>
+ * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
  * <td><tt> 4&nbsp;x&nbsp;4<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 0&nbsp;1&nbsp;1&nbsp;0<br>
- 0&nbsp;1&nbsp;0&nbsp;1<br>
- 1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 0&nbsp;1&nbsp;1&nbsp;0<br>
+ * 0&nbsp;1&nbsp;0&nbsp;1<br>
+ * 1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;1&nbsp;1&nbsp;0<br>
- 0&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;0&nbsp;1<br>
- 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+ * 1&nbsp;1&nbsp;1&nbsp;0<br>
+ * 0&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;0&nbsp;1<br>
+ * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
  * </tr>
  * <tr align="center" valign="middle">
  * <td><tt>upperBandwidth</tt></td>
@@ -111,7 +111,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * </div></td>
  * </tr>
  * </table>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class IntProperty implements Serializable, Cloneable {
@@ -145,9 +145,8 @@ public class IntProperty implements Serializable, Cloneable {
 
     /**
      * Checks whether the given matrix <tt>A</tt> is <i>rectangular</i>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>A.rows() < A.columns()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>A.rows() < A.columns()</tt>.
      */
     public void checkRectangular(IntMatrix2D A) {
         if (A.rows() < A.columns()) {
@@ -157,9 +156,8 @@ public class IntProperty implements Serializable, Cloneable {
 
     /**
      * Checks whether the given matrix <tt>A</tt> is <i>square</i>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>A.rows() != A.columns()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>A.rows() != A.columns()</tt>.
      */
     public void checkSquare(IntMatrix2D A) {
         if (A.rows() != A.columns())
@@ -179,13 +177,11 @@ public class IntProperty implements Serializable, Cloneable {
      * given value. The result is <tt>true</tt> if and only if
      * <tt>A != null</tt> and <tt>! (Math.abs(value - A[i]) > tolerance())</tt>
      * holds for all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     *
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final IntMatrix1D A, final int value) {
         if (A == null)
@@ -240,13 +236,11 @@ public class IntProperty implements Serializable, Cloneable {
      * <tt>true</tt> if and only if both arguments are <tt>!= null</tt>, have
      * the same size and <tt>! (Math.abs(A[i] - B[i]) > tolerance())</tt> holds
      * for all indexes.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     *
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final IntMatrix1D A, final IntMatrix1D B) {
         if (A == B)
@@ -306,13 +300,11 @@ public class IntProperty implements Serializable, Cloneable {
      * <tt>A != null</tt> and
      * <tt>! (Math.abs(value - A[row,col]) > tolerance())</tt> holds for all
      * coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     *
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final IntMatrix2D A, final int value) {
         if (A == null)
@@ -373,13 +365,11 @@ public class IntProperty implements Serializable, Cloneable {
      * the same number of columns and rows and
      * <tt>! (Math.abs(A[row,col] - B[row,col]) > tolerance())</tt> holds for
      * all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     *
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final IntMatrix2D A, final IntMatrix2D B) {
         if (A == B)
@@ -443,13 +433,11 @@ public class IntProperty implements Serializable, Cloneable {
      * <tt>A != null</tt> and
      * <tt>! (Math.abs(value - A[slice,row,col]) > tolerance())</tt> holds for
      * all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     *
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final IntMatrix3D A, final int value) {
         if (A == null)
@@ -520,13 +508,11 @@ public class IntProperty implements Serializable, Cloneable {
      * the same number of columns, rows and slices, and
      * <tt>! (Math.abs(A[slice,row,col] - B[slice,row,col]) > tolerance())</tt>
      * holds for all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     *
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final IntMatrix3D A, final IntMatrix3D B) {
         if (A == B)
@@ -598,20 +584,18 @@ public class IntProperty implements Serializable, Cloneable {
      * Modifies the given matrix square matrix <tt>A</tt> such that it is
      * diagonally dominant by row and column, hence non-singular, hence
      * invertible. For testing purposes only.
-     * 
-     * @param A
-     *            the square matrix to modify.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @param A the square matrix to modify.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public void generateNonSingular(IntMatrix2D A) {
         checkSquare(A);
         cern.jet.math.tint.IntFunctions F = cern.jet.math.tint.IntFunctions.intFunctions;
         int min = Math.min(A.rows(), A.columns());
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             A.setQuick(i, i, 0);
         }
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             int rowSum = A.viewRow(i).aggregate(IntFunctions.plus, IntFunctions.abs);
             int colSum = A.viewColumn(i).aggregate(IntFunctions.plus, IntFunctions.abs);
             A.setQuick(i, i, Math.max(rowSum, colSum) + i + 1);
@@ -619,6 +603,7 @@ public class IntProperty implements Serializable, Cloneable {
     }
 
     /**
+     *
      */
     protected static String get(cern.mateba.list.tobject.ObjectArrayList list, int index) {
         return ((String) list.get(index));
@@ -631,8 +616,8 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isDiagonal(IntMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (row != column && A.getQuick(row, column) != 0)
                     return false;
             }
@@ -644,7 +629,7 @@ public class IntProperty implements Serializable, Cloneable {
      * A matrix <tt>A</tt> is <i>diagonally dominant by column</i> if the
      * absolute value of each diagonal element is larger than the sum of the
      * absolute values of the off-diagonal elements in the corresponding column.
-     * 
+     *
      * <tt>returns true if for all i: abs(A[i,i]) &gt; Sum(abs(A[j,i])); j != i.</tt>
      * Matrix may but need not be square.
      * <p>
@@ -653,7 +638,7 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isDiagonallyDominantByColumn(IntMatrix2D A) {
         cern.jet.math.tint.IntFunctions F = cern.jet.math.tint.IntFunctions.intFunctions;
         int min = Math.min(A.rows(), A.columns());
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             int diag = Math.abs(A.getQuick(i, i));
             diag += diag;
             if (diag <= A.viewColumn(i).aggregate(IntFunctions.plus, IntFunctions.abs))
@@ -674,7 +659,7 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isDiagonallyDominantByRow(IntMatrix2D A) {
         cern.jet.math.tint.IntFunctions F = cern.jet.math.tint.IntFunctions.intFunctions;
         int min = Math.min(A.rows(), A.columns());
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             int diag = Math.abs(A.getQuick(i, i));
             diag += diag;
             if (diag <= A.viewRow(i).aggregate(IntFunctions.plus, IntFunctions.abs))
@@ -690,8 +675,8 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isIdentity(IntMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 int v = A.getQuick(row, column);
                 if (row == column) {
                     if (v != 1)
@@ -710,8 +695,8 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isLowerBidiagonal(IntMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(row == column || row == column + 1)) {
                     if (A.getQuick(row, column) != 0)
                         return false;
@@ -728,8 +713,8 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isLowerTriangular(IntMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = Math.min(column, rows); --row >= 0;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = Math.min(column, rows); --row >= 0; ) {
                 if (A.getQuick(row, column) != 0)
                     return false;
             }
@@ -746,8 +731,8 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isNonNegative(IntMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(A.getQuick(row, column) >= 0))
                     return false;
             }
@@ -758,9 +743,8 @@ public class IntProperty implements Serializable, Cloneable {
     /**
      * A square matrix <tt>A</tt> is <i>orthogonal</i> if
      * <tt>A*transpose(A) = I</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public boolean isOrthogonal(IntMatrix2D A) {
         checkSquare(A);
@@ -776,8 +760,8 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isPositive(IntMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(A.getQuick(row, column) > 0))
                     return false;
             }
@@ -792,19 +776,19 @@ public class IntProperty implements Serializable, Cloneable {
     //    public boolean isSingular(IntMatrix2D A) {
     //        return !(Math.abs(IntAlgebra.DEFAULT.det(A)) >= tolerance());
     //    }
+
     /**
      * A square matrix <tt>A</tt> is <i>skew-symmetric</i> if
      * <tt>A = -transpose(A)</tt>, that is <tt>A[i,j] == -A[j,i]</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public boolean isSkewSymmetric(IntMatrix2D A) {
         checkSquare(A);
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = rows; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = rows; --column >= 0; ) {
                 if (A.getQuick(row, column) != -A.getQuick(column, row))
                     return false;
             }
@@ -828,8 +812,8 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isStrictlyLowerTriangular(IntMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = Math.min(rows, column + 1); --row >= 0;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = Math.min(rows, column + 1); --row >= 0; ) {
                 if (A.getQuick(row, column) != 0)
                     return false;
             }
@@ -845,7 +829,7 @@ public class IntProperty implements Serializable, Cloneable {
         if (!isTriangular(A))
             return false;
 
-        for (int i = Math.min(A.rows(), A.columns()); --i >= 0;) {
+        for (int i = Math.min(A.rows(), A.columns()); --i >= 0; ) {
             if (A.getQuick(i, i) != 0)
                 return false;
         }
@@ -860,8 +844,8 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isStrictlyUpperTriangular(IntMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = rows; --row >= column;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = rows; --row >= column; ) {
                 if (A.getQuick(row, column) != 0)
                     return false;
             }
@@ -872,9 +856,8 @@ public class IntProperty implements Serializable, Cloneable {
     /**
      * A matrix <tt>A</tt> is <i>symmetric</i> if <tt>A = tranpose(A)</tt>, that
      * is <tt>A[i,j] == A[j,i]</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public boolean isSymmetric(IntMatrix2D A) {
         checkSquare(A);
@@ -896,8 +879,8 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isTridiagonal(IntMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (Math.abs(row - column) > 1) {
                     if (A.getQuick(row, column) != 0)
                         return false;
@@ -915,7 +898,7 @@ public class IntProperty implements Serializable, Cloneable {
         if (!isTriangular(A))
             return false;
 
-        for (int i = Math.min(A.rows(), A.columns()); --i >= 0;) {
+        for (int i = Math.min(A.rows(), A.columns()); --i >= 0; ) {
             if (A.getQuick(i, i) != 1)
                 return false;
         }
@@ -929,8 +912,8 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isUpperBidiagonal(IntMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(row == column || row == column - 1)) {
                     if (A.getQuick(row, column) != 0)
                         return false;
@@ -947,8 +930,8 @@ public class IntProperty implements Serializable, Cloneable {
     public boolean isUpperTriangular(IntMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = rows; --row > column;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = rows; --row > column; ) {
                 if (A.getQuick(row, column) != 0)
                     return false;
             }
@@ -968,12 +951,10 @@ public class IntProperty implements Serializable, Cloneable {
      * <tt>i-j</tt> for which <tt>A[i,j]</tt> is nonzero and <tt>i &gt; j</tt>.
      * A <i>banded</i> matrix has a "band" about the diagonal. Diagonal,
      * tridiagonal and triangular matrices are special cases.
-     * 
-     * @param A
-     *            the square matrix to analyze.
+     *
+     * @param A the square matrix to analyze.
      * @return the lower bandwith.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      * @see #semiBandwidth(IntMatrix2D)
      * @see #upperBandwidth(IntMatrix2D)
      */
@@ -981,8 +962,8 @@ public class IntProperty implements Serializable, Cloneable {
         checkSquare(A);
         int rows = A.rows();
 
-        for (int k = rows; --k >= 0;) {
-            for (int i = rows - k; --i >= 0;) {
+        for (int k = rows; --k >= 0; ) {
+            for (int i = rows - k; --i >= 0; ) {
                 int j = i + k;
                 if (A.getQuick(j, i) != 0)
                     return k;
@@ -1013,40 +994,40 @@ public class IntProperty implements Serializable, Cloneable {
      * <tr align="left" valign="top">
      * <td valign="middle" align="left"><tt>matrix</tt></td>
      * <td> <tt>4&nbsp;x&nbsp;4&nbsp;<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+     * 1&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;1&nbsp;0<br>
-     0&nbsp;1&nbsp;1&nbsp;1<br>
-     0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;1&nbsp;0<br>
+     * 0&nbsp;1&nbsp;1&nbsp;1<br>
+     * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
      * <td><tt> 4&nbsp;x&nbsp;4<br>
-     0&nbsp;1&nbsp;1&nbsp;1<br>
-     0&nbsp;1&nbsp;1&nbsp;1<br>
-     0&nbsp;0&nbsp;0&nbsp;1<br>
-     0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+     * 0&nbsp;1&nbsp;1&nbsp;1<br>
+     * 0&nbsp;1&nbsp;1&nbsp;1<br>
+     * 0&nbsp;0&nbsp;0&nbsp;1<br>
+     * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
      * <td><tt> 4&nbsp;x&nbsp;4<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     0&nbsp;1&nbsp;1&nbsp;0<br>
-     0&nbsp;1&nbsp;0&nbsp;1<br>
-     1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 0&nbsp;1&nbsp;1&nbsp;0<br>
+     * 0&nbsp;1&nbsp;0&nbsp;1<br>
+     * 1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;1&nbsp;1&nbsp;0<br>
-     0&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;0&nbsp;1<br>
-     0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+     * 1&nbsp;1&nbsp;1&nbsp;0<br>
+     * 0&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;0&nbsp;1<br>
+     * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
      * </tr>
      * <tr align="center" valign="middle">
      * <td><tt>upperBandwidth</tt></td>
@@ -1091,12 +1072,10 @@ public class IntProperty implements Serializable, Cloneable {
      * <tt>unstructured</tt></div></td>
      * </tr>
      * </table>
-     * 
-     * @param A
-     *            the square matrix to analyze.
+     *
+     * @param A the square matrix to analyze.
      * @return the semi-bandwith <tt>l</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      * @see #lowerBandwidth(IntMatrix2D)
      * @see #upperBandwidth(IntMatrix2D)
      */
@@ -1104,8 +1083,8 @@ public class IntProperty implements Serializable, Cloneable {
         checkSquare(A);
         int rows = A.rows();
 
-        for (int k = rows; --k >= 0;) {
-            for (int i = rows - k; --i >= 0;) {
+        for (int k = rows; --k >= 0; ) {
+            for (int i = rows - k; --i >= 0; ) {
                 int j = i + k;
                 if (A.getQuick(j, i) != 0)
                     return k + 1;
@@ -1120,7 +1099,7 @@ public class IntProperty implements Serializable, Cloneable {
      * Returns summary information about the given matrix <tt>A</tt>. That is a
      * String with (propertyName, propertyValue) pairs. Useful for debugging or
      * to quickly get the rough picture of a matrix. For example,
-     * 
+     *
      * <pre>
      *   density                      : 0.9
      *   isDiagonal                   : false
@@ -1148,7 +1127,7 @@ public class IntProperty implements Serializable, Cloneable {
      *   lowerBandwidth               : Illegal operation or error: Matrix must be square.
      *   semiBandwidth                : Illegal operation or error: Matrix must be square.
      *   upperBandwidth               : Illegal operation or error: Matrix must be square.
-     * 
+     *
      * </pre>
      */
     public String toString(IntMatrix2D A) {
@@ -1388,12 +1367,10 @@ public class IntProperty implements Serializable, Cloneable {
      * <tt>j-i</tt> for which <tt>A[i,j]</tt> is nonzero and <tt>j &gt; i</tt>.
      * A <i>banded</i> matrix has a "band" about the diagonal. Diagonal,
      * tridiagonal and triangular matrices are special cases.
-     * 
-     * @param A
-     *            the square matrix to analyze.
+     *
+     * @param A the square matrix to analyze.
      * @return the upper bandwith.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      * @see #semiBandwidth(IntMatrix2D)
      * @see #lowerBandwidth(IntMatrix2D)
      */
@@ -1401,8 +1378,8 @@ public class IntProperty implements Serializable, Cloneable {
         checkSquare(A);
         int rows = A.rows();
 
-        for (int k = rows; --k >= 0;) {
-            for (int i = rows - k; --i >= 0;) {
+        for (int k = rows; --k >= 0; ) {
+            for (int i = rows - k; --i >= 0; ) {
                 int j = i + k;
                 if (A.getQuick(i, j) != 0)
                     return k;

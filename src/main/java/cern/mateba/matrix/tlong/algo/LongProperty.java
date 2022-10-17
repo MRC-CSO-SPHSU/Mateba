@@ -25,7 +25,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * Tests matrices for linear algebraic properties (equality, tridiagonality,
  * symmetry, singularity, etc).
  * <p>
- * 
+ * <p>
  * Note that this implementation is not synchronized.
  * <p>
  * Here are some example properties
@@ -33,40 +33,40 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * <tr align="left" valign="top">
  * <td valign="middle" align="left"><tt>matrix</tt></td>
  * <td> <tt>4&nbsp;x&nbsp;4&nbsp;<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+ * 1&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;1&nbsp;0<br>
- 0&nbsp;1&nbsp;1&nbsp;1<br>
- 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;1&nbsp;0<br>
+ * 0&nbsp;1&nbsp;1&nbsp;1<br>
+ * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
  * <td><tt> 4&nbsp;x&nbsp;4<br>
- 0&nbsp;1&nbsp;1&nbsp;1<br>
- 0&nbsp;1&nbsp;1&nbsp;1<br>
- 0&nbsp;0&nbsp;0&nbsp;1<br>
- 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+ * 0&nbsp;1&nbsp;1&nbsp;1<br>
+ * 0&nbsp;1&nbsp;1&nbsp;1<br>
+ * 0&nbsp;0&nbsp;0&nbsp;1<br>
+ * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
  * <td><tt> 4&nbsp;x&nbsp;4<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 0&nbsp;1&nbsp;1&nbsp;0<br>
- 0&nbsp;1&nbsp;0&nbsp;1<br>
- 1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 0&nbsp;1&nbsp;1&nbsp;0<br>
+ * 0&nbsp;1&nbsp;0&nbsp;1<br>
+ * 1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;1&nbsp;1&nbsp;0<br>
- 0&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;0&nbsp;1<br>
- 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+ * 1&nbsp;1&nbsp;1&nbsp;0<br>
+ * 0&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;0&nbsp;1<br>
+ * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
  * </tr>
  * <tr align="center" valign="middle">
  * <td><tt>upperBandwidth</tt></td>
@@ -111,10 +111,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * </div></td>
  * </tr>
  * </table>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
-public class LongProperty implements Serializable, Cloneable{
+public class LongProperty implements Serializable, Cloneable {
 
     /**
      * The default Property object;.
@@ -141,9 +141,8 @@ public class LongProperty implements Serializable, Cloneable{
 
     /**
      * Checks whether the given matrix <tt>A</tt> is <i>rectangular</i>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>A.rows() < A.columns()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>A.rows() < A.columns()</tt>.
      */
     public void checkRectangular(LongMatrix2D A) {
         if (A.rows() < A.columns()) {
@@ -153,9 +152,8 @@ public class LongProperty implements Serializable, Cloneable{
 
     /**
      * Checks whether the given matrix <tt>A</tt> is <i>square</i>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>A.rows() != A.columns()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>A.rows() != A.columns()</tt>.
      */
     public void checkSquare(LongMatrix2D A) {
         if (A.rows() != A.columns())
@@ -175,13 +173,11 @@ public class LongProperty implements Serializable, Cloneable{
      * given value. The result is <tt>true</tt> if and only if
      * <tt>A != null</tt> and <tt>! (Math.abs(value - A[i]) > tolerance())</tt>
      * holds for all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     *
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final LongMatrix1D A, final long value) {
         if (A == null)
@@ -236,13 +232,11 @@ public class LongProperty implements Serializable, Cloneable{
      * <tt>true</tt> if and only if both arguments are <tt>!= null</tt>, have
      * the same size and <tt>! (Math.abs(A[i] - B[i]) > tolerance())</tt> holds
      * for all indexes.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     *
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final LongMatrix1D A, final LongMatrix1D B) {
         if (A == B)
@@ -302,13 +296,11 @@ public class LongProperty implements Serializable, Cloneable{
      * <tt>A != null</tt> and
      * <tt>! (Math.abs(value - A[row,col]) > tolerance())</tt> holds for all
      * coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     *
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final LongMatrix2D A, final long value) {
         if (A == null)
@@ -369,13 +361,11 @@ public class LongProperty implements Serializable, Cloneable{
      * the same number of columns and rows and
      * <tt>! (Math.abs(A[row,col] - B[row,col]) > tolerance())</tt> holds for
      * all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     *
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final LongMatrix2D A, final LongMatrix2D B) {
         if (A == B)
@@ -439,13 +429,11 @@ public class LongProperty implements Serializable, Cloneable{
      * <tt>A != null</tt> and
      * <tt>! (Math.abs(value - A[slice,row,col]) > tolerance())</tt> holds for
      * all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     *
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final LongMatrix3D A, final long value) {
         if (A == null)
@@ -516,13 +504,11 @@ public class LongProperty implements Serializable, Cloneable{
      * the same number of columns, rows and slices, and
      * <tt>! (Math.abs(A[slice,row,col] - B[slice,row,col]) > tolerance())</tt>
      * holds for all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     *
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final LongMatrix3D A, final LongMatrix3D B) {
         if (A == B)
@@ -594,20 +580,18 @@ public class LongProperty implements Serializable, Cloneable{
      * Modifies the given matrix square matrix <tt>A</tt> such that it is
      * diagonally dominant by row and column, hence non-singular, hence
      * invertible. For testing purposes only.
-     * 
-     * @param A
-     *            the square matrix to modify.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @param A the square matrix to modify.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public void generateNonSingular(LongMatrix2D A) {
         checkSquare(A);
         cern.jet.math.tlong.LongFunctions F = cern.jet.math.tlong.LongFunctions.longFunctions;
         int min = Math.min(A.rows(), A.columns());
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             A.setQuick(i, i, 0);
         }
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             long rowSum = A.viewRow(i).aggregate(LongFunctions.plus, LongFunctions.abs);
             long colSum = A.viewColumn(i).aggregate(LongFunctions.plus, LongFunctions.abs);
             A.setQuick(i, i, Math.max(rowSum, colSum) + i + 1);
@@ -615,6 +599,7 @@ public class LongProperty implements Serializable, Cloneable{
     }
 
     /**
+     *
      */
     protected static String get(cern.mateba.list.tobject.ObjectArrayList list, int index) {
         return ((String) list.get(index));
@@ -627,8 +612,8 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isDiagonal(LongMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (row != column && A.getQuick(row, column) != 0)
                     return false;
             }
@@ -640,7 +625,7 @@ public class LongProperty implements Serializable, Cloneable{
      * A matrix <tt>A</tt> is <i>diagonally dominant by column</i> if the
      * absolute value of each diagonal element is larger than the sum of the
      * absolute values of the off-diagonal elements in the corresponding column.
-     * 
+     *
      * <tt>returns true if for all i: abs(A[i,i]) &gt; Sum(abs(A[j,i])); j != i.</tt>
      * Matrix may but need not be square.
      * <p>
@@ -649,7 +634,7 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isDiagonallyDominantByColumn(LongMatrix2D A) {
         cern.jet.math.tlong.LongFunctions F = cern.jet.math.tlong.LongFunctions.longFunctions;
         int min = Math.min(A.rows(), A.columns());
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             long diag = Math.abs(A.getQuick(i, i));
             diag += diag;
             if (diag <= A.viewColumn(i).aggregate(LongFunctions.plus, LongFunctions.abs))
@@ -670,7 +655,7 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isDiagonallyDominantByRow(LongMatrix2D A) {
         cern.jet.math.tlong.LongFunctions F = cern.jet.math.tlong.LongFunctions.longFunctions;
         int min = Math.min(A.rows(), A.columns());
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             long diag = Math.abs(A.getQuick(i, i));
             diag += diag;
             if (diag <= A.viewRow(i).aggregate(LongFunctions.plus, LongFunctions.abs))
@@ -686,8 +671,8 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isIdentity(LongMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 long v = A.getQuick(row, column);
                 if (row == column) {
                     if (v != 1)
@@ -706,8 +691,8 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isLowerBidiagonal(LongMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(row == column || row == column + 1)) {
                     if (A.getQuick(row, column) != 0)
                         return false;
@@ -724,8 +709,8 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isLowerTriangular(LongMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = Math.min(column, rows); --row >= 0;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = Math.min(column, rows); --row >= 0; ) {
                 if (A.getQuick(row, column) != 0)
                     return false;
             }
@@ -742,8 +727,8 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isNonNegative(LongMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(A.getQuick(row, column) >= 0))
                     return false;
             }
@@ -754,14 +739,13 @@ public class LongProperty implements Serializable, Cloneable{
     /**
      * A square matrix <tt>A</tt> is <i>orthogonal</i> if
      * <tt>A*transpose(A) = I</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public boolean isOrthogonal(LongMatrix2D A) {
         checkSquare(A);
         return equals(A.zMult(A, null, 1, 0, false, true), cern.mateba.matrix.tlong.LongFactory2D.dense
-                .identity(A.rows()));
+            .identity(A.rows()));
     }
 
     /**
@@ -773,8 +757,8 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isPositive(LongMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(A.getQuick(row, column) > 0))
                     return false;
             }
@@ -789,19 +773,19 @@ public class LongProperty implements Serializable, Cloneable{
     //    public boolean isSingular(LongMatrix2D A) {
     //        return !(Math.abs(LongAlgebra.DEFAULT.det(A)) >= tolerance());
     //    }
+
     /**
      * A square matrix <tt>A</tt> is <i>skew-symmetric</i> if
      * <tt>A = -transpose(A)</tt>, that is <tt>A[i,j] == -A[j,i]</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public boolean isSkewSymmetric(LongMatrix2D A) {
         checkSquare(A);
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = rows; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = rows; --column >= 0; ) {
                 if (A.getQuick(row, column) != -A.getQuick(column, row))
                     return false;
             }
@@ -825,8 +809,8 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isStrictlyLowerTriangular(LongMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = Math.min(rows, column + 1); --row >= 0;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = Math.min(rows, column + 1); --row >= 0; ) {
                 if (A.getQuick(row, column) != 0)
                     return false;
             }
@@ -842,7 +826,7 @@ public class LongProperty implements Serializable, Cloneable{
         if (!isTriangular(A))
             return false;
 
-        for (int i = Math.min(A.rows(), A.columns()); --i >= 0;) {
+        for (int i = Math.min(A.rows(), A.columns()); --i >= 0; ) {
             if (A.getQuick(i, i) != 0)
                 return false;
         }
@@ -857,8 +841,8 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isStrictlyUpperTriangular(LongMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = rows; --row >= column;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = rows; --row >= column; ) {
                 if (A.getQuick(row, column) != 0)
                     return false;
             }
@@ -869,9 +853,8 @@ public class LongProperty implements Serializable, Cloneable{
     /**
      * A matrix <tt>A</tt> is <i>symmetric</i> if <tt>A = tranpose(A)</tt>, that
      * is <tt>A[i,j] == A[j,i]</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public boolean isSymmetric(LongMatrix2D A) {
         checkSquare(A);
@@ -893,8 +876,8 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isTridiagonal(LongMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (Math.abs(row - column) > 1) {
                     if (A.getQuick(row, column) != 0)
                         return false;
@@ -912,7 +895,7 @@ public class LongProperty implements Serializable, Cloneable{
         if (!isTriangular(A))
             return false;
 
-        for (int i = Math.min(A.rows(), A.columns()); --i >= 0;) {
+        for (int i = Math.min(A.rows(), A.columns()); --i >= 0; ) {
             if (A.getQuick(i, i) != 1)
                 return false;
         }
@@ -926,8 +909,8 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isUpperBidiagonal(LongMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(row == column || row == column - 1)) {
                     if (A.getQuick(row, column) != 0)
                         return false;
@@ -944,8 +927,8 @@ public class LongProperty implements Serializable, Cloneable{
     public boolean isUpperTriangular(LongMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = rows; --row > column;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = rows; --row > column; ) {
                 if (A.getQuick(row, column) != 0)
                     return false;
             }
@@ -965,12 +948,10 @@ public class LongProperty implements Serializable, Cloneable{
      * <tt>i-j</tt> for which <tt>A[i,j]</tt> is nonzero and <tt>i &gt; j</tt>.
      * A <i>banded</i> matrix has a "band" about the diagonal. Diagonal,
      * tridiagonal and triangular matrices are special cases.
-     * 
-     * @param A
-     *            the square matrix to analyze.
+     *
+     * @param A the square matrix to analyze.
      * @return the lower bandwith.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      * @see #semiBandwidth(LongMatrix2D)
      * @see #upperBandwidth(LongMatrix2D)
      */
@@ -978,8 +959,8 @@ public class LongProperty implements Serializable, Cloneable{
         checkSquare(A);
         int rows = A.rows();
 
-        for (int k = rows; --k >= 0;) {
-            for (int i = rows - k; --i >= 0;) {
+        for (int k = rows; --k >= 0; ) {
+            for (int i = rows - k; --i >= 0; ) {
                 int j = i + k;
                 if (A.getQuick(j, i) != 0)
                     return k;
@@ -1010,40 +991,40 @@ public class LongProperty implements Serializable, Cloneable{
      * <tr align="left" valign="top">
      * <td valign="middle" align="left"><tt>matrix</tt></td>
      * <td> <tt>4&nbsp;x&nbsp;4&nbsp;<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+     * 1&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;1&nbsp;0<br>
-     0&nbsp;1&nbsp;1&nbsp;1<br>
-     0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;1&nbsp;0<br>
+     * 0&nbsp;1&nbsp;1&nbsp;1<br>
+     * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
      * <td><tt> 4&nbsp;x&nbsp;4<br>
-     0&nbsp;1&nbsp;1&nbsp;1<br>
-     0&nbsp;1&nbsp;1&nbsp;1<br>
-     0&nbsp;0&nbsp;0&nbsp;1<br>
-     0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+     * 0&nbsp;1&nbsp;1&nbsp;1<br>
+     * 0&nbsp;1&nbsp;1&nbsp;1<br>
+     * 0&nbsp;0&nbsp;0&nbsp;1<br>
+     * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
      * <td><tt> 4&nbsp;x&nbsp;4<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     0&nbsp;1&nbsp;1&nbsp;0<br>
-     0&nbsp;1&nbsp;0&nbsp;1<br>
-     1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 0&nbsp;1&nbsp;1&nbsp;0<br>
+     * 0&nbsp;1&nbsp;0&nbsp;1<br>
+     * 1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;1&nbsp;1&nbsp;0<br>
-     0&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;0&nbsp;1<br>
-     0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+     * 1&nbsp;1&nbsp;1&nbsp;0<br>
+     * 0&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;0&nbsp;1<br>
+     * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
      * </tr>
      * <tr align="center" valign="middle">
      * <td><tt>upperBandwidth</tt></td>
@@ -1088,12 +1069,10 @@ public class LongProperty implements Serializable, Cloneable{
      * <tt>unstructured</tt></div></td>
      * </tr>
      * </table>
-     * 
-     * @param A
-     *            the square matrix to analyze.
+     *
+     * @param A the square matrix to analyze.
      * @return the semi-bandwith <tt>l</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      * @see #lowerBandwidth(LongMatrix2D)
      * @see #upperBandwidth(LongMatrix2D)
      */
@@ -1101,8 +1080,8 @@ public class LongProperty implements Serializable, Cloneable{
         checkSquare(A);
         int rows = A.rows();
 
-        for (int k = rows; --k >= 0;) {
-            for (int i = rows - k; --i >= 0;) {
+        for (int k = rows; --k >= 0; ) {
+            for (int i = rows - k; --i >= 0; ) {
                 int j = i + k;
                 if (A.getQuick(j, i) != 0)
                     return k + 1;
@@ -1117,7 +1096,7 @@ public class LongProperty implements Serializable, Cloneable{
      * Returns summary information about the given matrix <tt>A</tt>. That is a
      * String with (propertyName, propertyValue) pairs. Useful for debugging or
      * to quickly get the rough picture of a matrix. For example,
-     * 
+     *
      * <pre>
      *   density                      : 0.9
      *   isDiagonal                   : false
@@ -1145,7 +1124,7 @@ public class LongProperty implements Serializable, Cloneable{
      *   lowerBandwidth               : Illegal operation or error: Matrix must be square.
      *   semiBandwidth                : Illegal operation or error: Matrix must be square.
      *   upperBandwidth               : Illegal operation or error: Matrix must be square.
-     * 
+     *
      * </pre>
      */
     public String toString(LongMatrix2D A) {
@@ -1385,12 +1364,10 @@ public class LongProperty implements Serializable, Cloneable{
      * <tt>j-i</tt> for which <tt>A[i,j]</tt> is nonzero and <tt>j &gt; i</tt>.
      * A <i>banded</i> matrix has a "band" about the diagonal. Diagonal,
      * tridiagonal and triangular matrices are special cases.
-     * 
-     * @param A
-     *            the square matrix to analyze.
+     *
+     * @param A the square matrix to analyze.
      * @return the upper bandwith.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      * @see #semiBandwidth(LongMatrix2D)
      * @see #lowerBandwidth(LongMatrix2D)
      */
@@ -1398,8 +1375,8 @@ public class LongProperty implements Serializable, Cloneable{
         checkSquare(A);
         int rows = A.rows();
 
-        for (int k = rows; --k >= 0;) {
-            for (int i = rows - k; --i >= 0;) {
+        for (int k = rows; --k >= 0; ) {
+            for (int i = rows - k; --i >= 0; ) {
                 int j = i + k;
                 if (A.getQuick(i, j) != 0)
                     return k;

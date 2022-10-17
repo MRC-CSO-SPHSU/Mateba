@@ -49,7 +49,7 @@ public class Converter {
     protected double[] toArrayErrors(IHistogram1D h) {
         int xBins = h.xAxis().bins();
         double[] array = new double[xBins];
-        for (int j = xBins; --j >= 0;) {
+        for (int j = xBins; --j >= 0; ) {
             array[j] = h.binError(j);
         }
         return array;
@@ -62,8 +62,8 @@ public class Converter {
         int xBins = h.xAxis().bins();
         int yBins = h.yAxis().bins();
         double[][] array = new double[xBins][yBins];
-        for (int i = yBins; --i >= 0;) {
-            for (int j = xBins; --j >= 0;) {
+        for (int i = yBins; --i >= 0; ) {
+            for (int j = xBins; --j >= 0; ) {
                 array[j][i] = h.binError(j, i);
             }
         }
@@ -76,7 +76,7 @@ public class Converter {
     protected double[] toArrayHeights(IHistogram1D h) {
         int xBins = h.xAxis().bins();
         double[] array = new double[xBins];
-        for (int j = xBins; --j >= 0;) {
+        for (int j = xBins; --j >= 0; ) {
             array[j] = h.binHeight(j);
         }
         return array;
@@ -90,8 +90,8 @@ public class Converter {
         int xBins = h.xAxis().bins();
         int yBins = h.yAxis().bins();
         double[][] array = new double[xBins][yBins];
-        for (int i = yBins; --i >= 0;) {
-            for (int j = xBins; --j >= 0;) {
+        for (int i = yBins; --i >= 0; ) {
+            for (int j = xBins; --j >= 0; ) {
                 array[j][i] = h.binHeight(j, i);
             }
         }
@@ -106,9 +106,9 @@ public class Converter {
         int yBins = h.yAxis().bins();
         int zBins = h.zAxis().bins();
         double[][][] array = new double[xBins][yBins][zBins];
-        for (int j = xBins; --j >= 0;) {
-            for (int i = yBins; --i >= 0;) {
-                for (int k = zBins; --k >= 0;) {
+        for (int j = xBins; --j >= 0; ) {
+            for (int i = yBins; --i >= 0; ) {
+                for (int k = zBins; --k >= 0; ) {
                     array[j][i][k] = h.binHeight(j, i, k);
                 }
             }
@@ -159,10 +159,10 @@ public class Converter {
         String sep = System.getProperty("line.separator");
         int[] minMaxBins = h.minMaxBins();
         String title = h.title() + ":" + sep + "   Entries=" + form(f, h.entries()) + ", ExtraEntries="
-                + form(f, h.extraEntries()) + sep + "   Mean=" + form(f, h.mean()) + ", Rms=" + form(f, h.rms()) + sep
-                + "   MinBinHeight=" + form(f, h.binHeight(minMaxBins[0])) + ", MaxBinHeight="
-                + form(f, h.binHeight(minMaxBins[1])) + sep + "   Axis: " + "Bins=" + form(f, h.xAxis().bins())
-                + ", Min=" + form(f, h.xAxis().lowerEdge()) + ", Max=" + form(f, h.xAxis().upperEdge());
+            + form(f, h.extraEntries()) + sep + "   Mean=" + form(f, h.mean()) + ", Rms=" + form(f, h.rms()) + sep
+            + "   MinBinHeight=" + form(f, h.binHeight(minMaxBins[0])) + ", MaxBinHeight="
+            + form(f, h.binHeight(minMaxBins[1])) + sep + "   Axis: " + "Bins=" + form(f, h.xAxis().bins())
+            + ", Min=" + form(f, h.xAxis().lowerEdge()) + ", Max=" + form(f, h.xAxis().upperEdge());
 
         String[] xEdges = new String[h.xAxis().bins()];
         for (int i = 0; i < h.xAxis().bins(); i++)
@@ -183,23 +183,23 @@ public class Converter {
     public String toString(IHistogram2D h) {
         String columnAxisName = "X";
         String rowAxisName = "Y";
-        BinFunction1D[] aggr = { BinFunctions1D.sum };
+        BinFunction1D[] aggr = {BinFunctions1D.sum};
         String format = "%G";
 
         Former f = new FormerFactory().create(format);
         String sep = System.getProperty("line.separator");
         int[] minMaxBins = h.minMaxBins();
         String title = h.title() + ":" + sep + "   Entries=" + form(f, h.entries()) + ", ExtraEntries="
-                + form(f, h.extraEntries()) + sep + "   MeanX=" + form(f, h.meanX()) + ", RmsX=" + form(f, h.rmsX())
-                + sep + "   MeanY=" + form(f, h.meanY()) + ", RmsY=" + form(f, h.rmsX()) + sep + "   MinBinHeight="
-                + form(f, h.binHeight(minMaxBins[0], minMaxBins[1])) + ", MaxBinHeight="
-                + form(f, h.binHeight(minMaxBins[2], minMaxBins[3])) + sep +
+            + form(f, h.extraEntries()) + sep + "   MeanX=" + form(f, h.meanX()) + ", RmsX=" + form(f, h.rmsX())
+            + sep + "   MeanY=" + form(f, h.meanY()) + ", RmsY=" + form(f, h.rmsX()) + sep + "   MinBinHeight="
+            + form(f, h.binHeight(minMaxBins[0], minMaxBins[1])) + ", MaxBinHeight="
+            + form(f, h.binHeight(minMaxBins[2], minMaxBins[3])) + sep +
 
-                "   xAxis: " + "Bins=" + form(f, h.xAxis().bins()) + ", Min=" + form(f, h.xAxis().lowerEdge())
-                + ", Max=" + form(f, h.xAxis().upperEdge()) + sep +
+            "   xAxis: " + "Bins=" + form(f, h.xAxis().bins()) + ", Min=" + form(f, h.xAxis().lowerEdge())
+            + ", Max=" + form(f, h.xAxis().upperEdge()) + sep +
 
-                "   yAxis: " + "Bins=" + form(f, h.yAxis().bins()) + ", Min=" + form(f, h.yAxis().lowerEdge())
-                + ", Max=" + form(f, h.yAxis().upperEdge());
+            "   yAxis: " + "Bins=" + form(f, h.yAxis().bins()) + ", Min=" + form(f, h.yAxis().lowerEdge())
+            + ", Max=" + form(f, h.yAxis().upperEdge());
 
         String[] xEdges = new String[h.xAxis().bins()];
         for (int i = 0; i < h.xAxis().bins(); i++)
@@ -214,10 +214,10 @@ public class Converter {
         heights = heights.viewDice().viewRowFlip();
 
         return title
-                + sep
-                + "Heights:"
-                + sep
-                + new DoubleFormatter().toTitleString(heights, yEdges, xEdges, rowAxisName, columnAxisName, null, aggr);
+            + sep
+            + "Heights:"
+            + sep
+            + new DoubleFormatter().toTitleString(heights, yEdges, xEdges, rowAxisName, columnAxisName, null, aggr);
     }
 
     /**
@@ -227,27 +227,27 @@ public class Converter {
         String columnAxisName = "X";
         String rowAxisName = "Y";
         String sliceAxisName = "Z";
-        BinFunction1D[] aggr = { BinFunctions1D.sum };
+        BinFunction1D[] aggr = {BinFunctions1D.sum};
         String format = "%G";
 
         Former f = new FormerFactory().create(format);
         String sep = System.getProperty("line.separator");
         int[] minMaxBins = h.minMaxBins();
         String title = h.title() + ":" + sep + "   Entries=" + form(f, h.entries()) + ", ExtraEntries="
-                + form(f, h.extraEntries()) + sep + "   MeanX=" + form(f, h.meanX()) + ", RmsX=" + form(f, h.rmsX())
-                + sep + "   MeanY=" + form(f, h.meanY()) + ", RmsY=" + form(f, h.rmsX()) + sep + "   MeanZ="
-                + form(f, h.meanZ()) + ", RmsZ=" + form(f, h.rmsZ()) + sep + "   MinBinHeight="
-                + form(f, h.binHeight(minMaxBins[0], minMaxBins[1], minMaxBins[2])) + ", MaxBinHeight="
-                + form(f, h.binHeight(minMaxBins[3], minMaxBins[4], minMaxBins[5])) + sep +
+            + form(f, h.extraEntries()) + sep + "   MeanX=" + form(f, h.meanX()) + ", RmsX=" + form(f, h.rmsX())
+            + sep + "   MeanY=" + form(f, h.meanY()) + ", RmsY=" + form(f, h.rmsX()) + sep + "   MeanZ="
+            + form(f, h.meanZ()) + ", RmsZ=" + form(f, h.rmsZ()) + sep + "   MinBinHeight="
+            + form(f, h.binHeight(minMaxBins[0], minMaxBins[1], minMaxBins[2])) + ", MaxBinHeight="
+            + form(f, h.binHeight(minMaxBins[3], minMaxBins[4], minMaxBins[5])) + sep +
 
-                "   xAxis: " + "Bins=" + form(f, h.xAxis().bins()) + ", Min=" + form(f, h.xAxis().lowerEdge())
-                + ", Max=" + form(f, h.xAxis().upperEdge()) + sep +
+            "   xAxis: " + "Bins=" + form(f, h.xAxis().bins()) + ", Min=" + form(f, h.xAxis().lowerEdge())
+            + ", Max=" + form(f, h.xAxis().upperEdge()) + sep +
 
-                "   yAxis: " + "Bins=" + form(f, h.yAxis().bins()) + ", Min=" + form(f, h.yAxis().lowerEdge())
-                + ", Max=" + form(f, h.yAxis().upperEdge()) + sep +
+            "   yAxis: " + "Bins=" + form(f, h.yAxis().bins()) + ", Min=" + form(f, h.yAxis().lowerEdge())
+            + ", Max=" + form(f, h.yAxis().upperEdge()) + sep +
 
-                "   zAxis: " + "Bins=" + form(f, h.zAxis().bins()) + ", Min=" + form(f, h.zAxis().lowerEdge())
-                + ", Max=" + form(f, h.zAxis().upperEdge());
+            "   zAxis: " + "Bins=" + form(f, h.zAxis().bins()) + ", Min=" + form(f, h.zAxis().lowerEdge())
+            + ", Max=" + form(f, h.zAxis().upperEdge());
 
         String[] xEdges = new String[h.xAxis().bins()];
         for (int i = 0; i < h.xAxis().bins(); i++)
@@ -266,11 +266,11 @@ public class Converter {
         DoubleMatrix3D heights = new DenseDoubleMatrix3D(toArrayHeights(h));
         heights = heights.viewDice(2, 1, 0).viewSliceFlip().viewRowFlip();
         return title
-                + sep
-                + "Heights:"
-                + sep
-                + new DoubleFormatter().toTitleString(heights, zEdges, yEdges, xEdges,
-                        sliceAxisName, rowAxisName, columnAxisName, "", aggr);
+            + sep
+            + "Heights:"
+            + sep
+            + new DoubleFormatter().toTitleString(heights, zEdges, yEdges, xEdges,
+            sliceAxisName, rowAxisName, columnAxisName, "", aggr);
     }
 
     /**

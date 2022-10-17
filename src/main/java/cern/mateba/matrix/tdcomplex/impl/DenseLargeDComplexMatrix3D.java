@@ -26,16 +26,14 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * elements[slice][row][2*column] constitute the real part and
  * elements[slice][row][2*column+1] constitute the imaginary part. Note that
  * this implementation is not synchronized.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DenseLargeDComplexMatrix3D extends WrapperDComplexMatrix3D {
     @Serial
     private static final long serialVersionUID = -3453760273994043186L;
-    ;
 
-    private double[][][] elements;
+    private final double[][][] elements;
 
     private DoubleFFT_3D fft3;
 
@@ -53,7 +51,7 @@ public class DenseLargeDComplexMatrix3D extends WrapperDComplexMatrix3D {
     }
 
     public double[] getQuick(int slice, int row, int column) {
-        return new double[] { elements[slice][row][2 * column], elements[slice][row][2 * column + 1] };
+        return new double[]{elements[slice][row][2 * column], elements[slice][row][2 * column + 1]};
     }
 
     public void setQuick(int slice, int row, int column, double[] value) {
@@ -123,9 +121,8 @@ public class DenseLargeDComplexMatrix3D extends WrapperDComplexMatrix3D {
     /**
      * Computes the 2D inverse of the discrete Fourier transform (IDFT) of each
      * slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void ifft2Slices(final boolean scale) {
@@ -166,9 +163,8 @@ public class DenseLargeDComplexMatrix3D extends WrapperDComplexMatrix3D {
     /**
      * Computes the 3D inverse of the discrete Fourier transform (IDFT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void ifft3(boolean scale) {

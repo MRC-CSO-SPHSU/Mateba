@@ -10,7 +10,7 @@ import java.io.Serializable;
 
 /**
  * Linear algebraic matrix operations operating on dense complex matrices.
- * 
+ *
  * @author Wolfgang Hoschek (wolfgang.hoschek@cern.ch)
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  * @author Richard Lincoln (r.w.lincoln@gmail.com)
@@ -31,7 +31,7 @@ public class DenseDComplexAlgebra implements Serializable, Cloneable {
     /**
      * A default Algebra object; has {@link DComplexProperty#ZERO} attached for
      * tolerance. Allows ommiting to construct an Algebra object time and again.
-     * 
+     * <p>
      * Note that this Algebra object is immutable. Any attempt to assign a new
      * Property object to it (via method <tt>setProperty</tt>), or to alter the
      * tolerance of its property object (via
@@ -66,9 +66,8 @@ public class DenseDComplexAlgebra implements Serializable, Cloneable {
 
     /**
      * Constructs a new instance with the given equality tolerance.
-     * 
-     * @param tolerance
-     *            the tolerance to be used for equality operations.
+     *
+     * @param tolerance the tolerance to be used for equality operations.
      */
     public DenseDComplexAlgebra(double tolerance) {
         setProperty(new DComplexProperty(tolerance));
@@ -76,15 +75,12 @@ public class DenseDComplexAlgebra implements Serializable, Cloneable {
 
     /**
      * Attaches the given property object to this Algebra, defining tolerance.
-     * 
-     * @param property
-     *            the Property object to be attached.
-     * @throws UnsupportedOperationException
-     *             if <tt>this==DEFAULT && property!=this.property()</tt> - The
-     *             DEFAULT Algebra object is immutable.
-     * @throws UnsupportedOperationException
-     *             if <tt>this==ZERO && property!=this.property()</tt> - The
-     *             ZERO Algebra object is immutable.
+     *
+     * @param property the Property object to be attached.
+     * @throws UnsupportedOperationException if <tt>this==DEFAULT && property!=this.property()</tt> - The
+     *                                       DEFAULT Algebra object is immutable.
+     * @throws UnsupportedOperationException if <tt>this==ZERO && property!=this.property()</tt> - The
+     *                                       ZERO Algebra object is immutable.
      * @see #property
      */
     public void setProperty(DComplexProperty property) {

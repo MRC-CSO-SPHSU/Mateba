@@ -30,14 +30,14 @@ public final class DoublePlusMultSecond implements cern.mateba.function.tdouble.
     /**
      * Insert the method's description here. Creation date: (8/10/99 19:12:09)
      */
-    protected DoublePlusMultSecond(final double multiplicator) {
+    DoublePlusMultSecond(final double multiplicator) {
         this.multiplicator = multiplicator;
     }
 
     /**
      * Returns the result of the function evaluation.
      */
-    public final double apply(double a, double b) {
+    public double apply(double a, double b) {
         return a + b * multiplicator;
     }
 

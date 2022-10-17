@@ -30,14 +30,14 @@ public final class IntPlusMultFirst implements cern.mateba.function.tint.IntIntF
     /**
      * Insert the method's description here. Creation date: (8/10/99 19:12:09)
      */
-    protected IntPlusMultFirst(final int multiplicator) {
+    IntPlusMultFirst(final int multiplicator) {
         this.multiplicator = multiplicator;
     }
 
     /**
      * Returns the result of the function evaluation.
      */
-    public final int apply(int a, int b) {
+    public int apply(int a, int b) {
         return a * multiplicator + b;
     }
 

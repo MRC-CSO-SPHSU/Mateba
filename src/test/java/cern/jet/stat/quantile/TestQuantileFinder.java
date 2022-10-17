@@ -20,12 +20,10 @@ class TestQuantileFinder {
     /**
      * Finds the first and last indexes of a specific element within a sorted
      * list.
-     * 
+     *
+     * @param list    cern.mateba.list.DoubleArrayList
+     * @param element the element to search for
      * @return int[]
-     * @param list
-     *            cern.mateba.list.DoubleArrayList
-     * @param element
-     *            the element to search for
      */
     protected static IntArrayList binaryMultiSearch(DoubleArrayList list, double element) {
         int index = list.binarySearch(element);
@@ -42,7 +40,7 @@ class TestQuantileFinder {
             to++;
         to--;
 
-        return new IntArrayList(new int[] { from, to });
+        return new IntArrayList(new int[]{from, to});
     }
 
     /**
@@ -69,7 +67,7 @@ class TestQuantileFinder {
      * Observed epsilon
      */
     public static double epsilon(DoubleArrayList sortedList, QuantileFinder finder, double phi) {
-        double element = finder.quantileElements(new DoubleArrayList(new double[] { phi })).get(0);
+        double element = finder.quantileElements(new DoubleArrayList(new double[]{phi})).get(0);
         return epsilon(sortedList, phi, element);
     }
 
@@ -81,26 +79,24 @@ class TestQuantileFinder {
 
     /**
      * This method was created in VisualAge.
-     * 
+     *
+     * @param values cern.it.hepodbms.primitivearray.DoubleArrayList
+     * @param phis   double[]
      * @return double[]
-     * @param values
-     *            cern.it.hepodbms.primitivearray.DoubleArrayList
-     * @param phis
-     *            double[]
      */
     public static double observedEpsilonAtPhi(double phi, cern.jet.stat.quantile.ExactQuantileFinder exactFinder,
-            QuantileFinder approxFinder) {
+                                              QuantileFinder approxFinder) {
         int N = (int) exactFinder.size();
 
         int exactRank = (int) Utils.epsilonCeiling(phi * N) - 1;
         // System.out.println("exactRank="+exactRank);
-        exactFinder.quantileElements(new DoubleArrayList(new double[] { phi })).get(0); // just
+        exactFinder.quantileElements(new DoubleArrayList(new double[]{phi})).get(0); // just
         // to
         // ensure
         // exactFinder
         // is
         // sorted
-        double approxElement = approxFinder.quantileElements(new DoubleArrayList(new double[] { phi })).get(0);
+        double approxElement = approxFinder.quantileElements(new DoubleArrayList(new double[]{phi})).get(0);
         // System.out.println("approxElem="+approxElement);
         IntArrayList approxRanks = binaryMultiSearch(exactFinder.buffer, approxElement);
         int from = approxRanks.get(0);
@@ -122,23 +118,21 @@ class TestQuantileFinder {
 
     /**
      * This method was created in VisualAge.
-     * 
+     *
+     * @param values cern.it.hepodbms.primitivearray.DoubleArrayList
+     * @param phis   double[]
      * @return double[]
-     * @param values
-     *            cern.it.hepodbms.primitivearray.DoubleArrayList
-     * @param phis
-     *            double[]
      */
     public static DoubleArrayList observedEpsilonsAtPhis(DoubleArrayList phis, cern.jet.stat.quantile.ExactQuantileFinder exactFinder,
                                                          QuantileFinder approxFinder, double desiredEpsilon) {
         DoubleArrayList epsilons = new DoubleArrayList(phis.size());
 
-        for (int i = phis.size(); --i >= 0;) {
+        for (int i = phis.size(); --i >= 0; ) {
             double epsilon = observedEpsilonAtPhi(phis.get(i), exactFinder, approxFinder);
             epsilons.add(epsilon);
             if (epsilon > desiredEpsilon)
                 System.out.println("Real epsilon = " + epsilon + " is larger than desired by "
-                        + (epsilon - desiredEpsilon));
+                    + (epsilon - desiredEpsilon));
         }
         return epsilons;
     }
@@ -195,16 +189,16 @@ class TestQuantileFinder {
         // if (args==null) known_N = false;
         // else known_N = new Boolean(args[0]).booleanValue();
 
-        int[] quantiles = { 100, 10000 };
+        int[] quantiles = {100, 10000};
         // int[] quantiles = {1,100,10000};
 
-        long[] sizes = { Long.MAX_VALUE, 1000000, 10000000, 100000000 };
+        long[] sizes = {Long.MAX_VALUE, 1000000, 10000000, 100000000};
 
-        double[] deltas = { 0.0, 0.1, 0.00001 };
+        double[] deltas = {0.0, 0.1, 0.00001};
         // double[] deltas = {0.0, 0.001, 0.00001, 0.000001};
 
         // double[] epsilons = {0.0, 0.01, 0.001, 0.0001, 0.00001};
-        double[] epsilons = { 0.0, 0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001 };
+        double[] epsilons = {0.0, 0.1, 0.01, 0.001, 0.0001, 0.00001, 0.000001};
 
         // if (! known_N) sizes = new long[] {0};
         System.out.println("\n\n");
@@ -232,13 +226,10 @@ class TestQuantileFinder {
                         double delta = deltas[d];
                         for (int knownCounter = 0; knownCounter < 2; knownCounter++) {
                             boolean known_N;
-                            if (knownCounter == 0)
-                                known_N = true;
-                            else
-                                known_N = false;
+                            known_N = knownCounter == 0;
 
                             QuantileFinder finder = cern.jet.stat.quantile.QuantileFinderFactory.newQuantileFinder(known_N,
-                                    N, epsilon, delta, p, null);
+                                N, epsilon, delta, p, null);
                             // System.out.println(finder.getClass().getName());
                             /*
                              * double[] returnSamplingRate = new double[1];
@@ -249,16 +240,16 @@ class TestQuantileFinder {
                              * QuantileFinderFactory.unknown_N_compute_B_and_K(epsilon,
                              * delta, p); long b1 = result[0]; long k1 =
                              * result[1];
-                             * 
+                             *
                              * if (N>=0) { long[] resultKnown =
                              * QuantileFinderFactory.known_N_compute_B_and_K(N,
                              * epsilon, delta, p, returnSamplingRate); long b2 =
                              * resultKnown[0]; long k2 = resultKnown[1];
-                             * 
+                             *
                              * if (b2 * k2 < b1 * k1) { // the KnownFinder is
                              * smaller result = resultKnown; } } }
-                             * 
-                             * 
+                             *
+                             *
                              * long b = result[0]; long k = result[1];
                              */
                             String knownStr = known_N ? "  known" : "unknown";
@@ -281,7 +272,7 @@ class TestQuantileFinder {
                             // "+b*k*8/1024.0/1024.0+",
                             // "+Math.round(b*k*8/1024.0/1024.0));
                             System.out.print(")=(" + mem * 8.0 / 1024.0 / 1024.0 + ",  " + mem / 1000.0 + ",  "
-                                    + Math.round(mem * 8.0 / 1024.0 / 1024.0));
+                                + Math.round(mem * 8.0 / 1024.0 / 1024.0));
                             // if (known_N)
                             // System.out.print(","+returnSamplingRate[0]);
                             System.out.println(")");
@@ -327,6 +318,7 @@ class TestQuantileFinder {
     }
 
     /**
+     *
      */
     public static void testQuantileCalculation(String[] args) {
         int size = Integer.parseInt(args[0]);
@@ -344,7 +336,7 @@ class TestQuantileFinder {
         System.out.println("free=" + Runtime.getRuntime().freeMemory());
         System.out.println("total=" + Runtime.getRuntime().totalMemory());
 
-        double[] phis = { 0.001, 0.01, 0.1, 0.5, 0.9, 0.99, 0.999, 1.0 };
+        double[] phis = {0.001, 0.01, 0.1, 0.5, 0.9, 0.99, 0.999, 1.0};
         // int quantiles = phis.length;
 
         Timer timer = new Timer();
@@ -352,7 +344,7 @@ class TestQuantileFinder {
         QuantileFinder approxFinder;
 
         approxFinder = cern.jet.stat.quantile.QuantileFinderFactory.newQuantileFinder(false, max_N, epsilon, delta, quantiles,
-                null);
+            null);
         System.out.println(approxFinder);
         // new UnknownApproximateDoubleQuantileFinder(b,k);
         // approxFinder = new ApproximateDoubleQuantileFinder(b,k);
@@ -367,7 +359,7 @@ class TestQuantileFinder {
          */
 
         QuantileFinder exactFinder = cern.jet.stat.quantile.QuantileFinderFactory.newQuantileFinder(false, -1, 0.0, delta,
-                quantiles, null);
+            quantiles, null);
         System.out.println(exactFinder);
 
         DoubleArrayList list = new DoubleArrayList(size);
@@ -448,7 +440,7 @@ class TestQuantileFinder {
              */
 
             DoubleArrayList observedEpsilons = observedEpsilonsAtPhis(new DoubleArrayList(phis),
-                    (cern.jet.stat.quantile.ExactQuantileFinder) exactFinder, approxFinder, epsilon);
+                (cern.jet.stat.quantile.ExactQuantileFinder) exactFinder, approxFinder, epsilon);
             System.out.println("observedEpsilons=" + observedEpsilons);
 
             double element = 1000.0f;
@@ -457,9 +449,9 @@ class TestQuantileFinder {
             System.out.println("apprx phi(" + element + ")=" + approxFinder.phi(element));
 
             System.out.println("exact elem(phi(" + element + "))="
-                    + exactFinder.quantileElements(new DoubleArrayList(new double[] { exactFinder.phi(element) })));
+                + exactFinder.quantileElements(new DoubleArrayList(new double[]{exactFinder.phi(element)})));
             System.out.println("apprx elem(phi(" + element + "))="
-                    + approxFinder.quantileElements(new DoubleArrayList(new double[] { approxFinder.phi(element) })));
+                + approxFinder.quantileElements(new DoubleArrayList(new double[]{approxFinder.phi(element)})));
         }
     }
 
@@ -467,7 +459,7 @@ class TestQuantileFinder {
      * Not yet commented.
      */
     public static void testRank() {
-        DoubleArrayList list = new DoubleArrayList(new double[] { 1.0f, 5.0f, 5.0f, 5.0f, 7.0f, 10.f });
+        DoubleArrayList list = new DoubleArrayList(new double[]{1.0f, 5.0f, 5.0f, 5.0f, 7.0f, 10.f});
         // System.out.println(rankOfWithin(5.0f, list));
     }
 }

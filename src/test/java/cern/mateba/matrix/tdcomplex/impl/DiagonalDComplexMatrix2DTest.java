@@ -63,7 +63,7 @@ public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {
     }
 
     public void testAssignDoubleDouble() {
-        double[] value = new double[] { Math.random(), Math.random() };
+        double[] value = new double[]{Math.random(), Math.random()};
         A.assign(value[0], value[1]);
         if (DINDEX >= 0) {
             for (int r = 0; r < DLENGTH; r++) {
@@ -194,16 +194,16 @@ public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {
         if (DINDEX >= 0) {
             for (int r = 0; r < DLENGTH; r++) {
                 assertEquals(DComplex.div(Acopy.getQuick(r, r + DINDEX), B.getQuick(r, r + DINDEX))[0], A.getQuick(r, r
-                        + DINDEX)[0], TOL);
+                    + DINDEX)[0], TOL);
                 assertEquals(DComplex.div(Acopy.getQuick(r, r + DINDEX), B.getQuick(r, r + DINDEX))[1], A.getQuick(r, r
-                        + DINDEX)[1], TOL);
+                    + DINDEX)[1], TOL);
             }
         } else {
             for (int r = 0; r < DLENGTH; r++) {
                 assertEquals(DComplex.div(Acopy.getQuick(r - DINDEX, r), B.getQuick(r - DINDEX, r))[0], A.getQuick(r
-                        - DINDEX, r)[0], TOL);
+                    - DINDEX, r)[0], TOL);
                 assertEquals(DComplex.div(Acopy.getQuick(r - DINDEX, r), B.getQuick(r - DINDEX, r))[1], A.getQuick(r
-                        - DINDEX, r)[1], TOL);
+                    - DINDEX, r)[1], TOL);
             }
         }
     }
@@ -220,9 +220,9 @@ public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {
             A.assign(B, DComplexFunctions.div, rowList, columnList);
             for (int r = 0; r < DLENGTH; r++) {
                 assertEquals(DComplex.div(Acopy.getQuick(r, r + DINDEX), B.getQuick(r, r + DINDEX))[0], A.getQuick(r, r
-                        + DINDEX)[0], TOL);
+                    + DINDEX)[0], TOL);
                 assertEquals(DComplex.div(Acopy.getQuick(r, r + DINDEX), B.getQuick(r, r + DINDEX))[1], A.getQuick(r, r
-                        + DINDEX)[1], TOL);
+                    + DINDEX)[1], TOL);
             }
         } else {
             for (int r = 0; r < DLENGTH; r++) {
@@ -233,9 +233,9 @@ public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {
             A.assign(B, DComplexFunctions.div, rowList, columnList);
             for (int r = 0; r < DLENGTH; r++) {
                 assertEquals(DComplex.div(Acopy.getQuick(r - DINDEX, r), B.getQuick(r - DINDEX, r))[0], A.getQuick(r
-                        - DINDEX, r)[0], TOL);
+                    - DINDEX, r)[0], TOL);
                 assertEquals(DComplex.div(Acopy.getQuick(r - DINDEX, r), B.getQuick(r - DINDEX, r))[1], A.getQuick(r
-                        - DINDEX, r)[1], TOL);
+                    - DINDEX, r)[1], TOL);
             }
         }
     }
@@ -247,8 +247,8 @@ public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {
 
     public void testGetNonZeros() {
         A.assign(0, 0);
-        double[] elem1 = new double[] { 0.7, 0.8 };
-        double[] elem2 = new double[] { 0.1, 0.2 };
+        double[] elem1 = new double[]{0.7, 0.8};
+        double[] elem2 = new double[]{0.1, 0.2};
         if (DINDEX >= 0) {
             A.setQuick(NROWS / 3, NROWS / 3 + DINDEX, elem1);
             A.setQuick(NROWS / 2, NROWS / 2 + DINDEX, elem2);
@@ -286,9 +286,9 @@ public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {
 
     public void testToArray() {
         double[][] array = A.toArray();
-        assertTrue(NROWS == array.length);
+        assertEquals(NROWS, array.length);
         for (int r = 0; r < NROWS; r++) {
-            assertTrue(2 * NCOLUMNS == array[r].length);
+            assertEquals(2 * NCOLUMNS, array[r].length);
             for (int c = 0; c < NCOLUMNS; c++) {
                 assertEquals(array[r][2 * c], A.getQuick(r, c)[0], TOL);
                 assertEquals(array[r][2 * c + 1], A.getQuick(r, c)[1], TOL);
@@ -365,18 +365,14 @@ public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {
     }
 
     public void testViewSelectionComplexMatrix1DProcedure() {
-        final double[] value = new double[] { 2, 3 };
+        final double[] value = new double[]{2, 3};
         A.assign(0, 0);
         if (DINDEX >= 0) {
             A.setQuick(NROWS / 4, NROWS / 4 + DINDEX, value);
             A.setQuick(NROWS / 2, NROWS / 2 + DINDEX, value);
             DComplexMatrix2D B = A.viewSelection(new DComplexMatrix1DProcedure() {
                 public boolean apply(DComplexMatrix1D element) {
-                    if (DComplex.abs(DComplex.minus(element.getQuick(NROWS / 4 + DINDEX), value)) < TOL) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return DComplex.abs(DComplex.minus(element.getQuick(NROWS / 4 + DINDEX), value)) < TOL;
                 }
             });
             assertEquals(1, B.rows());
@@ -387,11 +383,7 @@ public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {
             A.setQuick(NROWS / 2 - DINDEX, NROWS / 2, value);
             DComplexMatrix2D B = A.viewSelection(new DComplexMatrix1DProcedure() {
                 public boolean apply(DComplexMatrix1D element) {
-                    if (DComplex.abs(DComplex.minus(element.getQuick(NROWS / 4), value)) < TOL) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return DComplex.abs(DComplex.minus(element.getQuick(NROWS / 4), value)) < TOL;
                 }
             });
             assertEquals(1, B.rows());
@@ -401,8 +393,8 @@ public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {
     }
 
     public void testViewSelectionIntArrayIntArray() {
-        int[] rowIndexes = new int[] { NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2 };
-        int[] colIndexes = new int[] { NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2, NROWS - 1 };
+        int[] rowIndexes = new int[]{NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2};
+        int[] colIndexes = new int[]{NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2, NROWS - 1};
         DComplexMatrix2D B = A.viewSelection(rowIndexes, colIndexes);
         assertEquals(rowIndexes.length, B.rows());
         assertEquals(colIndexes.length, B.columns());
@@ -425,8 +417,8 @@ public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {
     }
 
     public void testZMultDComplexMatrix2DDComplexMatrix2DDComplexDComplexBooleanBoolean() {
-        double[] alpha = new double[] { 3, 4 };
-        double[] beta = new double[] { 5, 6 };
+        double[] alpha = new double[]{3, 4};
+        double[] beta = new double[]{5, 6};
         DComplexMatrix2D C = new DiagonalDComplexMatrix2D(NROWS, NROWS, 0);
         for (int i = 0; i < DLENGTH; i++) {
             C.setQuick(i, i, Math.random(), Math.random());
@@ -586,7 +578,7 @@ public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {
                 double[] s = new double[2];
                 for (int k = 0; k < NROWS; k++) {
                     s = DComplex.plus(s, DComplex.mult(DComplex.conj(A.getQuick(k, i)), DComplex
-                            .conj(Bt.getQuick(j, k))));
+                        .conj(Bt.getQuick(j, k))));
                 }
                 elem[0] = expected[i][2 * j];
                 elem[1] = expected[i][2 * j + 1];

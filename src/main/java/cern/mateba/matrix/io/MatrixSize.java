@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003-2006 Bjørn-Ove Heimsund
- * 
+ *
  * This file is part of MTJ.
- * 
+ *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the
  * Free Software Foundation; either version 2.1 of the License, or (at your
  * option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -29,12 +29,12 @@ public class MatrixSize {
     /**
      * Number of rows
      */
-    private int numRows;
+    private final int numRows;
 
     /**
      * Number of columns
      */
-    private int numColumns;
+    private final int numColumns;
 
     /**
      * Number of entries stored
@@ -43,13 +43,10 @@ public class MatrixSize {
 
     /**
      * Constructor for MatrixSize
-     * 
-     * @param numRows
-     *            Number of rows in the matrix
-     * @param numColumns
-     *            Number of columns in the matrix
-     * @param info
-     *            Info on the matrix
+     *
+     * @param numRows    Number of rows in the matrix
+     * @param numColumns Number of columns in the matrix
+     * @param info       Info on the matrix
      */
     public MatrixSize(int numRows, int numColumns, MatrixInfo info) {
         this.numRows = numRows;
@@ -68,13 +65,10 @@ public class MatrixSize {
 
     /**
      * Constructor for MatrixSize
-     * 
-     * @param numRows
-     *            Number of rows in the matrix
-     * @param numColumns
-     *            Number of columns in the matrix
-     * @param numEntries
-     *            Number of entries stored
+     *
+     * @param numRows    Number of rows in the matrix
+     * @param numColumns Number of columns in the matrix
+     * @param numEntries Number of entries stored
      */
     public MatrixSize(int numRows, int numColumns, int numEntries) {
         this.numRows = numRows;

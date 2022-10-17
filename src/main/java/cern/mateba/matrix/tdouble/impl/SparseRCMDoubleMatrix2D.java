@@ -7,28 +7,24 @@ import java.io.Serial;
 /**
  * Sparse row-compressed-modified 2-d matrix holding <tt>double</tt> elements.
  * Each row is stored as SparseDoubleMatrix1D.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class SparseRCMDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
     @Serial
     private static final long serialVersionUID = 4903133377432946242L;
-    private SparseDoubleMatrix1D[] elements;
+    private final SparseDoubleMatrix1D[] elements;
 
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public SparseRCMDoubleMatrix2D(int rows, int columns) {
         super(null);

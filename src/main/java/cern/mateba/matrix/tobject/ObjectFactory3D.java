@@ -19,27 +19,27 @@ import java.io.Serializable;
  * cells. Use idioms like <tt>ObjectFactory3D.dense.make(4,4,4)</tt> to
  * construct dense matrices, <tt>ObjectFactory3D.sparse.make(4,4,4)</tt> to
  * construct sparse matrices.
- * 
+ * <p>
  * If the factory is used frequently it might be useful to streamline the
  * notation. For example by aliasing:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  *  ObjectFactory3D F = ObjectFactory3D.dense;
  *  F.make(4,4,4);
  *  ...
  * </pre>
- * 
+ *
  * </td>
  * </table>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class ObjectFactory3D implements Serializable, Cloneable{
+public class ObjectFactory3D implements Serializable, Cloneable {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = -4192785125265951692L;
@@ -68,18 +68,15 @@ public class ObjectFactory3D implements Serializable, Cloneable{
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>values.length != slices() || for any 0 &lt;= slice &lt; slices(): values[slice].length != rows()</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 0 &lt;= column &lt; columns(): values[slice][row].length != columns()</tt>
-     *             .
+     * @throws IllegalArgumentException if
+     *                                  <tt>values.length != slices() || for any 0 &lt;= slice &lt; slices(): values[slice].length != rows()</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 0 &lt;= column &lt; columns(): values[slice][row].length != columns()</tt>
+     *                                  .
      */
     public ObjectMatrix3D make(Object[][][] values) {
         if (this == sparse)

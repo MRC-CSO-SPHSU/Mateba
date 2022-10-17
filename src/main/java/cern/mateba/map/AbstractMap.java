@@ -18,7 +18,7 @@ import java.io.Serializable;
  * <a href="package-tree.html">tree view</a> to get the broad picture.
  * <p>
  * Note that implementations are not synchronized.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  * @see java.util.HashMap
@@ -84,7 +84,7 @@ public abstract class AbstractMap implements Serializable, Cloneable {
     /**
      * Returns new high water mark threshold based on current capacity and
      * maxLoadFactor.
-     * 
+     *
      * @return int the new threshold.
      */
     protected int chooseHighWaterMark(int capacity, double maxLoad) {
@@ -99,7 +99,7 @@ public abstract class AbstractMap implements Serializable, Cloneable {
     /**
      * Returns new low water mark threshold based on current capacity and
      * minLoadFactor.
-     * 
+     *
      * @return int the new threshold.
      */
     protected int chooseLowWaterMark(int capacity, double minLoad) {
@@ -143,9 +143,8 @@ public abstract class AbstractMap implements Serializable, Cloneable {
      * <p>
      * <b>This default implementation does nothing.</b> Override this method if
      * necessary.
-     * 
-     * @param minCapacity
-     *            the desired minimum capacity.
+     *
+     * @param minCapacity the desired minimum capacity.
      */
     public void ensureCapacity(int minCapacity) {
     }
@@ -153,9 +152,9 @@ public abstract class AbstractMap implements Serializable, Cloneable {
     /**
      * Returns <tt>true</tt> if the receiver contains no (key,value)
      * associations.
-     * 
+     *
      * @return <tt>true</tt> if the receiver contains no (key,value)
-     *         associations.
+     * associations.
      */
     public boolean isEmpty() {
         return distinct == 0;
@@ -165,9 +164,8 @@ public abstract class AbstractMap implements Serializable, Cloneable {
      * Returns a prime number which is <code>&gt;= desiredCapacity</code> and
      * very close to <code>desiredCapacity</code> (within 11% if
      * <code>desiredCapacity &gt;= 1000</code>).
-     * 
-     * @param desiredCapacity
-     *            the capacity desired by the user.
+     *
+     * @param desiredCapacity the capacity desired by the user.
      * @return the capacity which should be used for a hashtable.
      */
     protected int nextPrime(int desiredCapacity) {
@@ -177,18 +175,14 @@ public abstract class AbstractMap implements Serializable, Cloneable {
     /**
      * Initializes the receiver. You will almost certainly need to override this
      * method in subclasses to initialize the hash table.
-     * 
-     * @param initialCapacity
-     *            the initial capacity of the receiver.
-     * @param minLoadFactor
-     *            the minLoadFactor of the receiver.
-     * @param maxLoadFactor
-     *            the maxLoadFactor of the receiver.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
-     *             .
+     *
+     * @param initialCapacity the initial capacity of the receiver.
+     * @param minLoadFactor   the minLoadFactor of the receiver.
+     * @param maxLoadFactor   the maxLoadFactor of the receiver.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
+     *                                  .
      */
     protected void setUp(int initialCapacity, double minLoadFactor, double maxLoadFactor) {
         if (initialCapacity < 0)
@@ -199,12 +193,12 @@ public abstract class AbstractMap implements Serializable, Cloneable {
             throw new IllegalArgumentException("Illegal maxLoadFactor: " + maxLoadFactor);
         if (minLoadFactor >= maxLoadFactor)
             throw new IllegalArgumentException("Illegal minLoadFactor: " + minLoadFactor + " and maxLoadFactor: "
-                    + maxLoadFactor);
+                + maxLoadFactor);
     }
 
     /**
      * Returns the number of (key,value) associations currently contained.
-     * 
+     *
      * @return the number of (key,value) associations currently contained.
      */
     public int size() {

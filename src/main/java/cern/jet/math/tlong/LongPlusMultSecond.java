@@ -30,14 +30,14 @@ public final class LongPlusMultSecond implements cern.mateba.function.tlong.Long
     /**
      * Insert the method's description here. Creation date: (8/10/99 19:12:09)
      */
-    protected LongPlusMultSecond(final long multiplicator) {
+    LongPlusMultSecond(final long multiplicator) {
         this.multiplicator = multiplicator;
     }
 
     /**
      * Returns the result of the function evaluation.
      */
-    public final long apply(long a, long b) {
+    public long apply(long a, long b) {
         return a + b * multiplicator;
     }
 

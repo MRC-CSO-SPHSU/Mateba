@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003-2006 Bjørn-Ove Heimsund
- * 
+ *
  * This file is part of MTJ.
- * 
+ *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the
  * Free Software Foundation; either version 2.1 of the License, or (at your
  * option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -115,34 +115,25 @@ public class DoubleAMG implements DoublePreconditioner {
 
     /**
      * Sets up the algebraic multigrid preconditioner
-     * 
-     * @param omegaPreF
-     *            Overrelaxation parameter in the forward sweep of the
-     *            pre-smoothing
-     * @param omegaPreR
-     *            Overrelaxation parameter in the backwards sweep of the
-     *            pre-smoothing
-     * @param omegaPostF
-     *            Overrelaxation parameter in the forward sweep of the
-     *            post-smoothing
-     * @param omegaPostR
-     *            Overrelaxation parameter in the backwards sweep of the
-     *            post-smoothing
-     * @param nu1
-     *            Number of pre-relaxations to perform
-     * @param nu2
-     *            Number of post-relaxations to perform
-     * @param gamma
-     *            Number of times to go to a coarser level
-     * @param min
-     *            Smallest matrix size before using a direct solver
-     * @param omega
-     *            Jacobi damping parameter, between zero and one. If it equals
-     *            zero, the method reduces to the standard aggregate multigrid
-     *            method
+     *
+     * @param omegaPreF  Overrelaxation parameter in the forward sweep of the
+     *                   pre-smoothing
+     * @param omegaPreR  Overrelaxation parameter in the backwards sweep of the
+     *                   pre-smoothing
+     * @param omegaPostF Overrelaxation parameter in the forward sweep of the
+     *                   post-smoothing
+     * @param omegaPostR Overrelaxation parameter in the backwards sweep of the
+     *                   post-smoothing
+     * @param nu1        Number of pre-relaxations to perform
+     * @param nu2        Number of post-relaxations to perform
+     * @param gamma      Number of times to go to a coarser level
+     * @param min        Smallest matrix size before using a direct solver
+     * @param omega      Jacobi damping parameter, between zero and one. If it equals
+     *                   zero, the method reduces to the standard aggregate multigrid
+     *                   method
      */
     public DoubleAMG(double omegaPreF, double omegaPreR, double omegaPostF, double omegaPostR, int nu1, int nu2,
-            int gamma, int min, double omega) {
+                     int gamma, int min, double omega) {
         this.omegaPreF = omegaPreF;
         this.omegaPreR = omegaPreR;
         this.omegaPostF = omegaPostF;
@@ -161,23 +152,16 @@ public class DoubleAMG implements DoublePreconditioner {
     /**
      * Sets up the algebraic multigrid preconditioner. Uses an SOR method,
      * without the backward sweep in SSOR
-     * 
-     * @param omegaPre
-     *            Overrelaxation parameter in the pre-smoothing
-     * @param omegaPost
-     *            Overrelaxation parameter in the post-smoothing
-     * @param nu1
-     *            Number of pre-relaxations to perform
-     * @param nu2
-     *            Number of post-relaxations to perform
-     * @param gamma
-     *            Number of times to go to a coarser level
-     * @param min
-     *            Smallest matrix size before using a direct solver
-     * @param omega
-     *            Jacobi damping parameter, between zero and one. If it equals
-     *            zero, the method reduces to the standard aggregate multigrid
-     *            method
+     *
+     * @param omegaPre  Overrelaxation parameter in the pre-smoothing
+     * @param omegaPost Overrelaxation parameter in the post-smoothing
+     * @param nu1       Number of pre-relaxations to perform
+     * @param nu2       Number of post-relaxations to perform
+     * @param gamma     Number of times to go to a coarser level
+     * @param min       Smallest matrix size before using a direct solver
+     * @param omega     Jacobi damping parameter, between zero and one. If it equals
+     *                  zero, the method reduces to the standard aggregate multigrid
+     *                  method
      */
     public DoubleAMG(double omegaPre, double omegaPost, int nu1, int nu2, int gamma, int min, double omega) {
         this.omegaPreF = omegaPre;
@@ -308,9 +292,8 @@ public class DoubleAMG implements DoublePreconditioner {
 
     /**
      * Performs a multigrid cycle
-     * 
-     * @param k
-     *            Level to cycle at. Start by calling <code>cycle(0)</code>
+     *
+     * @param k Level to cycle at. Start by calling <code>cycle(0)</code>
      */
     private void cycle(int k) {
         if (k == m - 1)
@@ -356,9 +339,8 @@ public class DoubleAMG implements DoublePreconditioner {
 
     /**
      * Applies the relaxation scheme at the given level
-     * 
-     * @param k
-     *            Multigrid level
+     *
+     * @param k Multigrid level
      */
     private void preRelax(int k) {
         for (int i = 0; i < nu1; ++i)
@@ -370,9 +352,8 @@ public class DoubleAMG implements DoublePreconditioner {
 
     /**
      * Applies the relaxation scheme at the given level
-     * 
-     * @param k
-     *            Multigrid level
+     *
+     * @param k Multigrid level
      */
     private void postRelax(int k) {
         for (int i = 0; i < nu2; ++i)
@@ -396,7 +377,7 @@ public class DoubleAMG implements DoublePreconditioner {
         /**
          * Diagonal indexes into the sparse matrix
          */
-        private int[] diagind;
+        private final int[] diagind;
 
         /**
          * The strongly coupled node neighborhood of a given node
@@ -405,11 +386,9 @@ public class DoubleAMG implements DoublePreconditioner {
 
         /**
          * Creates the aggregates
-         * 
-         * @param A
-         *            Sparse matrix
-         * @param eps
-         *            Tolerance for selecting the strongly coupled node
+         *
+         * @param A   Sparse matrix
+         * @param eps Tolerance for selecting the strongly coupled node
          *            neighborhoods. Between zero and one.
          */
         public Aggregator(SparseRCDoubleMatrix2D A, double eps) {
@@ -656,7 +635,7 @@ public class DoubleAMG implements DoublePreconditioner {
         /**
          * The Galerkin coarse-space operator
          */
-        private SparseRCDoubleMatrix2D Ac;
+        private final SparseRCDoubleMatrix2D Ac;
 
         /**
          * The interpolation (prolongation) matrix
@@ -665,15 +644,12 @@ public class DoubleAMG implements DoublePreconditioner {
 
         /**
          * Creates the interpolation (prolongation) and Galerkin operators
-         * 
-         * @param aggregator
-         *            Aggregates
-         * @param A
-         *            Matrix
-         * @param omega
-         *            Jacobi damping parameter between zero and one. If zero, no
-         *            smoothing is performed, and a faster algorithm for forming
-         *            the Galerkin operator will be used.
+         *
+         * @param aggregator Aggregates
+         * @param A          Matrix
+         * @param omega      Jacobi damping parameter between zero and one. If zero, no
+         *                   smoothing is performed, and a faster algorithm for forming
+         *                   the Galerkin operator will be used.
          */
         public Interpolator(Aggregator aggregator, SparseRCDoubleMatrix2D A, double omega) {
             List<Set<Integer>> C = aggregator.getAggregates();
@@ -811,7 +787,7 @@ public class DoubleAMG implements DoublePreconditioner {
          * single sweep of the damped Jacobi method
          */
         private List<Map<Integer, Double>> createSmoothedProlongation(List<Set<Integer>> C, List<Set<Integer>> N,
-                SparseRCDoubleMatrix2D A, int[] diagind, double omega, int[] pt) {
+                                                                      SparseRCDoubleMatrix2D A, int[] diagind, double omega, int[] pt) {
 
             int n = A.rows(), c = C.size();
 
@@ -962,20 +938,16 @@ public class DoubleAMG implements DoublePreconditioner {
 
         /**
          * Constructor for SSOR
-         * 
-         * @param F
-         *            Matrix to use internally. It will not be modified, thus
-         *            the system matrix may be passed
-         * @param reverse
-         *            True to perform a reverse sweep as well as the forward
-         *            sweep. If false, this preconditioner becomes the SOR
-         *            method instead
-         * @param omegaF
-         *            Overrelaxation parameter for the forward sweep. Between 0
-         *            and 2.
-         * @param omegaR
-         *            Overrelaxation parameter for the backwards sweep. Between
-         *            0 and 2.
+         *
+         * @param F       Matrix to use internally. It will not be modified, thus
+         *                the system matrix may be passed
+         * @param reverse True to perform a reverse sweep as well as the forward
+         *                sweep. If false, this preconditioner becomes the SOR
+         *                method instead
+         * @param omegaF  Overrelaxation parameter for the forward sweep. Between 0
+         *                and 2.
+         * @param omegaR  Overrelaxation parameter for the backwards sweep. Between
+         *                0 and 2.
          */
         public SSOR(SparseRCDoubleMatrix2D F, boolean reverse, double omegaF, double omegaR) {
             if (F.rows() != F.columns())
@@ -993,10 +965,9 @@ public class DoubleAMG implements DoublePreconditioner {
         /**
          * Constructor for SSOR. Uses <code>omega=1</code> with a backwards
          * sweep
-         * 
-         * @param F
-         *            Matrix to use internally. It will not be modified, thus
-         *            the system matrix may be passed
+         *
+         * @param F Matrix to use internally. It will not be modified, thus
+         *          the system matrix may be passed
          */
         public SSOR(SparseRCDoubleMatrix2D F) {
             this(F, true, 1, 1);
@@ -1004,13 +975,11 @@ public class DoubleAMG implements DoublePreconditioner {
 
         /**
          * Sets the overrelaxation parameters
-         * 
-         * @param omegaF
-         *            Overrelaxation parameter for the forward sweep. Between 0
-         *            and 2.
-         * @param omegaR
-         *            Overrelaxation parameter for the backwards sweep. Between
-         *            0 and 2.
+         *
+         * @param omegaF Overrelaxation parameter for the forward sweep. Between 0
+         *               and 2.
+         * @param omegaR Overrelaxation parameter for the backwards sweep. Between
+         *               0 and 2.
          */
         public void setOmega(double omegaF, double omegaR) {
             if (omegaF < 0 || omegaF > 2)

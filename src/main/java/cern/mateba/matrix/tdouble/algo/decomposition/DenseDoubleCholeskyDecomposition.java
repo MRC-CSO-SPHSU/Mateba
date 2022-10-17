@@ -25,24 +25,22 @@ public class DenseDoubleCholeskyDecomposition implements java.io.Serializable {
     static final long serialVersionUID = 1020;
 
     private DoubleMatrix2D Lt;
-    private double[] elementsA;
+    private final double[] elementsA;
     private boolean columnMatrix = false;
 
     /**
      * Row and column dimension (square matrix).
      */
-    private int n;
+    private final int n;
 
     /**
      * Constructs and returns a new Cholesky decomposition object for a
      * symmetric and positive definite matrix; The decomposed matrices can be
      * retrieved via instance methods of the returned decomposition object.
-     * 
-     * @param A
-     *            Square, symmetric positive definite matrix .
-     * @throws IllegalArgumentException
-     *             if <tt>A</tt> is not square or is not a symmetric positive
-     *             definite.
+     *
+     * @param A Square, symmetric positive definite matrix .
+     * @throws IllegalArgumentException if <tt>A</tt> is not square or is not a symmetric positive
+     *                                  definite.
      */
     public DenseDoubleCholeskyDecomposition(DoubleMatrix2D A) {
         DoubleProperty.DEFAULT.checkSquare(A);
@@ -67,7 +65,7 @@ public class DenseDoubleCholeskyDecomposition implements java.io.Serializable {
 
     /**
      * Returns the triangular factor, <tt>L</tt>.
-     * 
+     *
      * @return <tt>L</tt>
      */
     public DoubleMatrix2D getL() {
@@ -77,16 +75,16 @@ public class DenseDoubleCholeskyDecomposition implements java.io.Serializable {
             if (columnMatrix) {
                 Lt = new DenseColumnDoubleMatrix2D(n, n);
                 double[] Lelems = (double[]) Lt.elements();
-                for (int c = n; --c >= 0;) {
-                    for (int r = n; --r >= c;) {
+                for (int c = n; --c >= 0; ) {
+                    for (int r = n; --r >= c; ) {
                         Lelems[r * n + c] = elementsA[r * n + c];
                     }
                 }
             } else {
                 Lt = new DenseDoubleMatrix2D(n, n);
                 double[] Lelems = (double[]) Lt.elements();
-                for (int c = n; --c >= 0;) {
-                    for (int r = n; --r >= c;) {
+                for (int c = n; --c >= 0; ) {
+                    for (int r = n; --r >= c; ) {
                         Lelems[c * n + r] = elementsA[r * n + c];
                     }
                 }
@@ -102,16 +100,16 @@ public class DenseDoubleCholeskyDecomposition implements java.io.Serializable {
             if (columnMatrix) {
                 Lt = new DenseColumnDoubleMatrix2D(n, n);
                 double[] Lelems = (double[]) Lt.elements();
-                for (int c = n; --c >= 0;) {
-                    for (int r = n; --r >= c;) {
+                for (int c = n; --c >= 0; ) {
+                    for (int r = n; --r >= c; ) {
                         Lelems[r * n + c] = elementsA[r * n + c];
                     }
                 }
             } else {
                 Lt = new DenseDoubleMatrix2D(n, n);
                 double[] Lelems = (double[]) Lt.elements();
-                for (int c = n; --c >= 0;) {
-                    for (int r = n; --r >= c;) {
+                for (int c = n; --c >= 0; ) {
+                    for (int r = n; --r >= c; ) {
                         Lelems[c * n + r] = elementsA[r * n + c];
                     }
                 }
@@ -123,12 +121,10 @@ public class DenseDoubleCholeskyDecomposition implements java.io.Serializable {
     /**
      * Solves <tt>A*X = B</tt>(in-place). Upon return <tt>B</tt> is overridden
      * with the result <tt>X</tt>.
-     * 
-     * @param B
-     *            A Matrix with as many rows as <tt>A</tt> and any number of
-     *            columns.
-     * @exception IllegalArgumentException
-     *                if <tt>B.rows() != A.rows()</tt>.
+     *
+     * @param B A Matrix with as many rows as <tt>A</tt> and any number of
+     *          columns.
+     * @throws IllegalArgumentException if <tt>B.rows() != A.rows()</tt>.
      */
     public void solve(DoubleMatrix2D B) {
         if (B.rows() != n) {
@@ -151,7 +147,7 @@ public class DenseDoubleCholeskyDecomposition implements java.io.Serializable {
         Dplasma.plasma_Finalize();
         if (info != 0) {
             throw new IllegalArgumentException(
-                    "Error occured while solving the system of equation using Cholesky decomposition: " + info);
+                "Error occured while solving the system of equation using Cholesky decomposition: " + info);
         }
         if (B instanceof DenseDoubleMatrix2D) {
             B.viewDice().assign(elementsX);
@@ -165,11 +161,9 @@ public class DenseDoubleCholeskyDecomposition implements java.io.Serializable {
     /**
      * Solves <tt>A*x = b</tt>(in-place). Upon return <tt>b</tt> is overridden
      * with the result <tt>x</tt>.
-     * 
-     * @param b
-     *            A vector with of size A.rows();
-     * @exception IllegalArgumentException
-     *                if <tt>b.size() != A.rows()</tt>.
+     *
+     * @param b A vector with of size A.rows();
+     * @throws IllegalArgumentException if <tt>b.size() != A.rows()</tt>.
      */
     public void solve(DoubleMatrix1D b) {
         if (b.size() != n) {
@@ -187,7 +181,7 @@ public class DenseDoubleCholeskyDecomposition implements java.io.Serializable {
         Dplasma.plasma_Finalize();
         if (info != 0) {
             throw new IllegalArgumentException(
-                    "Error occured while solving the system of equation using Cholesky decomposition: " + info);
+                "Error occured while solving the system of equation using Cholesky decomposition: " + info);
         }
         if (b.isView()) {
             b.assign(elementsX);
@@ -197,11 +191,11 @@ public class DenseDoubleCholeskyDecomposition implements java.io.Serializable {
     /**
      * Returns a String with (propertyName, propertyValue) pairs. Useful for
      * debugging or to quickly get the rough picture. For example,
-     * 
+     *
      * <pre>
      *   rank          : 3
      *   trace         : 0
-     * 
+     *
      * </pre>
      */
 
@@ -215,7 +209,7 @@ public class DenseDoubleCholeskyDecomposition implements java.io.Serializable {
 
         buf.append("\nL = ");
         try {
-            buf.append(String.valueOf(this.getL()));
+            buf.append(this.getL());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
@@ -224,7 +218,7 @@ public class DenseDoubleCholeskyDecomposition implements java.io.Serializable {
         try {
             DoubleMatrix2D X = cern.mateba.matrix.tdouble.DoubleFactory2D.dense.identity(n);
             this.solve(X);
-            buf.append(String.valueOf(X));
+            buf.append(X);
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }

@@ -48,7 +48,7 @@ class Dgetrs {
      *  using LU factorization computed by plasma_DGETRF()
      */
     protected static int plasma_DGETRS(int M, int NRHS, int N, double[] A, int A_offset, int LDA, double[] L,
-            int L_offset, int[] IPIV, int IPIV_offset, double[] B, int B_offset, int LDB) {
+                                       int L_offset, int[] IPIV, int IPIV_offset, double[] B, int B_offset, int LDB) {
         int NB, MT, NT, NTRHS;
         int status;
         double[] Abdl;
@@ -171,9 +171,9 @@ class Dgetrs {
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
         Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
         DbdlConvert.plasma_lapack_to_bdl(Dcommon.plasma_args.F77, Dcommon.plasma_args.F77_offset,
-                Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N,
-                Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
-                Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
+            Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N,
+            Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
+            Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
         /* Convert B from LAPACK to BDL */
@@ -202,9 +202,9 @@ class Dgetrs {
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
         Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
         DbdlConvert.plasma_lapack_to_bdl(Dcommon.plasma_args.F77, Dcommon.plasma_args.F77_offset,
-                Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N,
-                Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
-                Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
+            Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N,
+            Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
+            Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
         /* Accept L from the user */
@@ -245,12 +245,12 @@ class Dgetrs {
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
         Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
         Pdtrsmpl.plasma_pDTRSMPL(Dcommon.plasma_args.M, Dcommon.plasma_args.NRHS, Dcommon.plasma_args.N,
-                Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB,
-                Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_args.IBNBSIZE, Dcommon.plasma_args.IB,
-                Dcommon.plasma_args.MT, Dcommon.plasma_args.NTRHS, Dcommon.plasma_args.NT, Dcommon.plasma_args.L,
-                Dcommon.plasma_args.L_offset, Dcommon.plasma_args.IPIV, Dcommon.plasma_args.IPIV_offset,
-                Dcommon.plasma_args.B, Dcommon.plasma_args.B_offset, Dcommon.plasma_args.INFO,
-                Dcommon.plasma_cntrl.cores_num, 0);
+            Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB,
+            Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_args.IBNBSIZE, Dcommon.plasma_args.IB,
+            Dcommon.plasma_args.MT, Dcommon.plasma_args.NTRHS, Dcommon.plasma_args.NT, Dcommon.plasma_args.L,
+            Dcommon.plasma_args.L_offset, Dcommon.plasma_args.IPIV, Dcommon.plasma_args.IPIV_offset,
+            Dcommon.plasma_args.B, Dcommon.plasma_args.B_offset, Dcommon.plasma_args.INFO,
+            Dcommon.plasma_cntrl.cores_num, 0);
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
         /* Call parallel DTRSM */
@@ -285,10 +285,10 @@ class Dgetrs {
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
         Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
         Pdtrsm.plasma_pDTRSM(Dplasma.PlasmaLeft, Dcommon.plasma_args.uplo, Dcommon.plasma_args.trans,
-                Dcommon.plasma_args.diag, Dcommon.plasma_args.N, Dcommon.plasma_args.NRHS, 1.0, Dcommon.plasma_args.A,
-                Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB, Dcommon.plasma_args.NBNBSIZE,
-                Dcommon.plasma_args.NT, Dcommon.plasma_args.MT, Dcommon.plasma_args.B, Dcommon.plasma_args.B_offset,
-                Dcommon.plasma_args.MTB, Dcommon.plasma_args.NTRHS, Dcommon.plasma_cntrl.cores_num, 0);
+            Dcommon.plasma_args.diag, Dcommon.plasma_args.N, Dcommon.plasma_args.NRHS, 1.0, Dcommon.plasma_args.A,
+            Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB, Dcommon.plasma_args.NBNBSIZE,
+            Dcommon.plasma_args.NT, Dcommon.plasma_args.MT, Dcommon.plasma_args.B, Dcommon.plasma_args.B_offset,
+            Dcommon.plasma_args.MTB, Dcommon.plasma_args.NTRHS, Dcommon.plasma_cntrl.cores_num, 0);
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
         /* Convert B from BDL to LAPACK */
@@ -317,9 +317,9 @@ class Dgetrs {
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
         Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
         DbdlConvert.plasma_bdl_to_lapack(Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.F77,
-                Dcommon.plasma_args.F77_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N, Dcommon.plasma_args.LDA,
-                Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT, Dcommon.plasma_args.NBNBSIZE,
-                Dcommon.plasma_cntrl.cores_num, 0);
+            Dcommon.plasma_args.F77_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N, Dcommon.plasma_args.LDA,
+            Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT, Dcommon.plasma_args.NBNBSIZE,
+            Dcommon.plasma_cntrl.cores_num, 0);
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
         return Dplasma.PLASMA_SUCCESS;

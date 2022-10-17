@@ -19,22 +19,22 @@ import java.io.Serializable;
  * cells. Use idioms like <tt>ComplexFactory3D.dense.make(4,4,4)</tt> to
  * construct dense matrices, <tt>ComplexFactory3D.sparse.make(4,4,4)</tt> to
  * construct sparse matrices.
- * 
+ * <p>
  * If the factory is used frequently it might be useful to streamline the
  * notation. For example by aliasing:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  *  ComplexFactory3D F = ComplexFactory3D.dense;
  *  F.make(4,4,4);
  *  F.random(4,4,5);
  *  ...
  * </pre>
- * 
+ *
  * </td>
  * </table>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  * @version 1.0, 12/10/2007
  */
@@ -66,18 +66,15 @@ public class DComplexFactory3D implements Serializable, Cloneable {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>values.length != slices() || for any 0 &lt;= slice &lt; slices(): values[slice].length != rows()</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 0 &lt;= column &lt; columns(): values[slice][row].length != columns()</tt>
-     *             .
+     * @throws IllegalArgumentException if
+     *                                  <tt>values.length != slices() || for any 0 &lt;= slice &lt; slices(): values[slice].length != rows()</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 0 &lt;= column &lt; columns(): values[slice][row].length != columns()</tt>
+     *                                  .
      */
     public DComplexMatrix3D make(double[][][] values) {
         if (this == sparse) {

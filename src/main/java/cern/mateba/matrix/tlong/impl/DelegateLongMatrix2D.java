@@ -17,7 +17,7 @@ import java.io.Serial;
 /**
  * 2-d matrix holding <tt>long</tt> elements; a view wrapping another 3-d matrix
  * and therefore delegating calls to it.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class DelegateLongMatrix2D extends LongMatrix2D {
@@ -38,33 +38,30 @@ class DelegateLongMatrix2D extends LongMatrix2D {
 
     /**
      * Constructs a matrix view with a given content, axis and index
-     * 
-     * @param newContent
-     *            the content of this view
-     * @param axis
-     *            the axis (0 to 2) this view is bound to
-     * @param index
-     *            the index this view is bound to
+     *
+     * @param newContent the content of this view
+     * @param axis       the axis (0 to 2) this view is bound to
+     * @param index      the index this view is bound to
      */
     public DelegateLongMatrix2D(LongMatrix3D newContent, int axis, int index) {
         switch (axis) {
-        case 0:
-            if (index < 0 || index >= newContent.slices())
+            case 0:
+                if (index < 0 || index >= newContent.slices())
+                    throw new IllegalArgumentException();
+                setUp(newContent.rows(), newContent.columns());
+                break;
+            case 1:
+                if (index < 0 || index >= newContent.rows())
+                    throw new IllegalArgumentException();
+                setUp(newContent.slices(), newContent.columns());
+                break;
+            case 2:
+                if (index < 0 || index >= newContent.columns())
+                    throw new IllegalArgumentException();
+                setUp(newContent.slices(), newContent.rows());
+                break;
+            default:
                 throw new IllegalArgumentException();
-            setUp(newContent.rows(), newContent.columns());
-            break;
-        case 1:
-            if (index < 0 || index >= newContent.rows())
-                throw new IllegalArgumentException();
-            setUp(newContent.slices(), newContent.columns());
-            break;
-        case 2:
-            if (index < 0 || index >= newContent.columns())
-                throw new IllegalArgumentException();
-            setUp(newContent.slices(), newContent.rows());
-            break;
-        default:
-            throw new IllegalArgumentException();
         }
         this.axis = axis;
         this.index = index;
@@ -73,14 +70,14 @@ class DelegateLongMatrix2D extends LongMatrix2D {
 
     public synchronized long getQuick(int row, int column) {
         switch (axis) {
-        case 0:
-            return content.getQuick(index, row, column);
-        case 1:
-            return content.getQuick(row, index, column);
-        case 2:
-            return content.getQuick(row, column, index);
-        default:
-            throw new IllegalArgumentException();
+            case 0:
+                return content.getQuick(index, row, column);
+            case 1:
+                return content.getQuick(row, index, column);
+            case 2:
+                return content.getQuick(row, column, index);
+            default:
+                throw new IllegalArgumentException();
         }
     }
 
@@ -90,17 +87,17 @@ class DelegateLongMatrix2D extends LongMatrix2D {
 
     public synchronized void setQuick(int row, int column, long value) {
         switch (axis) {
-        case 0:
-            content.setQuick(index, row, column, value);
-            break;
-        case 1:
-            content.setQuick(row, index, column, value);
-            break;
-        case 2:
-            content.setQuick(row, column, index, value);
-            break;
-        default:
-            throw new IllegalArgumentException();
+            case 0:
+                content.setQuick(index, row, column, value);
+                break;
+            case 1:
+                content.setQuick(row, index, column, value);
+                break;
+            case 2:
+                content.setQuick(row, column, index, value);
+                break;
+            default:
+                throw new IllegalArgumentException();
         }
     }
 

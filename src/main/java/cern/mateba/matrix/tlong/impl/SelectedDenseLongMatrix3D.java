@@ -49,15 +49,14 @@ import java.io.Serial;
  * <p>
  * Depends on the parent view holding cells.
  * <p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 09/24/99
  */
 class SelectedDenseLongMatrix3D extends LongMatrix3D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = 1973313757175816533L;
@@ -83,18 +82,14 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param elements
-     *            the cells.
-     * @param sliceOffsets
-     *            The slice offsets of the cells that shall be visible.
-     * @param rowOffsets
-     *            The row offsets of the cells that shall be visible.
-     * @param columnOffsets
-     *            The column offsets of the cells that shall be visible.
+     *
+     * @param elements      the cells.
+     * @param sliceOffsets  The slice offsets of the cells that shall be visible.
+     * @param rowOffsets    The row offsets of the cells that shall be visible.
+     * @param columnOffsets The column offsets of the cells that shall be visible.
      */
     protected SelectedDenseLongMatrix3D(long[] elements, int[] sliceOffsets, int[] rowOffsets, int[] columnOffsets,
-            int offset) {
+                                        int offset) {
         // be sure parameters are valid, we do not check...
         int slices = sliceOffsets.length;
         int rows = rowOffsets.length;
@@ -118,20 +113,17 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>[slice,row,column]</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>slice&lt;0 || slice&gt;=slices() || row&lt;0 || row&gt;=rows() || column&lt;0 || column&gt;=column()</tt>.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      * @return the value at the specified coordinate.
      */
 
@@ -143,26 +135,23 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
         // return elements[index(slice,row,column)];
         // manually inlined:
         return elements[offset + sliceOffsets[sliceZero + slice * sliceStride] + rowOffsets[rowZero + row * rowStride]
-                + columnOffsets[columnZero + column * columnStride]];
+            + columnOffsets[columnZero + column * columnStride]];
     }
 
     /**
      * Returns the position of the given coordinate within the (virtual or
      * non-virtual) internal 1-dimensional array.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the third-coordinate.
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the third-coordinate.
      */
 
     public long index(int slice, int row, int column) {
         // return this.offset + super.index(slice,row,column);
         // manually inlined:
         return this.offset + sliceOffsets[sliceZero + slice * sliceStride] + rowOffsets[rowZero + row * rowStride]
-                + columnOffsets[columnZero + column * columnStride];
+            + columnOffsets[columnZero + column * columnStride];
     }
 
     /**
@@ -174,13 +163,10 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
      * <tt>SparseLongMatrix3D</tt> the new matrix must also be of type
      * <tt>SparseLongMatrix3D</tt>, etc. In general, the new matrix should have
      * internal parametrization as similar as possible.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param slices  the number of slices the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -195,22 +181,18 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
     /**
      * Sets the matrix cell at coordinate <tt>[slice,row,column]</tt> to the
      * specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>slice&lt;0 || slice&gt;=slices() || row&lt;0 || row&gt;=rows() || column&lt;0 || column&gt;=column()</tt>.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param value  the value to be filled into the specified cell.
      */
 
     public void setQuick(int slice, int row, int column, long value) {
@@ -221,13 +203,13 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
         // elements[index(slice,row,column)] = value;
         // manually inlined:
         elements[offset + sliceOffsets[sliceZero + slice * sliceStride] + rowOffsets[rowZero + row * rowStride]
-                + columnOffsets[columnZero + column * columnStride]] = value;
+            + columnOffsets[columnZero + column * columnStride]] = value;
     }
 
     /**
      * Returns a vector obtained by stacking the columns of each slice of the
      * matrix on top of one another.
-     * 
+     *
      * @return
      */
 
@@ -247,12 +229,10 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
      * slice view (methods <tt>viewColumn</tt>, <tt>viewRow</tt>) on the
      * intermediate 2-dimensional view. To obtain 1-dimensional views on
      * subranges, apply both steps.
-     * 
-     * @param column
-     *            the index of the column to fix.
+     *
+     * @param column the index of the column to fix.
      * @return a new 2-dimensional slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>column < 0 || column >= columns()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>column < 0 || column >= columns()</tt>.
      * @see #viewSlice(int)
      * @see #viewRow(int)
      */
@@ -274,7 +254,7 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
         int[] viewColumnOffsets = this.rowOffsets;
 
         return new SelectedDenseLongMatrix2D(viewRows, viewColumns, this.elements, viewRowZero, viewColumnZero,
-                viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
+            viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
     }
 
     /**
@@ -289,12 +269,10 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
      * slice view (methods <tt>viewColumn</tt>, <tt>viewRow</tt>) on the
      * intermediate 2-dimensional view. To obtain 1-dimensional views on
      * subranges, apply both steps.
-     * 
-     * @param row
-     *            the index of the row to fix.
+     *
+     * @param row the index of the row to fix.
      * @return a new 2-dimensional slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>row < 0 || row >= row()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>row < 0 || row >= row()</tt>.
      * @see #viewSlice(int)
      * @see #viewColumn(int)
      */
@@ -316,7 +294,7 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
         int[] viewColumnOffsets = this.columnOffsets;
 
         return new SelectedDenseLongMatrix2D(viewRows, viewColumns, this.elements, viewRowZero, viewColumnZero,
-                viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
+            viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
     }
 
     /**
@@ -331,12 +309,10 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
      * slice view (methods <tt>viewColumn</tt>, <tt>viewRow</tt>) on the
      * intermediate 2-dimensional view. To obtain 1-dimensional views on
      * subranges, apply both steps.
-     * 
-     * @param slice
-     *            the index of the slice to fix.
+     *
+     * @param slice the index of the slice to fix.
      * @return a new 2-dimensional slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>slice < 0 || slice >= slices()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>slice < 0 || slice >= slices()</tt>.
      * @see #viewRow(int)
      * @see #viewColumn(int)
      */
@@ -358,16 +334,15 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
         int[] viewColumnOffsets = this.columnOffsets;
 
         return new SelectedDenseLongMatrix2D(viewRows, viewColumns, this.elements, viewRowZero, viewColumnZero,
-                viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
+            viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
     }
 
     /**
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
 
@@ -379,9 +354,8 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
 
@@ -393,9 +367,8 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
 
@@ -415,11 +388,9 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
      */
 
     protected boolean haveSharedCellsRaw(LongMatrix3D other) {
-        if (other instanceof SelectedDenseLongMatrix3D) {
-            SelectedDenseLongMatrix3D otherMatrix = (SelectedDenseLongMatrix3D) other;
+        if (other instanceof SelectedDenseLongMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseLongMatrix3D) {
-            DenseLongMatrix3D otherMatrix = (DenseLongMatrix3D) other;
+        } else if (other instanceof DenseLongMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -432,21 +403,15 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
      * of type <tt>DenseLongMatrix2D</tt>, if the receiver is an instance of
      * type <tt>SparseLongMatrix3D</tt> the new matrix must also be of type
      * <tt>SparseLongMatrix2D</tt>, etc.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
+     *
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(i,j+1)-index(i,j)</tt>.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -458,15 +423,11 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
 
     /**
      * Sets up a matrix with a given number of slices and rows.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>(int)rows*slices > Long.MAX_VALUE</tt>.
+     *
+     * @param slices  the number of slices the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>(int)rows*slices > Long.MAX_VALUE</tt>.
      */
 
     protected void setUp(int slices, int rows, int columns) {
@@ -479,9 +440,8 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
 
     /**
      * Self modifying version of viewDice().
-     * 
-     * @throws IllegalArgumentException
-     *             if some of the parameters are equal or not in range 0..2.
+     *
+     * @throws IllegalArgumentException if some of the parameters are equal or not in range 0..2.
      */
 
     protected AbstractMatrix3D vDice(int axis0, int axis1, int axis2) {
@@ -502,13 +462,10 @@ class SelectedDenseLongMatrix3D extends LongMatrix3D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param sliceOffsets
-     *            the offsets of the visible elements.
-     * @param rowOffsets
-     *            the offsets of the visible elements.
-     * @param columnOffsets
-     *            the offsets of the visible elements.
+     *
+     * @param sliceOffsets  the offsets of the visible elements.
+     * @param rowOffsets    the offsets of the visible elements.
+     * @param columnOffsets the offsets of the visible elements.
      * @return a new view.
      */
 

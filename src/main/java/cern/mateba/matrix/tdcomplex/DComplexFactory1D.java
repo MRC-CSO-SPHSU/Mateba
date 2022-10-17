@@ -22,22 +22,22 @@ import cern.jet.random.sampling.RandomSamplingAssistant;
  * cells. Use idioms like <tt>ComplexFactory1D.dense.make(1000)</tt> to
  * construct dense matrices, <tt>ComplexFactory1D.sparse.make(1000)</tt> to
  * construct sparse matrices.
- * 
+ * <p>
  * If the factory is used frequently it might be useful to streamline the
  * notation. For example by aliasing:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  *  ComplexFactory1D F = ComplexFactory1D.dense;
  *  F.make(1000);
  *  F.random(3);
  *  ...
  * </pre>
- * 
+ *
  * </td>
  * </table>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class DComplexFactory1D implements Serializable, Cloneable {
@@ -78,9 +78,8 @@ public class DComplexFactory1D implements Serializable, Cloneable {
      * Constructs a matrix with the given cell values. The values are copied. So
      * subsequent changes in <tt>values</tt> are not reflected in the matrix,
      * and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      */
     public DComplexMatrix1D make(double[] values) {
         if (this == sparse)
@@ -134,9 +133,8 @@ public class DComplexFactory1D implements Serializable, Cloneable {
      * Constructs a matrix from the values of the given list. The values are
      * copied. So subsequent changes in <tt>values</tt> are not reflected in the
      * matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      * @return a new matrix.
      */
     public DComplexMatrix1D make(ArrayList<double[]> values) {
@@ -174,9 +172,8 @@ public class DComplexFactory1D implements Serializable, Cloneable {
      * them to <tt>value</tt>, all the rest will be initialized to zero. Note
      * that this is not the same as setting each cell with probability
      * <tt>nonZeroFraction</tt> to <tt>value</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
      * @see cern.jet.random.sampling.RandomSampler
      */
     public DComplexMatrix1D sample(int size, double[] value, double nonZeroFraction) {
@@ -208,9 +205,8 @@ public class DComplexFactory1D implements Serializable, Cloneable {
      * Constructs a list from the given matrix. The values are copied. So
      * subsequent changes in <tt>values</tt> are not reflected in the list, and
      * vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new list.
+     *
+     * @param values The values to be filled into the new list.
      * @return a new list.
      */
     public ArrayList<double[]> toList(DComplexMatrix1D values) {

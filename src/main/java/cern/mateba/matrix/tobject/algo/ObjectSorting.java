@@ -38,17 +38,16 @@ import java.io.Serializable;
  * not. A stable sort is, for example, helpful, if matrices are sorted
  * successively by multiple columns. It preserves the relative position of equal
  * elements.
- * 
+ *
+ * @author wolfgang.hoschek@cern.ch
+ * @version 1.1, 25/May/2000
  * @see cern.mateba.GenericSorting
  * @see cern.mateba.Sorting
  * @see java.util.Arrays
- * 
- * @author wolfgang.hoschek@cern.ch
- * @version 1.1, 25/May/2000
  */
-public class ObjectSorting implements Serializable, Cloneable{
+public class ObjectSorting implements Serializable, Cloneable {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = -1674113577210807428L;
@@ -66,7 +65,7 @@ public class ObjectSorting implements Serializable, Cloneable{
      */
     public static final ObjectSorting mergeSort = new ObjectSorting() { // override
         /**
-         * 
+         *
          */
         private static final long serialVersionUID = 1L;
 
@@ -107,26 +106,25 @@ public class ObjectSorting implements Serializable, Cloneable{
      * <table border="1" cellspacing="0">
      * <tr nowrap>
      * <td valign="top"><tt> 7, 1, 3, 1<br>
-     </tt></td>
+     * </tt></td>
      * <td valign="top">
      * <p>
      * <tt> ==&gt; 1, 1, 3, 7<br>
-     The vector IS NOT SORTED.<br>
-     The new VIEW IS SORTED.</tt>
+     * The vector IS NOT SORTED.<br>
+     * The new VIEW IS SORTED.</tt>
      * </p>
      * </td>
      * </tr>
      * </table>
-     * 
-     * @param vector
-     *            the vector to be sorted.
+     *
+     * @param vector the vector to be sorted.
      * @return a new sorted vector (matrix) view. <b>Note that the original
-     *         matrix is left unaffected.</b>
+     * matrix is left unaffected.</b>
      */
     public ObjectMatrix1D sort(final ObjectMatrix1D vector) {
         int[] indexes = new int[(int) vector.size()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = indexes.length; --i >= 0;)
+        for (int i = indexes.length; --i >= 0; )
             indexes[i] = i;
 
         IntComparator comp = new IntComparator() {
@@ -152,7 +150,7 @@ public class ObjectSorting implements Serializable, Cloneable{
      * use sub-ranging views. To sort descending, use flip views ...
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * // sort by sinus of cells
      * ObjectComparator comp = new ObjectComparator() {
@@ -164,18 +162,16 @@ public class ObjectSorting implements Serializable, Cloneable{
      * };
      * sorted = quickSort(vector, comp);
      * </pre>
-     * 
-     * @param vector
-     *            the vector to be sorted.
-     * @param c
-     *            the comparator to determine the order.
+     *
+     * @param vector the vector to be sorted.
+     * @param c      the comparator to determine the order.
      * @return a new matrix view sorted as specified. <b>Note that the original
-     *         vector (matrix) is left unaffected.</b>
+     * vector (matrix) is left unaffected.</b>
      */
     public ObjectMatrix1D sort(final ObjectMatrix1D vector, final java.util.Comparator c) {
         int[] indexes = new int[(int) vector.size()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = indexes.length; --i >= 0;)
+        for (int i = indexes.length; --i >= 0; )
             indexes[i] = i;
 
         IntComparator comp = new IntComparator() {
@@ -201,41 +197,38 @@ public class ObjectSorting implements Serializable, Cloneable{
      * <table border="1" cellspacing="0">
      * <tr nowrap>
      * <td valign="top"><tt>4 x 2 matrix: <br>
-     7, 6<br>
-     5, 4<br>
-     3, 2<br>
-     1, 0 <br>
-     </tt></td>
+     * 7, 6<br>
+     * 5, 4<br>
+     * 3, 2<br>
+     * 1, 0 <br>
+     * </tt></td>
      * <td align="left" valign="top">
      * <p>
      * <tt>column = 0;<br>
-     view = quickSort(matrix,column);<br>
-     System.out.println(view); </tt><tt><br>
-     ==> </tt>
+     * view = quickSort(matrix,column);<br>
+     * System.out.println(view); </tt><tt><br>
+     * ==> </tt>
      * </p>
      * </td>
      * <td valign="top">
      * <p>
      * <tt>4 x 2 matrix:<br>
-     1, 0<br>
-     3, 2<br>
-     5, 4<br>
-     7, 6</tt><br>
+     * 1, 0<br>
+     * 3, 2<br>
+     * 5, 4<br>
+     * 7, 6</tt><br>
      * The matrix IS NOT SORTED.<br>
      * The new VIEW IS SORTED.
      * </p>
      * </td>
      * </tr>
      * </table>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param column
-     *            the index of the column inducing the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param column the index of the column inducing the order.
      * @return a new matrix view having rows sorted by the given column. <b>Note
-     *         that the original matrix is left unaffected.</b>
-     * @throws IndexOutOfBoundsException
-     *             if <tt>column < 0 || column >= matrix.columns()</tt>.
+     * that the original matrix is left unaffected.</b>
+     * @throws IndexOutOfBoundsException if <tt>column < 0 || column >= matrix.columns()</tt>.
      */
     public ObjectMatrix2D sort(ObjectMatrix2D matrix, int column) {
         if (column < 0 || column >= matrix.columns())
@@ -243,7 +236,7 @@ public class ObjectSorting implements Serializable, Cloneable{
 
         int[] rowIndexes = new int[matrix.rows()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = rowIndexes.length; --i >= 0;)
+        for (int i = rowIndexes.length; --i >= 0; )
             rowIndexes[i] = i;
 
         final ObjectMatrix1D col = matrix.viewColumn(column);
@@ -273,7 +266,7 @@ public class ObjectSorting implements Serializable, Cloneable{
      * flip views ...
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * // sort by sum of values in a row
      * ObjectMatrix1DComparator comp = new ObjectMatrix1DComparator() {
@@ -285,25 +278,23 @@ public class ObjectSorting implements Serializable, Cloneable{
      * };
      * sorted = quickSort(matrix, comp);
      * </pre>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param c
-     *            the comparator to determine the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param c      the comparator to determine the order.
      * @return a new matrix view having rows sorted as specified. <b>Note that
-     *         the original matrix is left unaffected.</b>
+     * the original matrix is left unaffected.</b>
      */
     public ObjectMatrix2D sort(final ObjectMatrix2D matrix, final ObjectMatrix1DComparator c) {
         int[] rowIndexes = new int[matrix.rows()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = rowIndexes.length; --i >= 0;)
+        for (int i = rowIndexes.length; --i >= 0; )
             rowIndexes[i] = i;
 
         final ObjectMatrix1D[] views = new ObjectMatrix1D[matrix.rows()]; // precompute
         // views
         // for
         // speed
-        for (int i = views.length; --i >= 0;)
+        for (int i = views.length; --i >= 0; )
             views[i] = matrix.viewRow(i);
 
         IntComparator comp = new IntComparator() {
@@ -337,20 +328,16 @@ public class ObjectSorting implements Serializable, Cloneable{
      * <li><tt>A == B iff A.get(row,column) == B.get(row,column)</tt>
      * <li><tt>A &gt;  B  iff A.get(row,column) &gt;  B.get(row,column)</tt>
      * </ul>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param row
-     *            the index of the row inducing the order.
-     * @param column
-     *            the index of the column inducing the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param row    the index of the row inducing the order.
+     * @param column the index of the column inducing the order.
      * @return a new matrix view having slices sorted by the values of the slice
-     *         view <tt>matrix.viewRow(row).viewColumn(column)</tt>. <b>Note
-     *         that the original matrix is left unaffected.</b>
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>row < 0 || row >= matrix.rows() || column < 0 || column >= matrix.columns()</tt>
-     *             .
+     * view <tt>matrix.viewRow(row).viewColumn(column)</tt>. <b>Note
+     * that the original matrix is left unaffected.</b>
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>row < 0 || row >= matrix.rows() || column < 0 || column >= matrix.columns()</tt>
+     *                                   .
      */
     public ObjectMatrix3D sort(ObjectMatrix3D matrix, int row, int column) {
         if (row < 0 || row >= matrix.rows())
@@ -361,7 +348,7 @@ public class ObjectSorting implements Serializable, Cloneable{
         int[] sliceIndexes = new int[matrix.slices()]; // indexes to reorder
         // instead of matrix
         // itself
-        for (int i = sliceIndexes.length; --i >= 0;)
+        for (int i = sliceIndexes.length; --i >= 0; )
             sliceIndexes[i] = i;
 
         final ObjectMatrix1D sliceView = matrix.viewRow(row).viewColumn(column);
@@ -391,7 +378,7 @@ public class ObjectSorting implements Serializable, Cloneable{
      * descending, use flip views ...
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * // sort by sum of values in a slice
      * ObjectMatrix2DComparator comp = new ObjectMatrix2DComparator() {
@@ -403,26 +390,24 @@ public class ObjectSorting implements Serializable, Cloneable{
      * };
      * sorted = quickSort(matrix, comp);
      * </pre>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param c
-     *            the comparator to determine the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param c      the comparator to determine the order.
      * @return a new matrix view having slices sorted as specified. <b>Note that
-     *         the original matrix is left unaffected.</b>
+     * the original matrix is left unaffected.</b>
      */
     public ObjectMatrix3D sort(final ObjectMatrix3D matrix, final ObjectMatrix2DComparator c) {
         int[] sliceIndexes = new int[matrix.slices()]; // indexes to reorder
         // instead of matrix
         // itself
-        for (int i = sliceIndexes.length; --i >= 0;)
+        for (int i = sliceIndexes.length; --i >= 0; )
             sliceIndexes[i] = i;
 
         final ObjectMatrix2D[] views = new ObjectMatrix2D[matrix.slices()]; // precompute
         // views
         // for
         // speed
-        for (int i = views.length; --i >= 0;)
+        for (int i = views.length; --i >= 0; )
             views[i] = matrix.viewSlice(i);
 
         IntComparator comp = new IntComparator() {

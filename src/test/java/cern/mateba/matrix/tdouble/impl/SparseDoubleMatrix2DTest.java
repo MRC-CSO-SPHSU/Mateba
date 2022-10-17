@@ -22,8 +22,8 @@ public class SparseDoubleMatrix2DTest extends DoubleMatrix2DTest {
         int[] columnindexes = new int[SIZE];
         double[] values = new double[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            rowindexes[i] = (int) Math.abs(random.nextInt() % NROWS);
-            columnindexes[i] = (int) Math.abs(random.nextInt() % NCOLUMNS);
+            rowindexes[i] = Math.abs(random.nextInt() % NROWS);
+            columnindexes[i] = Math.abs(random.nextInt() % NCOLUMNS);
             values[i] = Math.random();
         }
         SparseDoubleMatrix2D A = new SparseDoubleMatrix2D(NROWS, NCOLUMNS, rowindexes, columnindexes, values);
@@ -47,8 +47,8 @@ public class SparseDoubleMatrix2DTest extends DoubleMatrix2DTest {
         int[] columnindexes = new int[SIZE];
         double[] values = new double[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            rowindexes[i] = (int) Math.abs(random.nextInt() % NROWS);
-            columnindexes[i] = (int) Math.abs(random.nextInt() % NCOLUMNS);
+            rowindexes[i] = Math.abs(random.nextInt() % NROWS);
+            columnindexes[i] = Math.abs(random.nextInt() % NCOLUMNS);
             values[i] = Math.random();
         }
         SparseDoubleMatrix2D S = new SparseDoubleMatrix2D(A.rows(), A.columns(), rowindexes, columnindexes, values);
@@ -66,8 +66,8 @@ public class SparseDoubleMatrix2DTest extends DoubleMatrix2DTest {
         int[] columnindexes = new int[SIZE];
         double[] values = new double[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            rowindexes[i] = (int) Math.abs(random.nextInt() % NROWS);
-            columnindexes[i] = (int) Math.abs(random.nextInt() % NCOLUMNS);
+            rowindexes[i] = Math.abs(random.nextInt() % NROWS);
+            columnindexes[i] = Math.abs(random.nextInt() % NCOLUMNS);
             values[i] = Math.random();
         }
         SparseDoubleMatrix2D S = new SparseDoubleMatrix2D(A.rows(), A.columns(), rowindexes, columnindexes, values);
@@ -92,8 +92,8 @@ public class SparseDoubleMatrix2DTest extends DoubleMatrix2DTest {
         int[] columnindexes = new int[SIZE];
         double[] values = new double[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            rowindexes[i] = (int) Math.abs(random.nextInt() % NROWS);
-            columnindexes[i] = (int) Math.abs(random.nextInt() % NCOLUMNS);
+            rowindexes[i] = Math.abs(random.nextInt() % NROWS);
+            columnindexes[i] = Math.abs(random.nextInt() % NCOLUMNS);
             values[i] = Math.random();
         }
         SparseDoubleMatrix2D S = new SparseDoubleMatrix2D(A.rows(), A.columns(), rowindexes, columnindexes, values);

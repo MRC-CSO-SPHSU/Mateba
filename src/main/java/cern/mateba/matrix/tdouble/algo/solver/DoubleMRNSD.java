@@ -1,16 +1,16 @@
 /*
  * Copyright (C) 2009 Piotr Wendykier
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the
  * Free Software Foundation; either version 2.1 of the License, or (at your
  * option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -28,7 +28,7 @@ import cern.jet.math.tdouble.DoubleFunctions;
  * MRNSD is Modified Residual Norm Steepest Descent method used for solving
  * large-scale, ill-posed inverse problems of the form: b = A*x + noise. This
  * algorithm is nonnegatively constrained.
- * 
+ *
  * <p>
  * References:<br>
  * <p>
@@ -41,9 +41,8 @@ import cern.jet.math.tdouble.DoubleFunctions;
  * [2] L. Kaufman, "Maximum likelihood, least squares and penalized least
  * squares for PET", IEEE Trans. Med. Imag. 12 (1993) pp. 200--214.
  * </p>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DoubleMRNSD extends AbstractDoubleIterativeSolver {
 
@@ -56,7 +55,7 @@ public class DoubleMRNSD extends AbstractDoubleIterativeSolver {
     }
 
     public DoubleMatrix1D solve(DoubleMatrix2D A, DoubleMatrix1D b, DoubleMatrix1D x)
-            throws IterativeSolverDoubleNotConvergedException {
+        throws IterativeSolverDoubleNotConvergedException {
         if (!(iter instanceof MRNSDDoubleIterationMonitor)) {
             iter = new MRNSDDoubleIterationMonitor();
             ((MRNSDDoubleIterationMonitor) iter).setRelativeTolerance(-1);
@@ -78,7 +77,7 @@ public class DoubleMRNSD extends AbstractDoubleIterativeSolver {
 
         if (((MRNSDDoubleIterationMonitor) iter).getRelativeTolerance() == -1.0) {
             ((MRNSDDoubleIterationMonitor) iter)
-                    .setRelativeTolerance(sqrteps * alg.norm2(A.zMult(b, null, 1, 0, true)));
+                .setRelativeTolerance(sqrteps * alg.norm2(A.zMult(b, null, 1, 0, true)));
         }
         r = A.zMult(x, null);
         r.assign(b, DoubleFunctions.plusMultFirst(-1));

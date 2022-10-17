@@ -13,7 +13,7 @@ import cern.mateba.list.tint.IntArrayList;
 
 /**
  * Basic descriptive statistics.
- * 
+ *
  * @author peter.gedeck@pharma.Novartis.com
  * @author wolfgang.hoschek@cern.ch
  * @version 0.91, 08-Dec-99
@@ -44,11 +44,10 @@ public class Descriptive {
 
     /**
      * Checks if the given range is within the contained array's bounds.
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>to!=from-1 || from&lt;0 || from&gt;to || to&gt;=size()</tt>
-     *             .
+     *
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>to!=from-1 || from&lt;0 || from&gt;to || to&gt;=size()</tt>
+     *                                   .
      */
     protected static void checkRangeFromTo(int from, int to, int theSize) {
         if (to == from - 1)
@@ -62,7 +61,7 @@ public class Descriptive {
      * <tt>covariance(data1,data2)/(standardDev1*standardDev2)</tt>.
      */
     public static double correlation(DoubleArrayList data1, double standardDev1, DoubleArrayList data2,
-            double standardDev2) {
+                                     double standardDev2) {
         return covariance(data1, data2) / (standardDev1 * standardDev2);
     }
 
@@ -146,18 +145,15 @@ public class Descriptive {
      * smallest distinct value (and its frequency) at index 1, ..., the largest
      * distinct value (and its frequency) at index
      * <tt>distinctValues.size()-1</tt>.
-     * 
+     *
      * <b>Example:</b> <br>
      * <tt>elements = (5,6,6,7,8,8) --> distinctValues = (5,6,7,8), frequencies = (1,2,1,2)</tt>
-     * 
-     * @param sortedData
-     *            the data; must be sorted ascending.
-     * @param distinctValues
-     *            a list to be filled with the distinct values; can have any
-     *            size.
-     * @param frequencies
-     *            a list to be filled with the frequencies; can have any size;
-     *            set this parameter to <tt>null</tt> to ignore it.
+     *
+     * @param sortedData     the data; must be sorted ascending.
+     * @param distinctValues a list to be filled with the distinct values; can have any
+     *                       size.
+     * @param frequencies    a list to be filled with the frequencies; can have any size;
+     *                       set this parameter to <tt>null</tt> to ignore it.
      */
     public static void frequencies(DoubleArrayList sortedData, DoubleArrayList distinctValues, IntArrayList frequencies) {
         distinctValues.clear();
@@ -212,11 +208,9 @@ public class Descriptive {
 
     /**
      * Returns the harmonic mean of a data sequence.
-     * 
-     * @param size
-     *            the number of elements in the data sequence.
-     * @param sumOfInversions
-     *            <tt>Sum( 1.0 / data[i])</tt>.
+     *
+     * @param size            the number of elements in the data sequence.
+     * @param sumOfInversions <tt>Sum( 1.0 / data[i])</tt>.
      */
     public static double harmonicMean(int size, double sumOfInversions) {
         return size / sumOfInversions;
@@ -225,7 +219,7 @@ public class Descriptive {
     /**
      * Incrementally maintains and updates minimum, maximum, sum and sum of
      * squares of a data sequence.
-     * 
+     * <p>
      * Assume we have already recorded some data sequence elements and know
      * their minimum, maximum, sum and sum of squares. Assume further, we are to
      * record some more elements and to derive updated values of minimum,
@@ -234,40 +228,34 @@ public class Descriptive {
      * This method computes those updated values without needing to know the
      * already recorded elements. Returns the updated values filled into the
      * <tt>inOut</tt> array.
-     * 
+     * <p>
      * This is interesting for interactive online monitoring and/or applications
      * that cannot keep the entire huge data sequence in memory.
      * <p>
      * <br>
      * Definition of sumOfSquares:
      * <tt>sumOfSquares(n) = Sum ( data[i] * data[i] )</tt>.
-     * 
-     * 
-     * @param data
-     *            the additional elements to be incorporated into min, max, etc.
-     * @param from
-     *            the index of the first element within <tt>data</tt> to
-     *            consider.
-     * @param to
-     *            the index of the last element within <tt>data</tt> to
-     *            consider. The method incorporates elements
-     *            <tt>data[from], ..., data[to]</tt>.
-     * @param inOut
-     *            the old values in the following format:
-     *            <ul>
-     *            <li><tt>inOut[0]</tt> is the old minimum. <li><tt>inOut[1]
-     *            </tt> is the old maximum. <li><tt>inOut[2]</tt> is the old
-     *            sum. <li><tt>inOut[3]</tt> is the old sum of squares.
-     *            </ul>
-     *            If no data sequence elements have so far been recorded set the
-     *            values as follows
-     *            <ul>
-     *            <li><tt>inOut[0] = Double.POSITIVE_INFINITY</tt> as the old
-     *            minimum. <li><tt>inOut[1] = Double.NEGATIVE_INFINITY</tt> as
-     *            the old maximum. <li><tt>inOut[2] = 0.0</tt> as the old sum.
-     *            <li><tt>inOut[3] = 0.0</tt> as the old sum of squares.
-     *            </ul>
-     * 
+     *
+     * @param data  the additional elements to be incorporated into min, max, etc.
+     * @param from  the index of the first element within <tt>data</tt> to
+     *              consider.
+     * @param to    the index of the last element within <tt>data</tt> to
+     *              consider. The method incorporates elements
+     *              <tt>data[from], ..., data[to]</tt>.
+     * @param inOut the old values in the following format:
+     *              <ul>
+     *              <li><tt>inOut[0]</tt> is the old minimum. <li><tt>inOut[1]
+     *              </tt> is the old maximum. <li><tt>inOut[2]</tt> is the old
+     *              sum. <li><tt>inOut[3]</tt> is the old sum of squares.
+     *              </ul>
+     *              If no data sequence elements have so far been recorded set the
+     *              values as follows
+     *              <ul>
+     *              <li><tt>inOut[0] = Double.POSITIVE_INFINITY</tt> as the old
+     *              minimum. <li><tt>inOut[1] = Double.NEGATIVE_INFINITY</tt> as
+     *              the old maximum. <li><tt>inOut[2] = 0.0</tt> as the old sum.
+     *              <li><tt>inOut[3] = 0.0</tt> as the old sum of squares.
+     *              </ul>
      */
     public static void incrementalUpdate(DoubleArrayList data, int from, int to, double[] inOut) {
         checkRangeFromTo(from, to, data.size());
@@ -316,7 +304,7 @@ public class Descriptive {
     /**
      * Incrementally maintains and updates various sums of powers of the form
      * <tt>Sum(data[i]<sup>k</sup>)</tt>.
-     * 
+     * <p>
      * Assume we have already recorded some data sequence elements
      * <tt>data[i]</tt> and know the values of
      * <tt>Sum(data[i]<sup>from</sup>), Sum(data[i]<sup>from+1</sup>), ..., Sum(data[i]<sup>to</sup>)</tt>
@@ -339,38 +327,31 @@ public class Descriptive {
      * <tt>m(k,c) = Sum( -1<sup>i</sup> * b(k,i) * c<sup>i</sup> * sumOfPowers(k-i))</tt>
      * for <tt>i = 0 .. k</tt> and <br>
      * <tt>b(k,i) = </tt>
-     * {@link cern.jet.math.tdouble.DoubleArithmetic#binomial(long,long)
+     * {@link cern.jet.math.tdouble.DoubleArithmetic#binomial(long, long)
      * binomial(k,i)} and <br>
      * <tt>sumOfPowers(k) = Sum( data[i]<sup>k</sup> )</tt>.
      * <p>
-     * 
-     * @param data
-     *            the additional elements to be incorporated into min, max, etc.
-     * @param from
-     *            the index of the first element within <tt>data</tt> to
-     *            consider.
-     * @param to
-     *            the index of the last element within <tt>data</tt> to
-     *            consider. The method incorporates elements
-     *            <tt>data[from], ..., data[to]</tt>.
-     * 
-     * @param sumOfPowers
-     *            the old values of the sums in the following format:
-     *            <ul>
-     *            <li><tt>sumOfPowers[0]</tt> is the old <tt>
-     *            Sum(data[i]<sup>fromSumIndex</sup>)</tt>. <li><tt>
-     *            sumOfPowers[1]</tt> is the old <tt>
-     *            Sum(data[i]<sup>fromSumIndex+1</sup>)</tt>. <li>... <li><tt>
-     *            sumOfPowers[toSumIndex-fromSumIndex]</tt> is the old <tt>
-     *            Sum(data[i]<sup>toSumIndex</sup>)</tt>.
-     *            </ul>
-     *            If no data sequence elements have so far been recorded set all
-     *            old values of the sums to <tt>0.0</tt>.
-     * 
-     * 
+     *
+     * @param data        the additional elements to be incorporated into min, max, etc.
+     * @param from        the index of the first element within <tt>data</tt> to
+     *                    consider.
+     * @param to          the index of the last element within <tt>data</tt> to
+     *                    consider. The method incorporates elements
+     *                    <tt>data[from], ..., data[to]</tt>.
+     * @param sumOfPowers the old values of the sums in the following format:
+     *                    <ul>
+     *                    <li><tt>sumOfPowers[0]</tt> is the old <tt>
+     *                    Sum(data[i]<sup>fromSumIndex</sup>)</tt>. <li><tt>
+     *                    sumOfPowers[1]</tt> is the old <tt>
+     *                    Sum(data[i]<sup>fromSumIndex+1</sup>)</tt>. <li>... <li><tt>
+     *                    sumOfPowers[toSumIndex-fromSumIndex]</tt> is the old <tt>
+     *                    Sum(data[i]<sup>toSumIndex</sup>)</tt>.
+     *                    </ul>
+     *                    If no data sequence elements have so far been recorded set all
+     *                    old values of the sums to <tt>0.0</tt>.
      */
     public static void incrementalUpdateSumsOfPowers(DoubleArrayList data, int from, int to, int fromSumIndex,
-            int toSumIndex, double[] sumOfPowers) {
+                                                     int toSumIndex, double[] sumOfPowers) {
         int size = data.size();
         int lastIndex = toSumIndex - fromSumIndex;
         if (from > size || lastIndex + 1 > sumOfPowers.length)
@@ -382,7 +363,7 @@ public class Descriptive {
                 double[] elements = data.elements();
                 double sum = sumOfPowers[0];
                 double sumSquares = sumOfPowers[1];
-                for (int i = from - 1; ++i <= to;) {
+                for (int i = from - 1; ++i <= to; ) {
                     double element = elements[i];
                     sum += element;
                     sumSquares += element * element;
@@ -397,7 +378,7 @@ public class Descriptive {
                 double sum = sumOfPowers[0];
                 double sumSquares = sumOfPowers[1];
                 double sum_xxx = sumOfPowers[2];
-                for (int i = from - 1; ++i <= to;) {
+                for (int i = from - 1; ++i <= to; ) {
                     double element = elements[i];
                     sum += element;
                     sumSquares += element * element;
@@ -415,7 +396,7 @@ public class Descriptive {
                 double sumSquares = sumOfPowers[1];
                 double sum_xxx = sumOfPowers[2];
                 double sum_xxxx = sumOfPowers[3];
-                for (int i = from - 1; ++i <= to;) {
+                for (int i = from - 1; ++i <= to; ) {
                     double element = elements[i];
                     sum += element;
                     sumSquares += element * element;
@@ -444,12 +425,12 @@ public class Descriptive {
         // optimized for maximum speed, but still not quite quick
         double[] elements = data.elements();
 
-        for (int i = from - 1; ++i <= to;) {
+        for (int i = from - 1; ++i <= to; ) {
             double element = elements[i];
             double pow = Math.pow(element, fromSumIndex);
 
             int j = 0;
-            for (int m = lastIndex; --m >= 0;) {
+            for (int m = lastIndex; --m >= 0; ) {
                 sumOfPowers[j++] += pow;
                 pow *= element;
             }
@@ -463,7 +444,7 @@ public class Descriptive {
     /**
      * Incrementally maintains and updates sum and sum of squares of a
      * <i>weighted</i> data sequence.
-     * 
+     * <p>
      * Assume we have already recorded some data sequence elements and know
      * their sum and sum of squares. Assume further, we are to record some more
      * elements and to derive updated values of sum and sum of squares.
@@ -478,40 +459,33 @@ public class Descriptive {
      * Definition of sum: <tt>sum = Sum ( data[i] * weights[i] )</tt>. <br>
      * Definition of sumOfSquares:
      * <tt>sumOfSquares = Sum ( data[i] * data[i] * weights[i])</tt>.
-     * 
-     * 
-     * @param data
-     *            the additional elements to be incorporated into min, max, etc.
-     * @param weights
-     *            the weight of each element within <tt>data</tt>.
-     * @param from
-     *            the index of the first element within <tt>data</tt> (and
-     *            <tt>weights</tt>) to consider.
-     * @param to
-     *            the index of the last element within <tt>data</tt> (and
-     *            <tt>weights</tt>) to consider. The method incorporates
-     *            elements <tt>data[from], ..., data[to]</tt>.
-     * @param inOut
-     *            the old values in the following format:
-     *            <ul>
-     *            <li><tt>inOut[0]</tt> is the old sum. <li><tt>inOut[1]</tt> is
-     *            the old sum of squares.
-     *            </ul>
-     *            If no data sequence elements have so far been recorded set the
-     *            values as follows
-     *            <ul>
-     *            <li><tt>inOut[0] = 0.0</tt> as the old sum. <li><tt>inOut[1] =
-     *            0.0</tt> as the old sum of squares.
-     *            </ul>
-     * 
+     *
+     * @param data    the additional elements to be incorporated into min, max, etc.
+     * @param weights the weight of each element within <tt>data</tt>.
+     * @param from    the index of the first element within <tt>data</tt> (and
+     *                <tt>weights</tt>) to consider.
+     * @param to      the index of the last element within <tt>data</tt> (and
+     *                <tt>weights</tt>) to consider. The method incorporates
+     *                elements <tt>data[from], ..., data[to]</tt>.
+     * @param inOut   the old values in the following format:
+     *                <ul>
+     *                <li><tt>inOut[0]</tt> is the old sum. <li><tt>inOut[1]</tt> is
+     *                the old sum of squares.
+     *                </ul>
+     *                If no data sequence elements have so far been recorded set the
+     *                values as follows
+     *                <ul>
+     *                <li><tt>inOut[0] = 0.0</tt> as the old sum. <li><tt>inOut[1] =
+     *                0.0</tt> as the old sum of squares.
+     *                </ul>
      */
     public static void incrementalWeightedUpdate(DoubleArrayList data, DoubleArrayList weights, int from, int to,
-            double[] inOut) {
+                                                 double[] inOut) {
         int dataSize = data.size();
         checkRangeFromTo(from, to, dataSize);
         if (dataSize != weights.size())
             throw new IllegalArgumentException("from=" + from + ", to=" + to + ", data.size()=" + dataSize
-                    + ", weights.size()=" + weights.size());
+                + ", weights.size()=" + weights.size());
 
         // read current values
         double sum = inOut[0];
@@ -520,7 +494,7 @@ public class Descriptive {
         double[] elements = data.elements();
         double[] w = weights.elements();
 
-        for (int i = from - 1; ++i <= to;) {
+        for (int i = from - 1; ++i <= to; ) {
             double element = elements[i];
             double weight = w[i];
             double prod = element * weight;
@@ -539,12 +513,10 @@ public class Descriptive {
 
     /**
      * Returns the kurtosis (aka excess) of a data sequence.
-     * 
-     * @param moment4
-     *            the fourth central moment, which is
-     *            <tt>moment(data,4,mean)</tt>.
-     * @param standardDeviation
-     *            the standardDeviation.
+     *
+     * @param moment4           the fourth central moment, which is
+     *                          <tt>moment(data,4,mean)</tt>.
+     * @param standardDeviation the standardDeviation.
      */
     public static double kurtosis(double moment4, double standardDeviation) {
         return -3 + moment4 / (standardDeviation * standardDeviation * standardDeviation * standardDeviation);
@@ -590,7 +562,7 @@ public class Descriptive {
 
         double[] elements = data.elements();
         double max = elements[size - 1];
-        for (int i = size - 1; --i >= 0;) {
+        for (int i = size - 1; --i >= 0; ) {
             if (elements[i] > max)
                 max = elements[i];
         }
@@ -614,28 +586,27 @@ public class Descriptive {
         double[] elements = data.elements();
         int size = data.size();
         double sum = 0;
-        for (int i = size; --i >= 0;)
+        for (int i = size; --i >= 0; )
             sum += Math.abs(elements[i] - mean);
         return sum / size;
     }
 
     /**
      * Returns the median of a sorted data sequence.
-     * 
-     * @param sortedData
-     *            the data sequence; <b>must be sorted ascending</b>.
+     *
+     * @param sortedData the data sequence; <b>must be sorted ascending</b>.
      */
     public static double median(DoubleArrayList sortedData) {
         return quantile(sortedData, 0.5);
         /*
          * double[] sortedElements = sortedData.elements(); int n =
          * sortedData.size(); int lhs = (n - 1) / 2 ; int rhs = n / 2 ;
-         * 
+         *
          * if (n == 0) return 0.0 ;
-         * 
+         *
          * double median; if (lhs == rhs) median = sortedElements[lhs] ; else
          * median = (sortedElements[lhs] + sortedElements[rhs])/2.0 ;
-         * 
+         *
          * return median;
          */
     }
@@ -650,7 +621,7 @@ public class Descriptive {
 
         double[] elements = data.elements();
         double min = elements[size - 1];
-        for (int i = size - 1; --i >= 0;) {
+        for (int i = size - 1; --i >= 0; ) {
             if (elements[i] < min)
                 min = elements[i];
         }
@@ -662,15 +633,13 @@ public class Descriptive {
      * Returns the moment of <tt>k</tt>-th order with constant <tt>c</tt> of a
      * data sequence, which is
      * <tt>Sum( (data[i]-c)<sup>k</sup> ) / data.size()</tt>.
-     * 
-     * @param sumOfPowers
-     *            <tt>sumOfPowers[m] == Sum( data[i]<sup>m</sup>) )</tt> for
-     *            <tt>m = 0,1,..,k</tt> as returned by method
-     *            {@link #incrementalUpdateSumsOfPowers(DoubleArrayList,int,int,int,int,double[])}
-     *            . In particular there must hold
-     *            <tt>sumOfPowers.length == k+1</tt>.
-     * @param size
-     *            the number of elements of the data sequence.
+     *
+     * @param sumOfPowers <tt>sumOfPowers[m] == Sum( data[i]<sup>m</sup>) )</tt> for
+     *                    <tt>m = 0,1,..,k</tt> as returned by method
+     *                    {@link #incrementalUpdateSumsOfPowers(DoubleArrayList, int, int, int, int, double[])}
+     *                    . In particular there must hold
+     *                    <tt>sumOfPowers.length == k+1</tt>.
+     * @param size        the number of elements of the data sequence.
      */
     public static double moment(int k, double c, int size, double[] sumOfPowers) {
         double sum = 0;
@@ -711,15 +680,11 @@ public class Descriptive {
     /**
      * Returns the pooled mean of two data sequences. That is
      * <tt>(size1 * mean1 + size2 * mean2) / (size1 + size2)</tt>.
-     * 
-     * @param size1
-     *            the number of elements in data sequence 1.
-     * @param mean1
-     *            the mean of data sequence 1.
-     * @param size2
-     *            the number of elements in data sequence 2.
-     * @param mean2
-     *            the mean of data sequence 2.
+     *
+     * @param size1 the number of elements in data sequence 1.
+     * @param mean1 the mean of data sequence 1.
+     * @param size2 the number of elements in data sequence 2.
+     * @param mean2 the mean of data sequence 2.
      */
     public static double pooledMean(int size1, double mean1, int size2, double mean2) {
         return (size1 * mean1 + size2 * mean2) / (size1 + size2);
@@ -728,15 +693,11 @@ public class Descriptive {
     /**
      * Returns the pooled variance of two data sequences. That is
      * <tt>(size1 * variance1 + size2 * variance2) / (size1 + size2)</tt>;
-     * 
-     * @param size1
-     *            the number of elements in data sequence 1.
-     * @param variance1
-     *            the variance of data sequence 1.
-     * @param size2
-     *            the number of elements in data sequence 2.
-     * @param variance2
-     *            the variance of data sequence 2.
+     *
+     * @param size1     the number of elements in data sequence 1.
+     * @param variance1 the variance of data sequence 1.
+     * @param size2     the number of elements in data sequence 2.
+     * @param variance2 the variance of data sequence 2.
      */
     public static double pooledVariance(int size1, double variance1, int size2, double variance2) {
         return (size1 * variance1 + size2 * variance2) / (size1 + size2);
@@ -762,7 +723,7 @@ public class Descriptive {
         double[] elements = data.elements();
 
         double product = 1;
-        for (int i = size; --i >= 0;)
+        for (int i = size; --i >= 0; )
             product *= elements[i];
 
         return product;
@@ -773,11 +734,9 @@ public class Descriptive {
      * which holds that <tt>phi</tt> percent of data elements are less than
      * <tt>elem</tt>. The quantile need not necessarily be contained in the data
      * sequence, it can be a linear interpolation.
-     * 
-     * @param sortedData
-     *            the data sequence; <b>must be sorted ascending</b>.
-     * @param phi
-     *            the percentage; must satisfy <tt>0 &lt;= phi &lt;= 1</tt>.
+     *
+     * @param sortedData the data sequence; <b>must be sorted ascending</b>.
+     * @param phi        the percentage; must satisfy <tt>0 &lt;= phi &lt;= 1</tt>.
      */
     public static double quantile(DoubleArrayList sortedData, double phi) {
         double[] sortedElements = sortedData.elements();
@@ -804,13 +763,11 @@ public class Descriptive {
      * Returns how many percent of the elements contained in the receiver are
      * <tt>&lt;= element</tt>. Does linear interpolation if the element is not
      * contained but lies in between two contained elements.
-     * 
-     * @param sortedList
-     *            the list to be searched (must be sorted ascending).
-     * @param element
-     *            the element to search for.
+     *
+     * @param sortedList the list to be searched (must be sorted ascending).
+     * @param element    the element to search for.
      * @return the percentage <tt>phi</tt> of elements <tt>&lt;= element</tt> (
-     *         <tt>0.0 &lt;= phi &lt;= 1.0)</tt>.
+     * <tt>0.0 &lt;= phi &lt;= 1.0)</tt>.
      */
     public static double quantileInverse(DoubleArrayList sortedList, double element) {
         return rankInterpolated(sortedList, element) / sortedList.size();
@@ -820,12 +777,10 @@ public class Descriptive {
      * Returns the quantiles of the specified percentages. The quantiles need
      * not necessarily be contained in the data sequence, it can be a linear
      * interpolation.
-     * 
-     * @param sortedData
-     *            the data sequence; <b>must be sorted ascending</b>.
-     * @param percentages
-     *            the percentages for which quantiles are to be computed. Each
-     *            percentage must be in the interval <tt>[0.0,1.0]</tt>.
+     *
+     * @param sortedData  the data sequence; <b>must be sorted ascending</b>.
+     * @param percentages the percentages for which quantiles are to be computed. Each
+     *                    percentage must be in the interval <tt>[0.0,1.0]</tt>.
      * @return the quantiles.
      */
     public static DoubleArrayList quantiles(DoubleArrayList sortedData, DoubleArrayList percentages) {
@@ -846,11 +801,9 @@ public class Descriptive {
      * element is <= element, then the rank is zero. If the element lies in
      * between two contained elements, then linear interpolation is used and a
      * non integer value is returned.
-     * 
-     * @param sortedList
-     *            the list to be searched (must be sorted ascending).
-     * @param element
-     *            the element to search for.
+     *
+     * @param sortedList the list to be searched (must be sorted ascending).
+     * @param element    the element to search for.
      * @return the rank of the element.
      */
     public static double rankInterpolated(DoubleArrayList sortedList, double element) {
@@ -881,12 +834,10 @@ public class Descriptive {
      * sequence is the square-root of the mean of the squares of the elements in
      * the data sequence. It is a measure of the average "size" of the elements
      * of a data sequence.
-     * 
-     * @param sumOfSquares
-     *            <tt>sumOfSquares(data) == Sum( data[i]*data[i] )</tt> of the
-     *            data sequence.
-     * @param size
-     *            the number of elements in the data sequence.
+     *
+     * @param sumOfSquares <tt>sumOfSquares(data) == Sum( data[i]*data[i] )</tt> of the
+     *                     data sequence.
+     * @param size         the number of elements in the data sequence.
      */
     public static double rms(int size, double sumOfSquares) {
         return Math.sqrt(sumOfSquares / size);
@@ -894,25 +845,22 @@ public class Descriptive {
 
     /**
      * Returns the sample kurtosis (aka excess) of a data sequence.
-     * 
+     * <p>
      * Ref: R.R. Sokal, F.J. Rohlf, Biometry: the principles and practice of
      * statistics in biological research (W.H. Freeman and Company, New York,
      * 1998, 3rd edition) p. 114-115.
-     * 
-     * @param size
-     *            the number of elements of the data sequence.
-     * @param moment4
-     *            the fourth central moment, which is
-     *            <tt>moment(data,4,mean)</tt>.
-     * @param sampleVariance
-     *            the <b>sample variance</b>.
+     *
+     * @param size           the number of elements of the data sequence.
+     * @param moment4        the fourth central moment, which is
+     *                       <tt>moment(data,4,mean)</tt>.
+     * @param sampleVariance the <b>sample variance</b>.
      */
     public static double sampleKurtosis(int size, double moment4, double sampleVariance) {
         int n = size;
         double s2 = sampleVariance; // (y-ymean)^2/(n-1)
         double m4 = moment4 * n; // (y-ymean)^4
         return m4 * n * (n + 1) / ((n - 1) * (n - 2) * (n - 3) * s2 * s2) - 3.0 * (n - 1) * (n - 1)
-                / ((n - 2) * (n - 3));
+            / ((n - 2) * (n - 3));
     }
 
     /**
@@ -924,13 +872,12 @@ public class Descriptive {
 
     /**
      * Return the standard error of the sample kurtosis.
-     * 
+     * <p>
      * Ref: R.R. Sokal, F.J. Rohlf, Biometry: the principles and practice of
      * statistics in biological research (W.H. Freeman and Company, New York,
      * 1998, 3rd edition) p. 138.
-     * 
-     * @param size
-     *            the number of elements of the data sequence.
+     *
+     * @param size the number of elements of the data sequence.
      */
     public static double sampleKurtosisStandardError(int size) {
         int n = size;
@@ -939,18 +886,15 @@ public class Descriptive {
 
     /**
      * Returns the sample skew of a data sequence.
-     * 
+     * <p>
      * Ref: R.R. Sokal, F.J. Rohlf, Biometry: the principles and practice of
      * statistics in biological research (W.H. Freeman and Company, New York,
      * 1998, 3rd edition) p. 114-115.
-     * 
-     * @param size
-     *            the number of elements of the data sequence.
-     * @param moment3
-     *            the third central moment, which is
-     *            <tt>moment(data,3,mean)</tt>.
-     * @param sampleVariance
-     *            the <b>sample variance</b>.
+     *
+     * @param size           the number of elements of the data sequence.
+     * @param moment3        the third central moment, which is
+     *                       <tt>moment(data,3,mean)</tt>.
+     * @param sampleVariance the <b>sample variance</b>.
      */
     public static double sampleSkew(int size, double moment3, double sampleVariance) {
         int n = size;
@@ -968,13 +912,12 @@ public class Descriptive {
 
     /**
      * Return the standard error of the sample skew.
-     * 
+     * <p>
      * Ref: R.R. Sokal, F.J. Rohlf, Biometry: the principles and practice of
      * statistics in biological research (W.H. Freeman and Company, New York,
      * 1998, 3rd edition) p. 138.
-     * 
-     * @param size
-     *            the number of elements of the data sequence.
+     *
+     * @param size the number of elements of the data sequence.
      */
     public static double sampleSkewStandardError(int size) {
         int n = size;
@@ -983,15 +926,13 @@ public class Descriptive {
 
     /**
      * Returns the sample standard deviation.
-     * 
+     * <p>
      * Ref: R.R. Sokal, F.J. Rohlf, Biometry: the principles and practice of
      * statistics in biological research (W.H. Freeman and Company, New York,
      * 1998, 3rd edition) p. 53.
-     * 
-     * @param size
-     *            the number of elements of the data sequence.
-     * @param sampleVariance
-     *            the <b>sample variance</b>.
+     *
+     * @param size           the number of elements of the data sequence.
+     * @param sampleVariance the <b>sample variance</b>.
      */
     public static double sampleStandardDeviation(int size, double sampleVariance) {
         double s, Cn;
@@ -1014,13 +955,10 @@ public class Descriptive {
      * Returns the sample variance of a data sequence. That is
      * <tt>(sumOfSquares - mean*sum) / (size - 1)</tt> with
      * <tt>mean = sum/size</tt>.
-     * 
-     * @param size
-     *            the number of elements of the data sequence.
-     * @param sum
-     *            <tt>== Sum( data[i] )</tt>.
-     * @param sumOfSquares
-     *            <tt>== Sum( data[i]*data[i] )</tt>.
+     *
+     * @param size         the number of elements of the data sequence.
+     * @param sum          <tt>== Sum( data[i] )</tt>.
+     * @param sumOfSquares <tt>== Sum( data[i]*data[i] )</tt>.
      */
     public static double sampleVariance(int size, double sum, double sumOfSquares) {
         double mean = sum / size;
@@ -1036,7 +974,7 @@ public class Descriptive {
         int size = data.size();
         double sum = 0;
         // find the sum of the squares
-        for (int i = size; --i >= 0;) {
+        for (int i = size; --i >= 0; ) {
             double delta = elements[i] - mean;
             sum += delta * delta;
         }
@@ -1046,16 +984,13 @@ public class Descriptive {
 
     /**
      * Returns the sample weighted variance of a data sequence. That is
-     * 
+     *
      * <tt>(sumOfSquaredProducts  -  sumOfProducts * sumOfProducts / sumOfWeights) / (sumOfWeights - 1)</tt>
      * .
-     * 
-     * @param sumOfWeights
-     *            <tt>== Sum( weights[i] )</tt>.
-     * @param sumOfProducts
-     *            <tt>== Sum( data[i] * weights[i] )</tt>.
-     * @param sumOfSquaredProducts
-     *            <tt>== Sum( data[i] * data[i] * weights[i] )</tt>.
+     *
+     * @param sumOfWeights         <tt>== Sum( weights[i] )</tt>.
+     * @param sumOfProducts        <tt>== Sum( data[i] * weights[i] )</tt>.
+     * @param sumOfSquaredProducts <tt>== Sum( data[i] * data[i] * weights[i] )</tt>.
      */
     public static double sampleWeightedVariance(double sumOfWeights, double sumOfProducts, double sumOfSquaredProducts) {
         return (sumOfSquaredProducts - sumOfProducts * sumOfProducts / sumOfWeights) / (sumOfWeights - 1);
@@ -1063,12 +998,10 @@ public class Descriptive {
 
     /**
      * Returns the skew of a data sequence.
-     * 
-     * @param moment3
-     *            the third central moment, which is
-     *            <tt>moment(data,3,mean)</tt>.
-     * @param standardDeviation
-     *            the standardDeviation.
+     *
+     * @param moment3           the third central moment, which is
+     *                          <tt>moment(data,3,mean)</tt>.
+     * @param standardDeviation the standardDeviation.
      */
     public static double skew(double moment3, double standardDeviation) {
         return moment3 / (standardDeviation * standardDeviation * standardDeviation);
@@ -1098,15 +1031,13 @@ public class Descriptive {
      * <tt>splitters=(100)</tt> yields 2 bins:
      * <tt>(1,2,3,4,5,8,8,8,10,11), ()</tt>.
      * </ul>
-     * 
-     * @param sortedList
-     *            the list to be partitioned (must be sorted ascending).
-     * @param splitters
-     *            the points at which the list shall be partitioned (must be
-     *            sorted ascending).
+     *
+     * @param sortedList the list to be partitioned (must be sorted ascending).
+     * @param splitters  the points at which the list shall be partitioned (must be
+     *                   sorted ascending).
      * @return the sublists (an array with
-     *         <tt>length == splitters.size() + 1</tt>. Each sublist is returned
-     *         sorted ascending.
+     * <tt>length == splitters.size() + 1</tt>. Each sublist is returned
+     * sorted ascending.
      */
     public static DoubleArrayList[] split(DoubleArrayList sortedList, DoubleArrayList splitters) {
         // assertion: data is sorted ascending.
@@ -1114,7 +1045,7 @@ public class Descriptive {
         int noOfBins = splitters.size() + 1;
 
         DoubleArrayList[] bins = new DoubleArrayList[noOfBins];
-        for (int i = noOfBins; --i >= 0;)
+        for (int i = noOfBins; --i >= 0; )
             bins[i] = new DoubleArrayList();
 
         int listSize = sortedList.size();
@@ -1157,11 +1088,9 @@ public class Descriptive {
     /**
      * Returns the standard error of a data sequence. That is
      * <tt>Math.sqrt(variance/size)</tt>.
-     * 
-     * @param size
-     *            the number of elements in the data sequence.
-     * @param variance
-     *            the variance of the data sequence.
+     *
+     * @param size     the number of elements in the data sequence.
+     * @param variance the variance of the data sequence.
      */
     public static double standardError(int size, double variance) {
         return Math.sqrt(variance / size);
@@ -1174,7 +1103,7 @@ public class Descriptive {
      */
     public static void standardize(DoubleArrayList data, double mean, double standardDeviation) {
         double[] elements = data.elements();
-        for (int i = data.size(); --i >= 0;)
+        for (int i = data.size(); --i >= 0; )
             elements[i] = (elements[i] - mean) / standardDeviation;
     }
 
@@ -1188,13 +1117,10 @@ public class Descriptive {
     /**
      * Returns the sum of inversions of a data sequence, which is
      * <tt>Sum( 1.0 / data[i])</tt>.
-     * 
-     * @param data
-     *            the data sequence.
-     * @param from
-     *            the index of the first data element (inclusive).
-     * @param to
-     *            the index of the last data element (inclusive).
+     *
+     * @param data the data sequence.
+     * @param from the index of the first data element (inclusive).
+     * @param to   the index of the last data element (inclusive).
      */
     public static double sumOfInversions(DoubleArrayList data, int from, int to) {
         return sumOfPowerDeviations(data, -1, 0.0, from, to);
@@ -1203,18 +1129,15 @@ public class Descriptive {
     /**
      * Returns the sum of logarithms of a data sequence, which is
      * <tt>Sum( Log(data[i])</tt>.
-     * 
-     * @param data
-     *            the data sequence.
-     * @param from
-     *            the index of the first data element (inclusive).
-     * @param to
-     *            the index of the last data element (inclusive).
+     *
+     * @param data the data sequence.
+     * @param from the index of the first data element (inclusive).
+     * @param to   the index of the last data element (inclusive).
      */
     public static double sumOfLogarithms(DoubleArrayList data, int from, int to) {
         double[] elements = data.elements();
         double logsum = 0;
-        for (int i = from - 1; ++i <= to;)
+        for (int i = from - 1; ++i <= to; )
             logsum += Math.log(elements[i]);
         return logsum;
     }
@@ -1233,95 +1156,95 @@ public class Descriptive {
      * <tt>c == 0.0</tt> and/or <tt>k == -2 .. 5</tt>.
      */
     public static double sumOfPowerDeviations(final DoubleArrayList data, final int k, final double c, final int from,
-            final int to) {
+                                              final int to) {
         final double[] elements = data.elements();
         double sum = 0;
         double v;
         int i;
         switch (k) { // optimized for speed
-        case -2:
-            if (c == 0.0)
-                for (i = from - 1; ++i <= to;) {
-                    v = elements[i];
-                    sum += 1 / (v * v);
-                }
-            else
-                for (i = from - 1; ++i <= to;) {
-                    v = elements[i] - c;
-                    sum += 1 / (v * v);
-                }
-            break;
-        case -1:
-            if (c == 0.0)
-                for (i = from - 1; ++i <= to;)
-                    sum += 1 / (elements[i]);
-            else
-                for (i = from - 1; ++i <= to;)
-                    sum += 1 / (elements[i] - c);
-            break;
-        case 0:
-            sum += to - from + 1;
-            break;
-        case 1:
-            if (c == 0.0)
-                for (i = from - 1; ++i <= to;)
-                    sum += elements[i];
-            else
-                for (i = from - 1; ++i <= to;)
-                    sum += elements[i] - c;
-            break;
-        case 2:
-            if (c == 0.0)
-                for (i = from - 1; ++i <= to;) {
-                    v = elements[i];
-                    sum += v * v;
-                }
-            else
-                for (i = from - 1; ++i <= to;) {
-                    v = elements[i] - c;
-                    sum += v * v;
-                }
-            break;
-        case 3:
-            if (c == 0.0)
-                for (i = from - 1; ++i <= to;) {
-                    v = elements[i];
-                    sum += v * v * v;
-                }
-            else
-                for (i = from - 1; ++i <= to;) {
-                    v = elements[i] - c;
-                    sum += v * v * v;
-                }
-            break;
-        case 4:
-            if (c == 0.0)
-                for (i = from - 1; ++i <= to;) {
-                    v = elements[i];
-                    sum += v * v * v * v;
-                }
-            else
-                for (i = from - 1; ++i <= to;) {
-                    v = elements[i] - c;
-                    sum += v * v * v * v;
-                }
-            break;
-        case 5:
-            if (c == 0.0)
-                for (i = from - 1; ++i <= to;) {
-                    v = elements[i];
-                    sum += v * v * v * v * v;
-                }
-            else
-                for (i = from - 1; ++i <= to;) {
-                    v = elements[i] - c;
-                    sum += v * v * v * v * v;
-                }
-            break;
-        default:
-            for (i = from - 1; ++i <= to;)
-                sum += Math.pow(elements[i] - c, k);
-            break;
+            case -2:
+                if (c == 0.0)
+                    for (i = from - 1; ++i <= to; ) {
+                        v = elements[i];
+                        sum += 1 / (v * v);
+                    }
+                else
+                    for (i = from - 1; ++i <= to; ) {
+                        v = elements[i] - c;
+                        sum += 1 / (v * v);
+                    }
+                break;
+            case -1:
+                if (c == 0.0)
+                    for (i = from - 1; ++i <= to; )
+                        sum += 1 / (elements[i]);
+                else
+                    for (i = from - 1; ++i <= to; )
+                        sum += 1 / (elements[i] - c);
+                break;
+            case 0:
+                sum += to - from + 1;
+                break;
+            case 1:
+                if (c == 0.0)
+                    for (i = from - 1; ++i <= to; )
+                        sum += elements[i];
+                else
+                    for (i = from - 1; ++i <= to; )
+                        sum += elements[i] - c;
+                break;
+            case 2:
+                if (c == 0.0)
+                    for (i = from - 1; ++i <= to; ) {
+                        v = elements[i];
+                        sum += v * v;
+                    }
+                else
+                    for (i = from - 1; ++i <= to; ) {
+                        v = elements[i] - c;
+                        sum += v * v;
+                    }
+                break;
+            case 3:
+                if (c == 0.0)
+                    for (i = from - 1; ++i <= to; ) {
+                        v = elements[i];
+                        sum += v * v * v;
+                    }
+                else
+                    for (i = from - 1; ++i <= to; ) {
+                        v = elements[i] - c;
+                        sum += v * v * v;
+                    }
+                break;
+            case 4:
+                if (c == 0.0)
+                    for (i = from - 1; ++i <= to; ) {
+                        v = elements[i];
+                        sum += v * v * v * v;
+                    }
+                else
+                    for (i = from - 1; ++i <= to; ) {
+                        v = elements[i] - c;
+                        sum += v * v * v * v;
+                    }
+                break;
+            case 5:
+                if (c == 0.0)
+                    for (i = from - 1; ++i <= to; ) {
+                        v = elements[i];
+                        sum += v * v * v * v * v;
+                    }
+                else
+                    for (i = from - 1; ++i <= to; ) {
+                        v = elements[i] - c;
+                        sum += v * v * v * v * v;
+                    }
+                break;
+            default:
+                for (i = from - 1; ++i <= to; )
+                    sum += Math.pow(elements[i] - c, k);
+                break;
         }
         return sum;
     }
@@ -1337,11 +1260,9 @@ public class Descriptive {
     /**
      * Returns the sum of squared mean deviation of of a data sequence. That is
      * <tt>variance * (size-1) == Sum( (data[i] - mean)^2 )</tt>.
-     * 
-     * @param size
-     *            the number of elements of the data sequence.
-     * @param variance
-     *            the variance of the data sequence.
+     *
+     * @param size     the number of elements of the data sequence.
+     * @param variance the variance of the data sequence.
      */
     public static double sumOfSquaredDeviations(int size, double variance) {
         return variance * (size - 1);
@@ -1357,15 +1278,11 @@ public class Descriptive {
 
     /**
      * Returns the trimmed mean of a sorted data sequence.
-     * 
-     * @param sortedData
-     *            the data sequence; <b>must be sorted ascending</b>.
-     * @param mean
-     *            the mean of the (full) sorted data sequence.
-     * @param left
-     *            the number of leading elements to trim.
-     * @param right
-     *            the number of trailing elements to trim.
+     *
+     * @param sortedData the data sequence; <b>must be sorted ascending</b>.
+     * @param mean       the mean of the (full) sorted data sequence.
+     * @param left       the number of leading elements to trim.
+     * @param right      the number of trailing elements to trim.
      */
     public static double trimmedMean(DoubleArrayList sortedData, double mean, int left, int right) {
         int N = sortedData.size();
@@ -1393,13 +1310,10 @@ public class Descriptive {
     /**
      * Returns the variance of a data sequence. That is
      * <tt>(sumOfSquares - mean*sum) / size</tt> with <tt>mean = sum/size</tt>.
-     * 
-     * @param size
-     *            the number of elements of the data sequence.
-     * @param sum
-     *            <tt>== Sum( data[i] )</tt>.
-     * @param sumOfSquares
-     *            <tt>== Sum( data[i]*data[i] )</tt>.
+     *
+     * @param size         the number of elements of the data sequence.
+     * @param sum          <tt>== Sum( data[i] )</tt>.
+     * @param sumOfSquares <tt>== Sum( data[i]*data[i] )</tt>.
      */
     public static double variance(int size, double sum, double sumOfSquares) {
         double mean = sum / size;
@@ -1419,7 +1333,7 @@ public class Descriptive {
         double[] theWeights = weights.elements();
         double sum = 0.0;
         double weightsSum = 0.0;
-        for (int i = size; --i >= 0;) {
+        for (int i = size; --i >= 0; ) {
             double w = theWeights[i];
             sum += elements[i] * w;
             weightsSum += w;
@@ -1432,11 +1346,9 @@ public class Descriptive {
      * Returns the weighted RMS (Root-Mean-Square) of a data sequence. That is
      * <tt>Sum( data[i] * data[i] * weights[i]) / Sum( data[i] * weights[i] )</tt>
      * , or in other words <tt>sumOfProducts / sumOfSquaredProducts</tt>.
-     * 
-     * @param sumOfProducts
-     *            <tt>== Sum( data[i] * weights[i] )</tt>.
-     * @param sumOfSquaredProducts
-     *            <tt>== Sum( data[i] * data[i] * weights[i] )</tt>.
+     *
+     * @param sumOfProducts        <tt>== Sum( data[i] * weights[i] )</tt>.
+     * @param sumOfSquaredProducts <tt>== Sum( data[i] * data[i] * weights[i] )</tt>.
      */
     public static double weightedRMS(double sumOfProducts, double sumOfSquaredProducts) {
         return sumOfProducts / sumOfSquaredProducts;
@@ -1444,15 +1356,11 @@ public class Descriptive {
 
     /**
      * Returns the winsorized mean of a sorted data sequence.
-     * 
-     * @param sortedData
-     *            the data sequence; <b>must be sorted ascending</b>.
-     * @param mean
-     *            the mean of the (full) sorted data sequence.
-     * @param left
-     *            the number of leading elements to trim.
-     * @param right
-     *            the number of trailing elements to trim.
+     *
+     * @param sortedData the data sequence; <b>must be sorted ascending</b>.
+     * @param mean       the mean of the (full) sorted data sequence.
+     * @param left       the number of leading elements to trim.
+     * @param right      the number of trailing elements to trim.
      */
     public static double winsorizedMean(DoubleArrayList sortedData, double mean, int left, int right) {
         int N = sortedData.size();

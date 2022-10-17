@@ -17,12 +17,12 @@ import java.io.Serial;
 /**
  * 1-d matrix holding <tt>int</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class WrapperObjectMatrix1D extends ObjectMatrix1D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = -1935895194395512940L;
@@ -48,15 +48,14 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>index</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
+     *
+     * @param index the index of the cell.
      * @return the value of the specified cell.
      */
 
@@ -76,9 +75,8 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
      * instance of type <tt>SparseObjectMatrix1D</tt> the new matrix must also be
      * of type <tt>SparseObjectMatrix1D</tt>, etc. In general, the new matrix
      * should have internal parametrization as similar as possible.
-     * 
-     * @param size
-     *            the number of cell the matrix shall have.
+     *
+     * @param size the number of cell the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -93,11 +91,9 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
      * must be of type <tt>DenseObjectMatrix2D</tt>, if the receiver is an
      * instance of type <tt>SparseObjectMatrix1D</tt> the new matrix must be of
      * type <tt>SparseObjectMatrix2D</tt>, etc.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -115,17 +111,15 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell.
      */
 
     public synchronized void setQuick(int index, Object value) {
@@ -138,14 +132,14 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
      * <tt>size()-1</tt> is now index <tt>0</tt>. The returned view is backed by
      * this matrix, so changes in the returned view are reflected in this
      * matrix, and vice-versa.
-     * 
+     *
      * @return a new flip view.
      */
 
     public ObjectMatrix1D viewFlip() {
         ObjectMatrix1D view = new WrapperObjectMatrix1D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -171,7 +165,7 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
     /**
      * Constructs and returns a new <i>sub-range view</i> that is a
      * <tt>width</tt> sub matrix starting at <tt>index</tt>.
-     * 
+     * <p>
      * Operations on the returned view can only be applied to the restricted
      * range. Any attempt to access coordinates not contained in the view will
      * throw an <tt>IndexOutOfBoundsException</tt>.
@@ -186,22 +180,18 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
      * <tt>0 .. view.size()-1==width-1</tt>. As usual, any attempt to access a
      * cell at other coordinates will throw an
      * <tt>IndexOutOfBoundsException</tt>.
-     * 
-     * @param index
-     *            The index of the first cell.
-     * @param width
-     *            The width of the range.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>index<0 || width<0 || index+width>size()</tt>.
+     *
+     * @param index The index of the first cell.
+     * @param width The width of the range.
      * @return the new view.
-     * 
+     * @throws IndexOutOfBoundsException if <tt>index<0 || width<0 || index+width>size()</tt>.
      */
 
     public ObjectMatrix1D viewPart(final int index, int width) {
         checkRange(index, width);
         ObjectMatrix1D view = new WrapperObjectMatrix1D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -233,35 +223,33 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
      * times and can be in arbitrary order.
      * <p>
      * <b>Example:</b> <br>
-     * 
+     *
      * <pre>
      *   this     = (0,0,8,0,7)
      *   indexes  = (0,2,4,2)
      *   --&gt;
      *   view     = (0,8,7,8)
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * Note that modifying <tt>indexes</tt> after this call has returned has no
      * effect on the view. The returned view is backed by this matrix, so
      * changes in the returned view are reflected in this matrix, and
      * vice-versa.
-     * 
-     * @param indexes
-     *            The indexes of the cells that shall be visible in the new
-     *            view. To indicate that <i>all</i> cells shall be visible,
-     *            simply set this parameter to <tt>null</tt>.
+     *
+     * @param indexes The indexes of the cells that shall be visible in the new
+     *                view. To indicate that <i>all</i> cells shall be visible,
+     *                simply set this parameter to <tt>null</tt>.
      * @return the new view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>!(0 <= indexes[i] < size())</tt> for any
-     *             <tt>i=0..indexes.length()-1</tt>.
+     * @throws IndexOutOfBoundsException if <tt>!(0 <= indexes[i] < size())</tt> for any
+     *                                   <tt>i=0..indexes.length()-1</tt>.
      */
 
     public ObjectMatrix1D viewSelection(int[] indexes) {
         // check for "all"
         if (indexes == null) {
             indexes = new int[size];
-            for (int i = size; --i >= 0;)
+            for (int i = size; --i >= 0; )
                 indexes[i] = i;
         }
 
@@ -270,7 +258,7 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
 
         ObjectMatrix1D view = new WrapperObjectMatrix1D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -296,9 +284,8 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param offsets
-     *            the offsets of the visible elements.
+     *
+     * @param offsets the offsets of the visible elements.
      * @return a new view.
      */
 
@@ -311,13 +298,10 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
      * consisting of every i-th cell. More specifically, the view has size
      * <tt>this.size()/stride</tt> holding cells <tt>this.get(i*stride)</tt> for
      * all <tt>i = 0..size()/stride - 1</tt>.
-     * 
-     * @param _stride
-     *            the step factor.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>stride <= 0</tt>.
+     *
+     * @param _stride the step factor.
      * @return the new view.
-     * 
+     * @throws IndexOutOfBoundsException if <tt>stride <= 0</tt>.
      */
 
     public ObjectMatrix1D viewStrides(final int _stride) {
@@ -325,7 +309,7 @@ public class WrapperObjectMatrix1D extends ObjectMatrix1D {
             throw new IndexOutOfBoundsException("illegal stride: " + stride);
         ObjectMatrix1D view = new WrapperObjectMatrix1D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 

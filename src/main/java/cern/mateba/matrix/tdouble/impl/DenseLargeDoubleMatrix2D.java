@@ -40,16 +40,15 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * <p>
  * <tt>O(1)</tt> (i.e. constant time) for the basic operations <tt>get</tt>,
  * <tt>getQuick</tt>, <tt>set</tt>, <tt>setQuick</tt> and <tt>size</tt>.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
 
     @Serial
     private static final long serialVersionUID = -5535611503516836874L;
-    private double[][] elements;
+    private final double[][] elements;
 
     private DoubleFFT_2D fft2;
 
@@ -89,10 +88,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
     /**
      * Computes the 2D discrete cosine transform (DCT-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void dct2(boolean scale) {
@@ -108,10 +105,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the discrete cosine transform (DCT-II) of each column of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void dctColumns(final boolean scale) {
@@ -155,10 +150,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the discrete cosine transform (DCT-II) of each row of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void dctRows(final boolean scale) {
@@ -195,7 +188,6 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
     /**
      * Computes the 2D discrete Hartley transform (DHT) of this matrix.
-     * 
      */
 
     public void dht2() {
@@ -211,7 +203,6 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the discrete Hartley transform (DHT) of each column of this
      * matrix.
-     * 
      */
 
     public void dhtColumns() {
@@ -254,7 +245,6 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
     /**
      * Computes the discrete Hartley transform (DHT) of each row of this matrix.
-     * 
      */
 
     public void dhtRows() {
@@ -291,10 +281,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
     /**
      * Computes the 2D discrete sine transform (DST-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void dst2(boolean scale) {
@@ -310,10 +298,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the discrete sine transform (DST-II) of each column of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void dstColumns(final boolean scale) {
@@ -356,10 +342,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
     /**
      * Computes the discrete sine transform (DST-II) of each row of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void dstRows(final boolean scale) {
@@ -397,34 +381,32 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the 2D discrete Fourier transform (DFT) of this matrix. The
      * physical layout of the output data is as follows:
-     * 
+     *
      * <pre>
-     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2], 
-     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2], 
-     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2, 
-     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2], 
-     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2], 
-     *       0&lt;k2&lt;columns/2, 
-     * this[k1][0] = Re[k1][0] = Re[rows-k1][0], 
-     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0], 
-     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2], 
-     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2], 
-     *       0&lt;k1&lt;rows/2, 
-     * this[0][0] = Re[0][0], 
-     * this[0][1] = Re[0][columns/2], 
-     * this[rows/2][0] = Re[rows/2][0], 
+     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2],
+     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2],
+     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2,
+     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2],
+     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2],
+     *       0&lt;k2&lt;columns/2,
+     * this[k1][0] = Re[k1][0] = Re[rows-k1][0],
+     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0],
+     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2],
+     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2],
+     *       0&lt;k1&lt;rows/2,
+     * this[0][0] = Re[0][0],
+     * this[0][1] = Re[0][columns/2],
+     * this[rows/2][0] = Re[rows/2][0],
      * this[rows/2][1] = Re[rows/2][columns/2]
      * </pre>
-     * 
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * forward transform, use <code>getFft2</code>. To get back the original
      * data, use <code>ifft2</code>.
-     * 
-     * @throws IllegalArgumentException
-     *             if the row size or the column size of this matrix is not a
-     *             power of 2 number.
-     * 
+     *
+     * @throws IllegalArgumentException if the row size or the column size of this matrix is not a
+     *                                  power of 2 number.
      */
 
     public void fft2() {
@@ -440,9 +422,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Returns new complex matrix which is the 2D discrete Fourier transform
      * (DFT) of this matrix.
-     * 
+     *
      * @return the 2D discrete Fourier transform (DFT) of this matrix.
-     * 
      */
 
     public DenseLargeDComplexMatrix2D getFft2() {
@@ -483,9 +464,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Returns new complex matrix which is the discrete Fourier transform (DFT)
      * of each column of this matrix.
-     * 
+     *
      * @return the discrete Fourier transform (DFT) of each column of this
-     *         matrix.
+     * matrix.
      */
 
     public DenseLargeDComplexMatrix2D getFftColumns() {
@@ -535,7 +516,7 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Returns new complex matrix which is the discrete Fourier transform (DFT)
      * of each row of this matrix.
-     * 
+     *
      * @return the discrete Fourier transform (DFT) of each row of this matrix.
      */
 
@@ -584,9 +565,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Returns new complex matrix which is the 2D inverse of the discrete
      * Fourier transform (IDFT) of this matrix.
-     * 
+     *
      * @return the 2D inverse of the discrete Fourier transform (IDFT) of this
-     *         matrix.
+     * matrix.
      */
 
     public DenseLargeDComplexMatrix2D getIfft2(boolean scale) {
@@ -627,9 +608,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Returns new complex matrix which is the inverse of the discrete Fourier
      * transform (IDFT) of each column of this matrix.
-     * 
+     *
      * @return the inverse of the discrete Fourier transform (IDFT) of each
-     *         column of this matrix.
+     * column of this matrix.
      */
 
     public DenseLargeDComplexMatrix2D getIfftColumns(final boolean scale) {
@@ -678,9 +659,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Returns new complex matrix which is the inverse of the discrete Fourier
      * transform (IDFT) of each row of this matrix.
-     * 
+     *
      * @return the inverse of the discrete Fourier transform (IDFT) of each row
-     *         of this matrix.
+     * of this matrix.
      */
 
     public DenseLargeDComplexMatrix2D getIfftRows(final boolean scale) {
@@ -732,10 +713,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete cosine transform (DCT-III) of
      * this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idct2(boolean scale) {
@@ -751,10 +730,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the inverse of the discrete cosine transform (DCT-III) of each
      * column of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idctColumns(final boolean scale) {
@@ -798,10 +775,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the inverse of the discrete cosine transform (DCT-III) of each
      * row of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idctRows(final boolean scale) {
@@ -839,10 +814,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete Hartley transform (IDHT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idht2(boolean scale) {
@@ -858,10 +831,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the inverse of the discrete Hartley transform (IDHT) of each
      * column of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idhtColumns(final boolean scale) {
@@ -905,10 +876,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the inverse of the discrete Hartley transform (IDHT) of each row
      * of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idhtRows(final boolean scale) {
@@ -946,10 +915,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete sine transform (DST-III) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idst2(boolean scale) {
@@ -965,10 +932,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the inverse of the discrete sine transform (DST-III) of each
      * column of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idstColumns(final boolean scale) {
@@ -1012,10 +977,8 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the inverse of the discrete sine transform (DST-III) of each row
      * of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idstRows(final boolean scale) {
@@ -1053,36 +1016,32 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete Fourier transform (IDFT) of this
      * matrix. The physical layout of the input data has to be as follows:
-     * 
+     *
      * <pre>
-     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2], 
-     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2], 
-     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2, 
-     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2], 
-     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2], 
-     *       0&lt;k2&lt;columns/2, 
-     * this[k1][0] = Re[k1][0] = Re[rows-k1][0], 
-     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0], 
-     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2], 
-     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2], 
-     *       0&lt;k1&lt;rows/2, 
-     * this[0][0] = Re[0][0], 
-     * this[0][1] = Re[0][columns/2], 
-     * this[rows/2][0] = Re[rows/2][0], 
+     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2],
+     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2],
+     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2,
+     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2],
+     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2],
+     *       0&lt;k2&lt;columns/2,
+     * this[k1][0] = Re[k1][0] = Re[rows-k1][0],
+     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0],
+     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2],
+     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2],
+     *       0&lt;k1&lt;rows/2,
+     * this[0][0] = Re[0][0],
+     * this[0][1] = Re[0][columns/2],
+     * this[rows/2][0] = Re[rows/2][0],
      * this[rows/2][1] = Re[rows/2][columns/2]
      * </pre>
-     * 
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * inverse transform, use <code>getIfft2</code>.
-     * 
-     * @throws IllegalArgumentException
-     *             if the row size or the column size of this matrix is not a
-     *             power of 2 number.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
+     * @throws IllegalArgumentException if the row size or the column size of this matrix is not a
+     *                                  power of 2 number.
      */
 
     public void ifft2(boolean scale) {

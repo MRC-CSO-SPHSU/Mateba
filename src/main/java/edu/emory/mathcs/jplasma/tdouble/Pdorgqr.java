@@ -45,8 +45,8 @@ class Pdorgqr {
      *  Parallel construction of Q using tile V (application to identity)
      */
     protected void plasma_pDORGQR(int M, int NRHS, int N, double[] A, int A_offset, int NB, int NBNBSIZE, int IBNBSIZE,
-            int IB, int MT, int NTRHS, int NT, double[] T, int T_offset, double[] B, int B_offset, intW INFO,
-            int cores_num, int my_core_id) {
+                                  int IB, int MT, int NTRHS, int NT, double[] T, int T_offset, double[] B, int B_offset, intW INFO,
+                                  int cores_num, int my_core_id) {
         double[] WORK = Dcommon.plasma_aux.WORK[my_core_id];
         int[] progress = Dcommon.plasma_aux.progress;
         int k, m, n;
@@ -82,12 +82,12 @@ class Pdorgqr {
                     Dcommon.delay();
                 if (n < Math.min(k + 1, NTRHS))
                     DcoreBLAS
-                            .core_DLARFB(Dplasma.PlasmaLeft, Dplasma.PlasmaNoTrans, Dplasma.PlasmaForward,
-                                    Dplasma.PlasmaColumnwise, k == MT - 1 ? M - k * NB : NB, n == NTRHS - 1 ? NRHS - n
-                                            * NB : NB, k == NT - 1 ? Math.min(M - k * NB, N - k * NB) : NB, IB, A,
-                                    A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, T, T_offset + IBNBSIZE * (k)
-                                            + IBNBSIZE * MT * (k), IB, B, B_offset + NBNBSIZE * (k) + NBNBSIZE * MT
-                                            * (n), NB, WORK, 0, NB);
+                        .core_DLARFB(Dplasma.PlasmaLeft, Dplasma.PlasmaNoTrans, Dplasma.PlasmaForward,
+                            Dplasma.PlasmaColumnwise, k == MT - 1 ? M - k * NB : NB, n == NTRHS - 1 ? NRHS - n
+                                * NB : NB, k == NT - 1 ? Math.min(M - k * NB, N - k * NB) : NB, IB, A,
+                            A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, T, T_offset + IBNBSIZE * (k)
+                                + IBNBSIZE * MT * (k), IB, B, B_offset + NBNBSIZE * (k) + NBNBSIZE * MT
+                                * (n), NB, WORK, 0, NB);
                 progress[(k) + MT * (n)] = k;
             } else {
                 while (progress[(k) + MT * (n)] != k)
@@ -96,10 +96,10 @@ class Pdorgqr {
                     Dcommon.delay();
                 if (n < Math.min(m + 1, NTRHS))
                     DcoreBLAS.core_DSSRFB(Dplasma.PlasmaLeft, Dplasma.PlasmaColumnwise, NB, m == MT - 1 ? M - m * NB
-                            : NB, n == NTRHS - 1 ? NRHS - n * NB : NB, IB, k == NT - 1 ? N - k * NB : NB, B, B_offset
-                            + NBNBSIZE * (k) + NBNBSIZE * MT * (n), NB, B, B_offset + NBNBSIZE * (m) + NBNBSIZE * MT
-                            * (n), NB, A, A_offset + NBNBSIZE * (m) + NBNBSIZE * MT * (k), NB, T, T_offset + IBNBSIZE
-                            * (m) + IBNBSIZE * MT * (k), IB, WORK, 0);
+                        : NB, n == NTRHS - 1 ? NRHS - n * NB : NB, IB, k == NT - 1 ? N - k * NB : NB, B, B_offset
+                        + NBNBSIZE * (k) + NBNBSIZE * MT * (n), NB, B, B_offset + NBNBSIZE * (m) + NBNBSIZE * MT
+                        * (n), NB, A, A_offset + NBNBSIZE * (m) + NBNBSIZE * MT * (k), NB, T, T_offset + IBNBSIZE
+                        * (m) + IBNBSIZE * MT * (k), IB, WORK, 0);
                 progress[(m) + MT * (n)] = k;
             }
             n = next_n;

@@ -42,7 +42,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * Cells are internally addressed in row-major. Applications demanding utmost
  * speed can exploit this fact. Setting/getting values in a loop row-by-row is
  * quicker than column-by-column. Thus
- * 
+ *
  * <pre>
  * for (int row = 0; row &lt; rows; row++) {
  *     for (int column = 0; column &lt; columns; column++) {
@@ -50,9 +50,9 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -60,12 +60,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
+ * @version 1.0, 09/24/99
  */
 public class DenseLongMatrix2D extends LongMatrix2D {
 
@@ -86,13 +84,11 @@ public class DenseLongMatrix2D extends LongMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public DenseLongMatrix2D(long[][] values) {
         this(values.length, values.length == 0 ? 0 : values[0].length);
@@ -102,15 +98,12 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (int)columns*rows > Long.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (int)columns*rows > Long.MAX_VALUE</tt>
+     *                                  .
      */
     public DenseLongMatrix2D(int rows, int columns) {
         setUp(rows, columns);
@@ -119,39 +112,30 @@ public class DenseLongMatrix2D extends LongMatrix2D {
 
     /**
      * Constructs a view with the given parameters.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @param isView
-     *            if true then a matrix view is constructed
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (int)columns*rows > Long.MAX_VALUE</tt>
-     *             or flip's are illegal.
+     *
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param elements     the cells.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(i,j+1)-index(i,j)</tt>.
+     * @param isView       if true then a matrix view is constructed
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (int)columns*rows > Long.MAX_VALUE</tt>
+     *                                  or flip's are illegal.
      */
     public DenseLongMatrix2D(int rows, int columns, long[] elements, int rowZero, int columnZero, int rowStride,
-            int columnStride, boolean isView) {
+                             int columnStride, boolean isView) {
         setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = !isView;
     }
 
     public long aggregate(final cern.mateba.function.tlong.LongLongFunction aggr,
-            final cern.mateba.function.tlong.LongFunction f) {
+                          final cern.mateba.function.tlong.LongFunction f) {
         if (size() == 0)
             throw new IllegalArgumentException("size == 0");
         final int zero = (int) index(0, 0);
@@ -212,14 +196,14 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                     public Long call() throws Exception {
                         long elem = elements[zero + firstRow * rowStride];
                         long a = 0;
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             a = f.apply(elem);
                         }
                         int d = 1;
                         for (int r = firstRow; r < lastRow; r++) {
                             for (int c = d; c < columns; c++) {
                                 elem = elements[zero + r * rowStride + c * columnStride];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     a = aggr.apply(a, f.apply(elem));
                                 }
                             }
@@ -232,14 +216,14 @@ public class DenseLongMatrix2D extends LongMatrix2D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             long elem = elements[zero];
-            if (cond.apply(elem) == true) {
+            if (cond.apply(elem)) {
                 a = f.apply(elements[zero]);
             }
             int d = 1; // first cell already done
             for (int r = 0; r < rows; r++) {
                 for (int c = d; c < columns; c++) {
                     elem = elements[zero + r * rowStride + c * columnStride];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         a = aggr.apply(a, f.apply(elem));
                     }
                 }
@@ -270,7 +254,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
 
                     public Long call() throws Exception {
                         long a = f.apply(elements[zero + rowElements[firstIdx] * rowStride + columnElements[firstIdx]
-                                * columnStride]);
+                            * columnStride]);
                         long elem;
                         for (int i = firstIdx + 1; i < lastIdx; i++) {
                             elem = elements[zero + rowElements[i] * rowStride + columnElements[i] * columnStride];
@@ -293,7 +277,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     }
 
     public long aggregate(final LongMatrix2D other, final cern.mateba.function.tlong.LongLongFunction aggr,
-            final cern.mateba.function.tlong.LongLongFunction f) {
+                          final cern.mateba.function.tlong.LongLongFunction f) {
         if (!(other instanceof DenseLongMatrix2D)) {
             return super.aggregate(other, aggr, f);
         }
@@ -318,12 +302,12 @@ public class DenseLongMatrix2D extends LongMatrix2D {
 
                     public Long call() throws Exception {
                         long a = f.apply(elements[zero + firstRow * rowStride], elemsOther[zeroOther + firstRow
-                                * rowStrideOther]);
+                            * rowStrideOther]);
                         int d = 1;
                         for (int r = firstRow; r < lastRow; r++) {
                             for (int c = d; c < columns; c++) {
                                 a = aggr.apply(a, f.apply(elements[zero + r * rowStride + c * columnStride],
-                                        elemsOther[zeroOther + r * rowStrideOther + c * colStrideOther]));
+                                    elemsOther[zeroOther + r * rowStrideOther + c * colStrideOther]));
                             }
                             d = 0;
                         }
@@ -338,7 +322,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
             for (int r = 0; r < rows; r++) {
                 for (int c = d; c < columns; c++) {
                     a = aggr.apply(a, f.apply(elements[zero + r * rowStride + c * columnStride], elemsOther[zeroOther
-                            + r * rowStrideOther + c * colStrideOther]));
+                        + r * rowStrideOther + c * colStrideOther]));
                 }
                 d = 0;
             }
@@ -429,7 +413,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     }
 
     public LongMatrix2D assign(final cern.mateba.function.tlong.LongProcedure cond,
-            final cern.mateba.function.tlong.LongFunction function) {
+                               final cern.mateba.function.tlong.LongFunction function) {
         final int zero = (int) index(0, 0);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
@@ -447,7 +431,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                         for (int r = firstRow; r < lastRow; r++) {
                             for (int i = idx, c = 0; c < columns; c++) {
                                 elem = elements[i];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     elements[i] = function.apply(elem);
                                 }
                                 i += columnStride;
@@ -464,7 +448,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
             for (int r = 0; r < rows; r++) {
                 for (int i = idx, c = 0; c < columns; c++) {
                     elem = elements[i];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         elements[i] = function.apply(elem);
                     }
                     i += columnStride;
@@ -493,7 +477,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                         for (int r = firstRow; r < lastRow; r++) {
                             for (int i = idx, c = 0; c < columns; c++) {
                                 elem = elements[i];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     elements[i] = value;
                                 }
                                 i += columnStride;
@@ -510,7 +494,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
             for (int r = 0; r < rows; r++) {
                 for (int i = idx, c = 0; c < columns; c++) {
                     elem = elements[i];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         elements[i] = value;
                     }
                     i += columnStride;
@@ -562,7 +546,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     public LongMatrix2D assign(final long[] values) {
         if (values.length != size())
             throw new IllegalArgumentException("Must have same length: length=" + values.length + " rows()*columns()="
-                    + rows() * columns());
+                + rows() * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             System.arraycopy(values, 0, this.elements, 0, values.length);
@@ -611,7 +595,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     public LongMatrix2D assign(final int[] values) {
         if (values.length != size())
             throw new IllegalArgumentException("Must have same length: length=" + values.length + " rows()*columns()="
-                    + rows() * columns());
+                + rows() * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         final int zero = (int) index(0, 0);
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
@@ -656,7 +640,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     public LongMatrix2D assign(final long[][] values) {
         if (values.length != rows)
             throw new IllegalArgumentException("Must have same number of rows: rows=" + values.length + "rows()="
-                    + rows());
+                + rows());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
@@ -674,8 +658,8 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                                 long[] currentRow = values[r];
                                 if (currentRow.length != columns)
                                     throw new IllegalArgumentException(
-                                            "Must have same number of columns in every row: columns="
-                                                    + currentRow.length + "columns()=" + columns());
+                                        "Must have same number of columns in every row: columns="
+                                            + currentRow.length + "columns()=" + columns());
                                 System.arraycopy(currentRow, 0, elements, i, columns);
                                 i += columns;
                             }
@@ -689,7 +673,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                     long[] currentRow = values[r];
                     if (currentRow.length != columns)
                         throw new IllegalArgumentException("Must have same number of columns in every row: columns="
-                                + currentRow.length + "columns()=" + columns());
+                            + currentRow.length + "columns()=" + columns());
                     System.arraycopy(currentRow, 0, this.elements, i, columns);
                     i += columns;
                 }
@@ -712,8 +696,8 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                                 long[] currentRow = values[r];
                                 if (currentRow.length != columns)
                                     throw new IllegalArgumentException(
-                                            "Must have same number of columns in every row: columns="
-                                                    + currentRow.length + "columns()=" + columns());
+                                        "Must have same number of columns in every row: columns="
+                                            + currentRow.length + "columns()=" + columns());
                                 for (int i = idx, c = 0; c < columns; c++) {
                                     elements[i] = currentRow[c];
                                     i += columnStride;
@@ -730,7 +714,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                     long[] currentRow = values[r];
                     if (currentRow.length != columns)
                         throw new IllegalArgumentException("Must have same number of columns in every row: columns="
-                                + currentRow.length + "columns()=" + columns());
+                            + currentRow.length + "columns()=" + columns());
                     for (int i = idx, c = 0; c < columns; c++) {
                         elements[i] = currentRow[c];
                         i += columnStride;
@@ -745,7 +729,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
 
     public LongMatrix2D assign(final LongMatrix2D source) {
         // overriden for performance only
-        if (!(source instanceof DenseLongMatrix2D)) {
+        if (!(source instanceof DenseLongMatrix2D other)) {
             super.assign(source);
             return this;
         }
@@ -758,7 +742,6 @@ public class DenseLongMatrix2D extends LongMatrix2D {
             System.arraycopy(other_final.elements, 0, this.elements, 0, this.elements.length);
             return this;
         }
-        DenseLongMatrix2D other = (DenseLongMatrix2D) source;
         if (haveSharedCells(other)) {
             LongMatrix2D c = other.copy();
             if (!(c instanceof DenseLongMatrix2D)) { // should not happen
@@ -818,11 +801,10 @@ public class DenseLongMatrix2D extends LongMatrix2D {
 
     public LongMatrix2D assign(final LongMatrix2D y, final cern.mateba.function.tlong.LongLongFunction function) {
         // overriden for performance only
-        if (!(y instanceof DenseLongMatrix2D)) {
+        if (!(y instanceof DenseLongMatrix2D other)) {
             super.assign(y, function);
             return this;
         }
-        DenseLongMatrix2D other = (DenseLongMatrix2D) y;
         checkShape(y);
         final long[] elemsOther = other.elements;
         if (elements == null || elemsOther == null)
@@ -1030,7 +1012,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     }
 
     public LongMatrix2D assign(final LongMatrix2D y, final cern.mateba.function.tlong.LongLongFunction function,
-            IntArrayList rowList, IntArrayList columnList) {
+                               IntArrayList rowList, IntArrayList columnList) {
         checkShape(y);
         final int size = rowList.size();
         final int[] rowElements = rowList.elements();
@@ -1056,7 +1038,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                         for (int i = firstIdx; i < lastIdx; i++) {
                             idx = zero + rowElements[i] * rowStride + columnElements[i] * columnStride;
                             idxOther = zeroOther + rowElements[i] * rowStrideOther + columnElements[i]
-                                    * columnStrideOther;
+                                * columnStrideOther;
                             elements[idx] = function.apply(elements[idx], elemsOther[idxOther]);
                         }
                     }
@@ -1181,7 +1163,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     }
 
     public void getNegativeValues(final IntArrayList rowList, final IntArrayList columnList,
-            final LongArrayList valueList) {
+                                  final LongArrayList valueList) {
         rowList.clear();
         columnList.clear();
         valueList.clear();
@@ -1220,7 +1202,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     }
 
     public void getPositiveValues(final IntArrayList rowList, final IntArrayList columnList,
-            final LongArrayList valueList) {
+                                  final LongArrayList valueList) {
         rowList.clear();
         columnList.clear();
         valueList.clear();
@@ -1244,7 +1226,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     }
 
     public long index(int row, int column) {
-        return rowZero + row * rowStride + columnZero + column * columnStride;
+        return rowZero + (long) row * rowStride + columnZero + (long) column * columnStride;
     }
 
     public LongMatrix2D like(int rows, int columns) {
@@ -1288,7 +1270,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                             }
                             d = 0;
                         }
-                        return new long[] { maxValue, rowLocation, colLocation };
+                        return new long[]{maxValue, rowLocation, colLocation};
                     }
                 });
             }
@@ -1327,7 +1309,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                 d = 0;
             }
         }
-        return new long[] { maxValue, rowLocation, columnLocation };
+        return new long[]{maxValue, rowLocation, columnLocation};
     }
 
     public long[] getMinLocation() {
@@ -1363,7 +1345,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                             }
                             d = 0;
                         }
-                        return new long[] { minValue, rowLocation, columnLocation };
+                        return new long[]{minValue, rowLocation, columnLocation};
                     }
                 });
             }
@@ -1402,7 +1384,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                 d = 0;
             }
         }
-        return new long[] { minValue, rowLocation, columnLocation };
+        return new long[]{minValue, rowLocation, columnLocation};
     }
 
     public void setQuick(int row, int column, long value) {
@@ -1499,7 +1481,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     }
 
     public LongMatrix1D zMult(final LongMatrix1D y, LongMatrix1D z, final long alpha, final long beta,
-            final boolean transposeA) {
+                              final boolean transposeA) {
         if (transposeA)
             return viewDice().zMult(y, z, alpha, beta, false);
         if (z == null) {
@@ -1510,7 +1492,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
 
         if (columns != y.size() || rows > z.size())
             throw new IllegalArgumentException("Incompatible args: " + toStringShort() + ", " + y.toStringShort()
-                    + ", " + z.toStringShort());
+                + ", " + z.toStringShort());
 
         final long[] elemsY = (long[]) y.elements();
         final long[] elemsZ = (long[]) z.elements();
@@ -1571,7 +1553,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     }
 
     public LongMatrix2D zMult(final LongMatrix2D B, LongMatrix2D C, final long alpha, final long beta,
-            final boolean transposeA, final boolean transposeB) {
+                              final boolean transposeA, final boolean transposeB) {
         final int rowsA = rows;
         final int columnsA = columns;
         final int rowsB = B.rows();
@@ -1584,17 +1566,17 @@ public class DenseLongMatrix2D extends LongMatrix2D {
         }
 
         /*
-        * determine how to split and parallelize best into blocks if more
-        * B.columns than tasks --> split B.columns, as follows:
-        * 
-        * xx|xx|xxx B xx|xx|xxx xx|xx|xxx A xxx xx|xx|xxx C xxx xx|xx|xxx xxx
-        * xx|xx|xxx xxx xx|xx|xxx xxx xx|xx|xxx
-        * 
-        * if less B.columns than tasks --> split A.rows, as follows:
-        * 
-        * xxxxxxx B xxxxxxx xxxxxxx A xxx xxxxxxx C xxx xxxxxxx --- ------- xxx
-        * xxxxxxx xxx xxxxxxx --- ------- xxx xxxxxxx
-        */
+         * determine how to split and parallelize best into blocks if more
+         * B.columns than tasks --> split B.columns, as follows:
+         *
+         * xx|xx|xxx B xx|xx|xxx xx|xx|xxx A xxx xx|xx|xxx C xxx xx|xx|xxx xxx
+         * xx|xx|xxx xxx xx|xx|xxx xxx xx|xx|xxx
+         *
+         * if less B.columns than tasks --> split A.rows, as follows:
+         *
+         * xxxxxxx B xxxxxxx xxxxxxx A xxx xxxxxxx C xxx xxxxxxx --- ------- xxx
+         * xxxxxxx xxx xxxxxxx --- ------- xxx xxxxxxx
+         */
         if (transposeA)
             return viewDice().zMult(B, C, alpha, beta, false, transposeB);
         if (B instanceof SparseLongMatrix2D || B instanceof SparseRCLongMatrix2D) {
@@ -1615,10 +1597,10 @@ public class DenseLongMatrix2D extends LongMatrix2D {
 
         if (B.rows() != columnsA)
             throw new IllegalArgumentException("Matrix2D inner dimensions must agree:" + this.toStringShort() + ", "
-                    + B.toStringShort());
+                + B.toStringShort());
         if (C.rows() != rowsA || C.columns() != columnsB)
             throw new IllegalArgumentException("Incompatibe result matrix: " + this.toStringShort() + ", "
-                    + B.toStringShort() + ", " + C.toStringShort());
+                + B.toStringShort() + ", " + C.toStringShort());
         if (this == C || B == C)
             throw new IllegalArgumentException("Matrices must not be identical");
 
@@ -1717,7 +1699,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     }
 
     private LongMatrix2D zMultSequential(LongMatrix2D B, LongMatrix2D C, long alpha, long beta, boolean transposeA,
-            boolean transposeB) {
+                                         boolean transposeB) {
         if (transposeA)
             return viewDice().zMult(B, C, alpha, beta, false, transposeB);
         if (B instanceof SparseLongMatrix2D || B instanceof SparseRCLongMatrix2D || B instanceof SparseCCLongMatrix2D) {
@@ -1739,19 +1721,17 @@ public class DenseLongMatrix2D extends LongMatrix2D {
         if (C == null) {
             C = new DenseLongMatrix2D(rowsA, p);
         }
-        if (!(B instanceof DenseLongMatrix2D) || !(C instanceof DenseLongMatrix2D))
+        if (!(B instanceof DenseLongMatrix2D BB) || !(C instanceof DenseLongMatrix2D CC))
             return super.zMult(B, C, alpha, beta, transposeA, transposeB);
         if (B.rows() != columnsA)
             throw new IllegalArgumentException("Matrix2D inner dimensions must agree:" + toStringShort() + ", "
-                    + B.toStringShort());
+                + B.toStringShort());
         if (C.rows() != rowsA || C.columns() != p)
             throw new IllegalArgumentException("Incompatibel result matrix: " + toStringShort() + ", "
-                    + B.toStringShort() + ", " + C.toStringShort());
+                + B.toStringShort() + ", " + C.toStringShort());
         if (this == C || B == C)
             throw new IllegalArgumentException("Matrices must not be identical");
 
-        DenseLongMatrix2D BB = (DenseLongMatrix2D) B;
-        DenseLongMatrix2D CC = (DenseLongMatrix2D) C;
         final long[] AElems = this.elements;
         final long[] BElems = BB.elements;
         final long[] CElems = CC.elements;
@@ -1779,7 +1759,7 @@ public class DenseLongMatrix2D extends LongMatrix2D {
         int rr = 0;
         if (rowsA % m_optimal != 0)
             blocks++;
-        for (; --blocks >= 0;) {
+        while (--blocks >= 0) {
             int jB = (int) BB.index(0, 0);
             int indexA = (int) index(rr, 0);
             int jC = (int) CC.index(rr, 0);
@@ -1787,10 +1767,10 @@ public class DenseLongMatrix2D extends LongMatrix2D {
             if (blocks == 0)
                 m_optimal += rowsA - rr;
 
-            for (int j = p; --j >= 0;) {
+            for (int j = p; --j >= 0; ) {
                 int iA = indexA;
                 int iC = jC;
-                for (int i = m_optimal; --i >= 0;) {
+                for (int i = m_optimal; --i >= 0; ) {
                     int kA = iA;
                     int kB = jB;
                     long s = 0;
@@ -1799,12 +1779,12 @@ public class DenseLongMatrix2D extends LongMatrix2D {
                     kA -= cA;
                     kB -= rB;
 
-                    for (int k = columnsA % 4; --k >= 0;) {
+                    for (int k = columnsA % 4; --k >= 0; ) {
                         s += AElems[kA += cA] * BElems[kB += rB];
                     }
-                    for (int k = columnsA / 4; --k >= 0;) {
+                    for (int k = columnsA / 4; --k >= 0; ) {
                         s += AElems[kA += cA] * BElems[kB += rB] + AElems[kA += cA] * BElems[kB += rB]
-                                + AElems[kA += cA] * BElems[kB += rB] + AElems[kA += cA] * BElems[kB += rB];
+                            + AElems[kA += cA] * BElems[kB += rB] + AElems[kA += cA] * BElems[kB += rB];
                     }
 
                     CElems[iC] = alpha * s + beta * CElems[iC];
@@ -1819,11 +1799,9 @@ public class DenseLongMatrix2D extends LongMatrix2D {
     }
 
     protected boolean haveSharedCellsRaw(LongMatrix2D other) {
-        if (other instanceof SelectedDenseLongMatrix2D) {
-            SelectedDenseLongMatrix2D otherMatrix = (SelectedDenseLongMatrix2D) other;
+        if (other instanceof SelectedDenseLongMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseLongMatrix2D) {
-            DenseLongMatrix2D otherMatrix = (DenseLongMatrix2D) other;
+        } else if (other instanceof DenseLongMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;

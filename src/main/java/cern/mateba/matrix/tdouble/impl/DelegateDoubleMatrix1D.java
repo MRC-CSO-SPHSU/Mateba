@@ -17,10 +17,10 @@ import java.io.Serial;
 /**
  * 1-d matrix holding <tt>double</tt> elements; a view wrapping another 2-d
  * matrix and therefore delegating calls to it.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 09/24/99
  */
 class DelegateDoubleMatrix1D extends DoubleMatrix1D {
 
@@ -38,11 +38,9 @@ class DelegateDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Constructs a matrix view with a given content and row
-     * 
-     * @param newContent
-     *            the content of this view
-     * @param row
-     *            the row this view is bound to
+     *
+     * @param newContent the content of this view
+     * @param row        the row this view is bound to
      */
     public DelegateDoubleMatrix1D(DoubleMatrix2D newContent, int row) {
         if (row < 0 || row >= newContent.rows())

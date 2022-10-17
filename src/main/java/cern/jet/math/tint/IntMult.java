@@ -28,14 +28,14 @@ public final class IntMult implements cern.mateba.function.tint.IntFunction {
     /**
      * Insert the method's description here. Creation date: (8/10/99 19:12:09)
      */
-    protected IntMult(final int multiplicator) {
+    private IntMult(final int multiplicator) {
         this.multiplicator = multiplicator;
     }
 
     /**
      * Returns the result of the function evaluation.
      */
-    public final int apply(int a) {
+    public int apply(int a) {
         return a * multiplicator;
     }
 

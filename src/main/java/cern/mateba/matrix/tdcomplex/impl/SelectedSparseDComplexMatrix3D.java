@@ -20,7 +20,7 @@ import cern.mateba.matrix.tdouble.DoubleMatrix3D;
 /**
  * Selection view on sparse 3-d matrices holding <tt>complex</tt> elements. This
  * implementation uses ConcurrentHashMap
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class SelectedSparseDComplexMatrix3D extends DComplexMatrix3D {
@@ -48,18 +48,14 @@ class SelectedSparseDComplexMatrix3D extends DComplexMatrix3D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param elements
-     *            the cells.
-     * @param sliceOffsets
-     *            The slice offsets of the cells that shall be visible.
-     * @param rowOffsets
-     *            The row offsets of the cells that shall be visible.
-     * @param columnOffsets
-     *            The column offsets of the cells that shall be visible.
+     *
+     * @param elements      the cells.
+     * @param sliceOffsets  The slice offsets of the cells that shall be visible.
+     * @param rowOffsets    The row offsets of the cells that shall be visible.
+     * @param columnOffsets The column offsets of the cells that shall be visible.
      */
     protected SelectedSparseDComplexMatrix3D(ConcurrentHashMap<Long, double[]> elements, int[] sliceOffsets,
-            int[] rowOffsets, int[] columnOffsets, int offset) {
+                                             int[] rowOffsets, int[] columnOffsets, int offset) {
         // be sure parameters are valid, we do not check...
         int slices = sliceOffsets.length;
         int rows = rowOffsets.length;
@@ -91,8 +87,8 @@ class SelectedSparseDComplexMatrix3D extends DComplexMatrix3D {
 
     public double[] getQuick(int slice, int row, int column) {
         return elements.get((long) offset + (long) sliceOffsets[sliceZero + slice * sliceStride]
-                + (long) rowOffsets[rowZero + row * rowStride]
-                + (long) columnOffsets[columnZero + column * columnStride]);
+            + (long) rowOffsets[rowZero + row * rowStride]
+            + (long) columnOffsets[columnZero + column * columnStride]);
     }
 
     public ConcurrentHashMap<Long, double[]> elements() {
@@ -111,11 +107,9 @@ class SelectedSparseDComplexMatrix3D extends DComplexMatrix3D {
      */
 
     protected boolean haveSharedCellsRaw(DComplexMatrix3D other) {
-        if (other instanceof SelectedSparseDComplexMatrix3D) {
-            SelectedSparseDComplexMatrix3D otherMatrix = (SelectedSparseDComplexMatrix3D) other;
+        if (other instanceof SelectedSparseDComplexMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseDComplexMatrix3D) {
-            SparseDComplexMatrix3D otherMatrix = (SparseDComplexMatrix3D) other;
+        } else if (other instanceof SparseDComplexMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -123,8 +117,8 @@ class SelectedSparseDComplexMatrix3D extends DComplexMatrix3D {
 
     public long index(int slice, int row, int column) {
         return (long) this.offset + (long) sliceOffsets[sliceZero + slice * sliceStride]
-                + (long) rowOffsets[rowZero + row * rowStride]
-                + (long) columnOffsets[columnZero + column * columnStride];
+            + (long) rowOffsets[rowZero + row * rowStride]
+            + (long) columnOffsets[columnZero + column * columnStride];
     }
 
     public DComplexMatrix3D like(int slices, int rows, int columns) {
@@ -136,7 +130,7 @@ class SelectedSparseDComplexMatrix3D extends DComplexMatrix3D {
     }
 
     protected DComplexMatrix2D like2D(int rows, int columns, int rowZero, int columnZero, int rowStride,
-            int columnStride) {
+                                      int columnStride) {
         throw new InternalError(); // this method is never called since
         // viewRow() and viewColumn are overridden
         // properly.
@@ -148,8 +142,8 @@ class SelectedSparseDComplexMatrix3D extends DComplexMatrix3D {
 
     public void setQuick(int slice, int row, int column, double[] value) {
         long index = (long) offset + (long) sliceOffsets[sliceZero + slice * sliceStride]
-                + (long) rowOffsets[rowZero + row * rowStride]
-                + (long) columnOffsets[columnZero + column * columnStride];
+            + (long) rowOffsets[rowZero + row * rowStride]
+            + (long) columnOffsets[columnZero + column * columnStride];
         if (value[0] == 0 && value[1] == 0)
             this.elements.remove(index);
         else
@@ -158,12 +152,12 @@ class SelectedSparseDComplexMatrix3D extends DComplexMatrix3D {
 
     public void setQuick(int slice, int row, int column, double re, double im) {
         long index = (long) offset + (long) sliceOffsets[sliceZero + slice * sliceStride]
-                + (long) rowOffsets[rowZero + row * rowStride]
-                + (long) columnOffsets[columnZero + column * columnStride];
+            + (long) rowOffsets[rowZero + row * rowStride]
+            + (long) columnOffsets[columnZero + column * columnStride];
         if (re == 0 && im == 0)
             this.elements.remove(index);
         else
-            this.elements.put(index, new double[] { re, im });
+            this.elements.put(index, new double[]{re, im});
 
     }
 
@@ -208,7 +202,7 @@ class SelectedSparseDComplexMatrix3D extends DComplexMatrix3D {
         int[] viewColumnOffsets = this.rowOffsets;
 
         return new SelectedSparseDComplexMatrix2D(viewRows, viewColumns, this.elements, viewRowZero, viewColumnZero,
-                viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
+            viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
     }
 
     public DComplexMatrix2D viewRow(int row) {
@@ -228,7 +222,7 @@ class SelectedSparseDComplexMatrix3D extends DComplexMatrix3D {
         int[] viewColumnOffsets = this.columnOffsets;
 
         return new SelectedSparseDComplexMatrix2D(viewRows, viewColumns, this.elements, viewRowZero, viewColumnZero,
-                viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
+            viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
     }
 
     protected DComplexMatrix3D viewSelectionLike(int[] sliceOffsets, int[] rowOffsets, int[] columnOffsets) {
@@ -252,7 +246,7 @@ class SelectedSparseDComplexMatrix3D extends DComplexMatrix3D {
         int[] viewColumnOffsets = this.columnOffsets;
 
         return new SelectedSparseDComplexMatrix2D(viewRows, viewColumns, this.elements, viewRowZero, viewColumnZero,
-                viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
+            viewRowStride, viewColumnStride, viewRowOffsets, viewColumnOffsets, viewOffset);
     }
 
     public DoubleMatrix3D getImaginaryPart() {

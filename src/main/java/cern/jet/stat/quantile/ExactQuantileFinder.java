@@ -17,7 +17,7 @@ import java.io.Serial;
  * large main memory; computes quantiles over a sequence of <tt>double</tt>
  * elements. The folkore algorithm: Keeps all elements in main memory, sorts the
  * list, then picks the quantiles.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -42,9 +42,8 @@ public class ExactQuantileFinder implements QuantileFinder, Cloneable {
 
     /**
      * Adds a value to the receiver.
-     * 
-     * @param value
-     *            the value to add.
+     *
+     * @param value the value to add.
      */
     public void add(double value) {
         this.buffer.add(value);
@@ -53,9 +52,8 @@ public class ExactQuantileFinder implements QuantileFinder, Cloneable {
 
     /**
      * Adds all values of the specified list to the receiver.
-     * 
-     * @param values
-     *            the list of which all values shall be added.
+     *
+     * @param values the list of which all values shall be added.
      */
     public void addAllOf(DoubleArrayList values) {
         addAllOfFromTo(values, 0, values.size() - 1);
@@ -64,13 +62,10 @@ public class ExactQuantileFinder implements QuantileFinder, Cloneable {
     /**
      * Adds the part of the specified list between indexes <tt>from</tt>
      * (inclusive) and <tt>to</tt> (inclusive) to the receiver.
-     * 
-     * @param values
-     *            the list of which elements shall be added.
-     * @param from
-     *            the index of the first element to be added (inclusive).
-     * @param to
-     *            the index of the last element to be added (inclusive).
+     *
+     * @param values the list of which elements shall be added.
+     * @param from   the index of the first element to be added (inclusive).
+     * @param to     the index of the last element to be added (inclusive).
      */
     public void addAllOfFromTo(DoubleArrayList values, int from, int to) {
         buffer.addAllOfFromTo(values, from, to);
@@ -89,7 +84,7 @@ public class ExactQuantileFinder implements QuantileFinder, Cloneable {
 
     /**
      * Returns a deep copy of the receiver.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
 
@@ -116,18 +111,17 @@ public class ExactQuantileFinder implements QuantileFinder, Cloneable {
     /**
      * Applies a procedure to each element of the receiver, if any. Iterates
      * over the receiver in no particular order.
-     * 
-     * @param procedure
-     *            the procedure to be applied. Stops iteration if the procedure
-     *            returns <tt>false</tt>, otherwise continues.
+     *
+     * @param procedure the procedure to be applied. Stops iteration if the procedure
+     *                  returns <tt>false</tt>, otherwise continues.
      * @return <tt>false</tt> if the procedure stopped before all elements where
-     *         iterated over, <tt>true</tt> otherwise.
+     * iterated over, <tt>true</tt> otherwise.
      */
     public boolean forEach(cern.mateba.function.tdouble.DoubleProcedure procedure) {
         double[] theElements = buffer.elements();
         int theSize = (int) size();
 
-        for (int i = 0; i < theSize;)
+        for (int i = 0; i < theSize; )
             if (!procedure.apply(theElements[i++]))
                 return false;
         return true;
@@ -146,11 +140,10 @@ public class ExactQuantileFinder implements QuantileFinder, Cloneable {
      * Returns how many percent of the elements contained in the receiver are
      * <tt>&lt;= element</tt>. Does linear interpolation if the element is not
      * contained but lies in between two contained elements.
-     * 
-     * @param element
-     *            the element to search for.
+     *
+     * @param element the element to search for.
      * @return the percentage <tt>p</tt> of elements <tt>&lt;= element</tt> (
-     *         <tt>0.0 &lt;= p &lt;=1.0)</tt>.
+     * <tt>0.0 &lt;= p &lt;=1.0)</tt>.
      */
     public double phi(double element) {
         this.sort();
@@ -160,11 +153,10 @@ public class ExactQuantileFinder implements QuantileFinder, Cloneable {
     /**
      * Computes the specified quantile elements over the values previously
      * added.
-     * 
-     * @param phis
-     *            the quantiles for which elements are to be computed. Each phi
-     *            must be in the interval [0.0,1.0]. <tt>phis</tt> must be
-     *            sorted ascending.
+     *
+     * @param phis the quantiles for which elements are to be computed. Each phi
+     *             must be in the interval [0.0,1.0]. <tt>phis</tt> must be
+     *             sorted ascending.
      * @return the exact quantile elements.
      */
     public DoubleArrayList quantileElements(DoubleArrayList phis) {

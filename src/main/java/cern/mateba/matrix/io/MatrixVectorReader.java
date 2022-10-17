@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003-2006 Bjørn-Ove Heimsund
- * 
+ *
  * This file is part of MTJ.
- * 
+ *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the
  * Free Software Foundation; either version 2.1 of the License, or (at your
  * option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -40,9 +40,8 @@ public class MatrixVectorReader extends BufferedReader {
 
     /**
      * Constructor for MatrixVectorReader
-     * 
-     * @param in
-     *            A Reader
+     *
+     * @param in A Reader
      */
     public MatrixVectorReader(Reader in) {
         super(in);
@@ -51,11 +50,9 @@ public class MatrixVectorReader extends BufferedReader {
 
     /**
      * Constructor for MatrixVectorReader
-     * 
-     * @param in
-     *            A Reader
-     * @param sz
-     *            Input buffer size
+     *
+     * @param in A Reader
+     * @param sz Input buffer size
      */
     public MatrixVectorReader(Reader in, int sz) {
         super(in, sz);
@@ -89,11 +86,9 @@ public class MatrixVectorReader extends BufferedReader {
     /**
      * Shifts the indexes. Useful for converting between 0- and 1-based
      * indicing.
-     * 
-     * @param num
-     *            Added to every index
-     * @param indexes
-     *            indexes to shift
+     *
+     * @param num     Added to every index
+     * @param indexes indexes to shift
      */
     public void add(int num, int[] indexes) {
         for (int i = 0; i < indexes.length; ++i)
@@ -102,9 +97,8 @@ public class MatrixVectorReader extends BufferedReader {
 
     /**
      * Reads a line, and trims it of surrounding whitespace
-     * 
-     * @throws IOException
-     *             If either I/O errors occur, or there was nothing to read
+     *
+     * @throws IOException If either I/O errors occur, or there was nothing to read
      */
     private String readTrimmedLine() throws IOException {
         String line = readLine();
@@ -217,7 +211,7 @@ public class MatrixVectorReader extends BufferedReader {
 
     /**
      * Checks if a Matrix Market header is present ("%%MatrixMarket")
-     * 
+     *
      * @return True if a header was found, else false
      * @throws IOException
      */

@@ -19,7 +19,7 @@ import java.io.Serial;
  * Approximate quantile finding algorithm for known <tt>N</tt> requiring only
  * one pass and little main memory; computes quantiles over a sequence of
  * <tt>double</tt> elements.
- * 
+ *
  * <p>
  * Needs as input the following parameters:
  * <p>
@@ -28,21 +28,21 @@ import java.io.Serial;
  * <dt>2. <tt>quantiles</tt> - the number of quantiles to be computed.
  * <dt>3. <tt>epsilon</tt> - the allowed approximation error on quantiles. The
  * approximation guarantee of this algorithm is explicit.
- * 
+ *
  * <p>
  * It is also possible to couple the approximation algorithm with random
  * sampling to further reduce memory requirements. With sampling, the
  * approximation guarantees are explicit but probabilistic, i.e. they apply with
  * respect to a (user controlled) confidence parameter "delta".
- * 
+ *
  * <dt>4. <tt>delta</tt> - the probability allowed that the approximation error
  * fails to be smaller than epsilon. Set <tt>delta</tt> to zero for explicit non
  * probabilistic guarantees.
- * 
+ * <p>
  * You usually don't instantiate quantile finders by using the constructor.
  * Instead use the factory <tt>QuantileFinderFactor</tt> to do so. It will set
  * up the right parametrization for you.
- * 
+ *
  * <p>
  * After Gurmeet Singh Manku, Sridhar Rajagopalan and Bruce G. Lindsay,
  * Approximate Medians and other Quantiles in One Pass and with Limited Memory,
@@ -66,20 +66,15 @@ class KnownQuantileEstimator extends QuantileEstimator {
     /**
      * Constructs an approximate quantile finder with b buffers, each having k
      * elements.
-     * 
-     * @param b
-     *            the number of buffers
-     * @param k
-     *            the number of elements per buffer
-     * @param N
-     *            the total number of elements over which quantiles are to be
-     *            computed.
-     * @param samplingRate
-     *            1.0 --> all elements are consumed. 10.0 --> Consumes one
-     *            random element from successive blocks of 10 elements each.
-     *            Etc.
-     * @param generator
-     *            a uniform random number generator.
+     *
+     * @param b            the number of buffers
+     * @param k            the number of elements per buffer
+     * @param N            the total number of elements over which quantiles are to be
+     *                     computed.
+     * @param samplingRate 1.0 --> all elements are consumed. 10.0 --> Consumes one
+     *                     random element from successive blocks of 10 elements each.
+     *                     Etc.
+     * @param generator    a uniform random number generator.
      */
     public KnownQuantileEstimator(int b, int k, long N, double samplingRate, RandomEngine generator) {
         this.samplingRate = samplingRate;
@@ -89,7 +84,7 @@ class KnownQuantileEstimator extends QuantileEstimator {
             this.samplingAssistant = null;
         } else {
             this.samplingAssistant = new RandomSamplingAssistant(DoubleArithmetic.floor(N / samplingRate), N,
-                    generator);
+                generator);
         }
 
         setUp(b, k);
@@ -97,10 +92,8 @@ class KnownQuantileEstimator extends QuantileEstimator {
     }
 
     /**
-     * @param infinities
-     *            the number of infinities to fill.
-     * @param buffer
-     *            the buffer into which the infinities shall be filled.
+     * @param infinities the number of infinities to fill.
+     * @param buffer     the buffer into which the infinities shall be filled.
      */
     protected void addInfinities(int missingInfinities, Buffer buffer) {
         RandomSamplingAssistant oldAssistant = this.samplingAssistant;
@@ -153,18 +146,18 @@ class KnownQuantileEstimator extends QuantileEstimator {
         var assist = this.samplingAssistant;
         if (assist != null) {
             this.samplingAssistant = new RandomSamplingAssistant(DoubleArithmetic.floor(N / samplingRate), N,
-                    assist.getRandomGenerator());
+                assist.getRandomGenerator());
         }
     }
 
     /**
      * Returns a deep copy of the receiver.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
 
     public Object clone() {
-       var copy = (KnownQuantileEstimator) super.clone();
+        var copy = (KnownQuantileEstimator) super.clone();
         if (this.samplingAssistant != null)
             copy.samplingAssistant = (RandomSamplingAssistant) copy.samplingAssistant.clone();
         return copy;
@@ -204,12 +197,13 @@ class KnownQuantileEstimator extends QuantileEstimator {
     }
 
     /**
+     *
      */
 
     protected DoubleArrayList preProcessPhis(DoubleArrayList phis) {
         if (beta > 1.0) {
             phis = phis.clone();
-            for (int i = phis.size(); --i >= 0;) {
+            for (int i = phis.size(); --i >= 0; ) {
                 phis.set(i, (2 * phis.get(i) + beta - 1) / (2 * beta));
             }
         }
@@ -219,11 +213,10 @@ class KnownQuantileEstimator extends QuantileEstimator {
     /**
      * Computes the specified quantile elements over the values previously
      * added.
-     * 
-     * @param phis
-     *            the quantiles for which elements are to be computed. Each phi
-     *            must be in the interval [0.0,1.0]. <tt>phis</tt> must be
-     *            sorted ascending.
+     *
+     * @param phis the quantiles for which elements are to be computed. Each phi
+     *             must be in the interval [0.0,1.0]. <tt>phis</tt> must be
+     *             sorted ascending.
      * @return the approximate quantile elements.
      */
 
@@ -234,7 +227,7 @@ class KnownQuantileEstimator extends QuantileEstimator {
          * satisfies this constraint by temporarily filling a few +infinity,
          * -infinity elements to make up a full block. This is in full
          * conformance with the explicit approximation guarantees.
-         * 
+         *
          * For those of you working on online apps: The approximation guarantees
          * are given for computing quantiles AFTER N elements have been filled,
          * not for intermediate displays. If you have one thread filling and
@@ -275,16 +268,14 @@ class KnownQuantileEstimator extends QuantileEstimator {
     /**
      * Reading off quantiles requires to fill some +infinity, -infinity values
      * to make a partial buffer become full.
-     * 
+     * <p>
      * This method removes the infinities which were previously temporarily
      * added to a partial buffer. Removing them is necessary if we want to
      * continue filling more elements. Precondition: the buffer is sorted
      * ascending.
-     * 
-     * @param infinities
-     *            the number of infinities previously filled.
-     * @param buffer
-     *            the buffer into which the infinities were filled.
+     *
+     * @param infinities the number of infinities previously filled.
+     * @param buffer     the buffer into which the infinities were filled.
      */
     protected void removeInfinitiesFrom(int infinities, Buffer buffer) {
         int plusInf = 0;
@@ -317,7 +308,7 @@ class KnownQuantileEstimator extends QuantileEstimator {
          * than N elements, because otherwise we can't give explicit
          * approximation guarantees anymore. Use an UNKNOWN quantile finder
          * instead if your app may fill more than N elements.
-         * 
+         *
          * However, to make this class meaningful even under wired use cases, we
          * actually do allow to fill more than N elements (without explicit
          * approx. guarantees, of course). Normally, elements beyond N will not
@@ -325,7 +316,7 @@ class KnownQuantileEstimator extends QuantileEstimator {
          * will no more change no matter how much you fill. This might not be
          * what the user expects. Therefore we use a new (unexhausted) sampler
          * with the same parametrization.
-         * 
+         *
          * If you want this class to ignore any elements beyong N, then comment
          * the following line.
          */

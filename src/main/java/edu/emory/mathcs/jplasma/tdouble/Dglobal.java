@@ -117,7 +117,7 @@ class Dglobal {
             workers = new Future[NTHREADS];
         }
 
-    };
+    }
 
     /*////////////////////////////////////////////////////////////////////////////////////////
      *  Auxiliary storage
@@ -134,7 +134,7 @@ class Dglobal {
             WORK = new double[NTHREADS][];
             TAU = new double[NTHREADS][];
         }
-    };
+    }
 
     /*////////////////////////////////////////////////////////////////////////////////////////
      *  Master->workers communication of arguments
@@ -175,6 +175,6 @@ class Dglobal {
 
         }
 
-    };
+    }
 
 }

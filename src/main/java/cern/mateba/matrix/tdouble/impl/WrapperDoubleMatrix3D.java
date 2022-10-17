@@ -18,8 +18,7 @@ import java.io.Serial;
 /**
  * 3-d matrix holding <tt>double</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
- * 
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
@@ -48,14 +47,12 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
 
     /**
      * Computes the 3D discrete cosine transform (DCT-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dct3(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).dct3(scale);
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -70,13 +67,12 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 2D discrete cosine transform (DCT-II) of each slice of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void dct2Slices(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).dct2Slices(scale);
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -90,13 +86,12 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
 
     /**
      * Computes the 3D discrete sine transform (DST-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void dst3(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).dst3(scale);
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -111,14 +106,12 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 2D discrete sine transform (DST-II) of each slice of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dst2Slices(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).dst2Slices(scale);
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -135,7 +128,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
      */
     public void dht3() {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).dht3();
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -153,7 +146,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
      */
     public void dht2Slices() {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).dht2Slices();
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -168,62 +161,61 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 3D discrete Fourier transform (DFT) of this matrix. The
      * physical layout of the output data is as follows:
-     * 
+     *
      * <pre>
      * this[k1][k2][2*k3] = Re[k1][k2][k3]
-     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
+     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
      * this[k1][k2][2*k3+1] = Im[k1][k2][k3]
-     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
-     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2, 
+     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
+     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2,
      * this[k1][k2][0] = Re[k1][k2][0]
-     *              = Re[(n1-k1)%n1][n2-k2][0], 
+     *              = Re[(n1-k1)%n1][n2-k2][0],
      * this[k1][k2][1] = Im[k1][k2][0]
-     *              = -Im[(n1-k1)%n1][n2-k2][0], 
+     *              = -Im[(n1-k1)%n1][n2-k2][0],
      * this[k1][n2-k2][1] = Re[(n1-k1)%n1][k2][n3/2]
-     *                 = Re[k1][n2-k2][n3/2], 
+     *                 = Re[k1][n2-k2][n3/2],
      * this[k1][n2-k2][0] = -Im[(n1-k1)%n1][k2][n3/2]
-     *                 = Im[k1][n2-k2][n3/2], 
-     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2, 
+     *                 = Im[k1][n2-k2][n3/2],
+     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2,
      * this[k1][0][0] = Re[k1][0][0]
-     *             = Re[n1-k1][0][0], 
+     *             = Re[n1-k1][0][0],
      * this[k1][0][1] = Im[k1][0][0]
-     *             = -Im[n1-k1][0][0], 
+     *             = -Im[n1-k1][0][0],
      * this[k1][n2/2][0] = Re[k1][n2/2][0]
-     *                = Re[n1-k1][n2/2][0], 
+     *                = Re[n1-k1][n2/2][0],
      * this[k1][n2/2][1] = Im[k1][n2/2][0]
-     *                = -Im[n1-k1][n2/2][0], 
+     *                = -Im[n1-k1][n2/2][0],
      * this[n1-k1][0][1] = Re[k1][0][n3/2]
-     *                = Re[n1-k1][0][n3/2], 
+     *                = Re[n1-k1][0][n3/2],
      * this[n1-k1][0][0] = -Im[k1][0][n3/2]
-     *                = Im[n1-k1][0][n3/2], 
+     *                = Im[n1-k1][0][n3/2],
      * this[n1-k1][n2/2][1] = Re[k1][n2/2][n3/2]
-     *                   = Re[n1-k1][n2/2][n3/2], 
+     *                   = Re[n1-k1][n2/2][n3/2],
      * this[n1-k1][n2/2][0] = -Im[k1][n2/2][n3/2]
-     *                   = Im[n1-k1][n2/2][n3/2], 
-     *     0&lt;k1&lt;n1/2, 
-     * this[0][0][0] = Re[0][0][0], 
-     * this[0][0][1] = Re[0][0][n3/2], 
-     * this[0][n2/2][0] = Re[0][n2/2][0], 
-     * this[0][n2/2][1] = Re[0][n2/2][n3/2], 
-     * this[n1/2][0][0] = Re[n1/2][0][0], 
-     * this[n1/2][0][1] = Re[n1/2][0][n3/2], 
-     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0], 
+     *                   = Im[n1-k1][n2/2][n3/2],
+     *     0&lt;k1&lt;n1/2,
+     * this[0][0][0] = Re[0][0][0],
+     * this[0][0][1] = Re[0][0][n3/2],
+     * this[0][n2/2][0] = Re[0][n2/2][0],
+     * this[0][n2/2][1] = Re[0][n2/2][n3/2],
+     * this[n1/2][0][0] = Re[n1/2][0][0],
+     * this[n1/2][0][1] = Re[n1/2][0][n3/2],
+     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0],
      * this[n1/2][n2/2][1] = Re[n1/2][n2/2][n3/2]
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * forward transform, use <code>getFft3</code>. To get back the original
      * data, use <code>ifft3</code>.
-     * 
-     * @throws IllegalArgumentException
-     *             if the slice size or the row size or the column size of this
-     *             matrix is not a power of 2 number.
+     *
+     * @throws IllegalArgumentException if the slice size or the row size or the column size of this
+     *                                  matrix is not a power of 2 number.
      */
     public void fft3() {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).fft3();
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -238,13 +230,12 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 3D discrete Fourier transform
      * (DFT) of this matrix.
-     * 
+     *
      * @return the 3D discrete Fourier transform (DFT) of this matrix.
-     * 
      */
     public DenseLargeDComplexMatrix3D getFft3() {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 return ((DenseLargeDoubleMatrix3D) content).getFft3();
             } else {
                 return ((DenseLargeDoubleMatrix3D) copy()).getFft3();
@@ -257,13 +248,13 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 3D inverse of the discrete
      * Fourier transform (IDFT) of this matrix.
-     * 
+     *
      * @return the 3D inverse of the discrete Fourier transform (IDFT) of this
-     *         matrix.
+     * matrix.
      */
     public DenseLargeDComplexMatrix3D getIfft3(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 return ((DenseLargeDoubleMatrix3D) content).getIfft3(scale);
             } else {
                 return ((DenseLargeDoubleMatrix3D) copy()).getIfft3(scale);
@@ -276,13 +267,13 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 2D discrete Fourier transform
      * (DFT) of each slice of this matrix.
-     * 
+     *
      * @return the 2D discrete Fourier transform (DFT) of each slice of this
-     *         matrix.
+     * matrix.
      */
     public DenseLargeDComplexMatrix3D getFft2Slices() {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 return ((DenseLargeDoubleMatrix3D) content).getFft2Slices();
             } else {
                 return ((DenseLargeDoubleMatrix3D) copy()).getFft2Slices();
@@ -295,13 +286,13 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 2D inverse of the discrete
      * Fourier transform (IDFT) of each slice of this matrix.
-     * 
+     *
      * @return the 2D inverse of the discrete Fourier transform (IDFT) of each
-     *         slice of this matrix.
+     * slice of this matrix.
      */
     public DenseLargeDComplexMatrix3D getIfft2Slices(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 return ((DenseLargeDoubleMatrix3D) content).getIfft2Slices(scale);
             } else {
                 return ((DenseLargeDoubleMatrix3D) copy()).getIfft2Slices(scale);
@@ -314,13 +305,12 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete cosine transform (DCT-III) of
      * this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idct3(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).idct3(scale);
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -335,13 +325,12 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 2D inverse of the discrete cosine transform (DCT-III) of
      * each slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idct2Slices(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).idct2Slices(scale);
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -356,13 +345,12 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete size transform (DST-III) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idst3(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).idst3(scale);
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -377,13 +365,12 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 2D inverse of the discrete sine transform (DST-III) of each
      * slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idst2Slices(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).idst2Slices(scale);
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -398,13 +385,12 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete Hartley transform (DHT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idht3(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).idht3(scale);
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -419,13 +405,12 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 2D inverse of the discrete Hartley transform (DHT) of each
      * slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idht2Slices(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).idht2Slices(scale);
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -440,63 +425,60 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete Fourier transform (IDFT) of this
      * matrix. The physical layout of the input data has to be as follows:
-     * 
+     *
      * <pre>
      * this[k1][k2][2*k3] = Re[k1][k2][k3]
-     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
+     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
      * this[k1][k2][2*k3+1] = Im[k1][k2][k3]
-     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
-     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2, 
+     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
+     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2,
      * this[k1][k2][0] = Re[k1][k2][0]
-     *              = Re[(n1-k1)%n1][n2-k2][0], 
+     *              = Re[(n1-k1)%n1][n2-k2][0],
      * this[k1][k2][1] = Im[k1][k2][0]
-     *              = -Im[(n1-k1)%n1][n2-k2][0], 
+     *              = -Im[(n1-k1)%n1][n2-k2][0],
      * this[k1][n2-k2][1] = Re[(n1-k1)%n1][k2][n3/2]
-     *                 = Re[k1][n2-k2][n3/2], 
+     *                 = Re[k1][n2-k2][n3/2],
      * this[k1][n2-k2][0] = -Im[(n1-k1)%n1][k2][n3/2]
-     *                 = Im[k1][n2-k2][n3/2], 
-     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2, 
+     *                 = Im[k1][n2-k2][n3/2],
+     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2,
      * this[k1][0][0] = Re[k1][0][0]
-     *             = Re[n1-k1][0][0], 
+     *             = Re[n1-k1][0][0],
      * this[k1][0][1] = Im[k1][0][0]
-     *             = -Im[n1-k1][0][0], 
+     *             = -Im[n1-k1][0][0],
      * this[k1][n2/2][0] = Re[k1][n2/2][0]
-     *                = Re[n1-k1][n2/2][0], 
+     *                = Re[n1-k1][n2/2][0],
      * this[k1][n2/2][1] = Im[k1][n2/2][0]
-     *                = -Im[n1-k1][n2/2][0], 
+     *                = -Im[n1-k1][n2/2][0],
      * this[n1-k1][0][1] = Re[k1][0][n3/2]
-     *                = Re[n1-k1][0][n3/2], 
+     *                = Re[n1-k1][0][n3/2],
      * this[n1-k1][0][0] = -Im[k1][0][n3/2]
-     *                = Im[n1-k1][0][n3/2], 
+     *                = Im[n1-k1][0][n3/2],
      * this[n1-k1][n2/2][1] = Re[k1][n2/2][n3/2]
-     *                   = Re[n1-k1][n2/2][n3/2], 
+     *                   = Re[n1-k1][n2/2][n3/2],
      * this[n1-k1][n2/2][0] = -Im[k1][n2/2][n3/2]
-     *                   = Im[n1-k1][n2/2][n3/2], 
-     *     0&lt;k1&lt;n1/2, 
-     * this[0][0][0] = Re[0][0][0], 
-     * this[0][0][1] = Re[0][0][n3/2], 
-     * this[0][n2/2][0] = Re[0][n2/2][0], 
-     * this[0][n2/2][1] = Re[0][n2/2][n3/2], 
-     * this[n1/2][0][0] = Re[n1/2][0][0], 
-     * this[n1/2][0][1] = Re[n1/2][0][n3/2], 
-     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0], 
+     *                   = Im[n1-k1][n2/2][n3/2],
+     *     0&lt;k1&lt;n1/2,
+     * this[0][0][0] = Re[0][0][0],
+     * this[0][0][1] = Re[0][0][n3/2],
+     * this[0][n2/2][0] = Re[0][n2/2][0],
+     * this[0][n2/2][1] = Re[0][n2/2][n3/2],
+     * this[n1/2][0][0] = Re[n1/2][0][0],
+     * this[n1/2][0][1] = Re[n1/2][0][n3/2],
+     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0],
      * this[n1/2][n2/2][1] = Re[n1/2][n2/2][n3/2]
      * </pre>
-     * 
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * inverse transform, use <code>getIfft3</code>.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
-     * @throws IllegalArgumentException
-     *             if the slice size or the row size or the column size of this
-     *             matrix is not a power of 2 number.
+     *
+     * @param scale if true then scaling is performed
+     * @throws IllegalArgumentException if the slice size or the row size or the column size of this
+     *                                  matrix is not a power of 2 number.
      */
     public void ifft3(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix3D) content).ifft3(scale);
             } else {
                 DenseLargeDoubleMatrix3D copy = (DenseLargeDoubleMatrix3D) copy();
@@ -539,7 +521,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
             return this;
         WrapperDoubleMatrix3D view = new WrapperDoubleMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -573,7 +555,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
             return this;
         WrapperDoubleMatrix3D view = new WrapperDoubleMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -600,7 +582,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
     public DoubleMatrix3D viewDice(int axis0, int axis1, int axis2) {
         int d = 3;
         if (axis0 < 0 || axis0 >= d || axis1 < 0 || axis1 >= d || axis2 < 0 || axis2 >= d || axis0 == axis1
-                || axis0 == axis2 || axis1 == axis2) {
+            || axis0 == axis2 || axis1 == axis2) {
             throw new IllegalArgumentException("Illegal Axes: " + axis0 + ", " + axis1 + ", " + axis2);
         }
         WrapperDoubleMatrix3D view = null;
@@ -609,7 +591,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
         } else if (axis0 == 1 && axis1 == 0 && axis2 == 2) {
             view = new WrapperDoubleMatrix3D(this) {
                 /**
-                 * 
+                 *
                  */
                 private static final long serialVersionUID = 1L;
 
@@ -632,7 +614,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
         } else if (axis0 == 1 && axis1 == 2 && axis2 == 0) {
             view = new WrapperDoubleMatrix3D(this) {
                 /**
-                 * 
+                 *
                  */
                 private static final long serialVersionUID = 1L;
 
@@ -655,7 +637,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
         } else if (axis0 == 2 && axis1 == 1 && axis2 == 0) {
             view = new WrapperDoubleMatrix3D(this) {
                 /**
-                 * 
+                 *
                  */
                 private static final long serialVersionUID = 1L;
 
@@ -678,7 +660,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
         } else if (axis0 == 2 && axis1 == 0 && axis2 == 1) {
             view = new WrapperDoubleMatrix3D(this) {
                 /**
-                 * 
+                 *
                  */
                 private static final long serialVersionUID = 1L;
 
@@ -711,7 +693,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
         checkBox(slice, row, column, depth, height, width);
         WrapperDoubleMatrix3D view = new WrapperDoubleMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -748,7 +730,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
             return this;
         WrapperDoubleMatrix3D view = new WrapperDoubleMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -776,17 +758,17 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
         // check for "all"
         if (sliceIndexes == null) {
             sliceIndexes = new int[slices];
-            for (int i = slices; --i >= 0;)
+            for (int i = slices; --i >= 0; )
                 sliceIndexes[i] = i;
         }
         if (rowIndexes == null) {
             rowIndexes = new int[rows];
-            for (int i = rows; --i >= 0;)
+            for (int i = rows; --i >= 0; )
                 rowIndexes[i] = i;
         }
         if (columnIndexes == null) {
             columnIndexes = new int[columns];
-            for (int i = columns; --i >= 0;)
+            for (int i = columns; --i >= 0; )
                 columnIndexes[i] = i;
         }
 
@@ -799,7 +781,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
 
         WrapperDoubleMatrix3D view = new WrapperDoubleMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -831,7 +813,7 @@ public class WrapperDoubleMatrix3D extends DoubleMatrix3D {
             throw new IndexOutOfBoundsException("illegal stride");
         WrapperDoubleMatrix3D view = new WrapperDoubleMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 

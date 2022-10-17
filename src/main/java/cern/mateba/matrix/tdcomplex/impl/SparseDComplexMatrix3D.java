@@ -22,9 +22,8 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 /**
  * Sparse hashed 3-d matrix holding <tt>complex</tt> elements. This
  * implementation uses ConcurrentHashMap
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 
 public class SparseDComplexMatrix3D extends DComplexMatrix3D {
@@ -44,38 +43,30 @@ public class SparseDComplexMatrix3D extends DComplexMatrix3D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
+     *                                  .
      */
     public SparseDComplexMatrix3D(double[][][] values) {
         this(values.length, (values.length == 0 ? 0 : values[0].length), (values.length == 0 ? 0
-                : values[0].length == 0 ? 0 : values[0][0].length));
+            : values[0].length == 0 ? 0 : values[0][0].length));
         assign(values);
     }
 
     /**
      * Constructs a matrix with a given number of slices, rows and columns and
      * default memory usage.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices  the number of slices the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public SparseDComplexMatrix3D(int slices, int rows, int columns) {
         setUp(slices, rows, columns);
@@ -84,37 +75,25 @@ public class SparseDComplexMatrix3D extends DComplexMatrix3D {
 
     /**
      * Constructs a view with the given parameters.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param sliceZero
-     *            the position of the first element.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param sliceStride
-     *            the number of elements between two slices, i.e.
-     *            <tt>index(k+1,i,j)-index(k,i,j)</tt>.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(k,i+1,j)-index(k,i,j)</tt>.
-     * @param columnnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(k,i,j+1)-index(k,i,j)</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices        the number of slices the matrix shall have.
+     * @param rows          the number of rows the matrix shall have.
+     * @param columns       the number of columns the matrix shall have.
+     * @param elements      the cells.
+     * @param sliceZero     the position of the first element.
+     * @param rowZero       the position of the first element.
+     * @param columnZero    the position of the first element.
+     * @param sliceStride   the number of elements between two slices, i.e.
+     *                      <tt>index(k+1,i,j)-index(k,i,j)</tt>.
+     * @param rowStride     the number of elements between two rows, i.e.
+     *                      <tt>index(k,i+1,j)-index(k,i,j)</tt>.
+     * @param columnnStride the number of elements between two columns, i.e.
+     *                      <tt>index(k,i,j+1)-index(k,i,j)</tt>.
+     * @throws IllegalArgumentException if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     protected SparseDComplexMatrix3D(int slices, int rows, int columns, ConcurrentHashMap<Long, double[]> elements,
-            int sliceZero, int rowZero, int columnZero, int sliceStride, int rowStride, int columnStride) {
+                                     int sliceZero, int rowZero, int columnZero, int sliceStride, int rowStride, int columnStride) {
         setUp(slices, rows, columns, sliceZero, rowZero, columnZero, sliceStride, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = false;
@@ -138,9 +117,9 @@ public class SparseDComplexMatrix3D extends DComplexMatrix3D {
 
     public synchronized double[] getQuick(int slice, int row, int column) {
         double[] elem = elements.get((long) sliceZero + (long) slice * (long) sliceStride + (long) rowZero + (long) row
-                * (long) rowStride + (long) columnZero + (long) column * (long) columnStride);
+            * (long) rowStride + (long) columnZero + (long) column * (long) columnStride);
         if (elem != null) {
-            return new double[] { elem[0], elem[1] };
+            return new double[]{elem[0], elem[1]};
         } else {
             return new double[2];
         }
@@ -155,11 +134,9 @@ public class SparseDComplexMatrix3D extends DComplexMatrix3D {
      */
 
     protected boolean haveSharedCellsRaw(DComplexMatrix3D other) {
-        if (other instanceof SelectedSparseDComplexMatrix3D) {
-            SelectedSparseDComplexMatrix3D otherMatrix = (SelectedSparseDComplexMatrix3D) other;
+        if (other instanceof SelectedSparseDComplexMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseDComplexMatrix3D) {
-            SparseDComplexMatrix3D otherMatrix = (SparseDComplexMatrix3D) other;
+        } else if (other instanceof SparseDComplexMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -167,7 +144,7 @@ public class SparseDComplexMatrix3D extends DComplexMatrix3D {
 
     public long index(int slice, int row, int column) {
         return (long) sliceZero + (long) slice * (long) sliceStride + (long) rowZero + (long) row * (long) rowStride
-                + (long) columnZero + (long) column * columnStride;
+            + (long) columnZero + (long) column * columnStride;
     }
 
     public DComplexMatrix3D like(int slices, int rows, int columns) {
@@ -179,13 +156,13 @@ public class SparseDComplexMatrix3D extends DComplexMatrix3D {
     }
 
     protected DComplexMatrix2D like2D(int rows, int columns, int rowZero, int columnZero, int rowStride,
-            int columnStride) {
+                                      int columnStride) {
         return new SparseDComplexMatrix2D(rows, columns, this.elements, rowZero, columnZero, rowStride, columnStride);
     }
 
     public synchronized void setQuick(int slice, int row, int column, double[] value) {
         long index = (long) sliceZero + (long) slice * (long) sliceStride + (long) rowZero + (long) row
-                * (long) rowStride + (long) columnZero + (long) column * (long) columnStride;
+            * (long) rowStride + (long) columnZero + (long) column * (long) columnStride;
         if (value[0] == 0 && value[1] == 0)
             this.elements.remove(index);
         else
@@ -194,11 +171,11 @@ public class SparseDComplexMatrix3D extends DComplexMatrix3D {
 
     public synchronized void setQuick(int slice, int row, int column, double re, double im) {
         long index = (long) sliceZero + (long) slice * (long) sliceStride + (long) rowZero + (long) row
-                * (long) rowStride + (long) columnZero + (long) column * (long) columnStride;
+            * (long) rowStride + (long) columnZero + (long) column * (long) columnStride;
         if (re == 0 && im == 0)
             this.elements.remove(index);
         else
-            this.elements.put(index, new double[] { re, im });
+            this.elements.put(index, new double[]{re, im});
     }
 
     protected DComplexMatrix3D viewSelectionLike(int[] sliceOffsets, int[] rowOffsets, int[] columnOffsets) {

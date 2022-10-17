@@ -22,7 +22,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * href="package-summary.html">package summary</a> and javadoc <a
  * href="package-tree.html">tree view</a> to get the broad picture.
  * <p>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
@@ -53,16 +53,13 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @param dindex
-     *            index of the diagonal.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length || index < -rows+1 || index > columns - 1</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @param dindex index of the diagonal.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length || index < -rows+1 || index > columns - 1</tt>
+     *                                  .
      */
     public DiagonalDoubleMatrix2D(double[][] values, int dindex) {
         this(values.length, values.length == 0 ? 0 : values[0].length, dindex);
@@ -72,15 +69,11 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param dindex
-     *            index of the diagonal.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0 (double)size > Integer.MAX_VALUE</tt>.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @param dindex  index of the diagonal.
+     * @throws IllegalArgumentException if <tt>size<0 (double)size > Integer.MAX_VALUE</tt>.
      */
     public DiagonalDoubleMatrix2D(int rows, int columns, int dindex) {
         super(null);
@@ -132,11 +125,11 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
                 return assign(0);
             if (alpha != alpha)
                 return assign(alpha); // the funny definition of isNaN(). This should better not happen.
-            for (int j = dlength; --j >= 0;) {
+            for (int j = dlength; --j >= 0; ) {
                 elements[j] *= alpha;
             }
         } else {
-            for (int j = dlength; --j >= 0;) {
+            for (int j = dlength; --j >= 0; ) {
                 elements[j] = function.apply(elements[j]);
             }
         }
@@ -144,7 +137,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
     }
 
     public DoubleMatrix2D assign(double value) {
-        for (int i = dlength; --i >= 0;)
+        for (int i = dlength; --i >= 0; )
             elements[i] = value;
         return this;
     }
@@ -163,15 +156,14 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            elements[r] = values[r];
-                        }
+                        if (lastRow - firstRow >= 0)
+                            System.arraycopy(values, firstRow, elements, firstRow, lastRow - firstRow);
                     }
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
-            for (int r = dlength; --r >= 0;) {
+            for (int r = dlength; --r >= 0; ) {
                 elements[r] = values[r];
             }
         }
@@ -181,7 +173,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
     public DoubleMatrix2D assign(final double[][] values) {
         if (values.length != rows)
             throw new IllegalArgumentException("Must have same number of rows: rows=" + values.length + "rows()="
-                    + rows());
+                + rows());
         int r, c;
         if (dindex >= 0) {
             r = 0;
@@ -193,7 +185,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
         for (int i = 0; i < dlength; i++) {
             if (values[i].length != columns) {
                 throw new IllegalArgumentException("Must have same number of columns in every row: columns="
-                        + values[r].length + "columns()=" + columns());
+                    + values[r].length + "columns()=" + columns());
             }
             elements[i] = values[r++][c++];
         }
@@ -206,8 +198,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
             return this; // nothing to do
         checkShape(source);
 
-        if (source instanceof DiagonalDoubleMatrix2D) {
-            DiagonalDoubleMatrix2D other = (DiagonalDoubleMatrix2D) source;
+        if (source instanceof DiagonalDoubleMatrix2D other) {
             if ((dindex != other.dindex) || (dlength != other.dlength)) {
                 throw new IllegalArgumentException("source is DiagonalDoubleMatrix2D with different diagonal stored.");
             }
@@ -221,8 +212,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
     public DoubleMatrix2D assign(final DoubleMatrix2D y, final cern.mateba.function.tdouble.DoubleDoubleFunction function) {
         checkShape(y);
-        if (y instanceof DiagonalDoubleMatrix2D) {
-            DiagonalDoubleMatrix2D other = (DiagonalDoubleMatrix2D) y;
+        if (y instanceof DiagonalDoubleMatrix2D other) {
             if ((dindex != other.dindex) || (dlength != other.dlength)) {
                 throw new IllegalArgumentException("y is DiagonalDoubleMatrix2D with different diagonal stored.");
             }
@@ -276,24 +266,24 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
                 if (function instanceof cern.jet.math.tdouble.DoublePlusMultSecond) { // x[i] = x[i] + alpha*y[i]
                     final double alpha = ((cern.jet.math.tdouble.DoublePlusMultSecond) function).multiplicator;
                     if (alpha == 1) {
-                        for (int j = dlength; --j >= 0;) {
+                        for (int j = dlength; --j >= 0; ) {
                             elements[j] += otherElements[j];
                         }
                     } else {
-                        for (int j = dlength; --j >= 0;) {
+                        for (int j = dlength; --j >= 0; ) {
                             elements[j] = elements[j] + alpha * otherElements[j];
                         }
                     }
                 } else if (function == cern.jet.math.tdouble.DoubleFunctions.mult) { // x[i] = x[i] * y[i]
-                    for (int j = dlength; --j >= 0;) {
+                    for (int j = dlength; --j >= 0; ) {
                         elements[j] = elements[j] * otherElements[j];
                     }
                 } else if (function == cern.jet.math.tdouble.DoubleFunctions.div) { // x[i] = x[i] /  y[i]
-                    for (int j = dlength; --j >= 0;) {
+                    for (int j = dlength; --j >= 0; ) {
                         elements[j] = elements[j] / otherElements[j];
                     }
                 } else {
-                    for (int j = dlength; --j >= 0;) {
+                    for (int j = dlength; --j >= 0; ) {
                         elements[j] = function.apply(elements[j], otherElements[j]);
                     }
                 }
@@ -367,8 +357,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
     }
 
     public boolean equals(Object obj) {
-        if (obj instanceof DiagonalDoubleMatrix2D) {
-            DiagonalDoubleMatrix2D other = (DiagonalDoubleMatrix2D) obj;
+        if (obj instanceof DiagonalDoubleMatrix2D other) {
             double epsilon = cern.mateba.matrix.tdouble.algo.DoubleProperty.DEFAULT.tolerance();
             if (this == obj)
                 return true;
@@ -399,7 +388,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
     }
 
     public DoubleMatrix2D forEachNonZero(final cern.mateba.function.tdouble.IntIntDoubleFunction function) {
-        for (int j = dlength; --j >= 0;) {
+        for (int j = dlength; --j >= 0; ) {
             double value = elements[j];
             if (value != 0) {
                 elements[j] = function.apply(j, j, value);
@@ -410,7 +399,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
     /**
      * Returns the length of the diagonal
-     * 
+     *
      * @return the length of the diagonal
      */
     public int diagonalLength() {
@@ -419,7 +408,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
 
     /**
      * Returns the index of the diagonal
-     * 
+     *
      * @return the index of the diagonal
      */
     public int diagonalIndex() {
@@ -450,7 +439,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
                                 location = r;
                             }
                         }
-                        return new double[] { maxValue, location, location };
+                        return new double[]{maxValue, location, location};
                     }
                 });
             }
@@ -494,7 +483,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
             rowLocation = location;
             columnLocation = location;
         }
-        return new double[] { maxValue, rowLocation, columnLocation };
+        return new double[]{maxValue, rowLocation, columnLocation};
     }
 
     public double[] getMinLocation() {
@@ -521,7 +510,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
                                 location = r;
                             }
                         }
-                        return new double[] { minValue, location, location };
+                        return new double[]{minValue, location, location};
                     }
                 });
             }
@@ -565,7 +554,7 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
             rowLocation = location;
             columnLocation = location;
         }
-        return new double[] { minValue, rowLocation, columnLocation };
+        return new double[]{minValue, rowLocation, columnLocation};
     }
 
     public double getQuick(int row, int column) {
@@ -636,24 +625,22 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
         if (z == null)
             z = new DenseDoubleMatrix1D(rowsA);
 
-        if (!(this.isNoView && y instanceof DenseDoubleMatrix1D && z instanceof DenseDoubleMatrix1D)) {
+        if (!(this.isNoView && y instanceof DenseDoubleMatrix1D yy && z instanceof DenseDoubleMatrix1D zz)) {
             return super.zMult(y, z, alpha, beta, transposeA);
         }
 
         if (columnsA != y.size() || rowsA > z.size())
             throw new IllegalArgumentException("Incompatible args: "
-                    + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
-                    + z.toStringShort());
+                + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
+                + z.toStringShort());
 
         if ((!ignore) && ((beta) != 1))
             z.assign(cern.jet.math.tdouble.DoubleFunctions.mult(beta));
 
-        DenseDoubleMatrix1D zz = (DenseDoubleMatrix1D) z;
         final double[] elementsZ = zz.elements;
         final int strideZ = zz.stride();
         final int zeroZ = (int) z.index(0);
 
-        DenseDoubleMatrix1D yy = (DenseDoubleMatrix1D) y;
         final double[] elementsY = yy.elements;
         final int strideY = yy.stride();
         final int zeroY = (int) y.index(0);
@@ -662,21 +649,21 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
             throw new InternalError();
         if (!transposeA) {
             if (dindex >= 0) {
-                for (int i = dlength; --i >= 0;) {
+                for (int i = dlength; --i >= 0; ) {
                     elementsZ[zeroZ + strideZ * i] += alpha * elements[i] * elementsY[dindex + zeroY + strideY * i];
                 }
             } else {
-                for (int i = dlength; --i >= 0;) {
+                for (int i = dlength; --i >= 0; ) {
                     elementsZ[-dindex + zeroZ + strideZ * i] += alpha * elements[i] * elementsY[zeroY + strideY * i];
                 }
             }
         } else {
             if (dindex >= 0) {
-                for (int i = dlength; --i >= 0;) {
+                for (int i = dlength; --i >= 0; ) {
                     elementsZ[dindex + zeroZ + strideZ * i] += alpha * elements[i] * elementsY[zeroY + strideY * i];
                 }
             } else {
-                for (int i = dlength; --i >= 0;) {
+                for (int i = dlength; --i >= 0; ) {
                     elementsZ[zeroZ + strideZ * i] += alpha * elements[i] * elementsY[-dindex + zeroY + strideY * i];
                 }
             }

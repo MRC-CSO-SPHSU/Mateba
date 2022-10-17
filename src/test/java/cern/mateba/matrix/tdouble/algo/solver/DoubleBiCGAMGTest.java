@@ -4,7 +4,6 @@ import cern.mateba.matrix.tdouble.algo.solver.preconditioner.DoubleAMG;
 
 /**
  * Test of DoubleBiCG wit AMG
- * 
  */
 public class DoubleBiCGAMGTest extends DoubleBiCGTest {
 

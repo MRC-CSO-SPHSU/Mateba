@@ -25,14 +25,14 @@ public final class DComplexMult implements cern.mateba.function.tdcomplex.DCompl
      */
     public double[] multiplicator;
 
-    protected DComplexMult(final double[] multiplicator) {
+    DComplexMult(final double[] multiplicator) {
         this.multiplicator = multiplicator;
     }
 
     /**
      * Returns the result of the function evaluation.
      */
-    public final double[] apply(double[] a) {
+    public double[] apply(double[] a) {
         double[] z = new double[2];
         z[0] = a[0] * multiplicator[0] - a[1] * multiplicator[1];
         z[1] = a[1] * multiplicator[0] + a[0] * multiplicator[1];
@@ -42,7 +42,7 @@ public final class DComplexMult implements cern.mateba.function.tdcomplex.DCompl
     /**
      * Returns the result of the function evaluation.
      */
-    public final double[] apply(double re, double im) {
+    public double[] apply(double re, double im) {
         double[] z = new double[2];
         z[0] = re * multiplicator[0] - im * multiplicator[1];
         z[1] = im * multiplicator[0] + re * multiplicator[1];

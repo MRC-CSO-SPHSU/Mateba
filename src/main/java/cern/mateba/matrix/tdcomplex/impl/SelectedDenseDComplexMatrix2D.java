@@ -35,7 +35,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * accesses per get/set.
  * <p>
  * Note that this implementation is not synchronized.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class SelectedDenseDComplexMatrix2D extends DComplexMatrix2D {
@@ -62,13 +62,10 @@ class SelectedDenseDComplexMatrix2D extends DComplexMatrix2D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param elements
-     *            the cells.
-     * @param rowOffsets
-     *            The row offsets of the cells that shall be visible.
-     * @param columnOffsets
-     *            The column offsets of the cells that shall be visible.
+     *
+     * @param elements      the cells.
+     * @param rowOffsets    The row offsets of the cells that shall be visible.
+     * @param columnOffsets The column offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedDenseDComplexMatrix2D(double[] elements, int[] rowOffsets, int[] columnOffsets, int offset) {
@@ -77,31 +74,22 @@ class SelectedDenseDComplexMatrix2D extends DComplexMatrix2D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @param rowOffsets
-     *            The row offsets of the cells that shall be visible.
-     * @param columnOffsets
-     *            The column offsets of the cells that shall be visible.
+     *
+     * @param rows          the number of rows the matrix shall have.
+     * @param columns       the number of columns the matrix shall have.
+     * @param elements      the cells.
+     * @param rowZero       the position of the first element.
+     * @param columnZero    the position of the first element.
+     * @param rowStride     the number of elements between two rows, i.e.
+     *                      <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride  the number of elements between two columns, i.e.
+     *                      <tt>index(i,j+1)-index(i,j)</tt>.
+     * @param rowOffsets    The row offsets of the cells that shall be visible.
+     * @param columnOffsets The column offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedDenseDComplexMatrix2D(int rows, int columns, double[] elements, int rowZero, int columnZero,
-            int rowStride, int columnStride, int[] rowOffsets, int[] columnOffsets, int offset) {
+                                            int rowStride, int columnStride, int[] rowOffsets, int[] columnOffsets, int offset) {
         // be sure parameters are valid, we do not check...
         setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
 
@@ -124,8 +112,8 @@ class SelectedDenseDComplexMatrix2D extends DComplexMatrix2D {
     public double[] getQuick(int row, int column) {
         int idxr = rowZero + row * rowStride;
         int idxc = columnZero + column * columnStride;
-        return new double[] { elements[offset + rowOffsets[idxr] + columnOffsets[idxc]],
-                elements[offset + rowOffsets[idxr] + columnOffsets[idxc] + 1] };
+        return new double[]{elements[offset + rowOffsets[idxr] + columnOffsets[idxc]],
+            elements[offset + rowOffsets[idxr] + columnOffsets[idxc] + 1]};
     }
 
     public double[] elements() {
@@ -145,11 +133,9 @@ class SelectedDenseDComplexMatrix2D extends DComplexMatrix2D {
      */
 
     protected boolean haveSharedCellsRaw(DComplexMatrix2D other) {
-        if (other instanceof SelectedDenseDComplexMatrix2D) {
-            SelectedDenseDComplexMatrix2D otherMatrix = (SelectedDenseDComplexMatrix2D) other;
+        if (other instanceof SelectedDenseDComplexMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseDComplexMatrix2D) {
-            DenseDComplexMatrix2D otherMatrix = (DenseDComplexMatrix2D) other;
+        } else if (other instanceof DenseDComplexMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;

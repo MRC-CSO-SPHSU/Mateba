@@ -10,9 +10,8 @@ package cern.mateba.matrix;
 
 /**
  * Types of matrix norms.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public enum Norm {
 

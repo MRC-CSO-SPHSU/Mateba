@@ -80,7 +80,7 @@ public class Test {
             out.println("<dataArea>");
             out.println("<data2d type=\"xxx\">");
             out.println("<bins2d title=\"" + h.title() + "\" xSize=\"" + h.xAxis().bins() + "\" ySize=\""
-                    + h.yAxis().bins() + "\">");
+                + h.yAxis().bins() + "\">");
             for (int i = 0; i < h.xAxis().bins(); i++)
                 for (int j = 0; j < h.yAxis().bins(); j++) {
                     out.println(h.binEntries(i, j) + "," + h.binError(i, j));

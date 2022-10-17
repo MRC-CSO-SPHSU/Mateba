@@ -48,13 +48,13 @@ import java.io.Serial;
  * <p>
  * Depends on the parent view holding cells.
  * <p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
 class SelectedSparseLongMatrix1D extends LongMatrix1D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = 573508908494974162L;
@@ -76,11 +76,9 @@ class SelectedSparseLongMatrix1D extends LongMatrix1D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param elements
-     *            the cells.
-     * @param indexes
-     *            The indexes of the cells that shall be visible.
+     *
+     * @param elements the cells.
+     * @param indexes  The indexes of the cells that shall be visible.
      */
     protected SelectedSparseLongMatrix1D(AbstractLongLongMap elements, int[] offsets) {
         this(offsets.length, elements, 0, 1, offsets, 0);
@@ -88,22 +86,17 @@ class SelectedSparseLongMatrix1D extends LongMatrix1D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @param offsets
-     *            the offsets of the cells that shall be visible.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param zero     the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @param offsets  the offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedSparseLongMatrix1D(int size, AbstractLongLongMap elements, int zero, int stride, int[] offsets,
-            int offset) {
+                                         int offset) {
         setUp(size, zero, stride);
 
         this.elements = elements;
@@ -118,15 +111,14 @@ class SelectedSparseLongMatrix1D extends LongMatrix1D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>index</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
+     *
+     * @param index the index of the cell.
      * @return the value of the specified cell.
      */
 
@@ -141,9 +133,8 @@ class SelectedSparseLongMatrix1D extends LongMatrix1D {
      * Returns the position of the element with the given relative rank within
      * the (virtual or non-virtual) internal 1-dimensional array. You may want
      * to override this method for performance.
-     * 
-     * @param rank
-     *            the rank of the element.
+     *
+     * @param rank the rank of the element.
      */
 
     public long index(int rank) {
@@ -160,9 +151,8 @@ class SelectedSparseLongMatrix1D extends LongMatrix1D {
      * instance of type <tt>SparseLongMatrix1D</tt> the new matrix must also be
      * of type <tt>SparseLongMatrix1D</tt>, etc. In general, the new matrix
      * should have internal parametrization as similar as possible.
-     * 
-     * @param size
-     *            the number of cell the matrix shall have.
+     *
+     * @param size the number of cell the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -177,11 +167,9 @@ class SelectedSparseLongMatrix1D extends LongMatrix1D {
      * must be of type <tt>DenseLongMatrix2D</tt>, if the receiver is an
      * instance of type <tt>SparseLongMatrix1D</tt> the new matrix must be of
      * type <tt>SparseLongMatrix2D</tt>, etc.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -199,17 +187,15 @@ class SelectedSparseLongMatrix1D extends LongMatrix1D {
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell.
      */
 
     public void setQuick(int index, long value) {
@@ -227,9 +213,8 @@ class SelectedSparseLongMatrix1D extends LongMatrix1D {
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
 
@@ -242,11 +227,9 @@ class SelectedSparseLongMatrix1D extends LongMatrix1D {
      */
 
     protected boolean haveSharedCellsRaw(LongMatrix1D other) {
-        if (other instanceof SelectedSparseLongMatrix1D) {
-            SelectedSparseLongMatrix1D otherMatrix = (SelectedSparseLongMatrix1D) other;
+        if (other instanceof SelectedSparseLongMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseLongMatrix1D) {
-            SparseLongMatrix1D otherMatrix = (SparseLongMatrix1D) other;
+        } else if (other instanceof SparseLongMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -254,9 +237,8 @@ class SelectedSparseLongMatrix1D extends LongMatrix1D {
 
     /**
      * Sets up a matrix with a given number of cells.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
+     *
+     * @param size the number of cells the matrix shall have.
      */
 
     protected void setUp(int size) {
@@ -267,9 +249,8 @@ class SelectedSparseLongMatrix1D extends LongMatrix1D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param offsets
-     *            the offsets of the visible elements.
+     *
+     * @param offsets the offsets of the visible elements.
      * @return a new view.
      */
 

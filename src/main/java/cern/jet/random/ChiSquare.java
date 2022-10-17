@@ -41,7 +41,7 @@ import java.io.Serial;
  * <p>
  * J.F. Monahan (1987): An algorithm for generating chi random variables, ACM
  * Trans. Math. Software 13, 168-172.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -59,11 +59,9 @@ public class ChiSquare extends AbstractContinousDistribution {
 
     /**
      * Constructs a ChiSquare distribution. Example: freedom=1.0.
-     * 
-     * @param freedom
-     *            degrees of freedom.
-     * @throws IllegalArgumentException
-     *             if <tt>freedom &lt; 1.0</tt>.
+     *
+     * @param freedom degrees of freedom.
+     * @throws IllegalArgumentException if <tt>freedom &lt; 1.0</tt>.
      */
     public ChiSquare(double freedom, RandomEngine randomGenerator) {
         setRandomGenerator(randomGenerator);
@@ -88,9 +86,8 @@ public class ChiSquare extends AbstractContinousDistribution {
     /**
      * Returns a random number from the distribution; bypasses the internal
      * state.
-     * 
-     * @param freedom
-     *            degrees of freedom. It should hold <tt>freedom &lt; 1.0</tt>.
+     *
+     * @param freedom degrees of freedom. It should hold <tt>freedom &lt; 1.0</tt>.
      */
     public double nextDouble(double freedom) {
         /***********************************************************************
@@ -108,7 +105,7 @@ public class ChiSquare extends AbstractContinousDistribution {
         // if( a < 1 ) return (-1.0); // Check for invalid input value
 
         if (freedom == 1.0) {
-            for (;;) {
+            for (; ; ) {
                 u = randomGenerator.raw();
                 v = randomGenerator.raw() * 0.857763884960707;
                 z = v / u;
@@ -134,7 +131,7 @@ public class ChiSquare extends AbstractContinousDistribution {
                 vd = vp - vm;
                 freedom_in = freedom;
             }
-            for (;;) {
+            for (; ; ) {
                 u = randomGenerator.raw();
                 v = randomGenerator.raw() * vd + vm;
                 z = v / u;
@@ -166,11 +163,9 @@ public class ChiSquare extends AbstractContinousDistribution {
 
     /**
      * Sets the distribution parameter.
-     * 
-     * @param freedom
-     *            degrees of freedom.
-     * @throws IllegalArgumentException
-     *             if <tt>freedom &lt; 1.0</tt>.
+     *
+     * @param freedom degrees of freedom.
+     * @throws IllegalArgumentException if <tt>freedom &lt; 1.0</tt>.
      */
     public void setState(double freedom) {
         if (freedom < 1.0)
@@ -180,11 +175,9 @@ public class ChiSquare extends AbstractContinousDistribution {
 
     /**
      * Returns a random number from the distribution.
-     * 
-     * @param freedom
-     *            degrees of freedom.
-     * @throws IllegalArgumentException
-     *             if <tt>freedom &lt; 1.0</tt>.
+     *
+     * @param freedom degrees of freedom.
+     * @throws IllegalArgumentException if <tt>freedom &lt; 1.0</tt>.
      */
     public static double staticNextDouble(double freedom) {
         synchronized (shared) {
@@ -203,9 +196,8 @@ public class ChiSquare extends AbstractContinousDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

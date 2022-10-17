@@ -13,11 +13,11 @@ import cern.jet.random.engine.MersenneTwister;
 
 /**
  * Demonstrates how to use sorting.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 03-Jul-99
  */
-class TestGenericSorting extends Object {
+class TestGenericSorting {
     /**
      * Makes this class non instantiable, but still let's others inherit from
      * it.
@@ -33,9 +33,9 @@ class TestGenericSorting extends Object {
         final double[] y;
         final double[] z;
 
-        x = new int[] { 3, 2, 1 };
-        y = new double[] { 3.0, 2.0, 1.0 };
-        z = new double[] { 6.0, 7.0, 8.0 };
+        x = new int[]{3, 2, 1};
+        y = new double[]{3.0, 2.0, 1.0};
+        z = new double[]{6.0, 7.0, 8.0};
 
         Swapper swapper = new Swapper() {
             public void swap(int a, int b) {
@@ -83,9 +83,9 @@ class TestGenericSorting extends Object {
         final double[] y;
         final double[] z;
 
-        x = new int[] { 6, 7, 8, 9 };
-        y = new double[] { 3.0, 2.0, 1.0, 3.0 };
-        z = new double[] { 5.0, 4.0, 4.0, 1.0 };
+        x = new int[]{6, 7, 8, 9};
+        y = new double[]{3.0, 2.0, 1.0, 3.0};
+        z = new double[]{5.0, 4.0, 4.0, 1.0};
 
         Swapper swapper = new Swapper() {
             public void swap(int a, int b) {
@@ -149,7 +149,7 @@ class TestGenericSorting extends Object {
             }
 
             cern.mateba.matrix.tdouble.DoubleMatrix2D A1 = new cern.mateba.matrix.tdouble.impl.DenseDoubleMatrix2D(size,
-                    size);
+                size);
             cern.mateba.matrix.tdouble.DoubleMatrix2D P1 = A1.viewPart(from, from, size - to, size - to);
 
             int intervalFrom = gen.nextIntFromTo(size / 2, 2 * size);
@@ -166,9 +166,9 @@ class TestGenericSorting extends Object {
 
             int c = 0;
             cern.mateba.matrix.tdouble.DoubleMatrix2D S1 = cern.mateba.matrix.tdouble.algo.DoubleSorting.quickSort.sort(P1,
-                    c);
+                c);
             cern.mateba.matrix.tdouble.DoubleMatrix2D S2 = cern.mateba.matrix.tdouble.algo.DoubleSorting.mergeSort.sort(P2,
-                    c);
+                c);
 
             if (!(S1.viewColumn(c).equals(S2.viewColumn(c))))
                 throw new InternalError();

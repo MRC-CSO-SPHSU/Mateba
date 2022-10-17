@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003-2006 Bjørn-Ove Heimsund
- * 
+ *
  * This file is part of MTJ.
- * 
+ *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the
  * Free Software Foundation; either version 2.1 of the License, or (at your
  * option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -36,7 +36,7 @@ import cern.jet.math.tdouble.DoubleFunctions;
  * using the Generalized Minimum Residual method. The GMRES iteration is
  * restarted after a given number of iterations. By default it is restarted
  * after 30 iterations.
- * 
+ *
  * @author Templates
  */
 public class DoubleGMRES extends AbstractDoubleIterativeSolver {
@@ -49,7 +49,9 @@ public class DoubleGMRES extends AbstractDoubleIterativeSolver {
     /**
      * Vectors for use in the iterative solution process
      */
-    private DoubleMatrix1D w, u, r;
+    private final DoubleMatrix1D w;
+    private final DoubleMatrix1D u;
+    private final DoubleMatrix1D r;
 
     /**
      * Vectors spanning the subspace
@@ -76,10 +78,9 @@ public class DoubleGMRES extends AbstractDoubleIterativeSolver {
      * scratch vectors. Typically, the solution or the right hand side vector
      * can be passed, and the template is not modified. The iteration is
      * restarted every 30 iterations
-     * 
-     * @param template
-     *            Vector to use as template for the work vectors needed in the
-     *            solution process
+     *
+     * @param template Vector to use as template for the work vectors needed in the
+     *                 solution process
      */
     public DoubleGMRES(DoubleMatrix1D template) {
         this(template, 30);
@@ -89,12 +90,10 @@ public class DoubleGMRES extends AbstractDoubleIterativeSolver {
      * Constructor for GMRES. Uses the given vector as template for creating
      * scratch vectors. Typically, the solution or the right hand side vector
      * can be passed, and the template is not modified
-     * 
-     * @param template
-     *            Vector to use as template for the work vectors needed in the
-     *            solution process
-     * @param restart
-     *            GMRES iteration is restarted after this number of iterations
+     *
+     * @param template Vector to use as template for the work vectors needed in the
+     *                 solution process
+     * @param restart  GMRES iteration is restarted after this number of iterations
      */
     public DoubleGMRES(DoubleMatrix1D template, int restart) {
         w = template.copy();
@@ -105,9 +104,8 @@ public class DoubleGMRES extends AbstractDoubleIterativeSolver {
 
     /**
      * Sets the restart parameter
-     * 
-     * @param restart
-     *            GMRES iteration is restarted after this number of iterations
+     *
+     * @param restart GMRES iteration is restarted after this number of iterations
      */
     public void setRestart(int restart) {
         this.restart = restart;
@@ -124,7 +122,7 @@ public class DoubleGMRES extends AbstractDoubleIterativeSolver {
     }
 
     public DoubleMatrix1D solve(DoubleMatrix2D A, DoubleMatrix1D b, DoubleMatrix1D x)
-            throws IterativeSolverDoubleNotConvergedException {
+        throws IterativeSolverDoubleNotConvergedException {
         checkSizes(A, b, x);
 
         A.zMult(x, u.assign(b), -1, 1, false);

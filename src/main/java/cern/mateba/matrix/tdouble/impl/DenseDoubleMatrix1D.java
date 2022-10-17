@@ -42,17 +42,14 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * <tt>O(1)</tt> (i.e. constant time) for the basic operations <tt>get</tt>,
  * <tt>getQuick</tt>, <tt>set</tt>, <tt>setQuick</tt> and <tt>size</tt>,
  * <p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
+ * @version 1.0, 09/24/99
  */
 public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     @Serial
     private static final long serialVersionUID = 4870939444175097034L;
-    ;
 
     private DoubleFFT_1D fft;
 
@@ -71,9 +68,8 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
      * Constructs a matrix with a copy of the given values. The values are
      * copied. So subsequent changes in <tt>values</tt> are not reflected in the
      * matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      */
     public DenseDoubleMatrix1D(double[] values) {
         this(values.length);
@@ -83,11 +79,9 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     /**
      * Constructs a matrix with a given number of cells. All entries are
      * initially <tt>0</tt>.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size the number of cells the matrix shall have.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public DenseDoubleMatrix1D(int size) {
         setUp(size);
@@ -96,20 +90,14 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Constructs a matrix with the given parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @param isView
-     *            if true then a matrix view is constructed
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param zero     the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @param isView   if true then a matrix view is constructed
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public DenseDoubleMatrix1D(int size, double[] elements, int zero, int stride, boolean isView) {
         setUp(size, zero, stride);
@@ -118,7 +106,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
 
     public double aggregate(final cern.mateba.function.tdouble.DoubleDoubleFunction aggr,
-            final cern.mateba.function.tdouble.DoubleFunction f) {
+                            final cern.mateba.function.tdouble.DoubleFunction f) {
         if (size == 0)
             return Double.NaN;
         double a = 0;
@@ -134,7 +122,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
                     public Double call() throws Exception {
                         int idx = zero + (firstIdx - 1) * stride;
                         double a = f.apply(elements[idx]);
-                        for (int i = firstIdx - 1; --i >= lastIdx;) {
+                        for (int i = firstIdx - 1; --i >= lastIdx; ) {
                             a = aggr.apply(a, f.apply(elements[idx -= stride]));
                         }
                         return a;
@@ -145,7 +133,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
         } else {
             int idx = zero + (size - 1) * stride;
             a = f.apply(elements[idx]);
-            for (int i = size - 1; --i >= 0;) {
+            for (int i = size - 1; --i >= 0; ) {
                 a = aggr.apply(a, f.apply(elements[idx -= stride]));
             }
         }
@@ -197,7 +185,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
 
     public double aggregate(final DoubleMatrix1D other, final cern.mateba.function.tdouble.DoubleDoubleFunction aggr,
-            final cern.mateba.function.tdouble.DoubleDoubleFunction f) {
+                            final cern.mateba.function.tdouble.DoubleDoubleFunction f) {
         if (!(other instanceof DenseDoubleMatrix1D)) {
             return super.aggregate(other, aggr, f);
         }
@@ -290,12 +278,12 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
             // specialization for speed
             if (function instanceof cern.jet.math.tdouble.DoubleMult) {
                 // x[i] = mult*x[i]
-                for (int k = size; --k >= 0;) {
+                for (int k = size; --k >= 0; ) {
                     elements[idx += stride] *= multiplicator;
                 }
             } else {
                 // the general case x[i] = f(x[i])
-                for (int k = size; --k >= 0;) {
+                for (int k = size; --k >= 0; ) {
                     elements[idx += stride] = function.apply(elements[idx]);
                 }
             }
@@ -304,7 +292,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
 
     public DoubleMatrix1D assign(final cern.mateba.function.tdouble.DoubleProcedure cond,
-            final cern.mateba.function.tdouble.DoubleFunction function) {
+                                 final cern.mateba.function.tdouble.DoubleFunction function) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size >= ConcurrencyUtils.getThreadsBeginN_1D())) {
             nthreads = Math.min(nthreads, size);
@@ -318,7 +306,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
                     public void run() {
                         int idx = zero + firstIdx * stride;
                         for (int i = firstIdx; i < lastIdx; i++) {
-                            if (cond.apply(elements[idx]) == true) {
+                            if (cond.apply(elements[idx])) {
                                 elements[idx] = function.apply(elements[idx]);
                             }
                             idx += stride;
@@ -330,7 +318,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
         } else {
             int idx = zero;
             for (int i = 0; i < size; i++) {
-                if (cond.apply(elements[idx]) == true) {
+                if (cond.apply(elements[idx])) {
                     elements[idx] = function.apply(elements[idx]);
                 }
                 idx += stride;
@@ -353,7 +341,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
                     public void run() {
                         int idx = zero + firstIdx * stride;
                         for (int i = firstIdx; i < lastIdx; i++) {
-                            if (cond.apply(elements[idx]) == true) {
+                            if (cond.apply(elements[idx])) {
                                 elements[idx] = value;
                             }
                             idx += stride;
@@ -365,7 +353,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
         } else {
             int idx = zero;
             for (int i = 0; i < size; i++) {
-                if (cond.apply(elements[idx]) == true) {
+                if (cond.apply(elements[idx])) {
                     elements[idx] = value;
                 }
                 idx += stride;
@@ -408,7 +396,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     public DoubleMatrix1D assign(final double[] values) {
         if (values.length != size)
             throw new IllegalArgumentException("Must have same number of cells: length=" + values.length + "size()="
-                    + size());
+                + size());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (isNoView) {
             System.arraycopy(values, 0, this.elements, 0, values.length);
@@ -445,11 +433,10 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
 
     public DoubleMatrix1D assign(DoubleMatrix1D source) {
         // overriden for performance only
-        if (!(source instanceof DenseDoubleMatrix1D)) {
+        if (!(source instanceof DenseDoubleMatrix1D other)) {
             super.assign(source);
             return this;
         }
-        DenseDoubleMatrix1D other = (DenseDoubleMatrix1D) source;
         if (other == this)
             return this;
         checkSize(other);
@@ -579,7 +566,6 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
                             double multiplicator = ((cern.jet.math.tdouble.DoublePlusMultSecond) function).multiplicator;
                             if (multiplicator == 0) {
                                 // x[i] = x[i] + 0*y[i]
-                                return;
                             } else if (multiplicator == 1) {
                                 // x[i] = x[i] + y[i]
                                 for (int k = firstIdx; k < lastIdx; k++) {
@@ -722,9 +708,8 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Computes the discrete cosine transform (DCT-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void dct(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -744,7 +729,6 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Computes the discrete Hartley transform (DHT) of this matrix.
-     * 
      */
     public void dht() {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -764,9 +748,8 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Computes the discrete sine transform (DST-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void dst(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -791,18 +774,17 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     /**
      * Computes the discrete Fourier transform (DFT) of this matrix. The
      * physical layout of the output data is as follows:
-     * 
+     *
      * <pre>
      * this[2*k] = Re[k], 0&lt;=k&lt;size/2
      * this[2*k+1] = Im[k], 0&lt;k&lt;size/2
      * this[1] = Re[size/2]
      * </pre>
-     * 
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * forward transform, use <code>getFft</code>. To get back the original
      * data, use <code>ifft</code>.
-     * 
      */
     public void fft() {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -823,14 +805,14 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     /**
      * Returns new complex matrix which is the discrete Fourier transform (DFT)
      * of this matrix.
-     * 
+     *
      * @return the discrete Fourier transform (DFT) of this matrix.
      */
     public DenseDComplexMatrix1D getFft() {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
         ConcurrencyUtils.setNumberOfThreads(ConcurrencyUtils.nextPow2(oldNthreads));
         final double[] elems;
-        if (isNoView == true) {
+        if (isNoView) {
             elems = elements;
         } else {
             elems = (double[]) this.copy().elements();
@@ -849,15 +831,15 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     /**
      * Returns new complex matrix which is the inverse of the discrete Fourier
      * (IDFT) transform of this matrix.
-     * 
+     *
      * @return the inverse of the discrete Fourier transform (IDFT) of this
-     *         matrix.
+     * matrix.
      */
     public DenseDComplexMatrix1D getIfft(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
         ConcurrencyUtils.setNumberOfThreads(ConcurrencyUtils.nextPow2(oldNthreads));
         final double[] elems;
-        if (isNoView == true) {
+        if (isNoView) {
             elems = elements;
         } else {
             elems = (double[]) this.copy().elements();
@@ -1035,7 +1017,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
                                 location = (idx - zero) / stride;
                             }
                         }
-                        return new double[] { maxValue, location };
+                        return new double[]{maxValue, location};
                     }
                 });
             }
@@ -1068,7 +1050,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
                 }
             }
         }
-        return new double[] { maxValue, location };
+        return new double[]{maxValue, location};
     }
 
     public double[] getMinLocation() {
@@ -1095,7 +1077,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
                                 location = (idx - zero) / stride;
                             }
                         }
-                        return new double[] { minValue, location };
+                        return new double[]{minValue, location};
                     }
                 });
             }
@@ -1128,7 +1110,7 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
                 }
             }
         }
-        return new double[] { minValue, location };
+        return new double[]{minValue, location};
     }
 
     public double getQuick(int index) {
@@ -1138,9 +1120,8 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     /**
      * Computes the inverse of the discrete cosine transform (DCT-III) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idct(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1161,9 +1142,8 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     /**
      * Computes the inverse of the discrete Hartley transform (IDHT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idht(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1183,9 +1163,8 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Computes the inverse of discrete sine transform (DST-III) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idst(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1206,17 +1185,16 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     /**
      * Computes the inverse of the discrete Fourier transform (DFT) of this
      * matrix. The physical layout of the input data has to be as follows:
-     * 
+     *
      * <pre>
      * this[2*k] = Re[k], 0&lt;=k&lt;size/2
      * this[2*k+1] = Im[k], 0&lt;k&lt;size/2
      * this[1] = Re[size/2]
      * </pre>
-     * 
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * inverse transform, use <code>getIfft</code>.
-     * 
      */
     public void ifft(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1409,10 +1387,9 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
 
     public double zDotProduct(DoubleMatrix1D y, int from, int length) {
-        if (!(y instanceof DenseDoubleMatrix1D)) {
+        if (!(y instanceof DenseDoubleMatrix1D yy)) {
             return super.zDotProduct(y, from, length);
         }
-        DenseDoubleMatrix1D yy = (DenseDoubleMatrix1D) y;
 
         int tail = from + length;
         if (from < 0 || length < 0)
@@ -1448,13 +1425,13 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
                         idxOther -= strideOtherF;
                         double sum = 0;
                         int min = lastIdx - firstIdx;
-                        for (int k = min / 4; --k >= 0;) {
+                        for (int k = min / 4; --k >= 0; ) {
                             sum += elements[idx += stride] * elementsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elementsOther[idxOther += strideOtherF];
+                                + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
+                                + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
+                                + elements[idx += stride] * elementsOther[idxOther += strideOtherF];
                         }
-                        for (int k = min % 4; --k >= 0;) {
+                        for (int k = min % 4; --k >= 0; ) {
                             sum += elements[idx += stride] * elementsOther[idxOther += strideOtherF];
                         }
                         return sum;
@@ -1478,13 +1455,13 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
             zeroThis -= stride;
             zeroOther -= strideOther;
             int min = tail - from;
-            for (int k = min / 4; --k >= 0;) {
+            for (int k = min / 4; --k >= 0; ) {
                 sum += elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther];
+                    + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
+                    + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
+                    + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther];
             }
-            for (int k = min % 4; --k >= 0;) {
+            for (int k = min % 4; --k >= 0; ) {
                 sum += elements[zeroThis += stride] * elementsOther[zeroOther += strideOther];
             }
         }
@@ -1554,18 +1531,16 @@ public class DenseDoubleMatrix1D extends DoubleMatrix1D {
     }
 
     protected boolean haveSharedCellsRaw(DoubleMatrix1D other) {
-        if (other instanceof SelectedDenseDoubleMatrix1D) {
-            SelectedDenseDoubleMatrix1D otherMatrix = (SelectedDenseDoubleMatrix1D) other;
+        if (other instanceof SelectedDenseDoubleMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseDoubleMatrix1D) {
-            DenseDoubleMatrix1D otherMatrix = (DenseDoubleMatrix1D) other;
+        } else if (other instanceof DenseDoubleMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
     }
 
     public long index(int rank) {
-        return zero + rank * stride;
+        return zero + (long) rank * stride;
     }
 
     protected DoubleMatrix1D viewSelectionLike(int[] offsets) {

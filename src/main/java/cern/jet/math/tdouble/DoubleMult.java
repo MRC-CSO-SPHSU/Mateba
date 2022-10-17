@@ -28,14 +28,14 @@ public final class DoubleMult implements cern.mateba.function.tdouble.DoubleFunc
     /**
      * Insert the method's description here. Creation date: (8/10/99 19:12:09)
      */
-    protected DoubleMult(final double multiplicator) {
+    DoubleMult(final double multiplicator) {
         this.multiplicator = multiplicator;
     }
 
     /**
      * Returns the result of the function evaluation.
      */
-    public final double apply(double a) {
+    public double apply(double a) {
         return a * multiplicator;
     }
 

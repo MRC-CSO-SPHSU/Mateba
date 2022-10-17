@@ -37,7 +37,7 @@ public class Histogram1D extends AbstractHistogram1D implements IHistogram1D {
      *
      * @param title The histogram title.
      * @param edges the bin boundaries the axis shall have; must be sorted ascending and must not contain multiple
-     *             identical elements.
+     *              identical elements.
      * @throws IllegalArgumentException if {@code edges.length < 1}.
      */
     public Histogram1D(String title, double[] edges) {
@@ -71,8 +71,7 @@ public class Histogram1D extends AbstractHistogram1D implements IHistogram1D {
         this(title, new FixedAxis(bins, min, max));
     }
 
-    public int allEntries()
-    {
+    public int allEntries() {
         return nEntry;
     }
 

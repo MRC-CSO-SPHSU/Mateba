@@ -21,7 +21,7 @@ import edu.emory.mathcs.csparsej.tdcomplex.DZcs_common.DZcs;
 
 /**
  * Linear algebraic matrix operations operating on sparse matrices.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class SparseDComplexAlgebra {
@@ -29,7 +29,7 @@ public class SparseDComplexAlgebra {
     /**
      * A default Algebra object; has {@link DComplexProperty#DEFAULT} attached for
      * tolerance. Allows ommiting to construct an Algebra object time and again.
-     * 
+     * <p>
      * Note that this Algebra object is immutable. Any attempt to assign a new
      * Property object to it (via method <tt>setProperty</tt>), or to alter the
      * tolerance of its property object (via
@@ -40,7 +40,7 @@ public class SparseDComplexAlgebra {
     /**
      * A default Algebra object; has {@link DComplexProperty#ZERO} attached for
      * tolerance. Allows ommiting to construct an Algebra object time and again.
-     * 
+     * <p>
      * Note that this Algebra object is immutable. Any attempt to assign a new
      * Property object to it (via method <tt>setProperty</tt>), or to alter the
      * tolerance of its property object (via
@@ -59,8 +59,13 @@ public class SparseDComplexAlgebra {
     }
 
     private static double normInfinityRC(SparseRCDComplexMatrix2D A) {
-        int p, j, n, Ap[];
-        double Ax[], norm = 0, s;
+        int p;
+        int j;
+        int n;
+        int[] Ap;
+        double[] Ax;
+        double norm = 0;
+        double s;
         n = A.rows();
         Ap = A.getRowPointers();
         Ax = A.getValues();
@@ -87,9 +92,8 @@ public class SparseDComplexAlgebra {
 
     /**
      * Constructs a new instance with the given equality tolerance.
-     * 
-     * @param tolerance
-     *            the tolerance to be used for equality operations.
+     *
+     * @param tolerance the tolerance to be used for equality operations.
      */
     public SparseDComplexAlgebra(double tolerance) {
         setProperty(new DComplexProperty(tolerance));
@@ -97,11 +101,9 @@ public class SparseDComplexAlgebra {
 
     /**
      * Constructs and returns the Cholesky-decomposition of the given matrix.
-     * 
-     * @param matrix
-     *            sparse matrix
-     * @param order
-     *            ordering option (0 or 1); 0: natural ordering, 1: amd(A+A')
+     *
+     * @param matrix sparse matrix
+     * @param order  ordering option (0 or 1); 0: natural ordering, 1: amd(A+A')
      * @return Cholesky-decomposition of the given matrix
      */
     public SparseDComplexCholeskyDecomposition chol(DComplexMatrix2D matrix, int order) {
@@ -111,7 +113,7 @@ public class SparseDComplexAlgebra {
     /**
      * Returns a copy of the receiver. The attached property object is also
      * copied. Hence, the property object of the copy is mutable.
-     * 
+     *
      * @return a copy of the receiver.
      */
 
@@ -121,9 +123,8 @@ public class SparseDComplexAlgebra {
 
     /**
      * Returns the determinant of matrix <tt>A</tt>.
-     * 
-     * @param A
-     *            sparse matrix
+     *
+     * @param A sparse matrix
      * @return the determinant of matrix <tt>A</tt>
      */
     public double[] det(DComplexMatrix2D A) {
@@ -132,12 +133,10 @@ public class SparseDComplexAlgebra {
 
     /**
      * Constructs and returns the LU-decomposition of the given matrix.
-     * 
-     * @param matrix
-     *            sparse matrix
-     * @param order
-     *            ordering option (0 to 3); 0: natural ordering, 1: amd(A+A'),
-     *            2: amd(S'*S), 3: amd(A'*A)
+     *
+     * @param matrix sparse matrix
+     * @param order  ordering option (0 to 3); 0: natural ordering, 1: amd(A+A'),
+     *               2: amd(S'*S), 3: amd(A'*A)
      * @return the LU-decomposition of the given matrix
      */
     public SparseDComplexLUDecomposition lu(DComplexMatrix2D matrix, int order) {
@@ -176,7 +175,7 @@ public class SparseDComplexAlgebra {
 
     /**
      * Returns the property object attached to this Algebra, defining tolerance.
-     * 
+     *
      * @return the Property object.
      * @see #setProperty(DComplexProperty)
      */
@@ -186,12 +185,10 @@ public class SparseDComplexAlgebra {
 
     /**
      * Constructs and returns the QR-decomposition of the given matrix.
-     * 
-     * @param matrix
-     *            sparse matrix
-     * @param order
-     *            ordering option (0 to 3); 0: natural ordering, 1: amd(A+A'),
-     *            2: amd(S'*S), 3: amd(A'*A)
+     *
+     * @param matrix sparse matrix
+     * @param order  ordering option (0 to 3); 0: natural ordering, 1: amd(A+A'),
+     *               2: amd(S'*S), 3: amd(A'*A)
      * @return the QR-decomposition of the given matrix
      */
     public SparseDComplexQRDecomposition qr(DComplexMatrix2D matrix, int order) {
@@ -200,15 +197,12 @@ public class SparseDComplexAlgebra {
 
     /**
      * Attaches the given property object to this Algebra, defining tolerance.
-     * 
-     * @param property
-     *            the Property object to be attached.
-     * @throws UnsupportedOperationException
-     *             if <tt>this==DEFAULT && property!=this.property()</tt> - The
-     *             DEFAULT Algebra object is immutable.
-     * @throws UnsupportedOperationException
-     *             if <tt>this==ZERO && property!=this.property()</tt> - The
-     *             ZERO Algebra object is immutable.
+     *
+     * @param property the Property object to be attached.
+     * @throws UnsupportedOperationException if <tt>this==DEFAULT && property!=this.property()</tt> - The
+     *                                       DEFAULT Algebra object is immutable.
+     * @throws UnsupportedOperationException if <tt>this==ZERO && property!=this.property()</tt> - The
+     *                                       ZERO Algebra object is immutable.
      * @see #property
      */
     public void setProperty(DComplexProperty property) {
@@ -221,14 +215,12 @@ public class SparseDComplexAlgebra {
 
     /**
      * Solves A*x = b.
-     * 
-     * @param A
-     *            sparse matrix
-     * @param b
-     *            right hand side
+     *
+     * @param A sparse matrix
+     * @param b right hand side
      * @return x; a new independent matrix; solution if A is square, least
-     *         squares solution if A.rows() > A.columns(), underdetermined
-     *         system solution if A.rows() < A.columns().
+     * squares solution if A.rows() > A.columns(), underdetermined
+     * system solution if A.rows() < A.columns().
      */
     public DComplexMatrix1D solve(DComplexMatrix2D A, DComplexMatrix1D b) {
         DComplexMatrix1D x = new DenseDComplexMatrix1D(Math.max(A.rows(), A.columns()));

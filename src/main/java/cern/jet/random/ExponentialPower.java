@@ -31,7 +31,7 @@ import java.io.Serial;
  * L. Devroye (1986): Non-Uniform Random Variate Generation , Springer Verlag,
  * New York.
  * <p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -49,9 +49,8 @@ public class ExponentialPower extends AbstractContinousDistribution {
 
     /**
      * Constructs an Exponential Power distribution. Example: tau=1.0.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>tau &lt; 1.0</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>tau &lt; 1.0</tt>.
      */
     public ExponentialPower(double tau, RandomEngine randomGenerator) {
         setRandomGenerator(randomGenerator);
@@ -69,9 +68,8 @@ public class ExponentialPower extends AbstractContinousDistribution {
     /**
      * Returns a random number from the distribution; bypasses the internal
      * state.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>tau &lt; 1.0</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>tau &lt; 1.0</tt>.
      */
     public double nextDouble(double tau) {
         double u, u1, v, x, y;
@@ -111,9 +109,8 @@ public class ExponentialPower extends AbstractContinousDistribution {
 
     /**
      * Sets the distribution parameter.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>tau &lt; 1.0</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>tau &lt; 1.0</tt>.
      */
     public void setState(double tau) {
         if (tau < 1.0)
@@ -123,9 +120,8 @@ public class ExponentialPower extends AbstractContinousDistribution {
 
     /**
      * Returns a random number from the distribution.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>tau &lt; 1.0</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>tau &lt; 1.0</tt>.
      */
     public static double staticNextDouble(double tau) {
         synchronized (shared) {
@@ -144,9 +140,8 @@ public class ExponentialPower extends AbstractContinousDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

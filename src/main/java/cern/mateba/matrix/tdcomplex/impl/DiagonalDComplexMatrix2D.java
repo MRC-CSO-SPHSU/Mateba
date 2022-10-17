@@ -23,7 +23,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * href="package-summary.html">package summary</a> and javadoc <a
  * href="package-tree.html">tree view</a> to get the broad picture.
  * <p>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
@@ -55,16 +55,13 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @param dindex
-     *            index of the diagonal.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length || index < -rows+1 || index > columns - 1</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @param dindex index of the diagonal.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length || index < -rows+1 || index > columns - 1</tt>
+     *                                  .
      */
     public DiagonalDComplexMatrix2D(double[][] values, int dindex) {
         this(values.length, values.length == 0 ? 0 : values[0].length, dindex);
@@ -74,15 +71,11 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param dindex
-     *            index of the diagonal.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0 (double)size > Integer.MAX_VALUE</tt>.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @param dindex  index of the diagonal.
+     * @throws IllegalArgumentException if <tt>size<0 (double)size > Integer.MAX_VALUE</tt>.
      */
     public DiagonalDComplexMatrix2D(int rows, int columns, int dindex) {
         super(null);
@@ -166,7 +159,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
     public DComplexMatrix2D assign(final double[] values) {
         if (values.length != 2 * dlength)
             throw new IllegalArgumentException("Must have same length: length=" + values.length + " 2*dlength=" + 2
-                    * dlength);
+                * dlength);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (dlength >= ConcurrencyUtils.getThreadsBeginN_2D())) {
             nthreads = Math.min(nthreads, dlength);
@@ -198,7 +191,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
     public DComplexMatrix2D assign(final float[] values) {
         if (values.length != 2 * dlength)
             throw new IllegalArgumentException("Must have same length: length=" + values.length + " 2*dlength=" + 2
-                    * dlength);
+                * dlength);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (dlength >= ConcurrencyUtils.getThreadsBeginN_2D())) {
             nthreads = Math.min(nthreads, dlength);
@@ -230,7 +223,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
     public DComplexMatrix2D assign(final double[][] values) {
         if (values.length != rows)
             throw new IllegalArgumentException("Must have same number of rows: rows=" + values.length + "rows()="
-                    + rows());
+                + rows());
         int r, c;
         if (dindex >= 0) {
             r = 0;
@@ -242,7 +235,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
         for (int i = 0; i < dlength; i++) {
             if (values[i].length != 2 * columns) {
                 throw new IllegalArgumentException("Must have same number of columns in every row: columns="
-                        + values[r].length + "2 * columns()=" + 2 * columns());
+                    + values[r].length + "2 * columns()=" + 2 * columns());
             }
             elements[2 * i] = values[r][2 * c];
             elements[2 * i + 1] = values[r][2 * c + 1];
@@ -258,8 +251,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
             return this; // nothing to do
         checkShape(source);
 
-        if (source instanceof DiagonalDComplexMatrix2D) {
-            DiagonalDComplexMatrix2D other = (DiagonalDComplexMatrix2D) source;
+        if (source instanceof DiagonalDComplexMatrix2D other) {
             if ((dindex != other.dindex) || (dlength != other.dlength)) {
                 throw new IllegalArgumentException("source is DiagonalDComplexMatrix2D with different diagonal stored.");
             }
@@ -272,10 +264,9 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
     }
 
     public DComplexMatrix2D assign(final DComplexMatrix2D y,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
+                                   final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
         checkShape(y);
-        if (y instanceof DiagonalDComplexMatrix2D) {
-            DiagonalDComplexMatrix2D other = (DiagonalDComplexMatrix2D) y;
+        if (y instanceof DiagonalDComplexMatrix2D other) {
             if ((dindex != other.dindex) || (dlength != other.dlength)) {
                 throw new IllegalArgumentException("y is DiagonalDComplexMatrix2D with different diagonal stored.");
             }
@@ -298,7 +289,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
 
                         public void run() {
                             if (function instanceof cern.jet.math.tcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
-                                final double alpha[] = ((cern.jet.math.tcomplex.DComplexPlusMultSecond) function).multiplicator;
+                                final double[] alpha = ((cern.jet.math.tcomplex.DComplexPlusMultSecond) function).multiplicator;
                                 if (alpha[0] == 1 && alpha[1] == 0) {
                                     for (int j = firstIdx; j < lastIdx; j++) {
                                         elements[2 * j] += otherElements[2 * j];
@@ -357,7 +348,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                 ConcurrencyUtils.waitForCompletion(futures);
             } else {
                 if (function instanceof cern.jet.math.tcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
-                    final double alpha[] = ((cern.jet.math.tcomplex.DComplexPlusMultSecond) function).multiplicator;
+                    final double[] alpha = ((cern.jet.math.tcomplex.DComplexPlusMultSecond) function).multiplicator;
                     if (alpha[0] == 1 && alpha[1] == 0) {
                         for (int j = 0; j < dlength; j++) {
                             elements[2 * j] += otherElements[2 * j];
@@ -475,8 +466,8 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
             diff[0] = Math.abs(value[0] - x[0]);
             diff[1] = Math.abs(value[1] - x[1]);
             if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                    || (DComplex.isEqual(value, x, epsilon))) {
+                && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                || (DComplex.isEqual(value, x, epsilon))) {
                 diff[0] = 0;
                 diff[1] = 0;
             }
@@ -488,8 +479,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
     }
 
     public boolean equals(Object obj) {
-        if (obj instanceof DiagonalDComplexMatrix2D) {
-            DiagonalDComplexMatrix2D other = (DiagonalDComplexMatrix2D) obj;
+        if (obj instanceof DiagonalDComplexMatrix2D other) {
             double epsilon = cern.mateba.matrix.tdcomplex.algo.DComplexProperty.DEFAULT.tolerance();
             if (this == obj)
                 return true;
@@ -514,8 +504,8 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                 diff[0] = Math.abs(value[0] - x[0]);
                 diff[1] = Math.abs(value[1] - x[1]);
                 if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                        || (DComplex.isEqual(value, x, epsilon))) {
+                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                    || (DComplex.isEqual(value, x, epsilon))) {
                     diff[0] = 0;
                     diff[1] = 0;
                 }
@@ -545,7 +535,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
 
     /**
      * Returns the length of the diagonal
-     * 
+     *
      * @return the length of the diagonal
      */
     public int diagonalLength() {
@@ -554,7 +544,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
 
     /**
      * Returns the index of the diagonal
-     * 
+     *
      * @return the index of the diagonal
      */
     public int diagonalIndex() {
@@ -567,7 +557,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                 return new double[2];
             } else {
                 if ((row < dlength) && (row + dindex == column)) {
-                    return new double[] { elements[2 * row], elements[2 * row + 1] };
+                    return new double[]{elements[2 * row], elements[2 * row + 1]};
                 } else {
                     return new double[2];
                 }
@@ -577,7 +567,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                 return new double[2];
             } else {
                 if ((column < dlength) && (row + dindex == column)) {
-                    return new double[] { elements[2 * column], elements[2 * column + 1] };
+                    return new double[]{elements[2 * column], elements[2 * column + 1]};
                 } else {
                     return new double[2];
                 }
@@ -646,7 +636,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
     }
 
     public DComplexMatrix1D zMult(DComplexMatrix1D y, DComplexMatrix1D z, double[] alpha, double[] beta,
-            final boolean transposeA) {
+                                  final boolean transposeA) {
         int rowsA = rows;
         int columnsA = columns;
         if (transposeA) {
@@ -658,24 +648,22 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
         if (z == null)
             z = new DenseDComplexMatrix1D(rowsA);
 
-        if (!(this.isNoView && y instanceof DenseDComplexMatrix1D && z instanceof DenseDComplexMatrix1D)) {
+        if (!(this.isNoView && y instanceof DenseDComplexMatrix1D yy && z instanceof DenseDComplexMatrix1D zz)) {
             return super.zMult(y, z, alpha, beta, transposeA);
         }
 
         if (columnsA != y.size() || rowsA > z.size())
             throw new IllegalArgumentException("Incompatible args: "
-                    + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
-                    + z.toStringShort());
+                + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
+                + z.toStringShort());
 
         if ((!ignore) && !((beta[0] == 1) && (beta[1] == 0)))
             z.assign(cern.jet.math.tcomplex.DComplexFunctions.mult(beta));
 
-        DenseDComplexMatrix1D zz = (DenseDComplexMatrix1D) z;
         final double[] elementsZ = zz.elements;
         final int strideZ = zz.stride();
         final int zeroZ = (int) z.index(0);
 
-        DenseDComplexMatrix1D yy = (DenseDComplexMatrix1D) y;
         final double[] elementsY = yy.elements;
         final int strideY = yy.stride();
         final int zeroY = (int) y.index(0);

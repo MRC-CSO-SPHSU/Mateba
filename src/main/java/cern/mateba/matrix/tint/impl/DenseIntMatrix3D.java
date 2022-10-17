@@ -44,7 +44,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * addressing. Setting/getting values in a loop slice-by-slice, row-by-row,
  * column-by-column is quicker than, for example, column-by-column, row-by-row,
  * slice-by-slice. Thus
- * 
+ *
  * <pre>
  * for (int slice = 0; slice &lt; slices; slice++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -54,9 +54,9 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -66,11 +66,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 09/24/99
  */
 public class DenseIntMatrix3D extends IntMatrix3D {
 
@@ -93,38 +92,30 @@ public class DenseIntMatrix3D extends IntMatrix3D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
+     *                                  .
      */
     public DenseIntMatrix3D(int[][][] values) {
         this(values.length, (values.length == 0 ? 0 : values[0].length), (values.length == 0 ? 0
-                : values[0].length == 0 ? 0 : values[0][0].length));
+            : values[0].length == 0 ? 0 : values[0][0].length));
         assign(values);
     }
 
     /**
      * Constructs a matrix with a given number of slices, rows and columns. All
      * entries are initially <tt>0</tt>.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>(int)slices*columns*rows > Int.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices  the number of slices the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>(int)slices*columns*rows > Int.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public DenseIntMatrix3D(int slices, int rows, int columns) {
         setUp(slices, rows, columns);
@@ -133,39 +124,26 @@ public class DenseIntMatrix3D extends IntMatrix3D {
 
     /**
      * Constructs a view with the given parameters.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param sliceZero
-     *            the position of the first element.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param sliceStride
-     *            the number of elements between two slices, i.e.
-     *            <tt>index(k+1,i,j)-index(k,i,j)</tt>.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(k,i+1,j)-index(k,i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(k,i,j+1)-index(k,i,j)</tt>.
-     * @param isView
-     *            if true then a matrix view is constructed
-     * @throws IllegalArgumentException
-     *             if <tt>(int)slices*columns*rows > Int.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices       the number of slices the matrix shall have.
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param elements     the cells.
+     * @param sliceZero    the position of the first element.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param sliceStride  the number of elements between two slices, i.e.
+     *                     <tt>index(k+1,i,j)-index(k,i,j)</tt>.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(k,i+1,j)-index(k,i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(k,i,j+1)-index(k,i,j)</tt>.
+     * @param isView       if true then a matrix view is constructed
+     * @throws IllegalArgumentException if <tt>(int)slices*columns*rows > Int.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public DenseIntMatrix3D(int slices, int rows, int columns, int[] elements, int sliceZero, int rowZero,
-            int columnZero, int sliceStride, int rowStride, int columnStride, boolean isView) {
+                            int columnZero, int sliceStride, int rowStride, int columnStride, boolean isView) {
         setUp(slices, rows, columns, sliceZero, rowZero, columnZero, sliceStride, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = !isView;
@@ -193,7 +171,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                             for (int r = 0; r < rows; r++) {
                                 for (int c = d; c < columns; c++) {
                                     a = aggr.apply(a, f.apply(elements[zero + s * sliceStride + r * rowStride + c
-                                            * columnStride]));
+                                        * columnStride]));
                                 }
                                 d = 0;
                             }
@@ -237,7 +215,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     public Integer call() throws Exception {
                         int elem = elements[zero + firstSlice * sliceStride];
                         int a = 0;
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             a = aggr.apply(a, f.apply(elem));
                         }
                         int d = 1;
@@ -245,7 +223,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                             for (int r = 0; r < rows; r++) {
                                 for (int c = d; c < columns; c++) {
                                     elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         a = aggr.apply(a, f.apply(elem));
                                     }
                                     d = 0;
@@ -259,7 +237,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             int elem = elements[zero];
-            if (cond.apply(elem) == true) {
+            if (cond.apply(elem)) {
                 a = aggr.apply(a, f.apply(elem));
             }
             int d = 1;
@@ -267,7 +245,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 for (int r = 0; r < rows; r++) {
                     for (int c = d; c < columns; c++) {
                         elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             a = aggr.apply(a, f.apply(elem));
                         }
                         d = 0;
@@ -303,11 +281,11 @@ public class DenseIntMatrix3D extends IntMatrix3D {
 
                     public Integer call() throws Exception {
                         int a = f.apply(elements[zero + sliceElements[firstIdx] * sliceStride + rowElements[firstIdx]
-                                * rowStride + columnElements[firstIdx] * columnStride]);
+                            * rowStride + columnElements[firstIdx] * columnStride]);
                         int elem;
                         for (int i = firstIdx + 1; i < lastIdx; i++) {
                             elem = elements[zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride
-                                    + columnElements[i] * columnStride];
+                                + columnElements[i] * columnStride];
                             a = aggr.apply(a, f.apply(elem));
                         }
                         return a;
@@ -317,11 +295,11 @@ public class DenseIntMatrix3D extends IntMatrix3D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             a = f.apply(elements[zero + sliceElements[0] * sliceStride + rowElements[0] * rowStride + columnElements[0]
-                    * columnStride]);
+                * columnStride]);
             int elem;
             for (int i = 1; i < size; i++) {
                 elem = elements[zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride + columnElements[i]
-                        * columnStride];
+                    * columnStride];
                 a = aggr.apply(a, f.apply(elem));
             }
         }
@@ -329,7 +307,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
     }
 
     public int aggregate(final IntMatrix3D other, final cern.mateba.function.tint.IntIntFunction aggr,
-            final cern.mateba.function.tint.IntIntFunction f) {
+                         final cern.mateba.function.tint.IntIntFunction f) {
         if (!(other instanceof DenseIntMatrix3D)) {
             return super.aggregate(other, aggr, f);
         }
@@ -362,7 +340,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                                 for (int c = d; c < columns; c++) {
                                     idx = zero + s * sliceStride + r * rowStride + c * columnStride;
                                     idxOther = zeroOther + s * sliceStrideOther + r * rowStrideOther + c
-                                            * colStrideOther;
+                                        * colStrideOther;
                                     a = aggr.apply(a, f.apply(elements[idx], elemsOther[idxOther]));
                                 }
                                 d = 0;
@@ -480,7 +458,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
     public IntMatrix3D assign(final int[] values) {
         if (values.length != size())
             throw new IllegalArgumentException("Must have same length: length=" + values.length
-                    + "slices()*rows()*columns()=" + slices() * rows() * columns());
+                + "slices()*rows()*columns()=" + slices() * rows() * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             System.arraycopy(values, 0, this.elements, 0, values.length);
@@ -531,7 +509,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
     public IntMatrix3D assign(final int[][][] values) {
         if (values.length != slices)
             throw new IllegalArgumentException("Must have same number of slices: slices=" + values.length + "slices()="
-                    + slices());
+                + slices());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_3D())) {
@@ -549,14 +527,14 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                                 int[][] currentSlice = values[s];
                                 if (currentSlice.length != rows)
                                     throw new IllegalArgumentException(
-                                            "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                                    + "rows()=" + rows());
+                                        "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                            + "rows()=" + rows());
                                 for (int r = 0; r < rows; r++) {
                                     int[] currentRow = currentSlice[r];
                                     if (currentRow.length != columns)
                                         throw new IllegalArgumentException(
-                                                "Must have same number of columns in every row: columns="
-                                                        + currentRow.length + "columns()=" + columns());
+                                            "Must have same number of columns in every row: columns="
+                                                + currentRow.length + "columns()=" + columns());
                                     System.arraycopy(currentRow, 0, elements, i, columns);
                                     i += columns;
                                 }
@@ -571,13 +549,13 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     int[][] currentSlice = values[s];
                     if (currentSlice.length != rows)
                         throw new IllegalArgumentException("Must have same number of rows in every slice: rows="
-                                + currentSlice.length + "rows()=" + rows());
+                            + currentSlice.length + "rows()=" + rows());
                     for (int r = 0; r < rows; r++) {
                         int[] currentRow = currentSlice[r];
                         if (currentRow.length != columns)
                             throw new IllegalArgumentException(
-                                    "Must have same number of columns in every row: columns=" + currentRow.length
-                                            + "columns()=" + columns());
+                                "Must have same number of columns in every row: columns=" + currentRow.length
+                                    + "columns()=" + columns());
                         System.arraycopy(currentRow, 0, this.elements, i, columns);
                         i += columns;
                     }
@@ -601,15 +579,15 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                                 int[][] currentSlice = values[s];
                                 if (currentSlice.length != rows)
                                     throw new IllegalArgumentException(
-                                            "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                                    + "rows()=" + rows());
+                                        "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                            + "rows()=" + rows());
                                 for (int r = 0; r < rows; r++) {
                                     idx = zero + s * sliceStride + r * rowStride;
                                     int[] currentRow = currentSlice[r];
                                     if (currentRow.length != columns)
                                         throw new IllegalArgumentException(
-                                                "Must have same number of columns in every row: columns="
-                                                        + currentRow.length + "columns()=" + columns());
+                                            "Must have same number of columns in every row: columns="
+                                                + currentRow.length + "columns()=" + columns());
                                     for (int c = 0; c < columns; c++) {
                                         elements[idx] = currentRow[c];
                                         idx += columnStride;
@@ -627,14 +605,14 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     int[][] currentSlice = values[s];
                     if (currentSlice.length != rows)
                         throw new IllegalArgumentException("Must have same number of rows in every slice: rows="
-                                + currentSlice.length + "rows()=" + rows());
+                            + currentSlice.length + "rows()=" + rows());
                     for (int r = 0; r < rows; r++) {
                         idx = zero + s * sliceStride + r * rowStride;
                         int[] currentRow = currentSlice[r];
                         if (currentRow.length != columns)
                             throw new IllegalArgumentException(
-                                    "Must have same number of columns in every row: columns=" + currentRow.length
-                                            + "columns()=" + columns());
+                                "Must have same number of columns in every row: columns=" + currentRow.length
+                                    + "columns()=" + columns());
                         for (int c = 0; c < columns; c++) {
                             elements[idx] = currentRow[c];
                             idx += columnStride;
@@ -647,7 +625,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
     }
 
     public IntMatrix3D assign(final cern.mateba.function.tint.IntProcedure cond,
-            final cern.mateba.function.tint.IntFunction f) {
+                              final cern.mateba.function.tint.IntFunction f) {
         final int zero = (int) index(0, 0, 0);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (slices * rows * columns >= ConcurrencyUtils.getThreadsBeginN_3D())) {
@@ -668,7 +646,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                                 idx = zero + s * sliceStride + r * rowStride;
                                 for (int c = 0; c < columns; c++) {
                                     elem = elements[idx];
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         elements[idx] = f.apply(elem);
                                     }
                                     idx += columnStride;
@@ -687,7 +665,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     idx = zero + s * sliceStride + r * rowStride;
                     for (int c = 0; c < columns; c++) {
                         elem = elements[idx];
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             elements[idx] = f.apply(elem);
                         }
                         idx += columnStride;
@@ -719,7 +697,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                                 idx = zero + s * sliceStride + r * rowStride;
                                 for (int c = 0; c < columns; c++) {
                                     elem = elements[idx];
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         elements[idx] = value;
                                     }
                                     idx += columnStride;
@@ -738,7 +716,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     idx = zero + s * sliceStride + r * rowStride;
                     for (int c = 0; c < columns; c++) {
                         elem = elements[idx];
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             elements[idx] = value;
                         }
                         idx += columnStride;
@@ -751,11 +729,10 @@ public class DenseIntMatrix3D extends IntMatrix3D {
 
     public IntMatrix3D assign(IntMatrix3D source) {
         // overriden for performance only
-        if (!(source instanceof DenseIntMatrix3D)) {
+        if (!(source instanceof DenseIntMatrix3D other)) {
             super.assign(source);
             return this;
         }
-        DenseIntMatrix3D other = (DenseIntMatrix3D) source;
         if (other == this)
             return this;
         checkShape(other);
@@ -887,7 +864,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
     }
 
     public IntMatrix3D assign(final IntMatrix3D y, final cern.mateba.function.tint.IntIntFunction function,
-            final IntArrayList sliceList, final IntArrayList rowList, final IntArrayList columnList) {
+                              final IntArrayList sliceList, final IntArrayList rowList, final IntArrayList columnList) {
         if (!(y instanceof DenseIntMatrix3D)) {
             super.assign(y, function);
             return this;
@@ -916,9 +893,9 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     public void run() {
                         for (int i = firstIdx; i < lastIdx; i++) {
                             int idx = zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride
-                                    + columnElements[i] * columnStride;
+                                + columnElements[i] * columnStride;
                             int idxOther = zeroOther + sliceElements[i] * sliceStrideOther + rowElements[i]
-                                    * rowStrideOther + columnElements[i] * columnStrideOther;
+                                * rowStrideOther + columnElements[i] * columnStrideOther;
                             elements[idx] = function.apply(elements[idx], elemsOther[idxOther]);
                         }
                     }
@@ -928,9 +905,9 @@ public class DenseIntMatrix3D extends IntMatrix3D {
         } else {
             for (int i = 0; i < size; i++) {
                 int idx = zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride + columnElements[i]
-                        * columnStride;
+                    * columnStride;
                 int idxOther = zeroOther + sliceElements[i] * sliceStrideOther + rowElements[i] * rowStrideOther
-                        + columnElements[i] * columnStrideOther;
+                    + columnElements[i] * columnStrideOther;
                 elements[idx] = function.apply(elements[idx], elemsOther[idxOther]);
             }
         }
@@ -1004,7 +981,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
     }
 
     public void getNegativeValues(final IntArrayList sliceList, final IntArrayList rowList,
-            final IntArrayList columnList, final IntArrayList valueList) {
+                                  final IntArrayList columnList, final IntArrayList valueList) {
         sliceList.clear();
         rowList.clear();
         columnList.clear();
@@ -1031,7 +1008,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
     }
 
     public void getNonZeros(final IntArrayList sliceList, final IntArrayList rowList, final IntArrayList columnList,
-            final IntArrayList valueList) {
+                            final IntArrayList valueList) {
         sliceList.clear();
         rowList.clear();
         columnList.clear();
@@ -1058,7 +1035,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
     }
 
     public void getPositiveValues(final IntArrayList sliceList, final IntArrayList rowList,
-            final IntArrayList columnList, final IntArrayList valueList) {
+                                  final IntArrayList columnList, final IntArrayList valueList) {
         sliceList.clear();
         rowList.clear();
         columnList.clear();
@@ -1086,11 +1063,11 @@ public class DenseIntMatrix3D extends IntMatrix3D {
 
     public int getQuick(int slice, int row, int column) {
         return elements[sliceZero + slice * sliceStride + rowZero + row * rowStride + columnZero + column
-                * columnStride];
+            * columnStride];
     }
 
     public long index(int slice, int row, int column) {
-        return sliceZero + slice * sliceStride + rowZero + row * rowStride + columnZero + column * columnStride;
+        return sliceZero + (long) slice * sliceStride + rowZero + (long) row * rowStride + columnZero + (long) column * columnStride;
     }
 
     public IntMatrix3D like(int slices, int rows, int columns) {
@@ -1139,7 +1116,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                                 d = 0;
                             }
                         }
-                        return new int[] { maxValue, slice_loc, row_loc, col_loc };
+                        return new int[]{maxValue, slice_loc, row_loc, col_loc};
                     }
                 });
             }
@@ -1148,15 +1125,15 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     results[j] = (int[]) futures[j].get();
                 }
                 maxValue = results[0][0];
-                slice_loc = (int) results[0][1];
-                row_loc = (int) results[0][2];
-                col_loc = (int) results[0][3];
+                slice_loc = results[0][1];
+                row_loc = results[0][2];
+                col_loc = results[0][3];
                 for (int j = 1; j < nthreads; j++) {
                     if (maxValue < results[j][0]) {
                         maxValue = results[j][0];
-                        slice_loc = (int) results[j][1];
-                        row_loc = (int) results[j][2];
-                        col_loc = (int) results[j][3];
+                        slice_loc = results[j][1];
+                        row_loc = results[j][2];
+                        col_loc = results[j][3];
                     }
                 }
             } catch (ExecutionException ex) {
@@ -1183,7 +1160,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 }
             }
         }
-        return new int[] { maxValue, slice_loc, row_loc, col_loc };
+        return new int[]{maxValue, slice_loc, row_loc, col_loc};
     }
 
     public int[] getMinLocation() {
@@ -1224,7 +1201,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                                 d = 0;
                             }
                         }
-                        return new int[] { minValue, slice_loc, row_loc, col_loc };
+                        return new int[]{minValue, slice_loc, row_loc, col_loc};
                     }
                 });
             }
@@ -1233,15 +1210,15 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     results[j] = (int[]) futures[j].get();
                 }
                 minValue = results[0][0];
-                slice_loc = (int) results[0][1];
-                row_loc = (int) results[0][2];
-                col_loc = (int) results[0][3];
+                slice_loc = results[0][1];
+                row_loc = results[0][2];
+                col_loc = results[0][3];
                 for (int j = 1; j < nthreads; j++) {
                     if (minValue > results[j][0]) {
                         minValue = results[j][0];
-                        slice_loc = (int) results[j][1];
-                        row_loc = (int) results[j][2];
-                        col_loc = (int) results[j][3];
+                        slice_loc = results[j][1];
+                        row_loc = results[j][2];
+                        col_loc = results[j][3];
                     }
                 }
             } catch (ExecutionException ex) {
@@ -1268,7 +1245,7 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 }
             }
         }
-        return new int[] { minValue, slice_loc, row_loc, col_loc };
+        return new int[]{minValue, slice_loc, row_loc, col_loc};
     }
 
     public void setQuick(int slice, int row, int column, int value) {
@@ -1386,11 +1363,9 @@ public class DenseIntMatrix3D extends IntMatrix3D {
     }
 
     protected boolean haveSharedCellsRaw(IntMatrix3D other) {
-        if (other instanceof SelectedDenseIntMatrix3D) {
-            SelectedDenseIntMatrix3D otherMatrix = (SelectedDenseIntMatrix3D) other;
+        if (other instanceof SelectedDenseIntMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseIntMatrix3D) {
-            DenseIntMatrix3D otherMatrix = (DenseIntMatrix3D) other;
+        } else if (other instanceof DenseIntMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;

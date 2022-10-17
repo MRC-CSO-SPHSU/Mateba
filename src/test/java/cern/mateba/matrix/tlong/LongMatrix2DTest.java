@@ -91,11 +91,7 @@ public abstract class LongMatrix2DTest extends TestCase {
     public void testAggregateLongLongFunctionLongFunctionLongProcedure() {
         LongProcedure procedure = new LongProcedure() {
             public boolean apply(long element) {
-                if (Math.abs(element) > 0.2) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 0.2;
             }
         };
         long expected = 0;
@@ -166,7 +162,7 @@ public abstract class LongMatrix2DTest extends TestCase {
         }
         A.assign(expected);
         for (int r = 0; r < A.rows(); r++) {
-            assertTrue(A.columns() == expected[r].length);
+            assertEquals(A.columns(), expected[r].length);
             for (int c = 0; c < A.columns(); c++)
                 assertEquals(expected[r][c], A.getQuick(r, c));
         }
@@ -222,11 +218,7 @@ public abstract class LongMatrix2DTest extends TestCase {
     public void testAssignLongProcedureLong() {
         LongProcedure procedure = new LongProcedure() {
             public boolean apply(long element) {
-                if (Math.abs(element) > 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 1;
             }
         };
         LongMatrix2D Acopy = A.copy();
@@ -245,11 +237,7 @@ public abstract class LongMatrix2DTest extends TestCase {
     public void testAssignLongProcedureLongFunction() {
         LongProcedure procedure = new LongProcedure() {
             public boolean apply(long element) {
-                if (Math.abs(element) > 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 1;
             }
         };
         LongMatrix2D Acopy = A.copy();
@@ -387,9 +375,9 @@ public abstract class LongMatrix2DTest extends TestCase {
 
     public void testToArray() {
         long[][] array = A.toArray();
-        assertTrue(A.rows() == array.length);
+        assertEquals(A.rows(), array.length);
         for (int r = 0; r < A.rows(); r++) {
-            assertTrue(A.columns() == array[r].length);
+            assertEquals(A.columns(), array[r].length);
             for (int c = 0; c < A.columns(); c++)
                 assertEquals(0, Math.abs(array[r][c] - A.getQuick(r, c)));
         }
@@ -470,11 +458,7 @@ public abstract class LongMatrix2DTest extends TestCase {
         A.setQuick(A.rows() / 2, 0, value);
         LongMatrix2D B = A.viewSelection(new LongMatrix1DProcedure() {
             public boolean apply(LongMatrix1D element) {
-                if (Math.abs(element.getQuick(0) - value) == 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element.getQuick(0) - value) == 0;
             }
         });
         assertEquals(2, B.rows());
@@ -484,9 +468,9 @@ public abstract class LongMatrix2DTest extends TestCase {
     }
 
     public void testViewSelectionIntArrayIntArray() {
-        int[] rowIndexes = new int[] { A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2 };
-        int[] colIndexes = new int[] { A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
-                A.columns() / 2, A.columns() - 1 };
+        int[] rowIndexes = new int[]{A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2};
+        int[] colIndexes = new int[]{A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
+            A.columns() / 2, A.columns() - 1};
         LongMatrix2D B = A.viewSelection(rowIndexes, colIndexes);
         assertEquals(rowIndexes.length, B.rows());
         assertEquals(colIndexes.length, B.columns());

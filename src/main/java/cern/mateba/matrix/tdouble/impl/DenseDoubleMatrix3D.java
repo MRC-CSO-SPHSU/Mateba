@@ -46,7 +46,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * addressing. Setting/getting values in a loop slice-by-slice, row-by-row,
  * column-by-column is quicker than, for example, column-by-column, row-by-row,
  * slice-by-slice. Thus
- * 
+ *
  * <pre>
  * for (int slice = 0; slice &lt; slices; slice++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -56,9 +56,9 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -68,11 +68,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 09/24/99
  */
 public class DenseDoubleMatrix3D extends DoubleMatrix3D {
 
@@ -96,38 +95,30 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
+     *                                  .
      */
     public DenseDoubleMatrix3D(double[][][] values) {
         this(values.length, (values.length == 0 ? 0 : values[0].length), (values.length == 0 ? 0
-                : values[0].length == 0 ? 0 : values[0][0].length));
+            : values[0].length == 0 ? 0 : values[0][0].length));
         assign(values);
     }
 
     /**
      * Constructs a matrix with a given number of slices, rows and columns. All
      * entries are initially <tt>0</tt>.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices  the number of slices the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public DenseDoubleMatrix3D(int slices, int rows, int columns) {
         setUp(slices, rows, columns);
@@ -136,46 +127,33 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
 
     /**
      * Constructs a matrix with the given parameters.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param sliceZero
-     *            the position of the first element.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param sliceStride
-     *            the number of elements between two slices, i.e.
-     *            <tt>index(k+1,i,j)-index(k,i,j)</tt>.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(k,i+1,j)-index(k,i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(k,i,j+1)-index(k,i,j)</tt>.
-     * @param isView
-     *            if true then a matrix view is constructed
-     * @throws IllegalArgumentException
-     *             if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices       the number of slices the matrix shall have.
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param elements     the cells.
+     * @param sliceZero    the position of the first element.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param sliceStride  the number of elements between two slices, i.e.
+     *                     <tt>index(k+1,i,j)-index(k,i,j)</tt>.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(k,i+1,j)-index(k,i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(k,i,j+1)-index(k,i,j)</tt>.
+     * @param isView       if true then a matrix view is constructed
+     * @throws IllegalArgumentException if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public DenseDoubleMatrix3D(int slices, int rows, int columns, double[] elements, int sliceZero, int rowZero,
-            int columnZero, int sliceStride, int rowStride, int columnStride, boolean isView) {
+                               int columnZero, int sliceStride, int rowStride, int columnStride, boolean isView) {
         setUp(slices, rows, columns, sliceZero, rowZero, columnZero, sliceStride, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = !isView;
     }
 
     public double aggregate(final cern.mateba.function.tdouble.DoubleDoubleFunction aggr,
-            final cern.mateba.function.tdouble.DoubleFunction f) {
+                            final cern.mateba.function.tdouble.DoubleFunction f) {
         if (size() == 0)
             return Double.NaN;
         double a = 0;
@@ -197,7 +175,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                             for (int r = 0; r < rows; r++) {
                                 for (int c = d; c < columns; c++) {
                                     a = aggr.apply(a, f.apply(elements[zero + s * sliceStride + r * rowStride + c
-                                            * columnStride]));
+                                        * columnStride]));
                                 }
                                 d = 0;
                             }
@@ -241,7 +219,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                     public Double call() throws Exception {
                         double elem = elements[zero + firstSlice * sliceStride];
                         double a = 0;
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             a = aggr.apply(a, f.apply(elem));
                         }
                         int d = 1;
@@ -249,7 +227,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                             for (int r = 0; r < rows; r++) {
                                 for (int c = d; c < columns; c++) {
                                     elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         a = aggr.apply(a, f.apply(elem));
                                     }
                                     d = 0;
@@ -263,7 +241,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             double elem = elements[zero];
-            if (cond.apply(elem) == true) {
+            if (cond.apply(elem)) {
                 a = aggr.apply(a, f.apply(elem));
             }
             int d = 1;
@@ -271,7 +249,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                 for (int r = 0; r < rows; r++) {
                     for (int c = d; c < columns; c++) {
                         elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             a = aggr.apply(a, f.apply(elem));
                         }
                         d = 0;
@@ -307,11 +285,11 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
 
                     public Double call() throws Exception {
                         double a = f.apply(elements[zero + sliceElements[firstIdx] * sliceStride
-                                + rowElements[firstIdx] * rowStride + columnElements[firstIdx] * columnStride]);
+                            + rowElements[firstIdx] * rowStride + columnElements[firstIdx] * columnStride]);
                         double elem;
                         for (int i = firstIdx + 1; i < lastIdx; i++) {
                             elem = elements[zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride
-                                    + columnElements[i] * columnStride];
+                                + columnElements[i] * columnStride];
                             a = aggr.apply(a, f.apply(elem));
                         }
                         return a;
@@ -321,11 +299,11 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             a = f.apply(elements[zero + sliceElements[0] * sliceStride + rowElements[0] * rowStride + columnElements[0]
-                    * columnStride]);
+                * columnStride]);
             double elem;
             for (int i = 1; i < size; i++) {
                 elem = elements[zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride + columnElements[i]
-                        * columnStride];
+                    * columnStride];
                 a = aggr.apply(a, f.apply(elem));
             }
         }
@@ -333,7 +311,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     }
 
     public double aggregate(final DoubleMatrix3D other, final cern.mateba.function.tdouble.DoubleDoubleFunction aggr,
-            final cern.mateba.function.tdouble.DoubleDoubleFunction f) {
+                            final cern.mateba.function.tdouble.DoubleDoubleFunction f) {
         if (!(other instanceof DenseDoubleMatrix3D)) {
             return super.aggregate(other, aggr, f);
         }
@@ -366,7 +344,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                                 for (int c = d; c < columns; c++) {
                                     idx = zero + s * sliceStride + r * rowStride + c * columnStride;
                                     idxOther = zeroOther + s * sliceStrideOther + r * rowStrideOther + c
-                                            * columnStrideOther;
+                                        * columnStrideOther;
                                     a = aggr.apply(a, f.apply(elements[idx], elementsOther[idxOther]));
                                 }
                                 d = 0;
@@ -439,7 +417,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     }
 
     public DoubleMatrix3D assign(final cern.mateba.function.tdouble.DoubleProcedure cond,
-            final cern.mateba.function.tdouble.DoubleFunction f) {
+                                 final cern.mateba.function.tdouble.DoubleFunction f) {
         final int zero = (int) index(0, 0, 0);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (slices * rows * columns >= ConcurrencyUtils.getThreadsBeginN_3D())) {
@@ -459,7 +437,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                                 idx = zero + s * sliceStride + r * rowStride;
                                 for (int c = 0; c < columns; c++) {
                                     elem = elements[idx];
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         elements[idx] = f.apply(elem);
                                     }
                                     idx += columnStride;
@@ -478,7 +456,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                     idx = zero + s * sliceStride + r * rowStride;
                     for (int c = 0; c < columns; c++) {
                         elem = elements[idx];
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             elements[idx] = f.apply(elem);
                         }
                         idx += columnStride;
@@ -509,7 +487,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                                 idx = zero + s * sliceStride + r * rowStride;
                                 for (int c = 0; c < columns; c++) {
                                     elem = elements[idx];
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         elements[idx] = value;
                                     }
                                     idx += columnStride;
@@ -528,7 +506,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                     idx = zero + s * sliceStride + r * rowStride;
                     for (int c = 0; c < columns; c++) {
                         elem = elements[idx];
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             elements[idx] = value;
                         }
                         idx += columnStride;
@@ -583,7 +561,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     public DoubleMatrix3D assign(final double[] values) {
         if (values.length != size())
             throw new IllegalArgumentException("Must have same length: length=" + values.length
-                    + "slices()*rows()*columns()=" + slices() * rows() * columns());
+                + "slices()*rows()*columns()=" + slices() * rows() * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             System.arraycopy(values, 0, this.elements, 0, values.length);
@@ -641,7 +619,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     public DoubleMatrix3D assign(final double[][][] values) {
         if (values.length != slices)
             throw new IllegalArgumentException("Must have same number of slices: slices=" + values.length + "slices()="
-                    + slices());
+                + slices());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_3D())) {
@@ -658,14 +636,14 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                                 double[][] currentSlice = values[s];
                                 if (currentSlice.length != rows)
                                     throw new IllegalArgumentException(
-                                            "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                                    + "rows()=" + rows());
+                                        "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                            + "rows()=" + rows());
                                 for (int r = 0; r < rows; r++) {
                                     double[] currentRow = currentSlice[r];
                                     if (currentRow.length != columns)
                                         throw new IllegalArgumentException(
-                                                "Must have same number of columns in every row: columns="
-                                                        + currentRow.length + "columns()=" + columns());
+                                            "Must have same number of columns in every row: columns="
+                                                + currentRow.length + "columns()=" + columns());
                                     System.arraycopy(currentRow, 0, elements, i, columns);
                                     i += columns;
                                 }
@@ -688,13 +666,13 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                     double[][] currentSlice = values[s];
                     if (currentSlice.length != rows)
                         throw new IllegalArgumentException("Must have same number of rows in every slice: rows="
-                                + currentSlice.length + "rows()=" + rows());
+                            + currentSlice.length + "rows()=" + rows());
                     for (int r = 0; r < rows; r++) {
                         double[] currentRow = currentSlice[r];
                         if (currentRow.length != columns)
                             throw new IllegalArgumentException(
-                                    "Must have same number of columns in every row: columns=" + currentRow.length
-                                            + "columns()=" + columns());
+                                "Must have same number of columns in every row: columns=" + currentRow.length
+                                    + "columns()=" + columns());
                         System.arraycopy(currentRow, 0, this.elements, i, columns);
                         i += columns;
                     }
@@ -717,15 +695,15 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                                 double[][] currentSlice = values[s];
                                 if (currentSlice.length != rows)
                                     throw new IllegalArgumentException(
-                                            "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                                    + "rows()=" + rows());
+                                        "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                            + "rows()=" + rows());
                                 for (int r = 0; r < rows; r++) {
                                     idx = zero + s * sliceStride + r * rowStride;
                                     double[] currentRow = currentSlice[r];
                                     if (currentRow.length != columns)
                                         throw new IllegalArgumentException(
-                                                "Must have same number of columns in every row: columns="
-                                                        + currentRow.length + "columns()=" + columns());
+                                            "Must have same number of columns in every row: columns="
+                                                + currentRow.length + "columns()=" + columns());
                                     for (int c = 0; c < columns; c++) {
                                         elements[idx] = currentRow[c];
                                         idx += columnStride;
@@ -751,14 +729,14 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                     double[][] currentSlice = values[s];
                     if (currentSlice.length != rows)
                         throw new IllegalArgumentException("Must have same number of rows in every slice: rows="
-                                + currentSlice.length + "rows()=" + rows());
+                            + currentSlice.length + "rows()=" + rows());
                     for (int r = 0; r < rows; r++) {
                         idx = zero + s * sliceStride + r * rowStride;
                         double[] currentRow = currentSlice[r];
                         if (currentRow.length != columns)
                             throw new IllegalArgumentException(
-                                    "Must have same number of columns in every row: columns=" + currentRow.length
-                                            + "columns()=" + columns());
+                                "Must have same number of columns in every row: columns=" + currentRow.length
+                                    + "columns()=" + columns());
                         for (int c = 0; c < columns; c++) {
                             elements[idx] = currentRow[c];
                             idx += columnStride;
@@ -772,11 +750,10 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
 
     public DoubleMatrix3D assign(DoubleMatrix3D source) {
         // overriden for performance only
-        if (!(source instanceof DenseDoubleMatrix3D)) {
+        if (!(source instanceof DenseDoubleMatrix3D other)) {
             super.assign(source);
             return this;
         }
-        DenseDoubleMatrix3D other = (DenseDoubleMatrix3D) source;
         if (other == this)
             return this;
         checkShape(other);
@@ -944,9 +921,9 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                     public void run() {
                         for (int i = firstIdx; i < lastIdx; i++) {
                             int idx = zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride
-                                    + columnElements[i] * columnStride;
+                                + columnElements[i] * columnStride;
                             int idxOther = zeroOther + sliceElements[i] * sliceStrideOther + rowElements[i]
-                                    * rowStrideOther + columnElements[i] * columnStrideOther;
+                                * rowStrideOther + columnElements[i] * columnStrideOther;
                             elements[idx] = function.apply(elements[idx], elementsOther[idxOther]);
                         }
                     }
@@ -956,9 +933,9 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         } else {
             for (int i = 0; i < size; i++) {
                 int idx = zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride + columnElements[i]
-                        * columnStride;
+                    * columnStride;
                 int idxOther = zeroOther + sliceElements[i] * sliceStrideOther + rowElements[i] * rowStrideOther
-                        + columnElements[i] * columnStrideOther;
+                    + columnElements[i] * columnStrideOther;
                 elements[idx] = function.apply(elements[idx], elementsOther[idxOther]);
             }
         }
@@ -1029,10 +1006,8 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 2D discrete cosine transform (DCT-II) of each slice of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dct2Slices(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1065,10 +1040,8 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
 
     /**
      * Computes the 3D discrete cosine transform (DCT-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dct3(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1076,7 +1049,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         if (dct3 == null) {
             dct3 = new DoubleDCT_3D(slices, rows, columns);
         }
-        if (isNoView == true) {
+        if (isNoView) {
             dct3.forward(elements, scale);
         } else {
             DoubleMatrix3D copy = this.copy();
@@ -1089,7 +1062,6 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 2D discrete Hartley transform (DHT) of each slice of this
      * matrix.
-     * 
      */
     public void dht2Slices() {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1122,7 +1094,6 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
 
     /**
      * Computes the 3D discrete Hartley transform (DHT) of this matrix.
-     * 
      */
     public void dht3() {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1130,7 +1101,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         if (dht3 == null) {
             dht3 = new DoubleDHT_3D(slices, rows, columns);
         }
-        if (isNoView == true) {
+        if (isNoView) {
             dht3.forward(elements);
         } else {
             DoubleMatrix3D copy = this.copy();
@@ -1143,10 +1114,8 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 2D discrete sine transform (DST-II) of each slice of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dst2Slices(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1179,10 +1148,8 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
 
     /**
      * Computes the 3D discrete sine transform (DST-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dst3(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1190,7 +1157,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         if (dst3 == null) {
             dst3 = new DoubleDST_3D(slices, rows, columns);
         }
-        if (isNoView == true) {
+        if (isNoView) {
             dst3.forward(elements, scale);
         } else {
             DoubleMatrix3D copy = this.copy();
@@ -1207,58 +1174,57 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 3D discrete Fourier transform (DFT) of this matrix. The
      * physical layout of the output data is as follows:
-     * 
+     *
      * <pre>
      * this[k1][k2][2*k3] = Re[k1][k2][k3]
-     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
+     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
      * this[k1][k2][2*k3+1] = Im[k1][k2][k3]
-     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
-     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2, 
+     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
+     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2,
      * this[k1][k2][0] = Re[k1][k2][0]
-     *              = Re[(n1-k1)%n1][n2-k2][0], 
+     *              = Re[(n1-k1)%n1][n2-k2][0],
      * this[k1][k2][1] = Im[k1][k2][0]
-     *              = -Im[(n1-k1)%n1][n2-k2][0], 
+     *              = -Im[(n1-k1)%n1][n2-k2][0],
      * this[k1][n2-k2][1] = Re[(n1-k1)%n1][k2][n3/2]
-     *                 = Re[k1][n2-k2][n3/2], 
+     *                 = Re[k1][n2-k2][n3/2],
      * this[k1][n2-k2][0] = -Im[(n1-k1)%n1][k2][n3/2]
-     *                 = Im[k1][n2-k2][n3/2], 
-     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2, 
+     *                 = Im[k1][n2-k2][n3/2],
+     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2,
      * this[k1][0][0] = Re[k1][0][0]
-     *             = Re[n1-k1][0][0], 
+     *             = Re[n1-k1][0][0],
      * this[k1][0][1] = Im[k1][0][0]
-     *             = -Im[n1-k1][0][0], 
+     *             = -Im[n1-k1][0][0],
      * this[k1][n2/2][0] = Re[k1][n2/2][0]
-     *                = Re[n1-k1][n2/2][0], 
+     *                = Re[n1-k1][n2/2][0],
      * this[k1][n2/2][1] = Im[k1][n2/2][0]
-     *                = -Im[n1-k1][n2/2][0], 
+     *                = -Im[n1-k1][n2/2][0],
      * this[n1-k1][0][1] = Re[k1][0][n3/2]
-     *                = Re[n1-k1][0][n3/2], 
+     *                = Re[n1-k1][0][n3/2],
      * this[n1-k1][0][0] = -Im[k1][0][n3/2]
-     *                = Im[n1-k1][0][n3/2], 
+     *                = Im[n1-k1][0][n3/2],
      * this[n1-k1][n2/2][1] = Re[k1][n2/2][n3/2]
-     *                   = Re[n1-k1][n2/2][n3/2], 
+     *                   = Re[n1-k1][n2/2][n3/2],
      * this[n1-k1][n2/2][0] = -Im[k1][n2/2][n3/2]
-     *                   = Im[n1-k1][n2/2][n3/2], 
-     *     0&lt;k1&lt;n1/2, 
-     * this[0][0][0] = Re[0][0][0], 
-     * this[0][0][1] = Re[0][0][n3/2], 
-     * this[0][n2/2][0] = Re[0][n2/2][0], 
-     * this[0][n2/2][1] = Re[0][n2/2][n3/2], 
-     * this[n1/2][0][0] = Re[n1/2][0][0], 
-     * this[n1/2][0][1] = Re[n1/2][0][n3/2], 
-     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0], 
+     *                   = Im[n1-k1][n2/2][n3/2],
+     *     0&lt;k1&lt;n1/2,
+     * this[0][0][0] = Re[0][0][0],
+     * this[0][0][1] = Re[0][0][n3/2],
+     * this[0][n2/2][0] = Re[0][n2/2][0],
+     * this[0][n2/2][1] = Re[0][n2/2][n3/2],
+     * this[n1/2][0][0] = Re[n1/2][0][0],
+     * this[n1/2][0][1] = Re[n1/2][0][n3/2],
+     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0],
      * this[n1/2][n2/2][1] = Re[n1/2][n2/2][n3/2]
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * forward transform, use <code>getFft3</code>. To get back the original
      * data, use <code>ifft3</code>.
-     * 
-     * @throws IllegalArgumentException
-     *             if the slice size or the row size or the column size of this
-     *             matrix is not a power of 2 number.
+     *
+     * @throws IllegalArgumentException if the slice size or the row size or the column size of this
+     *                                  matrix is not a power of 2 number.
      */
     public void fft3() {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1266,7 +1232,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         if (fft3 == null) {
             fft3 = new DoubleFFT_3D(slices, rows, columns);
         }
-        if (isNoView == true) {
+        if (isNoView) {
             fft3.realForward(elements);
         } else {
             DoubleMatrix3D copy = this.copy();
@@ -1279,10 +1245,9 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 2D discrete Fourier transform
      * (DFT) of each slice of this matrix.
-     * 
+     *
      * @return the 2D discrete Fourier transform (DFT) of each slice of this
-     *         matrix.
-     * 
+     * matrix.
      */
     public DenseDComplexMatrix3D getFft2Slices() {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1318,7 +1283,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 3D discrete Fourier transform
      * (DFT) of this matrix.
-     * 
+     *
      * @return the 3D discrete Fourier transform (DFT) of this matrix.
      */
     public DenseDComplexMatrix3D getFft3() {
@@ -1328,7 +1293,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         final int sliceStride = rows * columns;
         final int rowStride = columns;
         final double[] elems;
-        if (isNoView == true) {
+        if (isNoView) {
             elems = elements;
         } else {
             elems = (double[]) this.copy().elements();
@@ -1376,12 +1341,10 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 2D inverse of the discrete
      * Fourier transform (IDFT) of each slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      * @return the 2D inverse of the discrete Fourier transform (IDFT) of each
-     *         slice of this matrix.
+     * slice of this matrix.
      */
     public DenseDComplexMatrix3D getIfft2Slices(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1417,13 +1380,10 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 3D inverse of the discrete
      * Fourier transform (IDFT) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      * @return the 3D inverse of the discrete Fourier transform (IDFT) of this
-     *         matrix.
-     * 
+     * matrix.
      */
     public DenseDComplexMatrix3D getIfft3(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1433,7 +1393,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         final int rowStride = columns;
         final double[] cElems = (C).elements();
         final double[] elems;
-        if (isNoView == true) {
+        if (isNoView) {
             elems = elements;
         } else {
             elems = (double[]) this.copy().elements();
@@ -1514,7 +1474,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                                 d = 0;
                             }
                         }
-                        return new double[] { maxValue, slice_loc, row_loc, col_loc };
+                        return new double[]{maxValue, slice_loc, row_loc, col_loc};
                     }
                 });
             }
@@ -1558,7 +1518,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                 }
             }
         }
-        return new double[] { maxValue, slice_loc, row_loc, col_loc };
+        return new double[]{maxValue, slice_loc, row_loc, col_loc};
     }
 
     public double[] getMinLocation() {
@@ -1598,7 +1558,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                                 d = 0;
                             }
                         }
-                        return new double[] { minValue, slice_loc, row_loc, col_loc };
+                        return new double[]{minValue, slice_loc, row_loc, col_loc};
                     }
                 });
             }
@@ -1642,11 +1602,11 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
                 }
             }
         }
-        return new double[] { minValue, slice_loc, row_loc, col_loc };
+        return new double[]{minValue, slice_loc, row_loc, col_loc};
     }
 
     public void getNegativeValues(final IntArrayList sliceList, final IntArrayList rowList,
-            final IntArrayList columnList, final DoubleArrayList valueList) {
+                                  final IntArrayList columnList, final DoubleArrayList valueList) {
         sliceList.clear();
         rowList.clear();
         columnList.clear();
@@ -1673,7 +1633,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     }
 
     public void getNonZeros(final IntArrayList sliceList, final IntArrayList rowList, final IntArrayList columnList,
-            final DoubleArrayList valueList) {
+                            final DoubleArrayList valueList) {
         sliceList.clear();
         rowList.clear();
         columnList.clear();
@@ -1700,7 +1660,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     }
 
     public void getPositiveValues(final IntArrayList sliceList, final IntArrayList rowList,
-            final IntArrayList columnList, final DoubleArrayList valueList) {
+                                  final IntArrayList columnList, final DoubleArrayList valueList) {
         sliceList.clear();
         rowList.clear();
         columnList.clear();
@@ -1728,15 +1688,14 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
 
     public double getQuick(int slice, int row, int column) {
         return elements[sliceZero + slice * sliceStride + rowZero + row * rowStride + columnZero + column
-                * columnStride];
+            * columnStride];
     }
 
     /**
      * Computes the 2D inverse of the discrete cosine transform (DCT-III) of
      * each slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idct2Slices(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1770,9 +1729,8 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete cosine transform (DCT-III) of
      * this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idct3(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1780,7 +1738,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         if (dct3 == null) {
             dct3 = new DoubleDCT_3D(slices, rows, columns);
         }
-        if (isNoView == true) {
+        if (isNoView) {
             dct3.inverse(elements, scale);
         } else {
             DoubleMatrix3D copy = this.copy();
@@ -1793,10 +1751,8 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 2D inverse of the discrete Hartley transform (IDHT) of each
      * slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idht2Slices(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1830,9 +1786,8 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete Hartley transform (IDHT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idht3(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1840,7 +1795,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         if (dht3 == null) {
             dht3 = new DoubleDHT_3D(slices, rows, columns);
         }
-        if (isNoView == true) {
+        if (isNoView) {
             dht3.inverse(elements, scale);
         } else {
             DoubleMatrix3D copy = this.copy();
@@ -1853,9 +1808,8 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 2D inverse of the discrete sine transform (DST-III) of each
      * slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idst2Slices(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1889,10 +1843,8 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete sine transform (DST-III) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idst3(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1900,7 +1852,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         if (dst3 == null) {
             dst3 = new DoubleDST_3D(slices, rows, columns);
         }
-        if (isNoView == true) {
+        if (isNoView) {
             dst3.inverse(elements, scale);
         } else {
             DoubleMatrix3D copy = this.copy();
@@ -1913,59 +1865,56 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete Fourier transform (IDFT) of this
      * matrix. The physical layout of the input data has to be as follows:
-     * 
+     *
      * <pre>
      * this[k1][k2][2*k3] = Re[k1][k2][k3]
-     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
+     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
      * this[k1][k2][2*k3+1] = Im[k1][k2][k3]
-     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
-     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2, 
+     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
+     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2,
      * this[k1][k2][0] = Re[k1][k2][0]
-     *              = Re[(n1-k1)%n1][n2-k2][0], 
+     *              = Re[(n1-k1)%n1][n2-k2][0],
      * this[k1][k2][1] = Im[k1][k2][0]
-     *              = -Im[(n1-k1)%n1][n2-k2][0], 
+     *              = -Im[(n1-k1)%n1][n2-k2][0],
      * this[k1][n2-k2][1] = Re[(n1-k1)%n1][k2][n3/2]
-     *                 = Re[k1][n2-k2][n3/2], 
+     *                 = Re[k1][n2-k2][n3/2],
      * this[k1][n2-k2][0] = -Im[(n1-k1)%n1][k2][n3/2]
-     *                 = Im[k1][n2-k2][n3/2], 
-     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2, 
+     *                 = Im[k1][n2-k2][n3/2],
+     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2,
      * this[k1][0][0] = Re[k1][0][0]
-     *             = Re[n1-k1][0][0], 
+     *             = Re[n1-k1][0][0],
      * this[k1][0][1] = Im[k1][0][0]
-     *             = -Im[n1-k1][0][0], 
+     *             = -Im[n1-k1][0][0],
      * this[k1][n2/2][0] = Re[k1][n2/2][0]
-     *                = Re[n1-k1][n2/2][0], 
+     *                = Re[n1-k1][n2/2][0],
      * this[k1][n2/2][1] = Im[k1][n2/2][0]
-     *                = -Im[n1-k1][n2/2][0], 
+     *                = -Im[n1-k1][n2/2][0],
      * this[n1-k1][0][1] = Re[k1][0][n3/2]
-     *                = Re[n1-k1][0][n3/2], 
+     *                = Re[n1-k1][0][n3/2],
      * this[n1-k1][0][0] = -Im[k1][0][n3/2]
-     *                = Im[n1-k1][0][n3/2], 
+     *                = Im[n1-k1][0][n3/2],
      * this[n1-k1][n2/2][1] = Re[k1][n2/2][n3/2]
-     *                   = Re[n1-k1][n2/2][n3/2], 
+     *                   = Re[n1-k1][n2/2][n3/2],
      * this[n1-k1][n2/2][0] = -Im[k1][n2/2][n3/2]
-     *                   = Im[n1-k1][n2/2][n3/2], 
-     *     0&lt;k1&lt;n1/2, 
-     * this[0][0][0] = Re[0][0][0], 
-     * this[0][0][1] = Re[0][0][n3/2], 
-     * this[0][n2/2][0] = Re[0][n2/2][0], 
-     * this[0][n2/2][1] = Re[0][n2/2][n3/2], 
-     * this[n1/2][0][0] = Re[n1/2][0][0], 
-     * this[n1/2][0][1] = Re[n1/2][0][n3/2], 
-     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0], 
+     *                   = Im[n1-k1][n2/2][n3/2],
+     *     0&lt;k1&lt;n1/2,
+     * this[0][0][0] = Re[0][0][0],
+     * this[0][0][1] = Re[0][0][n3/2],
+     * this[0][n2/2][0] = Re[0][n2/2][0],
+     * this[0][n2/2][1] = Re[0][n2/2][n3/2],
+     * this[n1/2][0][0] = Re[n1/2][0][0],
+     * this[n1/2][0][1] = Re[n1/2][0][n3/2],
+     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0],
      * this[n1/2][n2/2][1] = Re[n1/2][n2/2][n3/2]
      * </pre>
-     * 
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * inverse transform, use <code>getIfft3</code>.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
-     * @throws IllegalArgumentException
-     *             if the slice size or the row size or the column size of this
-     *             matrix is not a power of 2 number.
+     *
+     * @param scale if true then scaling is performed
+     * @throws IllegalArgumentException if the slice size or the row size or the column size of this
+     *                                  matrix is not a power of 2 number.
      */
     public void ifft3(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1973,7 +1922,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         if (fft3 == null) {
             fft3 = new DoubleFFT_3D(slices, rows, columns);
         }
-        if (isNoView == true) {
+        if (isNoView) {
             fft3.realInverse(elements, scale);
         } else {
             DoubleMatrix3D copy = this.copy();
@@ -1984,7 +1933,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     }
 
     public long index(int slice, int row, int column) {
-        return sliceZero + slice * sliceStride + rowZero + row * rowStride + columnZero + column * columnStride;
+        return sliceZero + (long) slice * sliceStride + rowZero + (long) row * rowStride + columnZero + (long) column * columnStride;
     }
 
     public DoubleMatrix3D like(int slices, int rows, int columns) {
@@ -2056,7 +2005,7 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
 
     public void zAssign27Neighbors(DoubleMatrix3D B, cern.mateba.function.tdouble.Double27Function function) {
         // overridden for performance only
-        if (!(B instanceof DenseDoubleMatrix3D)) {
+        if (!(B instanceof DenseDoubleMatrix3D BB)) {
             super.zAssign27Neighbors(B, function);
             return;
         }
@@ -2068,7 +2017,6 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
         if (rows < 3 || columns < 3 || slices < 3)
             return; // nothing to do
 
-        DenseDoubleMatrix3D BB = (DenseDoubleMatrix3D) B;
         int A_ss = sliceStride;
         int A_rs = rowStride;
         int B_rs = BB.rowStride;
@@ -2158,9 +2106,9 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
 
                     B_elems[B11] = function.apply(a000, a001, a002, a010, a011, a012, a020, a021, a022,
 
-                    a100, a101, a102, a110, a111, a112, a120, a121, a122,
+                        a100, a101, a102, a110, a111, a112, a120, a121, a122,
 
-                    a200, a201, a202, a210, a211, a212, a220, a221, a222);
+                        a200, a201, a202, a210, a211, a212, a220, a221, a222);
                     B11 += B_cs;
 
                     // move remembered cells
@@ -2245,11 +2193,9 @@ public class DenseDoubleMatrix3D extends DoubleMatrix3D {
     }
 
     protected boolean haveSharedCellsRaw(DoubleMatrix3D other) {
-        if (other instanceof SelectedDenseDoubleMatrix3D) {
-            SelectedDenseDoubleMatrix3D otherMatrix = (SelectedDenseDoubleMatrix3D) other;
+        if (other instanceof SelectedDenseDoubleMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseDoubleMatrix3D) {
-            DenseDoubleMatrix3D otherMatrix = (DenseDoubleMatrix3D) other;
+        } else if (other instanceof DenseDoubleMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;

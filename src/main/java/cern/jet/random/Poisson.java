@@ -47,7 +47,7 @@ import java.io.Serial;
  * HREF="http://www.cis.tu-graz.ac.at/stat/stadl/random.html">The patchwork
  * rejection method for sampling from unimodal distributions</A>, to appear in
  * ACM Transactions on Modelling and Simulation.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -119,7 +119,7 @@ public class Poisson extends AbstractDiscreteDistribution {
      * Returns a deep copy of the receiver; the copy will produce identical
      * sequences. After this call has returned, the copy and the receiver have
      * equal but separate state.
-     * 
+     *
      * @return a copy of the receiver.
      */
 
@@ -182,7 +182,7 @@ public class Poisson extends AbstractDiscreteDistribution {
                 // for (k=pp.length; --k >=0; ) pp[k] = 0;
             }
             m = (my > 1.0) ? (int) my : 1;
-            for (;;) {
+            for (; ; ) {
                 u = gen.raw(); // Step U. Uniform sample
                 k = 0;
                 if (u <= p0)
@@ -269,7 +269,7 @@ public class Poisson extends AbstractDiscreteDistribution {
                 p6 = f5 / lr + p5; // expon. tail right
             } // end set-up
 
-            for (;;) {
+            for (; ; ) {
                 // generate uniform number U -- U(0, p6)
                 // case distinction corresponding to U
                 if ((U = gen.raw() * p6) < p2) { // centre left
@@ -398,9 +398,8 @@ public class Poisson extends AbstractDiscreteDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

@@ -54,29 +54,28 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * Cells are internally addressed in column-major. Applications demanding utmost
  * speed can exploit this fact. Setting/getting values in a loop
  * column-by-column is quicker than row-by-row. Thus
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
  *         matrix.setQuick(row, column, someValue);
  *     }
  * }
- * 
+ *
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int row = 0; row &lt; rows; row++) {
  *     for (int column = 0; column &lt; columns; column++) {
  *         matrix.setQuick(row, column, someValue);
  *     }
  * }
- * 
+ *
  * </pre>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
@@ -99,13 +98,11 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public DenseColumnDoubleMatrix2D(double[][] values) {
         this(values.length, values.length == 0 ? 0 : values[0].length);
@@ -115,15 +112,12 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public DenseColumnDoubleMatrix2D(int rows, int columns) {
         setUp(rows, columns, 0, 0, 1, rows);
@@ -132,32 +126,23 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Constructs a matrix with the given parameters.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @param isView
-     *            if true then a matrix view is constructed
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             or flip's are illegal.
+     *
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param elements     the cells.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(i,j+1)-index(i,j)</tt>.
+     * @param isView       if true then a matrix view is constructed
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  or flip's are illegal.
      */
     public DenseColumnDoubleMatrix2D(int rows, int columns, double[] elements, int rowZero, int columnZero,
-            int rowStride, int columnStride, boolean isView) {
+                                     int rowStride, int columnStride, boolean isView) {
         setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = !isView;
@@ -165,9 +150,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Constructs a matrix from MatrixVectorReader.
-     * 
-     * @param reader
-     *            matrix reader
+     *
+     * @param reader matrix reader
      * @throws IOException
      */
     public DenseColumnDoubleMatrix2D(MatrixVectorReader reader) throws IOException {
@@ -228,9 +212,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public Double call() throws Exception {
                         double a = f.apply(elements[zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride]);
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 a = aggr.apply(a, f.apply(elements[r * rowStride + cidx]));
                             }
                             d = 0;
@@ -243,9 +227,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         } else {
             a = f.apply(elements[zero + (rows - 1) * rowStride + (columns - 1) * columnStride]);
             int d = 1;
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     a = aggr.apply(a, f.apply(elements[r * rowStride + cidx]));
                 }
                 d = 0;
@@ -272,15 +256,15 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public Double call() throws Exception {
                         double elem = elements[zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride];
                         double a = 0;
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             a = f.apply(elem);
                         }
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 elem = elements[r * rowStride + cidx];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     a = aggr.apply(a, f.apply(elem));
                                 }
                             }
@@ -293,15 +277,15 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             double elem = elements[zero + (rows - 1) * rowStride + (columns - 1) * columnStride];
-            if (cond.apply(elem) == true) {
+            if (cond.apply(elem)) {
                 a = f.apply(elem);
             }
             int d = 1;
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     elem = elements[r * rowStride + cidx];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         a = aggr.apply(a, f.apply(elem));
                     }
                 }
@@ -312,7 +296,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     }
 
     public double aggregate(final DoubleDoubleFunction aggr, final DoubleFunction f, final IntArrayList rowList,
-            final IntArrayList columnList) {
+                            final IntArrayList columnList) {
         if (size() == 0)
             return Double.NaN;
         final int zero = (int) index(0, 0);
@@ -332,10 +316,10 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
                     public Double call() throws Exception {
                         double a = f.apply(elements[zero + rowElements[firstIdx - 1] * rowStride
-                                + columnElements[firstIdx - 1] * columnStride]);
-                        for (int i = firstIdx - 1; --i >= lastIdx;) {
+                            + columnElements[firstIdx - 1] * columnStride]);
+                        for (int i = firstIdx - 1; --i >= lastIdx; ) {
                             a = aggr.apply(a, f.apply(elements[zero + rowElements[i] * rowStride + columnElements[i]
-                                    * columnStride]));
+                                * columnStride]));
                         }
                         return a;
                     }
@@ -344,9 +328,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             a = f.apply(elements[zero + rowElements[size - 1] * rowStride + columnElements[size - 1] * columnStride]);
-            for (int i = size - 1; --i >= 0;) {
+            for (int i = size - 1; --i >= 0; ) {
                 a = aggr.apply(a, f
-                        .apply(elements[zero + rowElements[i] * rowStride + columnElements[i] * columnStride]));
+                    .apply(elements[zero + rowElements[i] * rowStride + columnElements[i] * columnStride]));
             }
         }
         return a;
@@ -377,15 +361,15 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
                     public Double call() throws Exception {
                         double a = f.apply(elements[zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride],
-                                otherElements[zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1)
-                                        * columnStrideOther]);
+                            otherElements[zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1)
+                                * columnStrideOther]);
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
                             int cidxOther = zeroOther + c * columnStrideOther;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 a = aggr.apply(a, f.apply(elements[r * rowStride + cidx], otherElements[r
-                                        * rowStrideOther + cidxOther]));
+                                    * rowStrideOther + cidxOther]));
                             }
                             d = 0;
                         }
@@ -397,13 +381,13 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         } else {
             int d = 1;
             a = f.apply(elements[zero + (rows - 1) * rowStride + (columns - 1) * columnStride], otherElements[zeroOther
-                    + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther]);
-            for (int c = columns; --c >= 0;) {
+                + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther]);
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
                 int cidxOther = zeroOther + c * columnStrideOther;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     a = aggr.apply(a, f.apply(elements[r * rowStride + cidx], otherElements[r * rowStrideOther
-                            + cidxOther]));
+                        + cidxOther]));
                 }
                 d = 0;
             }
@@ -435,16 +419,16 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                         // specialization for speed
                         if (function instanceof cern.jet.math.tdouble.DoubleMult) { // x[i] = mult*x[i]
                             double multiplicator = ((cern.jet.math.tdouble.DoubleMult) function).multiplicator;
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, r = rows; --r >= 0; ) {
                                     elements[i] *= multiplicator;
                                     i -= rowStride;
                                 }
                                 idx -= columnStride;
                             }
                         } else { // the general case x[i] = f(x[i])                            
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, r = rows; --r >= 0; ) {
                                     elements[i] = function.apply(elements[i]);
                                     i -= rowStride;
                                 }
@@ -459,16 +443,16 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             if (function instanceof cern.jet.math.tdouble.DoubleMult) { // x[i] = mult*x[i]
                 double multiplicator = ((cern.jet.math.tdouble.DoubleMult) function).multiplicator;
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, r = rows; --r >= 0; ) {
                         elements[i] *= multiplicator;
                         i -= rowStride;
                     }
                     idx -= columnStride;
                 }
             } else { // the general case x[i] = f(x[i])
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, r = rows; --r >= 0; ) {
                         elements[i] = function.apply(elements[i]);
                         i -= rowStride;
                     }
@@ -494,10 +478,10 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public void run() {
                         double elem;
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 elem = elements[i];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     elements[i] = function.apply(elem);
                                 }
                                 i -= rowStride;
@@ -511,10 +495,10 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         } else {
             double elem;
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     elem = elements[i];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         elements[i] = function.apply(elem);
                     }
                     i -= rowStride;
@@ -540,10 +524,10 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public void run() {
                         double elem;
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 elem = elements[i];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     elements[i] = value;
                                 }
                                 i -= rowStride;
@@ -557,10 +541,10 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         } else {
             double elem;
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     elem = elements[i];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         elements[i] = value;
                     }
                     i -= rowStride;
@@ -584,8 +568,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 elements[i] = value;
                                 i -= rowStride;
                             }
@@ -597,8 +581,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     elements[i] = value;
                     i -= rowStride;
                 }
@@ -611,7 +595,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     public DoubleMatrix2D assign(final double[] values) {
         if (values.length != size())
             throw new IllegalArgumentException("Must have same length: length=" + values.length + " rows()*columns()="
-                    + rows() * columns());
+                + rows() * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             System.arraycopy(values, 0, this.elements, 0, values.length);
@@ -629,8 +613,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                         public void run() {
                             int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                             int idxOther = (rows - 1) + (firstColumn - 1) * rows;
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, r = rows; --r >= 0; ) {
                                     elements[i] = values[idxOther--];
                                     i -= rowStride;
                                 }
@@ -643,8 +627,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             } else {
                 int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
                 int idxOther = values.length - 1;
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, r = rows; --r >= 0; ) {
                         elements[i] = values[idxOther--];
                         i -= rowStride;
                     }
@@ -658,7 +642,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     public DoubleMatrix2D assign(final double[][] values) {
         if (values.length != rows)
             throw new IllegalArgumentException("Must have same number of rows: rows=" + values.length + "columns()="
-                    + rows());
+                + rows());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         final int zero = (int) index(0, 0);
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
@@ -671,13 +655,13 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (firstRow - 1) * rowStride + (columns - 1) * columnStride;
-                        for (int r = firstRow; --r >= lastRow;) {
+                        for (int r = firstRow; --r >= lastRow; ) {
                             double[] currentRow = values[r];
                             if (currentRow.length != columns)
                                 throw new IllegalArgumentException(
-                                        "Must have same number of columns in every row: column=" + currentRow.length
-                                                + "columns()=" + columns());
-                            for (int i = idx, c = columns; --c >= 0;) {
+                                    "Must have same number of columns in every row: column=" + currentRow.length
+                                        + "columns()=" + columns());
+                            for (int i = idx, c = columns; --c >= 0; ) {
                                 elements[i] = currentRow[c];
                                 i -= columnStride;
                             }
@@ -689,12 +673,12 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int r = rows; --r >= 0;) {
+            for (int r = rows; --r >= 0; ) {
                 double[] currentRow = values[r];
                 if (currentRow.length != columns)
                     throw new IllegalArgumentException("Must have same number of columns in every row: column="
-                            + currentRow.length + "columns()=" + columns());
-                for (int i = idx, c = columns; --c >= 0;) {
+                        + currentRow.length + "columns()=" + columns());
+                for (int i = idx, c = columns; --c >= 0; ) {
                     elements[i] = currentRow[c];
                     i -= columnStride;
                 }
@@ -706,11 +690,10 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
     public DoubleMatrix2D assign(final DoubleMatrix2D source) {
         // overriden for performance only
-        if (!(source instanceof DenseColumnDoubleMatrix2D)) {
+        if (!(source instanceof DenseColumnDoubleMatrix2D other)) {
             super.assign(source);
             return this;
         }
-        DenseColumnDoubleMatrix2D other = (DenseColumnDoubleMatrix2D) source;
         if (other == this)
             return this; // nothing to do
         checkShape(other);
@@ -744,8 +727,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                         int idxOther = zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1) * columnStrideOther;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                 elements[i] = otherElements[j];
                                 i -= rowStride;
                                 j -= rowStrideOther;
@@ -760,8 +743,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             int idxOther = zeroOther + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                     elements[i] = otherElements[j];
                     i -= rowStride;
                     j -= rowStrideOther;
@@ -786,11 +769,10 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 return assign(y);
             }
         }
-        if (!(y instanceof DenseColumnDoubleMatrix2D)) {
+        if (!(y instanceof DenseColumnDoubleMatrix2D other)) {
             super.assign(y, function);
             return this;
         }
-        DenseColumnDoubleMatrix2D other = (DenseColumnDoubleMatrix2D) y;
         checkShape(y);
         final double[] otherElements = other.elements;
         final int zeroOther = (int) other.index(0, 0);
@@ -812,8 +794,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                         int idxOther = zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1) * columnStrideOther;
                         if (function == cern.jet.math.tdouble.DoubleFunctions.mult) {
                             // x[i] = x[i]*y[i]                            
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                     elements[i] *= otherElements[j];
                                     i -= rowStride;
                                     j -= rowStrideOther;
@@ -823,8 +805,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                             }
                         } else if (function == cern.jet.math.tdouble.DoubleFunctions.div) {
                             // x[i] = x[i] / y[i]
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                     elements[i] /= otherElements[j];
                                     i -= rowStride;
                                     j -= rowStrideOther;
@@ -836,8 +818,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                             double multiplicator = ((cern.jet.math.tdouble.DoublePlusMultSecond) function).multiplicator;
                             if (multiplicator == 1) {
                                 // x[i] = x[i] + y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] += otherElements[j];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -847,8 +829,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                                 }
                             } else if (multiplicator == -1) {
                                 // x[i] = x[i] - y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] -= otherElements[j];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -858,8 +840,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                                 }
                             } else { // the general case
                                 // x[i] = x[i] + mult*y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] += multiplicator * otherElements[j];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -872,8 +854,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                             double multiplicator = ((cern.jet.math.tdouble.DoublePlusMultFirst) function).multiplicator;
                             if (multiplicator == 1) {
                                 // x[i] = x[i] + y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] += otherElements[j];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -883,8 +865,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                                 }
                             } else if (multiplicator == -1) {
                                 // x[i] = -x[i] + y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] = otherElements[j] - elements[i];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -894,8 +876,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                                 }
                             } else { // the general case
                                 // x[i] = mult*x[i] + y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] = multiplicator * elements[i] + otherElements[j];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -905,8 +887,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                                 }
                             }
                         } else { // the general case x[i] = f(x[i],y[i])
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                     elements[i] = function.apply(elements[i], otherElements[j]);
                                     i -= rowStride;
                                     j -= rowStrideOther;
@@ -925,8 +907,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             int idxOther = zeroOther + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther;
             if (function == cern.jet.math.tdouble.DoubleFunctions.mult) {
                 // x[i] = x[i]*y[i]                            
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                         elements[i] *= otherElements[j];
                         i -= rowStride;
                         j -= rowStrideOther;
@@ -936,8 +918,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 }
             } else if (function == cern.jet.math.tdouble.DoubleFunctions.div) {
                 // x[i] = x[i] / y[i]
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                         elements[i] /= otherElements[j];
                         i -= rowStride;
                         j -= rowStrideOther;
@@ -949,8 +931,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 double multiplicator = ((cern.jet.math.tdouble.DoublePlusMultSecond) function).multiplicator;
                 if (multiplicator == 1) {
                     // x[i] = x[i] + y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] += otherElements[j];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -960,8 +942,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     }
                 } else if (multiplicator == -1) {
                     // x[i] = x[i] - y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] -= otherElements[j];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -971,8 +953,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     }
                 } else { // the general case
                     // x[i] = x[i] + mult*y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] += multiplicator * otherElements[j];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -985,8 +967,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 double multiplicator = ((cern.jet.math.tdouble.DoublePlusMultFirst) function).multiplicator;
                 if (multiplicator == 1) {
                     // x[i] = x[i] + y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] += otherElements[j];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -996,8 +978,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     }
                 } else if (multiplicator == -1) {
                     // x[i] = -x[i] + y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] = otherElements[j] - elements[i];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -1007,8 +989,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     }
                 } else { // the general case
                     // x[i] = mult*x[i] + y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] = multiplicator * elements[i] + otherElements[j];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -1018,8 +1000,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     }
                 }
             } else { // the general case x[i] = f(x[i],y[i])
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                         elements[i] = function.apply(elements[i], otherElements[j]);
                         i -= rowStride;
                         j -= rowStrideOther;
@@ -1033,13 +1015,12 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     }
 
     public DoubleMatrix2D assign(final DoubleMatrix2D y, final DoubleDoubleFunction function, IntArrayList rowList,
-            IntArrayList columnList) {
+                                 IntArrayList columnList) {
         checkShape(y);
-        if (!(y instanceof DenseColumnDoubleMatrix2D)) {
+        if (!(y instanceof DenseColumnDoubleMatrix2D other)) {
             super.assign(y, function);
             return this;
         }
-        DenseColumnDoubleMatrix2D other = (DenseColumnDoubleMatrix2D) y;
         final int size = rowList.size();
         final int[] rowElements = rowList.elements();
         final int[] columnElements = columnList.elements();
@@ -1061,10 +1042,10 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public void run() {
                         int idx;
                         int idxOther;
-                        for (int i = firstIdx; --i >= lastIdx;) {
+                        for (int i = firstIdx; --i >= lastIdx; ) {
                             idx = zero + rowElements[i] * rowStride + columnElements[i] * columnStride;
                             idxOther = zeroOther + rowElements[i] * rowStrideOther + columnElements[i]
-                                    * columnStrideOther;
+                                * columnStrideOther;
                             elements[idx] = function.apply(elements[idx], otherElements[idxOther]);
                         }
                     }
@@ -1075,7 +1056,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         } else {
             int idx;
             int idxOther;
-            for (int i = size; --i >= 0;) {
+            for (int i = size; --i >= 0; ) {
                 idx = zero + rowElements[i] * rowStride + columnElements[i] * columnStride;
                 idxOther = zeroOther + rowElements[i] * rowStrideOther + columnElements[i] * columnStrideOther;
                 elements[idx] = function.apply(elements[idx], otherElements[idxOther]);
@@ -1087,7 +1068,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     public DoubleMatrix2D assign(final float[] values) {
         if (values.length != size())
             throw new IllegalArgumentException("Must have same length: length=" + values.length + "rows()*columns()="
-                    + rows() * columns());
+                + rows() * columns());
         final int zero = (int) index(0, 0);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
@@ -1102,8 +1083,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                         int idxOther = (rows - 1) + (firstColumn - 1) * rows;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 elements[i] = values[idxOther--];
                                 i -= rowStride;
                             }
@@ -1116,8 +1097,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             int idxOther = values.length - 1;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     elements[i] = values[idxOther--];
                     i -= rowStride;
                 }
@@ -1143,8 +1124,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public Integer call() throws Exception {
                         int cardinality = 0;
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 if (elements[i] != 0)
                                     cardinality++;
                                 i -= rowStride;
@@ -1170,8 +1151,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             }
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     if (elements[i] != 0)
                         cardinality++;
                     i -= rowStride;
@@ -1184,10 +1165,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Computes the 2D discrete cosine transform (DCT-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dct2(boolean scale) {
         DoubleMatrix2D transpose = viewDice().copy();
@@ -1204,10 +1183,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the discrete cosine transform (DCT-II) of each column of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dctColumns(final boolean scale) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1223,7 +1200,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             ((DenseDoubleMatrix1D) viewColumn(c)).dct(scale);
                         }
                     }
@@ -1232,7 +1209,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN_FFT();
         } else {
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 ((DenseDoubleMatrix1D) viewColumn(c)).dct(scale);
             }
         }
@@ -1241,10 +1218,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the discrete cosine transform (DCT-II) of each row of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dctRows(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1262,7 +1237,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int r = firstRow; --r >= lastRow;) {
+                        for (int r = firstRow; --r >= lastRow; ) {
                             ((DenseDoubleMatrix1D) viewRow(r)).dct(scale);
                         }
                     }
@@ -1280,7 +1255,6 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Computes the 2D discrete Hartley transform (DHT) of this matrix.
-     * 
      */
     public void dht2() {
         DoubleMatrix2D transpose = viewDice().copy();
@@ -1297,7 +1271,6 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the discrete Hartley transform (DHT) of each column of this
      * matrix.
-     * 
      */
     public void dhtColumns() {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1315,7 +1288,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             ((DenseDoubleMatrix1D) viewColumn(c)).dht();
                         }
                     }
@@ -1324,7 +1297,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN_FFT();
         } else {
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 ((DenseDoubleMatrix1D) viewColumn(c)).dht();
             }
         }
@@ -1333,7 +1306,6 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Computes the discrete Hartley transform (DHT) of each row of this matrix.
-     * 
      */
     public void dhtRows() {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1351,7 +1323,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int r = firstRow; --r >= lastRow;) {
+                        for (int r = firstRow; --r >= lastRow; ) {
                             ((DenseDoubleMatrix1D) viewRow(r)).dht();
                         }
                     }
@@ -1369,10 +1341,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Computes the 2D discrete sine transform (DST-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dst2(boolean scale) {
         DoubleMatrix2D transpose = viewDice().copy();
@@ -1389,10 +1359,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the discrete sine transform (DST-II) of each column of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dstColumns(final boolean scale) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1408,7 +1376,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             ((DenseDoubleMatrix1D) viewColumn(c)).dst(scale);
                         }
                     }
@@ -1417,7 +1385,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN_FFT();
         } else {
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 ((DenseDoubleMatrix1D) viewColumn(c)).dst(scale);
             }
         }
@@ -1425,10 +1393,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Computes the discrete sine transform (DST-II) of each row of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dstRows(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1446,7 +1412,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int r = firstRow; --r >= lastRow;) {
+                        for (int r = firstRow; --r >= lastRow; ) {
                             ((DenseDoubleMatrix1D) viewRow(r)).dst(scale);
                         }
                     }
@@ -1469,34 +1435,32 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the 2D discrete Fourier transform (DFT) of this matrix. The
      * physical layout of the output data is as follows:
-     * 
+     *
      * <pre>
-     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2], 
-     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2], 
-     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2, 
-     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2], 
-     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2], 
-     *       0&lt;k2&lt;columns/2, 
-     * this[k1][0] = Re[k1][0] = Re[rows-k1][0], 
-     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0], 
-     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2], 
-     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2], 
-     *       0&lt;k1&lt;rows/2, 
-     * this[0][0] = Re[0][0], 
-     * this[0][1] = Re[0][columns/2], 
-     * this[rows/2][0] = Re[rows/2][0], 
+     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2],
+     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2],
+     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2,
+     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2],
+     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2],
+     *       0&lt;k2&lt;columns/2,
+     * this[k1][0] = Re[k1][0] = Re[rows-k1][0],
+     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0],
+     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2],
+     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2],
+     *       0&lt;k1&lt;rows/2,
+     * this[0][0] = Re[0][0],
+     * this[0][1] = Re[0][columns/2],
+     * this[rows/2][0] = Re[rows/2][0],
      * this[rows/2][1] = Re[rows/2][columns/2]
      * </pre>
-     * 
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * forward transform, use <code>getFft2</code>. To get back the original
      * data, use <code>ifft2</code>.
-     * 
-     * @throws IllegalArgumentException
-     *             if the row size or the column size of this matrix is not a
-     *             power of 2 number.
-     * 
+     *
+     * @throws IllegalArgumentException if the row size or the column size of this matrix is not a
+     *                                  power of 2 number.
      */
     public void fft2() {
         DoubleMatrix2D transpose = viewDice().copy();
@@ -1523,8 +1487,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 double value = elements[i];
                                 if (value != 0) {
                                     elements[i] = function.apply(r, c, value);
@@ -1539,8 +1503,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     double value = elements[i];
                     if (value != 0) {
                         elements[i] = function.apply(r, c, value);
@@ -1558,7 +1522,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
      * are addressed internally in row major. This method creates a new object
      * (not a view), so changes in the returned matrix are NOT reflected in this
      * matrix.
-     * 
+     *
      * @return this matrix with elements addressed internally in row major
      */
     public DenseDoubleMatrix2D getRowMajor() {
@@ -1581,8 +1545,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                         int idxR = zeroR + (rows - 1) * rowStrideR + (firstColumn - 1) * columnStrideR;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, j = idxR, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, j = idxR, r = rows; --r >= 0; ) {
                                 elementsR[j] = elements[i];
                                 i -= rowStride;
                                 j -= rowStrideR;
@@ -1597,8 +1561,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             int idxR = zeroR + (rows - 1) * rowStrideR + (columns - 1) * columnStrideR;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, j = idxR, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, j = idxR, r = rows; --r >= 0; ) {
                     elementsR[j] = elements[i];
                     i -= rowStride;
                     j -= rowStrideR;
@@ -1613,9 +1577,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the 2D discrete Fourier transform
      * (DFT) of this matrix.
-     * 
+     *
      * @return the 2D discrete Fourier transform (DFT) of this matrix.
-     * 
      */
     public DenseDComplexMatrix2D getFft2() {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1642,8 +1605,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                         int idxOther = zeroC + (rows - 1) * rowStrideC + (firstColumn - 1) * columnStrideC;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                 elementsC[j] = elements[i];
                                 i -= rowStride;
                                 j -= rowStrideC;
@@ -1658,8 +1621,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             int idxOther = zeroC + (rows - 1) * rowStrideC + (columns - 1) * columnStrideC;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                     elementsC[j] = elements[i];
                     i -= rowStride;
                     j -= rowStrideC;
@@ -1676,9 +1639,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the discrete Fourier transform (DFT)
      * of each column of this matrix.
-     * 
+     *
      * @return the discrete Fourier transform (DFT) of each column of this
-     *         matrix.
+     * matrix.
      */
     public DenseDComplexMatrix2D getFftColumns() {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1697,7 +1660,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             C.viewColumn(c).assign(((DenseDoubleMatrix1D) viewColumn(c)).getFft());
                         }
                     }
@@ -1706,7 +1669,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN_FFT();
         } else {
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 C.viewColumn(c).assign(((DenseDoubleMatrix1D) viewColumn(c)).getFft());
             }
         }
@@ -1717,7 +1680,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the discrete Fourier transform (DFT)
      * of each row of this matrix.
-     * 
+     *
      * @return the discrete Fourier transform (DFT) of each row of this matrix.
      */
     public DenseDComplexMatrix2D getFftRows() {
@@ -1737,7 +1700,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int r = firstRow; --r >= lastRow;) {
+                        for (int r = firstRow; --r >= lastRow; ) {
                             C.viewRow(r).assign(((DenseDoubleMatrix1D) viewRow(r)).getFft());
                         }
                     }
@@ -1746,7 +1709,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN_FFT();
         } else {
-            for (int r = rows; --r >= 0;) {
+            for (int r = rows; --r >= 0; ) {
                 C.viewRow(r).assign(((DenseDoubleMatrix1D) viewRow(r)).getFft());
             }
         }
@@ -1757,9 +1720,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the 2D inverse of the discrete
      * Fourier transform (IDFT) of this matrix.
-     * 
+     *
      * @return the 2D inverse of the discrete Fourier transform (IDFT) of this
-     *         matrix.
+     * matrix.
      */
     public DComplexMatrix2D getIfft2(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1786,8 +1749,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                         int idxOther = zeroC + (rows - 1) * rowStrideC + (firstColumn - 1) * columnStrideC;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                 elementsC[j] = elements[i];
                                 i -= rowStride;
                                 j -= rowStrideC;
@@ -1802,8 +1765,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             int idxOther = zeroC + (rows - 1) * rowStrideC + (columns - 1) * columnStrideC;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                     elementsC[j] = elements[i];
                     i -= rowStride;
                     j -= rowStrideC;
@@ -1820,9 +1783,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the inverse of the discrete Fourier
      * transform (IDFT) of each column of this matrix.
-     * 
+     *
      * @return the inverse of the discrete Fourier transform (IDFT) of each
-     *         column of this matrix.
+     * column of this matrix.
      */
     public DComplexMatrix2D getIfftColumns(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1841,7 +1804,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             C.viewColumn(c).assign(((DenseDoubleMatrix1D) viewColumn(c)).getIfft(scale));
                         }
                     }
@@ -1850,7 +1813,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN_FFT();
         } else {
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 C.viewColumn(c).assign(((DenseDoubleMatrix1D) viewColumn(c)).getIfft(scale));
             }
         }
@@ -1861,9 +1824,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the inverse of the discrete Fourier
      * transform (IDFT) of each row of this matrix.
-     * 
+     *
      * @return the inverse of the discrete Fourier transform (IDFT) of each row
-     *         of this matrix.
+     * of this matrix.
      */
     public DComplexMatrix2D getIfftRows(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1881,7 +1844,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 final int lastRow = (j == (nthreads - 1)) ? 0 : firstRow - k;
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
-                        for (int r = firstRow; --r >= lastRow;) {
+                        for (int r = firstRow; --r >= lastRow; ) {
                             C.viewRow(r).assign(((DenseDoubleMatrix1D) viewRow(r)).getIfft(scale));
                         }
                     }
@@ -1890,7 +1853,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN_FFT();
         } else {
-            for (int r = rows; --r >= 0;) {
+            for (int r = rows; --r >= 0; ) {
                 C.viewRow(r).assign(((DenseDoubleMatrix1D) viewRow(r)).getIfft(scale));
             }
         }
@@ -1899,7 +1862,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     }
 
     public void getNegativeValues(final IntArrayList rowList, final IntArrayList columnList,
-            final DoubleArrayList valueList) {
+                                  final DoubleArrayList valueList) {
         rowList.clear();
         columnList.clear();
         valueList.clear();
@@ -1938,7 +1901,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     }
 
     public void getPositiveValues(final IntArrayList rowList, final IntArrayList columnList,
-            final DoubleArrayList valueList) {
+                                  final DoubleArrayList valueList) {
         rowList.clear();
         columnList.clear();
         valueList.clear();
@@ -1964,10 +1927,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete cosine transform (DCT-III) of
      * this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idct2(boolean scale) {
         DoubleMatrix2D transpose = viewDice().copy();
@@ -1984,10 +1945,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete cosine transform (DCT-III) of each
      * column of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idctColumns(final boolean scale) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -2003,7 +1962,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             ((DenseDoubleMatrix1D) viewColumn(c)).idct(scale);
                         }
                     }
@@ -2012,7 +1971,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN_FFT();
         } else {
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 ((DenseDoubleMatrix1D) viewColumn(c)).idct(scale);
             }
         }
@@ -2021,10 +1980,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete cosine transform (DCT-III) of each
      * row of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idctRows(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -2042,7 +1999,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int r = firstRow; --r >= lastRow;) {
+                        for (int r = firstRow; --r >= lastRow; ) {
                             ((DenseDoubleMatrix1D) viewRow(r)).idct(scale);
                         }
                     }
@@ -2061,10 +2018,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete Hartley transform (IDHT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idht2(boolean scale) {
         DoubleMatrix2D transpose = viewDice().copy();
@@ -2081,10 +2036,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete Hartley transform (IDHT) of each
      * column of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idhtColumns(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -2102,7 +2055,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             ((DenseDoubleMatrix1D) viewColumn(c)).idht(scale);
                         }
                     }
@@ -2111,7 +2064,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN_FFT();
         } else {
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 ((DenseDoubleMatrix1D) viewColumn(c)).idht(scale);
             }
         }
@@ -2121,10 +2074,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete Hartley transform (IDHT) of each row
      * of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idhtRows(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -2142,7 +2093,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int r = firstRow; --r >= lastRow;) {
+                        for (int r = firstRow; --r >= lastRow; ) {
                             ((DenseDoubleMatrix1D) viewRow(r)).idht(scale);
                         }
                     }
@@ -2161,10 +2112,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete sine transform (DST-III) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idst2(boolean scale) {
         DoubleMatrix2D transpose = viewDice().copy();
@@ -2181,10 +2130,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete sine transform (DST-III) of each
      * column of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idstColumns(final boolean scale) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -2200,7 +2147,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             ((DenseDoubleMatrix1D) viewColumn(c)).idst(scale);
                         }
                     }
@@ -2209,7 +2156,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN_FFT();
         } else {
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 ((DenseDoubleMatrix1D) viewColumn(c)).idst(scale);
             }
         }
@@ -2218,10 +2165,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete sine transform (DST-III) of each row
      * of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idstRows(final boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -2239,7 +2184,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int r = firstRow; --r >= lastRow;) {
+                        for (int r = firstRow; --r >= lastRow; ) {
                             ((DenseDoubleMatrix1D) viewRow(r)).idst(scale);
                         }
                     }
@@ -2258,36 +2203,32 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete Fourier transform (IDFT) of this
      * matrix. The physical layout of the input data has to be as follows:
-     * 
+     *
      * <pre>
-     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2], 
-     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2], 
-     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2, 
-     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2], 
-     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2], 
-     *       0&lt;k2&lt;columns/2, 
-     * this[k1][0] = Re[k1][0] = Re[rows-k1][0], 
-     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0], 
-     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2], 
-     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2], 
-     *       0&lt;k1&lt;rows/2, 
-     * this[0][0] = Re[0][0], 
-     * this[0][1] = Re[0][columns/2], 
-     * this[rows/2][0] = Re[rows/2][0], 
+     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2],
+     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2],
+     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2,
+     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2],
+     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2],
+     *       0&lt;k2&lt;columns/2,
+     * this[k1][0] = Re[k1][0] = Re[rows-k1][0],
+     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0],
+     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2],
+     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2],
+     *       0&lt;k1&lt;rows/2,
+     * this[0][0] = Re[0][0],
+     * this[0][1] = Re[0][columns/2],
+     * this[rows/2][0] = Re[rows/2][0],
      * this[rows/2][1] = Re[rows/2][columns/2]
      * </pre>
-     * 
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * inverse transform, use <code>getIfft2</code>.
-     * 
-     * @throws IllegalArgumentException
-     *             if the row size or the column size of this matrix is not a
-     *             power of 2 number.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
+     * @throws IllegalArgumentException if the row size or the column size of this matrix is not a
+     *                                  power of 2 number.
      */
     public void ifft2(boolean scale) {
         DoubleMatrix2D transpose = viewDice().copy();
@@ -2302,7 +2243,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     }
 
     public long index(int row, int column) {
-        return rowZero + row * rowStride + columnZero + column * columnStride;
+        return rowZero + (long) row * rowStride + columnZero + (long) column * columnStride;
     }
 
     public DoubleMatrix2D like(int rows, int columns) {
@@ -2334,9 +2275,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                         int columnLocation = firstColumn - 1;
                         double elem;
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 elem = elements[r * rowStride + cidx];
                                 if (maxValue < elem) {
                                     maxValue = elem;
@@ -2346,7 +2287,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                             }
                             d = 0;
                         }
-                        return new double[] { maxValue, rowLocation, columnLocation };
+                        return new double[]{maxValue, rowLocation, columnLocation};
                     }
                 });
             }
@@ -2375,9 +2316,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             columnLocation = columns - 1;
             double elem;
             int d = 1;
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     elem = elements[r * rowStride + cidx];
                     if (maxValue < elem) {
                         maxValue = elem;
@@ -2388,7 +2329,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 d = 0;
             }
         }
-        return new double[] { maxValue, rowLocation, columnLocation };
+        return new double[]{maxValue, rowLocation, columnLocation};
     }
 
     public double[] getMinLocation() {
@@ -2412,9 +2353,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                         int columnLocation = firstColumn - 1;
                         double elem;
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 elem = elements[r * rowStride + cidx];
                                 if (minValue > elem) {
                                     minValue = elem;
@@ -2424,7 +2365,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                             }
                             d = 0;
                         }
-                        return new double[] { minValue, rowLocation, columnLocation };
+                        return new double[]{minValue, rowLocation, columnLocation};
                     }
                 });
             }
@@ -2453,9 +2394,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             columnLocation = columns - 1;
             double elem;
             int d = 1;
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     elem = elements[r * rowStride + cidx];
                     if (minValue > elem) {
                         minValue = elem;
@@ -2466,7 +2407,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 d = 0;
             }
         }
-        return new double[] { minValue, rowLocation, columnLocation };
+        return new double[]{minValue, rowLocation, columnLocation};
     }
 
     public void setQuick(int row, int column, double value) {
@@ -2487,8 +2428,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 values[r][c] = elements[i];
                                 i -= rowStride;
                             }
@@ -2500,8 +2441,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     values[r][c] = elements[i];
                     i -= rowStride;
                 }
@@ -2514,7 +2455,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     public DoubleMatrix1D vectorize() {
         final int size = (int) size();
         DoubleMatrix1D v = new DenseDoubleMatrix1D(size);
-        if (isNoView == true) {
+        if (isNoView) {
             System.arraycopy(elements, 0, v.elements(), 0, size);
         } else {
             final int zero = (int) index(0, 0);
@@ -2535,8 +2476,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                         public void run() {
                             int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                             int idxOther = zeroOther + (firstIdxOther - 1) * strideOther;
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, r = rows; --r >= 0; ) {
                                     elementsOther[idxOther] = elements[i];
                                     i -= rowStride;
                                     idxOther -= strideOther;
@@ -2550,8 +2491,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             } else {
                 int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
                 int idxOther = zeroOther + size - 1;
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, r = rows; --r >= 0; ) {
                         elementsOther[idxOther] = elements[i];
                         i -= rowStride;
                         idxOther--;
@@ -2564,17 +2505,17 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     }
 
     public DoubleMatrix1D zMult(final DoubleMatrix1D y, DoubleMatrix1D z, final double alpha, final double beta,
-            final boolean transposeA) {
+                                final boolean transposeA) {
         if (z == null) {
             z = new DenseDoubleMatrix1D(transposeA ? columns : rows);
         }
 
         if ((transposeA ? rows : columns) != y.size() || (transposeA ? columns : rows) > z.size())
             throw new IllegalArgumentException("Incompatible args: " + toStringShort() + ", " + y.toStringShort()
-                    + ", " + z.toStringShort());
+                + ", " + z.toStringShort());
 
         if (!(y instanceof DenseDoubleMatrix1D) || !(z instanceof DenseDoubleMatrix1D) || this.isView() || y.isView()
-                || z.isView())
+            || z.isView())
             return super.zMult(y, z, alpha, beta, transposeA);
 
         double[] yElements = (double[]) y.elements();
@@ -2582,12 +2523,12 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         Transpose transA = transposeA ? Transpose.Transpose : Transpose.NoTranspose;
 
         BLAS.getInstance().dgemv(transA.netlib(), rows, columns, alpha, elements, Math.max(rows, 1), yElements, 1,
-                beta, zElements, 1);
+            beta, zElements, 1);
         return z;
     }
 
     public DoubleMatrix2D zMult(final DoubleMatrix2D B, DoubleMatrix2D C, final double alpha, final double beta,
-            final boolean transposeA, final boolean transposeB) {
+                                final boolean transposeA, final boolean transposeB) {
         final int rowsA = transposeA ? columns : rows;
         final int columnsA = transposeA ? rows : columns;
         final int rowsB = transposeB ? B.columns() : B.rows();
@@ -2597,7 +2538,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
 
         if (columnsA != rowsB) {
             throw new IllegalArgumentException("Matrix2D inner dimensions must agree:" + this.toStringShort() + ", "
-                    + B.toStringShort());
+                + B.toStringShort());
         }
 
         if (C == null) {
@@ -2605,14 +2546,14 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         } else {
             if (rowsA != C.rows() || columnsB != C.columns()) {
                 throw new IllegalArgumentException("Incompatibe result matrix: " + this.toStringShort() + ", "
-                        + B.toStringShort() + ", " + C.toStringShort());
+                    + B.toStringShort() + ", " + C.toStringShort());
             }
         }
         if (this == C || B == C)
             throw new IllegalArgumentException("Matrices must not be identical");
 
         if (!(B instanceof DenseColumnDoubleMatrix2D) || !(C instanceof DenseColumnDoubleMatrix2D) || this.isView()
-                || B.isView() || C.isView())
+            || B.isView() || C.isView())
             return super.zMult(B, C, alpha, beta, transposeA, transposeB);
 
         Transpose transA = transposeA ? Transpose.Transpose : Transpose.NoTranspose;
@@ -2626,7 +2567,7 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
         int ldc = Math.max(1, rowsA);
 
         BLAS.getInstance().dgemm(transA.netlib(), transB.netlib(), rowsA, columnsB, columnsA, alpha, elementsA, lda,
-                elementsB, ldb, beta, elementsC, ldc);
+            elementsB, ldb, beta, elementsC, ldc);
 
         return C;
     }
@@ -2649,8 +2590,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
                     public Double call() throws Exception {
                         double sum = 0;
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 sum += elements[i];
                                 i -= rowStride;
                             }
@@ -2671,8 +2612,8 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
             }
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     sum += elements[i];
                     i -= rowStride;
                 }
@@ -2683,11 +2624,9 @@ public class DenseColumnDoubleMatrix2D extends DoubleMatrix2D {
     }
 
     protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
-        if (other instanceof SelectedDenseColumnDoubleMatrix2D) {
-            SelectedDenseColumnDoubleMatrix2D otherMatrix = (SelectedDenseColumnDoubleMatrix2D) other;
+        if (other instanceof SelectedDenseColumnDoubleMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseColumnDoubleMatrix2D) {
-            DenseColumnDoubleMatrix2D otherMatrix = (DenseColumnDoubleMatrix2D) other;
+        } else if (other instanceof DenseColumnDoubleMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;

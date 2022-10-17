@@ -28,9 +28,8 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * attempt to access an element at a coordinate
  * <tt>index&lt;0 || index&gt;=size()</tt> will throw an
  * <tt>IndexOutOfBoundsException</tt>.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
@@ -46,18 +45,16 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Applies a function to each cell and aggregates the results.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell value.
-     * @param f
-     *            a function transforming the current cell value.
+     *
+     * @param aggr an aggregation function taking as first argument the current
+     *             aggregation and as second argument the transformed current
+     *             cell value.
+     * @param f    a function transforming the current cell value.
      * @return the aggregated measure.
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public double[] aggregate(final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
-            final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
+                              final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
         double[] b = new double[2];
         int size = (int) size();
         if (size == 0) {
@@ -96,24 +93,19 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
     /**
      * Applies a function to each corresponding cell of two matrices and
      * aggregates the results.
-     * 
-     * @param other
-     *            the secondary matrix to operate on.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell values.
-     * @param f
-     *            a function transforming the current cell values.
+     *
+     * @param other the secondary matrix to operate on.
+     * @param aggr  an aggregation function taking as first argument the current
+     *              aggregation and as second argument the transformed current
+     *              cell values.
+     * @param f     a function transforming the current cell values.
      * @return the aggregated measure.
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public double[] aggregate(final DComplexMatrix1D other,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
+                              final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
+                              final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
         checkSize(other);
         int size = (int) size();
         if (size == 0) {
@@ -152,9 +144,8 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Assigns the result of a function to each cell;
-     * 
-     * @param f
-     *            a function object taking as argument the current cell's value.
+     *
+     * @param f a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
@@ -187,17 +178,14 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Assigns the result of a function to all cells that satisfy a condition.
-     * 
-     * @param cond
-     *            a condition.
-     * 
-     * @param f
-     *            a function object.
+     *
+     * @param cond a condition.
+     * @param f    a function object.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix1D assign(final cern.mateba.function.tdcomplex.DComplexProcedure cond,
-            final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
+                                   final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size >= ConcurrencyUtils.getThreadsBeginN_1D())) {
             nthreads = Math.min(nthreads, size);
@@ -212,7 +200,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
                     public void run() {
                         for (int i = firstIdx; i < lastIdx; i++) {
                             elem = getQuick(i);
-                            if (cond.apply(elem) == true) {
+                            if (cond.apply(elem)) {
                                 setQuick(i, f.apply(elem));
                             }
                         }
@@ -224,7 +212,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
             double[] elem;
             for (int i = 0; i < size; i++) {
                 elem = getQuick(i);
-                if (cond.apply(elem) == true) {
+                if (cond.apply(elem)) {
                     setQuick(i, f.apply(elem));
                 }
             }
@@ -234,14 +222,10 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Assigns a value to all cells that satisfy a condition.
-     * 
-     * @param cond
-     *            a condition.
-     * 
-     * @param value
-     *            a value (re=value[0], im=value[1]).
+     *
+     * @param cond  a condition.
+     * @param value a value (re=value[0], im=value[1]).
      * @return <tt>this</tt> (for convenience only).
-     * 
      */
     public DComplexMatrix1D assign(final cern.mateba.function.tdcomplex.DComplexProcedure cond, final double[] value) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -258,7 +242,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
                     public void run() {
                         for (int i = firstIdx; i < lastIdx; i++) {
                             elem = getQuick(i);
-                            if (cond.apply(elem) == true) {
+                            if (cond.apply(elem)) {
                                 setQuick(i, value);
                             }
                         }
@@ -270,7 +254,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
             double[] elem;
             for (int i = 0; i < size; i++) {
                 elem = getQuick(i);
-                if (cond.apply(elem) == true) {
+                if (cond.apply(elem)) {
                     setQuick(i, value);
                 }
             }
@@ -281,9 +265,8 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
     /**
      * Assigns the result of a function to the real part of the receiver. The
      * imaginary part of the receiver is reset to zero.
-     * 
-     * @param f
-     *            a function object taking as argument the current cell's value.
+     *
+     * @param f a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
@@ -320,13 +303,11 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * same cells (as is the case if they are views derived from the same
      * matrix) and intersect in an ambiguous way, then replaces <i>as if</i>
      * using an intermediate auxiliary deep copy of <tt>other</tt>.
-     * 
-     * @param other
-     *            the source matrix to copy from (may be identical to the
-     *            receiver).
+     *
+     * @param other the source matrix to copy from (may be identical to the
+     *              receiver).
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
     public DComplexMatrix1D assign(DComplexMatrix1D other) {
         if (other == this)
@@ -365,20 +346,17 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Assigns the result of a function to each cell;
-     * 
-     * @param y
-     *            the secondary matrix to operate on.
-     * @param f
-     *            a function object taking as first argument the current cell's
-     *            value of <tt>this</tt>, and as second argument the current
-     *            cell's value of <tt>y</tt>,
+     *
+     * @param y the secondary matrix to operate on.
+     * @param f a function object taking as first argument the current cell's
+     *          value of <tt>this</tt>, and as second argument the current
+     *          cell's value of <tt>y</tt>,
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != y.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != y.size()</tt>.
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix1D assign(final DComplexMatrix1D y,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
+                                   final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
         int size = (int) size();
         checkSize(y);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -408,12 +386,9 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Sets all cells to the state specified by <tt>re</tt> and <tt>im</tt>.
-     * 
-     * @param re
-     *            the real part of the value to be filled into the cells.
-     * @param im
-     *            the imaginary part of the value to be filled into the cells.
-     * 
+     *
+     * @param re the real part of the value to be filled into the cells.
+     * @param im the imaginary part of the value to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
      */
     public DComplexMatrix1D assign(final double re, final double im) {
@@ -452,12 +427,10 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>values.length != 2*size()</tt>.
+     * @throws IllegalArgumentException if <tt>values.length != 2*size()</tt>.
      */
     public DComplexMatrix1D assign(final double[] values) {
         int size = (int) size();
@@ -493,12 +466,10 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * Replaces imaginary part of the receiver with the values of another real
      * matrix. The real part remains unchanged. Both matrices must have the same
      * size.
-     * 
-     * @param other
-     *            the source matrix to copy from
+     *
+     * @param other the source matrix to copy from
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
     public DComplexMatrix1D assignImaginary(final DoubleMatrix1D other) {
         checkSize(other);
@@ -535,12 +506,10 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * Replaces real part of the receiver with the values of another real
      * matrix. The imaginary part remains unchanged. Both matrices must have the
      * same size.
-     * 
-     * @param other
-     *            the source matrix to copy from
+     *
+     * @param other the source matrix to copy from
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
     public DComplexMatrix1D assignReal(final DoubleMatrix1D other) {
         checkSize(other);
@@ -575,7 +544,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns the number of cells having non-zero values; ignores tolerance.
-     * 
+     *
      * @return the number of cells having non-zero values.
      */
     public int cardinality() {
@@ -633,7 +602,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * <b>Note that the returned matrix is an independent deep copy.</b> The
      * returned matrix is not backed by this matrix, so changes in the returned
      * matrix are not reflected in this matrix, and vice-versa.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
     public DComplexMatrix1D copy() {
@@ -644,12 +613,10 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns whether all cells are equal to the given value.
-     * 
-     * @param value
-     *            the value to test against (re=value[0], im=value[1]).
-     * 
+     *
+     * @param value the value to test against (re=value[0], im=value[1]).
      * @return <tt>true</tt> if all cells are equal to the given value,
-     *         <tt>false</tt> otherwise.
+     * <tt>false</tt> otherwise.
      */
     public boolean equals(double[] value) {
         return cern.mateba.matrix.tdcomplex.algo.DComplexProperty.DEFAULT.equals(this, value);
@@ -661,11 +628,10 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * and is at least a <code>ComplexMatrix1D</code> object that has the same
      * sizes as the receiver and has exactly the same values at the same
      * indexes.
-     * 
-     * @param obj
-     *            the object to compare with.
+     *
+     * @param obj the object to compare with.
      * @return <code>true</code> if the objects are the same; <code>false</code>
-     *         otherwise.
+     * otherwise.
      */
 
     public boolean equals(Object obj) {
@@ -681,12 +647,10 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>index</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
+     *
+     * @param index the index of the cell.
      * @return the value of the specified cell.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>index&lt;0 || index&gt;=size()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>index&lt;0 || index&gt;=size()</tt>.
      */
     public double[] get(int index) {
         int size = (int) size();
@@ -697,14 +661,14 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns the elements of this matrix.
-     * 
+     *
      * @return the elements
      */
     public abstract Object elements();
 
     /**
      * Returns the imaginary part of this matrix
-     * 
+     *
      * @return the imaginary part
      */
     public abstract DoubleMatrix1D getImaginaryPart();
@@ -720,11 +684,9 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * are free to us any other order, even an order that may change over time
      * as cell values are changed. (Of course, result lists indexes are
      * guaranteed to correspond to the same cell).
-     * 
-     * @param indexList
-     *            the list to be filled with indexes, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param indexList the list to be filled with indexes, can have any size.
+     * @param valueList the list to be filled with values, can have any size.
      */
     public void getNonZeros(final IntArrayList indexList, final ArrayList<double[]> valueList) {
         indexList.clear();
@@ -742,22 +704,21 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>index</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
+     *
+     * @param index the index of the cell.
      * @return the value of the specified cell.
      */
     public abstract double[] getQuick(int index);
 
     /**
      * Returns the real part of this matrix
-     * 
+     *
      * @return the real part
      */
     public abstract DoubleMatrix1D getRealPart();
@@ -768,7 +729,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * instance of type <tt>DenseComplexMatrix1D</tt> the new matrix must also
      * be of type <tt>DenseComplexMatrix1D</tt>. In general, the new matrix
      * should have internal parametrization as similar as possible.
-     * 
+     *
      * @return a new empty matrix of the same dynamic type.
      */
     public DComplexMatrix1D like() {
@@ -782,9 +743,8 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * is an instance of type <tt>DenseDComplexMatrix1D</tt> the new matrix must
      * also be of type <tt>DenseDComplexMatrix1D</tt>. In general, the new
      * matrix should have internal parametrization as similar as possible.
-     * 
-     * @param size
-     *            the number of cell the matrix shall have.
+     *
+     * @param size the number of cell the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
     public abstract DComplexMatrix1D like(int size);
@@ -794,11 +754,9 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * type</i>, entirely independent of the receiver. For example, if the
      * receiver is an instance of type <tt>DenseDComplexMatrix1D</tt> the new
      * matrix must be of type <tt>DenseDComplexMatrix2D</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
     public abstract DComplexMatrix2D like2D(int rows, int columns);
@@ -806,11 +764,9 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
     /**
      * Returns new DoubleMatrix2D of size rows x columns whose elements are
      * taken column-wise from this matrix.
-     * 
-     * @param rows
-     *            number of rows
-     * @param columns
-     *            number of columns
+     *
+     * @param rows    number of rows
+     * @param columns number of columns
      * @return new 2D matrix with columns being the elements of this matrix.
      */
     public abstract DComplexMatrix2D reshape(int rows, int columns);
@@ -818,29 +774,22 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
     /**
      * Returns new DoubleMatrix3D of size slices x rows x columns, whose
      * elements are taken column-wise from this matrix.
-     * 
-     * @param rows
-     *            number of rows
-     * @param columns
-     *            number of columns
+     *
+     * @param rows    number of rows
+     * @param columns number of columns
      * @return new 2D matrix with columns being the elements of this matrix.
      */
     public abstract DComplexMatrix3D reshape(int slices, int rows, int columns);
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param re
-     *            the real part of the value to be filled into the specified
-     *            cell.
-     * @param im
-     *            the imaginary part of the value to be filled into the
-     *            specified cell.
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>index&lt;0 || index&gt;=size()</tt>.
+     *
+     * @param index the index of the cell.
+     * @param re    the real part of the value to be filled into the specified
+     *              cell.
+     * @param im    the imaginary part of the value to be filled into the
+     *              specified cell.
+     * @throws IndexOutOfBoundsException if <tt>index&lt;0 || index&gt;=size()</tt>.
      */
     public void set(int index, double re, double im) {
         int size = (int) size();
@@ -851,15 +800,11 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell (re=value[0],
-     *            im=value[1]).
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>index&lt;0 || index&gt;=size()</tt>.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell (re=value[0],
+     *              im=value[1]).
+     * @throws IndexOutOfBoundsException if <tt>index&lt;0 || index&gt;=size()</tt>.
      */
     public void set(int index, double[] value) {
         int size = (int) size();
@@ -870,46 +815,40 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param re
-     *            the real part of the value to be filled into the specified
-     *            cell.
-     * @param im
-     *            the imaginary part of the value to be filled into the
-     *            specified cell.
+     *
+     * @param index the index of the cell.
+     * @param re    the real part of the value to be filled into the specified
+     *              cell.
+     * @param im    the imaginary part of the value to be filled into the
+     *              specified cell.
      */
     public abstract void setQuick(int index, double re, double im);
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell (re=value[0],
-     *            im=value[1]).
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell (re=value[0],
+     *              im=value[1]).
      */
     public abstract void setQuick(int index, double[] value);
 
     /**
      * Swaps each element <tt>this[i]</tt> with <tt>other[i]</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
     public void swap(final DComplexMatrix1D other) {
         int size = (int) size();
@@ -950,11 +889,11 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * reflected in the matrix, and vice-versa. The returned array
      * <tt>values</tt> has the form <br>
      * <tt>for (int i = 0; i < size; i++) {
-     * 		  tmp = getQuick(i);
-     * 		  values[2 * i] = tmp[0]; //real part
-     * 		  values[2 * i + 1] = tmp[1]; //imaginary part
-     * 	   }</tt>
-     * 
+     * tmp = getQuick(i);
+     * values[2 * i] = tmp[0]; //real part
+     * values[2 * i + 1] = tmp[1]; //imaginary part
+     * }</tt>
+     *
      * @return an array filled with the values of the cells.
      */
     public double[] toArray() {
@@ -970,13 +909,12 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * the matrix, and vice-versa. After this call returns the array
      * <tt>values</tt> has the form <br>
      * <tt>for (int i = 0; i < size; i++) {
-     * 		  tmp = getQuick(i);
-     * 		  values[2 * i] = tmp[0]; //real part
-     * 		  values[2 * i + 1] = tmp[1]; //imaginary part
-     * 	   }</tt>
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>values.length < 2*size()</tt>.
+     * tmp = getQuick(i);
+     * values[2 * i] = tmp[0]; //real part
+     * values[2 * i + 1] = tmp[1]; //imaginary part
+     * }</tt>
+     *
+     * @throws IllegalArgumentException if <tt>values.length < 2*size()</tt>.
      */
     public void toArray(final double[] values) {
         int size = (int) size();
@@ -1014,7 +952,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns a string representation using default formatting ("%.4f").
-     * 
+     *
      * @return a string representation of the matrix.
      */
 
@@ -1024,9 +962,8 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns a string representation using given <tt>format</tt>
-     * 
-     * @param format
-     *            a format for java.lang.String.format().
+     *
+     * @param format a format for java.lang.String.format().
      * @return a string representation of the matrix.
      */
     public String toString(String format) {
@@ -1057,7 +994,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * <tt>size()-1</tt> is now index <tt>0</tt>. The returned view is backed by
      * this matrix, so changes in the returned view are reflected in this
      * matrix, and vice-versa.
-     * 
+     *
      * @return a new flip view.
      */
     public DComplexMatrix1D viewFlip() {
@@ -1067,7 +1004,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
     /**
      * Constructs and returns a new <i>sub-range view</i> that is a
      * <tt>width</tt> sub matrix starting at <tt>index</tt>.
-     * 
+     * <p>
      * Operations on the returned view can only be applied to the restricted
      * range. Any attempt to access coordinates not contained in the view will
      * throw an <tt>IndexOutOfBoundsException</tt>.
@@ -1082,15 +1019,11 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * <tt>0 .. view.size()-1==width-1</tt>. As usual, any attempt to access a
      * cell at other coordinates will throw an
      * <tt>IndexOutOfBoundsException</tt>.
-     * 
-     * @param index
-     *            The index of the first cell.
-     * @param width
-     *            The width of the range.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>index<0 || width<0 || index+width>size()</tt>.
+     *
+     * @param index The index of the first cell.
+     * @param width The width of the range.
      * @return the new view.
-     * 
+     * @throws IndexOutOfBoundsException if <tt>index<0 || width<0 || index+width>size()</tt>.
      */
     public DComplexMatrix1D viewPart(int index, int width) {
         return (DComplexMatrix1D) (view().vPart(index, width));
@@ -1101,12 +1034,11 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * holding the cells matching the given condition. Applies the condition to
      * each cell and takes only those cells where
      * <tt>condition.apply(get(i))</tt> yields <tt>true</tt>.
-     * 
+     * <p>
      * The returned view is backed by this matrix, so changes in the returned
      * view are reflected in this matrix, and vice-versa.
-     * 
-     * @param condition
-     *            The condition to be matched.
+     *
+     * @param condition The condition to be matched.
      * @return the new view.
      */
     public DComplexMatrix1D viewSelection(cern.mateba.function.tdcomplex.DComplexProcedure condition) {
@@ -1126,27 +1058,25 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * <tt>view.size() == indexes.length</tt> and
      * <tt>view.get(i) == this.get(indexes[i])</tt>. Indexes can occur multiple
      * times and can be in arbitrary order.
-     * 
+     * <p>
      * Note that modifying <tt>indexes</tt> after this call has returned has no
      * effect on the view. The returned view is backed by this matrix, so
      * changes in the returned view are reflected in this matrix, and
      * vice-versa.
-     * 
-     * @param indexes
-     *            The indexes of the cells that shall be visible in the new
-     *            view. To indicate that <i>all</i> cells shall be visible,
-     *            simply set this parameter to <tt>null</tt>.
+     *
+     * @param indexes The indexes of the cells that shall be visible in the new
+     *                view. To indicate that <i>all</i> cells shall be visible,
+     *                simply set this parameter to <tt>null</tt>.
      * @return the new view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>!(0 <= indexes[i] < size())</tt> for any
-     *             <tt>i=0..indexes.length()-1</tt>.
+     * @throws IndexOutOfBoundsException if <tt>!(0 <= indexes[i] < size())</tt> for any
+     *                                   <tt>i=0..indexes.length()-1</tt>.
      */
     public DComplexMatrix1D viewSelection(int[] indexes) {
         // check for "all"
         int size = (int) size();
         if (indexes == null) {
             indexes = new int[size];
-            for (int i = size - 1; --i >= 0;)
+            for (int i = size - 1; --i >= 0; )
                 indexes[i] = i;
         }
 
@@ -1163,13 +1093,10 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * consisting of every i-th cell. More specifically, the view has size
      * <tt>this.size()/stride</tt> holding cells <tt>this.get(i*stride)</tt> for
      * all <tt>i = 0..size()/stride - 1</tt>.
-     * 
-     * @param stride
-     *            the step factor.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>stride <= 0</tt>.
+     *
+     * @param stride the step factor.
      * @return the new view.
-     * 
+     * @throws IndexOutOfBoundsException if <tt>stride <= 0</tt>.
      */
     public DComplexMatrix1D viewStrides(int stride) {
         return (DComplexMatrix1D) (view().vStrides(stride));
@@ -1178,9 +1105,8 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
     /**
      * Returns the dot product of two vectors x and y. Operates on cells at
      * indexes <tt>0 .. Math.min(size(),y.size())</tt>.
-     * 
-     * @param y
-     *            the second vector.
+     *
+     * @param y the second vector.
      * @return the sum of products.
      */
     public double[] zDotProduct(DComplexMatrix1D y) {
@@ -1191,19 +1117,16 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
     /**
      * Returns the dot product of two vectors x and y. Operates on cells at
      * indexes <tt>from .. Min(size(),y.size(),from+length)-1</tt>.
-     * 
-     * @param y
-     *            the second vector.
-     * @param from
-     *            the first index to be considered.
-     * @param length
-     *            the number of cells to be considered.
+     *
+     * @param y      the second vector.
+     * @param from   the first index to be considered.
+     * @param length the number of cells to be considered.
      * @return the sum of products; zero if <tt>from<0 || length<0</tt>.
      */
     public double[] zDotProduct(final DComplexMatrix1D y, final int from, int length) {
         int size = (int) size();
         if (from < 0 || length <= 0)
-            return new double[] { 0, 0 };
+            return new double[]{0, 0};
 
         int tail = from + length;
         if (size < tail)
@@ -1265,17 +1188,15 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns the dot product of two vectors x and y.
-     * 
-     * @param y
-     *            the second vector.
-     * @param nonZeroIndexes
-     *            the indexes of cells in <tt>y</tt>having a non-zero value.
+     *
+     * @param y              the second vector.
+     * @param nonZeroIndexes the indexes of cells in <tt>y</tt>having a non-zero value.
      * @return the sum of products.
      */
     public double[] zDotProduct(DComplexMatrix1D y, int from, int length, IntArrayList nonZeroIndexes) {
         int size = (int) size();
         if (from < 0 || length <= 0)
-            return new double[] { 0, 0 };
+            return new double[]{0, 0};
 
         int tail = from + length;
         if (size < tail)
@@ -1284,7 +1205,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
             tail = y.size;
         length = tail - from;
         if (length <= 0)
-            return new double[] { 0, 0 };
+            return new double[]{0, 0};
 
         // setup
         IntArrayList indexesCopy = nonZeroIndexes.clone();
@@ -1314,7 +1235,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns the sum of all cells.
-     * 
+     *
      * @return the sum.
      */
     public double[] zSum() {
@@ -1363,11 +1284,10 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
     /**
      * Returns the number of cells having non-zero values, but at most
      * maxCardinality; ignores tolerance.
-     * 
-     * @param maxCardinality
-     *            maximal cardinality
+     *
+     * @param maxCardinality maximal cardinality
      * @return number of cells having non-zero values, but at most
-     *         maxCardinality.
+     * maxCardinality.
      */
     protected int cardinality(int maxCardinality) {
         int size = (int) size();
@@ -1392,9 +1312,8 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns <tt>true</tt> if both matrices share at least one identical cell.
-     * 
-     * @param other
-     *            matrix
+     *
+     * @param other matrix
      * @return <tt>true</tt> if both matrices share at least one identical cell
      */
     protected boolean haveSharedCells(DComplexMatrix1D other) {
@@ -1407,9 +1326,8 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Always returns false
-     * 
-     * @param other
-     *            matrix
+     *
+     * @param other matrix
      * @return false
      */
     protected boolean haveSharedCellsRaw(DComplexMatrix1D other) {
@@ -1426,7 +1344,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * <p>
      * Use {@link #copy()} to construct an independent deep copy rather than a
      * new view.
-     * 
+     *
      * @return a new view of the receiver.
      */
     protected DComplexMatrix1D view() {
@@ -1435,20 +1353,17 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param offsets
-     *            the offsets of the visible elements.
+     *
+     * @param offsets the offsets of the visible elements.
      * @return a new view.
      */
     protected abstract DComplexMatrix1D viewSelectionLike(int[] offsets);
 
     /**
      * Returns the dot product of two vectors x and y.
-     * 
-     * @param y
-     *            the second vector.
-     * @param nonZeroIndexes
-     *            the indexes of cells in <tt>y</tt>having a non-zero value.
+     *
+     * @param y              the second vector.
+     * @param nonZeroIndexes the indexes of cells in <tt>y</tt>having a non-zero value.
      * @return the sum of products.
      */
     protected double[] zDotProduct(DComplexMatrix1D y, IntArrayList nonZeroIndexes) {

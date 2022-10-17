@@ -121,7 +121,7 @@ public abstract class IntMatrix1DTest extends TestCase {
 
     public void testAssignIntMatrix1D() {
         A.assign(B);
-        assertTrue(A.size() == B.size());
+        assertEquals(A.size(), B.size());
         for (int i = 0; i < (int) A.size(); i++) {
             assertEquals(B.getQuick(i), A.getQuick(i));
         }
@@ -138,11 +138,7 @@ public abstract class IntMatrix1DTest extends TestCase {
     public void testAssignIntProcedureInt() {
         IntProcedure procedure = new IntProcedure() {
             public boolean apply(int element) {
-                if (Math.abs(element) > 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 1;
             }
         };
         IntMatrix1D Acopy = A.copy();
@@ -159,11 +155,7 @@ public abstract class IntMatrix1DTest extends TestCase {
     public void testAssignIntProcedureIntFunction() {
         IntProcedure procedure = new IntProcedure() {
             public boolean apply(int element) {
-                if (Math.abs(element) > 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 1;
             }
         };
         IntMatrix1D Acopy = A.copy();
@@ -209,7 +201,7 @@ public abstract class IntMatrix1DTest extends TestCase {
         A.setQuick((int) A.size() / 2, 1);
         int[] maxAndLoc = A.getMaxLocation();
         assertEquals(7, maxAndLoc[0]);
-        assertEquals((int) A.size() / 3, (int) maxAndLoc[1]);
+        assertEquals((int) A.size() / 3, maxAndLoc[1]);
     }
 
     public void testMinLocation() {
@@ -218,7 +210,7 @@ public abstract class IntMatrix1DTest extends TestCase {
         A.setQuick((int) A.size() / 2, -1);
         int[] minAndLoc = A.getMinLocation();
         assertEquals(-7, minAndLoc[0]);
-        assertEquals((int) A.size() / 3, (int) minAndLoc[1]);
+        assertEquals((int) A.size() / 3, minAndLoc[1]);
     }
 
     public void testGetNegativeValuesIntArrayListIntArrayList() {
@@ -268,7 +260,7 @@ public abstract class IntMatrix1DTest extends TestCase {
 
     public void testToArray() {
         int[] array = A.toArray();
-        assertTrue((int) A.size() == array.length);
+        assertEquals((int) A.size(), array.length);
         for (int i = 0; i < (int) A.size(); i++) {
             assertEquals(array[i], A.getQuick(i));
         }
@@ -349,7 +341,7 @@ public abstract class IntMatrix1DTest extends TestCase {
     }
 
     public void testViewSelectionIntArray() {
-        int[] indexes = new int[] { 5, 11, 22, 37, 101 };
+        int[] indexes = new int[]{5, 11, 22, 37, 101};
         IntMatrix1D b = A.viewSelection(indexes);
         for (int i = 0; i < indexes.length; i++) {
             assertEquals(A.getQuick(indexes[i]), b.getQuick(i));

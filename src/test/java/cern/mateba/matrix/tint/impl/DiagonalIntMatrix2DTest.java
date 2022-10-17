@@ -158,15 +158,15 @@ public class DiagonalIntMatrix2DTest extends IntMatrix2DTest {
             A.setQuick(NROWS / 2, NROWS / 2 + DINDEX, 1);
             int[] maxAndLoc = A.getMaxLocation();
             assertEquals(7, maxAndLoc[0]);
-            assertEquals(NROWS / 3, (int) maxAndLoc[1]);
-            assertEquals(NROWS / 3 + DINDEX, (int) maxAndLoc[2]);
+            assertEquals(NROWS / 3, maxAndLoc[1]);
+            assertEquals(NROWS / 3 + DINDEX, maxAndLoc[2]);
         } else {
             A.setQuick(NROWS / 3 - DINDEX, NROWS / 3, 7);
             A.setQuick(NROWS / 2 - DINDEX, NROWS / 2, 1);
             int[] maxAndLoc = A.getMaxLocation();
             assertEquals(7, maxAndLoc[0]);
-            assertEquals(NROWS / 3 - DINDEX, (int) maxAndLoc[1]);
-            assertEquals(NROWS / 3, (int) maxAndLoc[2]);
+            assertEquals(NROWS / 3 - DINDEX, maxAndLoc[1]);
+            assertEquals(NROWS / 3, maxAndLoc[2]);
         }
     }
 
@@ -177,15 +177,15 @@ public class DiagonalIntMatrix2DTest extends IntMatrix2DTest {
             A.setQuick(NROWS / 2, NROWS / 2 + DINDEX, -1);
             int[] minAndLoc = A.getMinLocation();
             assertEquals(-7, minAndLoc[0]);
-            assertEquals(NROWS / 3, (int) minAndLoc[1]);
-            assertEquals(NROWS / 3 + DINDEX, (int) minAndLoc[2]);
+            assertEquals(NROWS / 3, minAndLoc[1]);
+            assertEquals(NROWS / 3 + DINDEX, minAndLoc[2]);
         } else {
             A.setQuick(NROWS / 3 - DINDEX, NROWS / 3, -7);
             A.setQuick(NROWS / 2 - DINDEX, NROWS / 2, -1);
             int[] minAndLoc = A.getMinLocation();
             assertEquals(-7, minAndLoc[0]);
-            assertEquals(NROWS / 3 - DINDEX, (int) minAndLoc[1]);
-            assertEquals(NROWS / 3, (int) minAndLoc[2]);
+            assertEquals(NROWS / 3 - DINDEX, minAndLoc[1]);
+            assertEquals(NROWS / 3, minAndLoc[2]);
         }
     }
 
@@ -302,9 +302,9 @@ public class DiagonalIntMatrix2DTest extends IntMatrix2DTest {
 
     public void testToArray() {
         int[][] array = A.toArray();
-        assertTrue(NROWS == array.length);
+        assertEquals(NROWS, array.length);
         for (int r = 0; r < NROWS; r++) {
-            assertTrue(NCOLUMNS == array[r].length);
+            assertEquals(NCOLUMNS, array[r].length);
             for (int c = 0; c < NCOLUMNS; c++) {
                 assertEquals(array[r][c], A.getQuick(r, c));
             }
@@ -387,11 +387,7 @@ public class DiagonalIntMatrix2DTest extends IntMatrix2DTest {
             A.setQuick(NROWS / 2, NROWS / 2 + DINDEX, value);
             IntMatrix2D B = A.viewSelection(new IntMatrix1DProcedure() {
                 public boolean apply(IntMatrix1D element) {
-                    if (element.getQuick(NROWS / 4 + DINDEX) == value) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return element.getQuick(NROWS / 4 + DINDEX) == value;
                 }
             });
             assertEquals(1, B.rows());
@@ -402,11 +398,7 @@ public class DiagonalIntMatrix2DTest extends IntMatrix2DTest {
             A.setQuick(NROWS / 2 - DINDEX, NROWS / 2, value);
             IntMatrix2D B = A.viewSelection(new IntMatrix1DProcedure() {
                 public boolean apply(IntMatrix1D element) {
-                    if (element.getQuick(NROWS / 4) == value) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return element.getQuick(NROWS / 4) == value;
                 }
             });
             assertEquals(1, B.rows());
@@ -416,8 +408,8 @@ public class DiagonalIntMatrix2DTest extends IntMatrix2DTest {
     }
 
     public void testViewSelectionIntArrayIntArray() {
-        int[] rowIndexes = new int[] { NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2 };
-        int[] colIndexes = new int[] { NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2, NROWS - 1 };
+        int[] rowIndexes = new int[]{NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2};
+        int[] colIndexes = new int[]{NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2, NROWS - 1};
         IntMatrix2D B = A.viewSelection(rowIndexes, colIndexes);
         assertEquals(rowIndexes.length, B.rows());
         assertEquals(colIndexes.length, B.columns());

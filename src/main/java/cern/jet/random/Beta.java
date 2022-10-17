@@ -47,7 +47,7 @@ import java.io.Serial;
  * Stadlober E., H. Zechner (1993), <A
  * HREF="http://www.cis.tu-graz.ac.at/stat/stadl/random.html"> Generating beta
  * variates via patchwork rejection,</A>, Computing 50, 1-18.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -91,7 +91,7 @@ public class Beta extends AbstractContinousDistribution {
     }
 
     /**
-     * 
+     *
      */
     protected double b00(double a, double b, RandomEngine randomGenerator) {
         double U, V, X, Z;
@@ -112,7 +112,7 @@ public class Beta extends AbstractContinousDistribution {
             p2 = (1.0 - t) / b + p1; // t < X < 1
         }
 
-        for (;;) {
+        for (; ; ) {
             if ((U = randomGenerator.raw() * p2) <= p1) { // X < t
                 Z = Math.exp(Math.log(U / p1) / a);
                 X = t * Z;
@@ -143,7 +143,7 @@ public class Beta extends AbstractContinousDistribution {
     }
 
     /**
-     * 
+     *
      */
     protected double b01(double a, double b, RandomEngine randomGenerator) {
         double U, V, X, Z;
@@ -171,7 +171,7 @@ public class Beta extends AbstractContinousDistribution {
             p2 = fb * (1.0 - t) / b + p1; // t < X < 1
         }
 
-        for (;;) {
+        for (; ; ) {
             if ((U = randomGenerator.raw() * p2) <= p1) { // X < t
                 Z = Math.exp(Math.log(U / p1) / a);
                 X = t * Z;
@@ -202,7 +202,7 @@ public class Beta extends AbstractContinousDistribution {
     }
 
     /**
-     * 
+     *
      */
     protected double b1prs(double p, double q, RandomEngine randomGenerator) {
         double U, V, W, X, Y;
@@ -262,7 +262,7 @@ public class Beta extends AbstractContinousDistribution {
             p4 = f5 * lr + p3; // x5 < X
         }
 
-        for (;;) {
+        for (; ; ) {
             if ((U = randomGenerator.raw() * p4) <= p1) {
                 // immediate accept: x2 < X < m, - f(x2) < W < 0
                 if ((W = U / Dl - f2) <= 0.0)
@@ -459,9 +459,8 @@ public class Beta extends AbstractContinousDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

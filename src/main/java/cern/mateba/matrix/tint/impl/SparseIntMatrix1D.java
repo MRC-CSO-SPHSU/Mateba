@@ -55,10 +55,8 @@ import java.io.Serial;
  * <tt>O(N)</tt> in the worst case. As such this sparse class is expected to
  * have no worse time complexity than its dense counterpart
  * {@link DenseIntMatrix1D}. However, constant factors are considerably larger.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  * @version 1.1, 08/22/2007
  */
@@ -75,9 +73,8 @@ public class SparseIntMatrix1D extends IntMatrix1D {
      * Constructs a matrix with a copy of the given values. The values are
      * copied. So subsequent changes in <tt>values</tt> are not reflected in the
      * matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      */
     public SparseIntMatrix1D(int[] values) {
         this(values.length);
@@ -87,11 +84,9 @@ public class SparseIntMatrix1D extends IntMatrix1D {
     /**
      * Constructs a matrix with a given number of cells. All entries are
      * initially <tt>0</tt>.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size the number of cells the matrix shall have.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public SparseIntMatrix1D(int size) {
         this(size, size / 1000, 0.2, 0.5);
@@ -101,23 +96,17 @@ public class SparseIntMatrix1D extends IntMatrix1D {
      * Constructs a matrix with a given number of parameters. All entries are
      * initially <tt>0</tt>. For details related to memory usage see
      * {@link cern.mateba.map.tlong.OpenLongIntHashMap}.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param initialCapacity
-     *            the initial capacity of the hash map. If not known, set
-     *            <tt>initialCapacity=0</tt> or small.
-     * @param minLoadFactor
-     *            the minimum load factor of the hash map.
-     * @param maxLoadFactor
-     *            the maximum load factor of the hash map.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size            the number of cells the matrix shall have.
+     * @param initialCapacity the initial capacity of the hash map. If not known, set
+     *                        <tt>initialCapacity=0</tt> or small.
+     * @param minLoadFactor   the minimum load factor of the hash map.
+     * @param maxLoadFactor   the maximum load factor of the hash map.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
+     *                                  .
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public SparseIntMatrix1D(int size, int initialCapacity, double minLoadFactor, double maxLoadFactor) {
         setUp(size);
@@ -126,18 +115,13 @@ public class SparseIntMatrix1D extends IntMatrix1D {
 
     /**
      * Constructs a matrix view with a given number of parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param offset
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param offset   the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     protected SparseIntMatrix1D(int size, AbstractLongIntMap elements, int offset, int stride) {
         setUp(size, offset, stride);
@@ -147,9 +131,8 @@ public class SparseIntMatrix1D extends IntMatrix1D {
 
     /**
      * Sets all cells to the state specified by <tt>value</tt>.
-     * 
-     * @param value
-     *            the value to be filled into the cells.
+     *
+     * @param value the value to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
      */
 
@@ -175,7 +158,7 @@ public class SparseIntMatrix1D extends IntMatrix1D {
 
     /**
      * Returns the elements of this matrix.
-     * 
+     *
      * @return the elements
      */
 
@@ -193,9 +176,8 @@ public class SparseIntMatrix1D extends IntMatrix1D {
      * Calling this method before tt>set()</tt>ing a large number of non-zero
      * values boosts performance, because the receiver will grow only once
      * instead of potentially many times and hash collisions get less probable.
-     * 
-     * @param minCapacity
-     *            the desired minimum number of non-zero cells.
+     *
+     * @param minCapacity the desired minimum number of non-zero cells.
      */
 
     public void ensureCapacity(int minCapacity) {
@@ -204,15 +186,14 @@ public class SparseIntMatrix1D extends IntMatrix1D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>index</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
+     *
+     * @param index the index of the cell.
      * @return the value of the specified cell.
      */
 
@@ -227,9 +208,8 @@ public class SparseIntMatrix1D extends IntMatrix1D {
      * Returns the position of the element with the given relative rank within
      * the (virtual or non-virtual) internal 1-dimensional array. You may want
      * to override this method for performance.
-     * 
-     * @param rank
-     *            the rank of the element.
+     *
+     * @param rank the rank of the element.
      */
 
     public long index(int rank) {
@@ -246,9 +226,8 @@ public class SparseIntMatrix1D extends IntMatrix1D {
      * type <tt>SparseIntMatrix1D</tt> the new matrix must also be of type
      * <tt>SparseIntMatrix1D</tt>, etc. In general, the new matrix should have
      * internal parametrization as similar as possible.
-     * 
-     * @param size
-     *            the number of cell the matrix shall have.
+     *
+     * @param size the number of cell the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -263,11 +242,9 @@ public class SparseIntMatrix1D extends IntMatrix1D {
      * must be of type <tt>DenseIntMatrix2D</tt>, if the receiver is an instance
      * of type <tt>SparseIntMatrix1D</tt> the new matrix must be of type
      * <tt>SparseIntMatrix2D</tt>, etc.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -313,17 +290,15 @@ public class SparseIntMatrix1D extends IntMatrix1D {
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell.
      */
 
     public synchronized void setQuick(int index, int value) {
@@ -358,11 +333,9 @@ public class SparseIntMatrix1D extends IntMatrix1D {
      */
 
     protected boolean haveSharedCellsRaw(IntMatrix1D other) {
-        if (other instanceof SelectedSparseIntMatrix1D) {
-            SelectedSparseIntMatrix1D otherMatrix = (SelectedSparseIntMatrix1D) other;
+        if (other instanceof SelectedSparseIntMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseIntMatrix1D) {
-            SparseIntMatrix1D otherMatrix = (SparseIntMatrix1D) other;
+        } else if (other instanceof SparseIntMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -370,9 +343,8 @@ public class SparseIntMatrix1D extends IntMatrix1D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param offsets
-     *            the offsets of the visible elements.
+     *
+     * @param offsets the offsets of the visible elements.
      * @return a new view.
      */
 

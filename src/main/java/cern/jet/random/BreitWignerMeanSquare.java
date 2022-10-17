@@ -26,7 +26,7 @@ import java.io.Serial;
  * <b>Implementation:</b> This is a port of <A HREF="http://wwwinfo.cern.ch/asd/lhc++/clhep/manual/RefGuide/Random/RandBreitWigner.html"
  * >RandBreitWigner</A> used in <A
  * HREF="http://wwwinfo.cern.ch/asd/lhc++/clhep">CLHEP 1.4.0</A> (C++).
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -41,9 +41,8 @@ public class BreitWignerMeanSquare extends BreitWigner {
 
     /**
      * Constructs a mean-squared BreitWigner distribution.
-     * 
-     * @param cut
-     *            </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
+     *
+     * @param cut </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
      */
     public BreitWignerMeanSquare(double mean, double gamma, double cut, RandomEngine randomGenerator) {
         super(mean, gamma, cut, randomGenerator);
@@ -54,7 +53,7 @@ public class BreitWignerMeanSquare extends BreitWigner {
      * Returns a deep copy of the receiver; the copy will produce identical
      * sequences. After this call has returned, the copy and the receiver have
      * equal but separate state.
-     * 
+     *
      * @return a copy of the receiver.
      */
 
@@ -68,9 +67,8 @@ public class BreitWignerMeanSquare extends BreitWigner {
     /**
      * Returns a mean-squared random number from the distribution; bypasses the
      * internal state.
-     * 
-     * @param cut
-     *            </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
+     *
+     * @param cut </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
      */
 
     public double nextDouble(double mean, double gamma, double cut) {
@@ -94,9 +92,8 @@ public class BreitWignerMeanSquare extends BreitWigner {
 
     /**
      * Returns a random number from the distribution.
-     * 
-     * @param cut
-     *            </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
+     *
+     * @param cut </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
      */
     public static double staticNextDouble(double mean, double gamma, double cut) {
         synchronized (shared) {
@@ -107,9 +104,8 @@ public class BreitWignerMeanSquare extends BreitWigner {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

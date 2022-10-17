@@ -27,14 +27,14 @@ public final class DoublePlusMultFirst implements cern.mateba.function.tdouble.D
      */
     public double multiplicator;
 
-    protected DoublePlusMultFirst(final double multiplicator) {
+    DoublePlusMultFirst(final double multiplicator) {
         this.multiplicator = multiplicator;
     }
 
     /**
      * Returns the result of the function evaluation.
      */
-    public final double apply(double a, double b) {
+    public double apply(double a, double b) {
         return a * multiplicator + b;
     }
 

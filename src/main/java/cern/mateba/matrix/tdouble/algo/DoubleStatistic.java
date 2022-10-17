@@ -51,27 +51,27 @@ import hep.aida.ref.VariableAxis;
  * </tr>
  * <tr valign="top">
  * <td><tt> 4&nbsp;x&nbsp;3&nbsp;matrix<br>
- 1&nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;3<br>
- 2&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;6<br>
- 3&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;9<br>
- 4&nbsp;-8&nbsp;-10 </tt></td>
+ * 1&nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;3<br>
+ * 2&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;6<br>
+ * 3&nbsp;&nbsp;6&nbsp;&nbsp;&nbsp;9<br>
+ * 4&nbsp;-8&nbsp;-10 </tt></td>
  * <td><tt> 3&nbsp;x&nbsp;3&nbsp;matrix<br>
- &nbsp;1.25&nbsp;-3.5&nbsp;-4.5<br>
- -3.5&nbsp;&nbsp;29&nbsp;&nbsp;&nbsp;39&nbsp;&nbsp;<br>
- -4.5&nbsp;&nbsp;39&nbsp;&nbsp;&nbsp;52.5 </tt></td>
+ * &nbsp;1.25&nbsp;-3.5&nbsp;-4.5<br>
+ * -3.5&nbsp;&nbsp;29&nbsp;&nbsp;&nbsp;39&nbsp;&nbsp;<br>
+ * -4.5&nbsp;&nbsp;39&nbsp;&nbsp;&nbsp;52.5 </tt></td>
  * <td><tt> 3&nbsp;x&nbsp;3&nbsp;matrix<br>
- &nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-0.581318&nbsp;-0.555492<br>
- -0.581318&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.999507<br>
- -0.555492&nbsp;&nbsp;0.999507&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
- </tt></td>
+ * &nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-0.581318&nbsp;-0.555492<br>
+ * -0.581318&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.999507<br>
+ * -0.555492&nbsp;&nbsp;0.999507&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ * </tt></td>
  * <td><tt> 3&nbsp;x&nbsp;3&nbsp;matrix<br>
- &nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12.569805&nbsp;15.874508<br>
- 12.569805&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.242641<br>
- 15.874508&nbsp;&nbsp;4.242641&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
- </tt> <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt></td>
+ * &nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12.569805&nbsp;15.874508<br>
+ * 12.569805&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4.242641<br>
+ * 15.874508&nbsp;&nbsp;4.242641&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+ * </tt> <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </tt></td>
  * </tr>
  * </table>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -82,9 +82,9 @@ public class DoubleStatistic {
      * Euclidean distance function; <tt>Sqrt(Sum( (x[i]-y[i])^2 ))</tt>.
      */
     public static final VectorVectorFunction EUCLID = new VectorVectorFunction() {
-        public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
+        public double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
             return Math.sqrt(a.aggregate(b, DoubleFunctions.plus, DoubleFunctions.chain(DoubleFunctions.square,
-                    DoubleFunctions.minus)));
+                DoubleFunctions.minus)));
         }
     };
 
@@ -93,10 +93,10 @@ public class DoubleStatistic {
      * <tt>Sum( abs(x[i]-y[i]) )  /  Sum( x[i]+y[i] )</tt>.
      */
     public static final VectorVectorFunction BRAY_CURTIS = new VectorVectorFunction() {
-        public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
+        public double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
             return a.aggregate(b, DoubleFunctions.plus, DoubleFunctions.chain(DoubleFunctions.abs,
-                    DoubleFunctions.minus))
-                    / a.aggregate(b, DoubleFunctions.plus, DoubleFunctions.plus);
+                DoubleFunctions.minus))
+                / a.aggregate(b, DoubleFunctions.plus, DoubleFunctions.plus);
         }
     };
 
@@ -105,13 +105,13 @@ public class DoubleStatistic {
      * <tt>Sum( abs(x[i]-y[i]) / abs(x[i]+y[i]) )</tt>.
      */
     public static final VectorVectorFunction CANBERRA = new VectorVectorFunction() {
-        DoubleDoubleFunction fun = new DoubleDoubleFunction() {
-            public final double apply(double a, double b) {
+        final DoubleDoubleFunction fun = new DoubleDoubleFunction() {
+            public double apply(double a, double b) {
                 return Math.abs(a - b) / Math.abs(a + b);
             }
         };
 
-        public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
+        public double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
             return a.aggregate(b, DoubleFunctions.plus, fun);
         }
     };
@@ -120,9 +120,9 @@ public class DoubleStatistic {
      * Maximum distance function; <tt>Max( abs(x[i]-y[i]) )</tt>.
      */
     public static final VectorVectorFunction MAXIMUM = new VectorVectorFunction() {
-        public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
+        public double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
             return a.aggregate(b, DoubleFunctions.max, DoubleFunctions
-                    .chain(DoubleFunctions.abs, DoubleFunctions.minus));
+                .chain(DoubleFunctions.abs, DoubleFunctions.minus));
         }
     };
 
@@ -130,9 +130,9 @@ public class DoubleStatistic {
      * Manhattan distance function; <tt>Sum( abs(x[i]-y[i]) )</tt>.
      */
     public static final VectorVectorFunction MANHATTAN = new VectorVectorFunction() {
-        public final double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
+        public double apply(DoubleMatrix1D a, DoubleMatrix1D b) {
             return a.aggregate(b, DoubleFunctions.plus, DoubleFunctions.chain(DoubleFunctions.abs,
-                    DoubleFunctions.minus));
+                DoubleFunctions.minus));
         }
     };
 
@@ -143,15 +143,13 @@ public class DoubleStatistic {
     public interface VectorVectorFunction {
         /**
          * Applies a function to two argument vectors.
-         * 
-         * @param x
-         *            the first argument vector passed to the function.
-         * @param y
-         *            the second argument vector passed to the function.
+         *
+         * @param x the first argument vector passed to the function.
+         * @param y the second argument vector passed to the function.
          * @return the result of the function.
          */
-        abstract public double apply(cern.mateba.matrix.tdouble.DoubleMatrix1D x,
-                cern.mateba.matrix.tdouble.DoubleMatrix1D y);
+        double apply(cern.mateba.matrix.tdouble.DoubleMatrix1D x,
+                              cern.mateba.matrix.tdouble.DoubleMatrix1D y);
     }
 
     /**
@@ -167,29 +165,26 @@ public class DoubleStatistic {
      * result must have shape <tt>aggr.length x n</tt>. Tip: To do aggregations
      * on rows use dice views (transpositions), as in
      * <tt>aggregate(matrix.viewDice(),aggr,result.viewDice())</tt>.
-     * 
-     * @param matrix
-     *            any matrix; a column holds the values of a given variable.
-     * @param aggr
-     *            the aggregation functions to be applied to each column.
-     * @param result
-     *            the matrix to hold the aggregation results.
+     *
+     * @param matrix any matrix; a column holds the values of a given variable.
+     * @param aggr   the aggregation functions to be applied to each column.
+     * @param result the matrix to hold the aggregation results.
      * @return <tt>result</tt> (for convenience only).
      * @see DoubleFormatter
      * @see hep.aida.bin.BinFunction1D
      * @see hep.aida.bin.BinFunctions1D
      */
     public static DoubleMatrix2D aggregate(DoubleMatrix2D matrix, BinFunction1D[] aggr,
-            DoubleMatrix2D result) {
-       var bin = new DynamicBin1D();
+                                           DoubleMatrix2D result) {
+        var bin = new DynamicBin1D();
         double[] elements = new double[matrix.rows()];
         cern.mateba.list.tdouble.DoubleArrayList values = new cern.mateba.list.tdouble.DoubleArrayList(elements);
-        for (int column = matrix.columns(); --column >= 0;) {
+        for (int column = matrix.columns(); --column >= 0; ) {
             matrix.viewColumn(column).toArray(elements); // copy column into
             // values
             bin.clear();
             bin.addAllOf(values);
-            for (int i = aggr.length; --i >= 0;) {
+            for (int i = aggr.length; --i >= 0; ) {
                 result.set(i, column, aggr[i].apply(bin));
             }
         }
@@ -204,7 +199,7 @@ public class DoubleStatistic {
      * computed by the bin. Example:
      * <table>
      * <td class="PRE">
-     * 
+     *
      * <pre>
      * 	 Size: 20000
      * 	 Sum: 299858.02350278624
@@ -244,18 +239,17 @@ public class DoubleStatistic {
      * 	 18.86124362967137
      * 	 quantileInverse(mean): 0.559163335012079
      * 	 Distinct elements &amp; frequencies not printed (too many).
-     * 
+     *
      * </pre>
-     * 
+     *
      * </td>
      * </table>
-     * 
-     * @param vector
-     *            the vector to analyze.
+     *
+     * @param vector the vector to analyze.
      * @return a bin holding the statistics measures of the vector.
      */
     public static DynamicBin1D bin(DoubleMatrix1D vector) {
-        var  bin = new DynamicBin1D();
+        var bin = new DynamicBin1D();
         bin.addAllOf(DoubleFactory1D.dense.toList(vector));
         return bin;
     }
@@ -277,16 +271,15 @@ public class DoubleStatistic {
      * math definition</A> and <A HREF="http://www.stat.berkeley.edu/users/stark/SticiGui/Text/gloss.htm#correlation_coef"
      * > another def</A>. Compares two column vectors at a time. Use dice views
      * to compare two row vectors at a time.
-     * 
-     * @param covariance
-     *            a covariance matrix, as, for example, returned by method
-     *            {@link #covariance(DoubleMatrix2D)}.
+     *
+     * @param covariance a covariance matrix, as, for example, returned by method
+     *                   {@link #covariance(DoubleMatrix2D)}.
      * @return the modified covariance, now correlation matrix (for convenience
-     *         only).
+     * only).
      */
     public static DoubleMatrix2D correlation(DoubleMatrix2D covariance) {
-        for (int i = covariance.columns(); --i >= 0;) {
-            for (int j = i; --j >= 0;) {
+        for (int i = covariance.columns(); --i >= 0; ) {
+            for (int j = i; --j >= 0; ) {
                 double stdDev1 = Math.sqrt(covariance.getQuick(i, i));
                 double stdDev2 = Math.sqrt(covariance.getQuick(j, j));
                 double cov = covariance.getQuick(i, j);
@@ -296,7 +289,7 @@ public class DoubleStatistic {
                 covariance.setQuick(j, i, corr); // symmetric
             }
         }
-        for (int i = covariance.columns(); --i >= 0;)
+        for (int i = covariance.columns(); --i >= 0; )
             covariance.setQuick(i, i, 1);
 
         return covariance;
@@ -313,9 +306,8 @@ public class DoubleStatistic {
      * <A HREF="http://www.cquest.utoronto.ca/geog/ggr270y/notes/not05efg.html">
      * math definition</A>. Compares two column vectors at a time. Use dice
      * views to compare two row vectors at a time.
-     * 
-     * @param matrix
-     *            any matrix; a column holds the values of a given variable.
+     *
+     * @param matrix any matrix; a column holds the values of a given variable.
      * @return the covariance matrix (<tt>n x n, n=matrix.columns</tt>).
      */
     public static DoubleMatrix2D covariance(DoubleMatrix2D matrix) {
@@ -325,13 +317,13 @@ public class DoubleStatistic {
 
         double[] sums = new double[columns];
         DoubleMatrix1D[] cols = new DoubleMatrix1D[columns];
-        for (int i = columns; --i >= 0;) {
+        for (int i = columns; --i >= 0; ) {
             cols[i] = matrix.viewColumn(i);
             sums[i] = cols[i].zSum();
         }
 
-        for (int i = columns; --i >= 0;) {
-            for (int j = i + 1; --j >= 0;) {
+        for (int i = columns; --i >= 0; ) {
+            for (int j = i + 1; --j >= 0; ) {
                 double sumOfProducts = cols[i].zDotProduct(cols[j]);
                 double cov = (sumOfProducts - sums[i] * sums[j] / rows) / rows;
                 covariance.setQuick(i, j, cov);
@@ -354,7 +346,7 @@ public class DoubleStatistic {
      * Example output:
      * <table>
      * <td class="PRE">
-     * 
+     *
      * <pre>
      * 	 Cube:
      * 	    Entries=5000, ExtraEntries=0
@@ -364,7 +356,7 @@ public class DoubleStatistic {
      * 	    yAxis: Min=0, Max=5, Bins=6
      * 	 Heights:
      * 	       | X
-     * 	       | 0   1   2   3   4   5   6   7   8   9   10  | Sum 
+     * 	       | 0   1   2   3   4   5   6   7   8   9   10  | Sum
      * 	 ----------------------------------------------------------
      * 	 Y 5   |  30  53  51  52  57  39  65  61  55  49  22 |  534
      * 	   4   |  43 106 112  96  92  94 107  98  98 110  47 | 1003
@@ -374,16 +366,15 @@ public class DoubleStatistic {
      * 	   0   |  24  54  52  44  42  56  46  47  56  53  20 |  494
      * 	 ----------------------------------------------------------
      * 	   Sum | 234 522 518 480 509 470 535 476 537 493 226 |
-     * 
+     *
      * </pre>
-     * 
+     *
      * </td>
      * </table>
-     * 
+     *
      * @return the histogram containing the cube.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>x.size() != y.size() || y.size() != weights.size()</tt>.
+     * @throws IllegalArgumentException if
+     *                                  <tt>x.size() != y.size() || y.size() != weights.size()</tt>.
      */
     public static IHistogram2D cube(DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D weights) {
         if (x.size() != y.size() || y.size() != weights.size())
@@ -429,12 +420,11 @@ public class DoubleStatistic {
      * <p>
      * Computes the distinct values of x and y and z, yielding histogram axes
      * that capture one distinct value per bin. Then fills the histogram.
-     * 
+     *
      * @return the histogram containing the cube.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>x.size() != y.size() || x.size() != z.size() || x.size() != weights.size()</tt>
-     *             .
+     * @throws IllegalArgumentException if
+     *                                  <tt>x.size() != y.size() || x.size() != z.size() || x.size() != weights.size()</tt>
+     *                                  .
      */
     public static IHistogram3D cube(DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D z,
                                     DoubleMatrix1D weights) {
@@ -480,7 +470,7 @@ public class DoubleStatistic {
         IAxis zaxis = new VariableAxis(distinct.elements());
 
         var histo = new Histogram3D("Cube", xaxis, yaxis,
-                zaxis);
+            zaxis);
         return histogram(histo, x, y, z, weights);
     }
 
@@ -488,7 +478,7 @@ public class DoubleStatistic {
      * Demonstrates usage of this class.
      */
     public static void demo1() {
-        double[][] values = { { 1, 2, 3 }, { 2, 4, 6 }, { 3, 6, 9 }, { 4, -8, -10 } };
+        double[][] values = {{1, 2, 3}, {2, 4, 6}, {3, 6, 9}, {4, -8, -10}};
         DoubleFactory2D factory = DoubleFactory2D.dense;
         DoubleMatrix2D A = factory.make(values);
         System.out.println("\n\nmatrix=" + A);
@@ -530,8 +520,8 @@ public class DoubleStatistic {
      * Demonstrates usage of this class.
      */
     public static void demo3(VectorVectorFunction norm) {
-        double[][] values = { { -0.9611052f, -0.25421095f }, { 0.4308269f, -0.69932648f },
-                { -1.2071029f, 0.62030596f }, { 1.5345166f, 0.02135884f }, { -1.1341542f, 0.20388430f } };
+        double[][] values = {{-0.9611052f, -0.25421095f}, {0.4308269f, -0.69932648f},
+            {-1.2071029f, 0.62030596f}, {1.5345166f, 0.02135884f}, {-1.1341542f, 0.20388430f}};
 
         System.out.println("\n\ninitializing...");
         DoubleFactory2D factory = DoubleFactory2D.dense;
@@ -548,13 +538,11 @@ public class DoubleStatistic {
      * the cells represent distance coefficients. The diagonal cells (i.e. the
      * distance between a variable and itself) will be zero. Compares two column
      * vectors at a time. Use dice views to compare two row vectors at a time.
-     * 
-     * @param matrix
-     *            any matrix; a column holds the values of a given variable
-     *            (vector).
-     * @param distanceFunction
-     *            (EUCLID, CANBERRA, ..., or any user defined distance function
-     *            operating on two vectors).
+     *
+     * @param matrix           any matrix; a column holds the values of a given variable
+     *                         (vector).
+     * @param distanceFunction (EUCLID, CANBERRA, ..., or any user defined distance function
+     *                         operating on two vectors).
      * @return the distance matrix (<tt>n x n, n=matrix.columns</tt>).
      */
     public static DoubleMatrix2D distance(DoubleMatrix2D matrix, VectorVectorFunction distanceFunction) {
@@ -563,13 +551,13 @@ public class DoubleStatistic {
 
         // cache views
         DoubleMatrix1D[] cols = new DoubleMatrix1D[columns];
-        for (int i = columns; --i >= 0;) {
+        for (int i = columns; --i >= 0; ) {
             cols[i] = matrix.viewColumn(i);
         }
 
         // work out all permutations
-        for (int i = columns; --i >= 0;) {
-            for (int j = i; --j >= 0;) {
+        for (int i = columns; --i >= 0; ) {
+            for (int j = i; --j >= 0; ) {
                 double d = distanceFunction.apply(cols[i], cols[j]);
                 distance.setQuick(i, j, d);
                 distance.setQuick(j, i, d); // symmetric
@@ -580,11 +568,11 @@ public class DoubleStatistic {
 
     /**
      * Fills all cells of the given vector into the given histogram.
-     * 
+     *
      * @return <tt>histo</tt> (for convenience only).
      */
-    public static IHistogram1D histogram(IHistogram1D histo,  DoubleMatrix1D vector) {
-        for (int i = (int) vector.size(); --i >= 0;) {
+    public static IHistogram1D histogram(IHistogram1D histo, DoubleMatrix1D vector) {
+        for (int i = (int) vector.size(); --i >= 0; ) {
             histo.fill(vector.getQuick(i));
         }
         return histo;
@@ -592,20 +580,20 @@ public class DoubleStatistic {
 
     /**
      * Fills all cells of the given matrix into the given histogram.
-     * 
+     *
      * @return <tt>histo</tt> (for convenience only).
      */
     public static IHistogram1D histogram(final IHistogram1D histo,
-                                                          final DoubleMatrix2D matrix) {
+                                         final DoubleMatrix2D matrix) {
         histo.fill_2D((double[]) matrix.elements(), matrix.rows(), matrix.columns(), (int) matrix.index(0, 0), matrix
-                .rowStride(), matrix.columnStride());
+            .rowStride(), matrix.columnStride());
         return histo;
     }
 
     /**
      * Splits the given matrix into m x n pieces and computes 1D histogram of
      * each piece.
-     * 
+     *
      * @return <tt>histo</tt> (for convenience only).
      */
     public static IHistogram1D[][] histogram(
@@ -647,7 +635,7 @@ public class DoubleStatistic {
                             for (int c = 0; c < n; c++) {
                                 view = matrix.viewPart(r * row_size, c * col_size, height[r], width[c]);
                                 histo[r][c].fill_2D((double[]) view.elements(), view.rows(), view.columns(), (int) view
-                                        .index(0, 0), view.rowStride(), view.columnStride());
+                                    .index(0, 0), view.rowStride(), view.columnStride());
                             }
                         }
                     }
@@ -660,7 +648,7 @@ public class DoubleStatistic {
                 for (int c = 0; c < n; c++) {
                     view = matrix.viewPart(r * row_size, c * col_size, height[r], width[c]);
                     histo[r][c].fill_2D((double[]) view.elements(), view.rows(), view.columns(),
-                            (int) view.index(0, 0), view.rowStride(), view.columnStride());
+                        (int) view.index(0, 0), view.rowStride(), view.columnStride());
                 }
             }
         }
@@ -669,16 +657,15 @@ public class DoubleStatistic {
 
     /**
      * Fills all cells of the given vectors into the given histogram.
-     * 
+     *
      * @return <tt>histo</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>x.size() != y.size()</tt>.
+     * @throws IllegalArgumentException if <tt>x.size() != y.size()</tt>.
      */
     public static IHistogram2D histogram(IHistogram2D histo,
-                                                          DoubleMatrix1D x, DoubleMatrix1D y) {
+                                         DoubleMatrix1D x, DoubleMatrix1D y) {
         if (x.size() != y.size())
             throw new IllegalArgumentException("vectors must have same size");
-        for (int i = (int) x.size(); --i >= 0;) {
+        for (int i = (int) x.size(); --i >= 0; ) {
             histo.fill(x.getQuick(i), y.getQuick(i));
         }
         return histo;
@@ -686,17 +673,16 @@ public class DoubleStatistic {
 
     /**
      * Fills all cells of the given vectors into the given histogram.
-     * 
+     *
      * @return <tt>histo</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>x.size() != y.size() || y.size() != weights.size()</tt>.
+     * @throws IllegalArgumentException if
+     *                                  <tt>x.size() != y.size() || y.size() != weights.size()</tt>.
      */
     public static IHistogram2D histogram(IHistogram2D histo,
-                                                          DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D weights) {
+                                         DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D weights) {
         if (x.size() != y.size() || y.size() != weights.size())
             throw new IllegalArgumentException("vectors must have same size");
-        for (int i = (int) x.size(); --i >= 0;) {
+        for (int i = (int) x.size(); --i >= 0; ) {
             histo.fill(x.getQuick(i), y.getQuick(i), weights.getQuick(i));
         }
         return histo;
@@ -704,18 +690,17 @@ public class DoubleStatistic {
 
     /**
      * Fills all cells of the given vectors into the given histogram.
-     * 
+     *
      * @return <tt>histo</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>x.size() != y.size() || x.size() != z.size() || x.size() != weights.size()</tt>
-     *             .
+     * @throws IllegalArgumentException if
+     *                                  <tt>x.size() != y.size() || x.size() != z.size() || x.size() != weights.size()</tt>
+     *                                  .
      */
     public static IHistogram3D histogram(IHistogram3D histo,
-                                                          DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D z, DoubleMatrix1D weights) {
+                                         DoubleMatrix1D x, DoubleMatrix1D y, DoubleMatrix1D z, DoubleMatrix1D weights) {
         if (x.size() != y.size() || x.size() != z.size() || x.size() != weights.size())
             throw new IllegalArgumentException("vectors must have same size");
-        for (int i = (int) x.size(); --i >= 0;) {
+        for (int i = (int) x.size(); --i >= 0; ) {
             histo.fill(x.getQuick(i), y.getQuick(i), z.getQuick(i), weights.getQuick(i));
         }
         return histo;
@@ -735,20 +720,16 @@ public class DoubleStatistic {
      * Constructs and returns a sampling view with a size of
      * <tt>round(matrix.size() * fraction)</tt>. Samples "without replacement"
      * from the uniform distribution.
-     * 
-     * @param matrix
-     *            any matrix.
-     * @param fraction
-     *            the percentage to be included in the view.
-     * @param randomGenerator
-     *            a uniform random number generator; set this parameter to
-     *            <tt>null</tt> to use a default generator seeded with the
-     *            current time.
+     *
+     * @param matrix          any matrix.
+     * @param fraction        the percentage to be included in the view.
+     * @param randomGenerator a uniform random number generator; set this parameter to
+     *                        <tt>null</tt> to use a default generator seeded with the
+     *                        current time.
      * @return the sampling view.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>! (0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>
-     *             .
+     * @throws IllegalArgumentException if
+     *                                  <tt>! (0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>
+     *                                  .
      * @see cern.jet.random.sampling.RandomSampler
      */
     public static DoubleMatrix1D viewSample(DoubleMatrix1D matrix, double fraction, RandomEngine randomGenerator) {
@@ -791,65 +772,60 @@ public class DoubleStatistic {
      * <tr valign="top" align="center">
      * <td><div align="left"><tt>matrix</tt></div></td>
      * <td><div align="left"><tt>rowFraction=0.2<br>
-     columnFraction=0.2</tt></div></td>
+     * columnFraction=0.2</tt></div></td>
      * <td><div align="left"><tt>rowFraction=0.2<br>
-     columnFraction=1.0 </tt></div></td>
+     * columnFraction=1.0 </tt></div></td>
      * <td><div align="left"><tt>rowFraction=1.0<br>
-     columnFraction=0.2 </tt></div></td>
+     * columnFraction=0.2 </tt></div></td>
      * </tr>
      * <tr valign="top">
      * <td><tt> 10&nbsp;x&nbsp;10&nbsp;matrix<br>
-     &nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;3&nbsp;&nbsp;4&nbsp;&nbsp;5&nbsp;&nbsp;6&nbsp;&nbsp;7&nbsp;&nbsp;8&nbsp;&nbsp;9&nbsp;&nbsp;10<br>
-     11&nbsp;12&nbsp;13&nbsp;14&nbsp;15&nbsp;16&nbsp;17&nbsp;18&nbsp;19&nbsp;&nbsp;20<br>
-     21&nbsp;22&nbsp;23&nbsp;24&nbsp;25&nbsp;26&nbsp;27&nbsp;28&nbsp;29&nbsp;&nbsp;30<br>
-     31&nbsp;32&nbsp;33&nbsp;34&nbsp;35&nbsp;36&nbsp;37&nbsp;38&nbsp;39&nbsp;&nbsp;40<br>
-     41&nbsp;42&nbsp;43&nbsp;44&nbsp;45&nbsp;46&nbsp;47&nbsp;48&nbsp;49&nbsp;&nbsp;50<br>
-     51&nbsp;52&nbsp;53&nbsp;54&nbsp;55&nbsp;56&nbsp;57&nbsp;58&nbsp;59&nbsp;&nbsp;60<br>
-     61&nbsp;62&nbsp;63&nbsp;64&nbsp;65&nbsp;66&nbsp;67&nbsp;68&nbsp;69&nbsp;&nbsp;70<br>
-     71&nbsp;72&nbsp;73&nbsp;74&nbsp;75&nbsp;76&nbsp;77&nbsp;78&nbsp;79&nbsp;&nbsp;80<br>
-     81&nbsp;82&nbsp;83&nbsp;84&nbsp;85&nbsp;86&nbsp;87&nbsp;88&nbsp;89&nbsp;&nbsp;90<br>
-     91&nbsp;92&nbsp;93&nbsp;94&nbsp;95&nbsp;96&nbsp;97&nbsp;98&nbsp;99&nbsp;100 
-     </tt></td>
+     * &nbsp;1&nbsp;&nbsp;2&nbsp;&nbsp;3&nbsp;&nbsp;4&nbsp;&nbsp;5&nbsp;&nbsp;6&nbsp;&nbsp;7&nbsp;&nbsp;8&nbsp;&nbsp;9&nbsp;&nbsp;10<br>
+     * 11&nbsp;12&nbsp;13&nbsp;14&nbsp;15&nbsp;16&nbsp;17&nbsp;18&nbsp;19&nbsp;&nbsp;20<br>
+     * 21&nbsp;22&nbsp;23&nbsp;24&nbsp;25&nbsp;26&nbsp;27&nbsp;28&nbsp;29&nbsp;&nbsp;30<br>
+     * 31&nbsp;32&nbsp;33&nbsp;34&nbsp;35&nbsp;36&nbsp;37&nbsp;38&nbsp;39&nbsp;&nbsp;40<br>
+     * 41&nbsp;42&nbsp;43&nbsp;44&nbsp;45&nbsp;46&nbsp;47&nbsp;48&nbsp;49&nbsp;&nbsp;50<br>
+     * 51&nbsp;52&nbsp;53&nbsp;54&nbsp;55&nbsp;56&nbsp;57&nbsp;58&nbsp;59&nbsp;&nbsp;60<br>
+     * 61&nbsp;62&nbsp;63&nbsp;64&nbsp;65&nbsp;66&nbsp;67&nbsp;68&nbsp;69&nbsp;&nbsp;70<br>
+     * 71&nbsp;72&nbsp;73&nbsp;74&nbsp;75&nbsp;76&nbsp;77&nbsp;78&nbsp;79&nbsp;&nbsp;80<br>
+     * 81&nbsp;82&nbsp;83&nbsp;84&nbsp;85&nbsp;86&nbsp;87&nbsp;88&nbsp;89&nbsp;&nbsp;90<br>
+     * 91&nbsp;92&nbsp;93&nbsp;94&nbsp;95&nbsp;96&nbsp;97&nbsp;98&nbsp;99&nbsp;100
+     * </tt></td>
      * <td><tt> 2&nbsp;x&nbsp;2&nbsp;matrix<br>
-     43&nbsp;50<br>
-     53&nbsp;60 </tt></td>
+     * 43&nbsp;50<br>
+     * 53&nbsp;60 </tt></td>
      * <td><tt> 2&nbsp;x&nbsp;10&nbsp;matrix<br>
-     41&nbsp;42&nbsp;43&nbsp;44&nbsp;45&nbsp;46&nbsp;47&nbsp;48&nbsp;49&nbsp;&nbsp;50<br>
-     91&nbsp;92&nbsp;93&nbsp;94&nbsp;95&nbsp;96&nbsp;97&nbsp;98&nbsp;99&nbsp;100 
-     </tt></td>
+     * 41&nbsp;42&nbsp;43&nbsp;44&nbsp;45&nbsp;46&nbsp;47&nbsp;48&nbsp;49&nbsp;&nbsp;50<br>
+     * 91&nbsp;92&nbsp;93&nbsp;94&nbsp;95&nbsp;96&nbsp;97&nbsp;98&nbsp;99&nbsp;100
+     * </tt></td>
      * <td><tt> 10&nbsp;x&nbsp;2&nbsp;matrix<br>
-     &nbsp;4&nbsp;&nbsp;8<br>
-     14&nbsp;18<br>
-     24&nbsp;28<br>
-     34&nbsp;38<br>
-     44&nbsp;48<br>
-     54&nbsp;58<br>
-     64&nbsp;68<br>
-     74&nbsp;78<br>
-     84&nbsp;88<br>
-     94&nbsp;98 </tt></td>
+     * &nbsp;4&nbsp;&nbsp;8<br>
+     * 14&nbsp;18<br>
+     * 24&nbsp;28<br>
+     * 34&nbsp;38<br>
+     * 44&nbsp;48<br>
+     * 54&nbsp;58<br>
+     * 64&nbsp;68<br>
+     * 74&nbsp;78<br>
+     * 84&nbsp;88<br>
+     * 94&nbsp;98 </tt></td>
      * </tr>
      * </table>
-     * 
-     * @param matrix
-     *            any matrix.
-     * @param rowFraction
-     *            the percentage of rows to be included in the view.
-     * @param columnFraction
-     *            the percentage of columns to be included in the view.
-     * @param randomGenerator
-     *            a uniform random number generator; set this parameter to
-     *            <tt>null</tt> to use a default generator seeded with the
-     *            current time.
+     *
+     * @param matrix          any matrix.
+     * @param rowFraction     the percentage of rows to be included in the view.
+     * @param columnFraction  the percentage of columns to be included in the view.
+     * @param randomGenerator a uniform random number generator; set this parameter to
+     *                        <tt>null</tt> to use a default generator seeded with the
+     *                        current time.
      * @return the sampling view.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>! (0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>
-     *             .
+     * @throws IllegalArgumentException if
+     *                                  <tt>! (0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>
+     *                                  .
      * @see cern.jet.random.sampling.RandomSampler
      */
     public static DoubleMatrix2D viewSample(DoubleMatrix2D matrix, double rowFraction, double columnFraction,
-            RandomEngine randomGenerator) {
+                                            RandomEngine randomGenerator) {
         // check preconditions and allow for a little tolerance
         double epsilon = 1e-05f;
         if (rowFraction < 0 - epsilon || rowFraction > 1 + epsilon)
@@ -902,28 +878,22 @@ public class DoubleStatistic {
      * <tt>round(matrix.columns() * columnFraction)</tt> columns. Samples
      * "without replacement". Slices, rows and columns are randomly chosen from
      * the uniform distribution.
-     * 
-     * @param matrix
-     *            any matrix.
-     * @param sliceFraction
-     *            the percentage of slices to be included in the view.
-     * @param rowFraction
-     *            the percentage of rows to be included in the view.
-     * @param columnFraction
-     *            the percentage of columns to be included in the view.
-     * @param randomGenerator
-     *            a uniform random number generator; set this parameter to
-     *            <tt>null</tt> to use a default generator seeded with the
-     *            current time.
+     *
+     * @param matrix          any matrix.
+     * @param sliceFraction   the percentage of slices to be included in the view.
+     * @param rowFraction     the percentage of rows to be included in the view.
+     * @param columnFraction  the percentage of columns to be included in the view.
+     * @param randomGenerator a uniform random number generator; set this parameter to
+     *                        <tt>null</tt> to use a default generator seeded with the
+     *                        current time.
      * @return the sampling view.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>! (0 <= sliceFraction <= 1 && 0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>
-     *             .
+     * @throws IllegalArgumentException if
+     *                                  <tt>! (0 <= sliceFraction <= 1 && 0 <= rowFraction <= 1 && 0 <= columnFraction <= 1)</tt>
+     *                                  .
      * @see cern.jet.random.sampling.RandomSampler
      */
     public static DoubleMatrix3D viewSample(DoubleMatrix3D matrix, double sliceFraction, double rowFraction,
-            double columnFraction, RandomEngine randomGenerator) {
+                                            double columnFraction, RandomEngine randomGenerator) {
         // check preconditions and allow for a little tolerance
         double epsilon = 1e-05f;
         if (sliceFraction < 0 - epsilon || sliceFraction > 1 + epsilon)
@@ -977,7 +947,7 @@ public class DoubleStatistic {
         // sample columns
         n = ncolumns;
         N = matrix.columns();
-       RandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
+        RandomSampler.sample(n, N, n, 0, selected, 0, randomGenerator);
         int[] selectedCols = new int[n];
         for (int i = 0; i < n; i++)
             selectedCols[i] = (int) selected[i];

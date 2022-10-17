@@ -61,7 +61,7 @@ import java.io.Serial;
  * exploit this fact. Setting/getting values in a loop slice-by-slice,
  * row-by-row, column-by-column is quicker than, for example, column-by-column,
  * row-by-row, slice-by-slice. Thus
- * 
+ *
  * <pre>
  * for (int slice = 0; slice &lt; slices; slice++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -71,9 +71,9 @@ import java.io.Serial;
  *     }
  * }
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -83,17 +83,16 @@ import java.io.Serial;
  *     }
  * }
  * </pre>
- * 
+ *
+ * @author wolfgang.hoschek@cern.ch
+ * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 09/24/99
  * @see cern.mateba.map
  * @see cern.mateba.map.tlong.OpenIntLongHashMap
- * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
- * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class SparseLongMatrix3D extends LongMatrix3D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = -2767007811525606824L;
@@ -110,38 +109,30 @@ public class SparseLongMatrix3D extends LongMatrix3D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
+     *                                  .
      */
     public SparseLongMatrix3D(long[][][] values) {
         this(values.length, (values.length == 0 ? 0 : values[0].length), (values.length == 0 ? 0
-                : values[0].length == 0 ? 0 : values[0][0].length));
+            : values[0].length == 0 ? 0 : values[0][0].length));
         assign(values);
     }
 
     /**
      * Constructs a matrix with a given number of slices, rows and columns and
      * default memory usage. All entries are initially <tt>0</tt>.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>(long)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices  the number of slices the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>(long)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public SparseLongMatrix3D(int slices, int rows, int columns) {
         this(slices, rows, columns, slices * rows * (columns / 1000), 0.2, 0.5);
@@ -152,32 +143,23 @@ public class SparseLongMatrix3D extends LongMatrix3D {
      * memory as specified. All entries are initially <tt>0</tt>. For details
      * related to memory usage see
      * {@link cern.mateba.map.tlong.OpenIntLongHashMap}.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param initialCapacity
-     *            the initial capacity of the hash map. If not known, set
-     *            <tt>initialCapacity=0</tt> or small.
-     * @param minLoadFactor
-     *            the minimum load factor of the hash map.
-     * @param maxLoadFactor
-     *            the maximum load factor of the hash map.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if <tt>(double)columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices          the number of slices the matrix shall have.
+     * @param rows            the number of rows the matrix shall have.
+     * @param columns         the number of columns the matrix shall have.
+     * @param initialCapacity the initial capacity of the hash map. If not known, set
+     *                        <tt>initialCapacity=0</tt> or small.
+     * @param minLoadFactor   the minimum load factor of the hash map.
+     * @param maxLoadFactor   the maximum load factor of the hash map.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
+     *                                  .
+     * @throws IllegalArgumentException if <tt>(double)columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public SparseLongMatrix3D(int slices, int rows, int columns, int initialCapacity, double minLoadFactor,
-            double maxLoadFactor) {
+                              double maxLoadFactor) {
         try {
             setUp(slices, rows, columns);
         } catch (IllegalArgumentException exc) { // we can hold slices*rows*columns>Integer.MAX_VALUE cells !
@@ -189,37 +171,25 @@ public class SparseLongMatrix3D extends LongMatrix3D {
 
     /**
      * Constructs a view with the given parameters.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param sliceZero
-     *            the position of the first element.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param sliceStride
-     *            the number of elements between two slices, i.e.
-     *            <tt>index(k+1,i,j)-index(k,i,j)</tt>.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(k,i+1,j)-index(k,i,j)</tt>.
-     * @param columnnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(k,i,j+1)-index(k,i,j)</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>(long)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices        the number of slices the matrix shall have.
+     * @param rows          the number of rows the matrix shall have.
+     * @param columns       the number of columns the matrix shall have.
+     * @param elements      the cells.
+     * @param sliceZero     the position of the first element.
+     * @param rowZero       the position of the first element.
+     * @param columnZero    the position of the first element.
+     * @param sliceStride   the number of elements between two slices, i.e.
+     *                      <tt>index(k+1,i,j)-index(k,i,j)</tt>.
+     * @param rowStride     the number of elements between two rows, i.e.
+     *                      <tt>index(k,i+1,j)-index(k,i,j)</tt>.
+     * @param columnnStride the number of elements between two columns, i.e.
+     *                      <tt>index(k,i,j+1)-index(k,i,j)</tt>.
+     * @throws IllegalArgumentException if <tt>(long)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     protected SparseLongMatrix3D(int slices, int rows, int columns, AbstractLongLongMap elements, int sliceZero,
-            int rowZero, int columnZero, int sliceStride, int rowStride, int columnStride) {
+                                 int rowZero, int columnZero, int sliceStride, int rowStride, int columnStride) {
         try {
             setUp(slices, rows, columns, sliceZero, rowZero, columnZero, sliceStride, rowStride, columnStride);
         } catch (IllegalArgumentException exc) { // we can hold slices*rows*columns>Integer.MAX_VALUE cells !
@@ -262,7 +232,7 @@ public class SparseLongMatrix3D extends LongMatrix3D {
         // return elements.get(index(slice,row,column));
         // manually inlined:
         return elements.get((long) sliceZero + (long) slice * (long) sliceStride + (long) rowZero + (long) row
-                * (long) rowStride + (long) columnZero + (long) column * (long) columnStride);
+            * (long) rowStride + (long) columnZero + (long) column * (long) columnStride);
     }
 
     public long index(int slice, int row, int column) {
@@ -270,7 +240,7 @@ public class SparseLongMatrix3D extends LongMatrix3D {
         // _columnOffset(_columnRank(column));
         // manually inlined:
         return (long) sliceZero + (long) slice * (long) sliceStride + (long) rowZero + (long) row * (long) rowStride
-                + (long) columnZero + (long) column * (long) columnStride;
+            + (long) columnZero + (long) column * (long) columnStride;
     }
 
     public LongMatrix3D like(int slices, int rows, int columns) {
@@ -289,7 +259,7 @@ public class SparseLongMatrix3D extends LongMatrix3D {
         // int index = index(slice,row,column);
         // manually inlined:
         long index = (long) sliceZero + (long) slice * (long) sliceStride + (long) rowZero + (long) row
-                * (long) rowStride + (long) columnZero + (long) column * (long) columnStride;
+            * (long) rowStride + (long) columnZero + (long) column * (long) columnStride;
         if (value == 0)
             this.elements.removeKey(index);
         else
@@ -299,14 +269,14 @@ public class SparseLongMatrix3D extends LongMatrix3D {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(slices).append(" x ").append(rows).append(" x ").append(columns)
-                .append(" sparse matrix, nnz = ").append(cardinality()).append('\n');
+            .append(" sparse matrix, nnz = ").append(cardinality()).append('\n');
         for (int s = 0; s < slices; s++) {
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < columns; c++) {
                     long elem = getQuick(s, r, c);
                     if (elem != 0) {
                         builder.append('(').append(s).append(',').append(r).append(',').append(c).append(')').append(
-                                '\t').append(elem).append('\n');
+                            '\t').append(elem).append('\n');
                     }
                 }
             }
@@ -328,11 +298,9 @@ public class SparseLongMatrix3D extends LongMatrix3D {
     }
 
     protected boolean haveSharedCellsRaw(LongMatrix3D other) {
-        if (other instanceof SelectedSparseLongMatrix3D) {
-            SelectedSparseLongMatrix3D otherMatrix = (SelectedSparseLongMatrix3D) other;
+        if (other instanceof SelectedSparseLongMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseLongMatrix3D) {
-            SparseLongMatrix3D otherMatrix = (SparseLongMatrix3D) other;
+        } else if (other instanceof SparseLongMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;

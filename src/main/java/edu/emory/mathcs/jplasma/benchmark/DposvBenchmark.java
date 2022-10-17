@@ -40,9 +40,8 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Benchmark of plasma_DPOSV
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DposvBenchmark {
 
@@ -91,11 +90,11 @@ public class DposvBenchmark {
             }
         }
         System.out.println("Average execution time of JPlasma DPOSV (" + N + "x" + N + ", " + NRHS + " right-hand sides, "
-                + NTHREADS + " threads): " + avtime / NITERS / 1000000.0 + " milliseconds");
+            + NTHREADS + " threads): " + avtime / NITERS / 1000000.0 + " milliseconds");
         Dplasma.plasma_Finalize();
 
     }
-    
+
     private static void dposvBenchmarkJLAPACK(int N, int NRHS, int NITERS) {
         int LDA = N;
         int LDB = N;

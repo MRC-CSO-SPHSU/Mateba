@@ -35,12 +35,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * will throw an <tt>IndexOutOfBoundsException</tt>.
  * <p>
  * <b>Note</b> that this implementation is not synchronized.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
+ * @version 1.0, 09/24/99
  */
 public abstract class IntMatrix2D extends AbstractMatrix2D {
 
@@ -61,28 +59,26 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <tt>a(1) == f(get(0,0)), a(0)==Int.NaN</tt>.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      *   cern.jet.math.Functions F = cern.jet.math.Functions.functions;
      *   2 x 2 matrix
      *   0 1
      *   2 3
-     * 
-     *   // Sum( x[row,col]*x[row,col] ) 
+     *
+     *   // Sum( x[row,col]*x[row,col] )
      *   matrix.aggregate(F.plus,F.square);
      *   --&gt; 14
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell value.
-     * @param f
-     *            a function transforming the current cell value.
+     *
+     * @param aggr an aggregation function taking as first argument the current
+     *             aggregation and as second argument the transformed current
+     *             cell value.
+     * @param f    a function transforming the current cell value.
      * @return the aggregated measure.
      * @see cern.jet.math.tint.IntFunctions
      */
@@ -130,15 +126,12 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
     /**
      * Applies a function to each cell that satisfies a condition and aggregates
      * the results.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell value.
-     * @param f
-     *            a function transforming the current cell value.
-     * @param cond
-     *            a condition.
+     *
+     * @param aggr an aggregation function taking as first argument the current
+     *             aggregation and as second argument the transformed current
+     *             cell value.
+     * @param f    a function transforming the current cell value.
+     * @param cond a condition.
      * @return the aggregated measure.
      * @see cern.jet.math.tint.IntFunctions
      */
@@ -160,14 +153,14 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                     public Integer call() throws Exception {
                         int elem = getQuick(firstRow, 0);
                         int a = 0;
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             a = aggr.apply(a, f.apply(elem));
                         }
                         int d = 1;
                         for (int r = firstRow; r < lastRow; r++) {
                             for (int c = d; c < columns; c++) {
                                 elem = getQuick(r, c);
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     a = aggr.apply(a, f.apply(elem));
                                 }
                             }
@@ -180,14 +173,14 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             int elem = getQuick(0, 0);
-            if (cond.apply(elem) == true) {
+            if (cond.apply(elem)) {
                 a = aggr.apply(a, f.apply(elem));
             }
             int d = 1; // first cell already done
             for (int r = 0; r < rows; r++) {
                 for (int c = d; c < columns; c++) {
                     elem = getQuick(r, c);
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         a = aggr.apply(a, f.apply(elem));
                     }
                 }
@@ -198,21 +191,15 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
     }
 
     /**
-     * 
      * Applies a function to all cells with a given indexes and aggregates the
      * results.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell value.
-     * @param f
-     *            a function transforming the current cell value.
-     * @param rowList
-     *            row indexes.
-     * @param columnList
-     *            column indexes.
-     * 
+     *
+     * @param aggr       an aggregation function taking as first argument the current
+     *                   aggregation and as second argument the transformed current
+     *                   cell value.
+     * @param f          a function transforming the current cell value.
+     * @param rowList    row indexes.
+     * @param columnList column indexes.
      * @return the aggregated measure.
      * @see cern.jet.math.tint.IntFunctions
      */
@@ -266,44 +253,41 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <tt>a(1) == f(get(0,0),other.get(0,0)), a(0)==Int.NaN</tt>.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      *   cern.jet.math.Functions F = cern.jet.math.Functions.functions;
      *   x == 2 x 2 matrix
      *   0 1
      *   2 3
-     * 
+     *
      *   y == 2 x 2 matrix
      *   0 1
      *   2 3
-     * 
-     *   // Sum( x[row,col] * y[row,col] ) 
+     *
+     *   // Sum( x[row,col] * y[row,col] )
      *   x.aggregate(y, F.plus, F.mult);
      *   --&gt; 14
-     * 
+     *
      *   // Sum( (x[row,col] + y[row,col])&circ;2 )
      *   x.aggregate(y, F.plus, F.chain(F.square,F.plus));
      *   --&gt; 56
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell values.
-     * @param f
-     *            a function transforming the current cell values.
+     *
+     * @param aggr an aggregation function taking as first argument the current
+     *             aggregation and as second argument the transformed current
+     *             cell values.
+     * @param f    a function transforming the current cell values.
      * @return the aggregated measure.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
      * @see cern.jet.math.tint.IntFunctions
      */
     public int aggregate(final IntMatrix2D other, final cern.mateba.function.tint.IntIntFunction aggr,
-            final cern.mateba.function.tint.IntIntFunction f) {
+                         final cern.mateba.function.tint.IntIntFunction f) {
         checkShape(other);
         if (size() == 0)
             throw new IllegalArgumentException("size == 0");
@@ -350,26 +334,25 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <tt>x[row,col] = function(x[row,col])</tt>.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
-     *   matrix = 2 x 2 matrix 
-     *   0.5 1.5      
+     *   matrix = 2 x 2 matrix
+     *   0.5 1.5
      *   2.5 3.5
-     * 
+     *
      *   // change each cell to its sine
      *   matrix.assign(cern.jet.math.Functions.sin);
      *   --&gt;
      *   2 x 2 matrix
-     *   0.479426  0.997495 
+     *   0.479426  0.997495
      *   0.598472 -0.350783
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>.
-     * 
-     * @param f
-     *            a function object taking as argument the current cell's value.
+     *
+     * @param f a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tint.IntFunctions
      */
@@ -407,17 +390,14 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
 
     /**
      * Assigns the result of a function to all cells that satisfy a condition.
-     * 
-     * @param cond
-     *            a condition.
-     * 
-     * @param f
-     *            a function object.
+     *
+     * @param cond a condition.
+     * @param f    a function object.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tint.IntFunctions
      */
     public IntMatrix2D assign(final cern.mateba.function.tint.IntProcedure cond,
-            final cern.mateba.function.tint.IntFunction f) {
+                              final cern.mateba.function.tint.IntFunction f) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (rows * columns >= ConcurrencyUtils.getThreadsBeginN_2D())) {
             nthreads = Math.min(nthreads, rows);
@@ -434,7 +414,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                         for (int r = firstRow; r < lastRow; r++) {
                             for (int c = 0; c < columns; c++) {
                                 elem = getQuick(r, c);
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     setQuick(r, c, f.apply(elem));
                                 }
                             }
@@ -448,7 +428,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < columns; c++) {
                     elem = getQuick(r, c);
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         setQuick(r, c, f.apply(elem));
                     }
                 }
@@ -459,14 +439,10 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
 
     /**
      * Assigns a value to all cells that satisfy a condition.
-     * 
-     * @param cond
-     *            a condition.
-     * 
-     * @param value
-     *            a value.
+     *
+     * @param cond  a condition.
+     * @param value a value.
      * @return <tt>this</tt> (for convenience only).
-     * 
      */
     public IntMatrix2D assign(final cern.mateba.function.tint.IntProcedure cond, final int value) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -485,7 +461,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                         for (int r = firstRow; r < lastRow; r++) {
                             for (int c = 0; c < columns; c++) {
                                 elem = getQuick(r, c);
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     setQuick(r, c, value);
                                 }
                             }
@@ -499,7 +475,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < columns; c++) {
                     elem = getQuick(r, c);
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         setQuick(r, c, value);
                     }
                 }
@@ -510,9 +486,8 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
 
     /**
      * Sets all cells to the state specified by <tt>value</tt>.
-     * 
-     * @param value
-     *            the value to be filled into the cells.
+     *
+     * @param value the value to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
      */
     public IntMatrix2D assign(final int value) {
@@ -554,17 +529,15 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>values.length != rows()*columns()</tt>.
+     * @throws IllegalArgumentException if <tt>values.length != rows()*columns()</tt>.
      */
     public IntMatrix2D assign(final int[] values) {
         if (values.length != rows * columns)
             throw new IllegalArgumentException("Must have same length: length=" + values.length + "rows()*columns()="
-                    + rows() * columns());
+                + rows() * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (rows * columns >= ConcurrencyUtils.getThreadsBeginN_2D())) {
             nthreads = Math.min(nthreads, rows);
@@ -607,19 +580,17 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>values.length != rows() || for any 0 &lt;= row &lt; rows(): values[row].length != columns()</tt>
-     *             .
+     * @throws IllegalArgumentException if
+     *                                  <tt>values.length != rows() || for any 0 &lt;= row &lt; rows(): values[row].length != columns()</tt>
+     *                                  .
      */
     public IntMatrix2D assign(final int[][] values) {
         if (values.length != rows)
             throw new IllegalArgumentException("Must have same number of rows: rows=" + values.length + "rows()="
-                    + rows());
+                + rows());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (rows * columns >= ConcurrencyUtils.getThreadsBeginN_2D())) {
             nthreads = Math.min(nthreads, rows);
@@ -636,8 +607,8 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                             int[] currentRow = values[r];
                             if (currentRow.length != columns)
                                 throw new IllegalArgumentException(
-                                        "Must have same number of columns in every row: columns=" + currentRow.length
-                                                + "columns()=" + columns());
+                                    "Must have same number of columns in every row: columns=" + currentRow.length
+                                        + "columns()=" + columns());
                             for (int c = 0; c < columns; c++) {
                                 setQuick(r, c, currentRow[c]);
                             }
@@ -651,7 +622,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                 int[] currentRow = values[r];
                 if (currentRow.length != columns)
                     throw new IllegalArgumentException("Must have same number of columns in every row: columns="
-                            + currentRow.length + "columns()=" + columns());
+                        + currentRow.length + "columns()=" + columns());
                 for (int c = 0; c < columns; c++) {
                     setQuick(r, c, currentRow[c]);
                 }
@@ -667,14 +638,12 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * derived from the same matrix) and intersect in an ambiguous way, then
      * replaces <i>as if</i> using an intermediate auxiliary deep copy of
      * <tt>other</tt>.
-     * 
-     * @param other
-     *            the source matrix to copy from (may be identical to the
-     *            receiver).
+     *
+     * @param other the source matrix to copy from (may be identical to the
+     *              receiver).
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
      */
     public IntMatrix2D assign(IntMatrix2D other) {
         if (other == this)
@@ -722,38 +691,35 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <tt>x[row,col] = function(x[row,col],y[row,col])</tt>.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      *   // assign x[row,col] = x[row,col]&lt;sup&gt;y[row,col]&lt;/sup&gt;
-     *   m1 = 2 x 2 matrix 
-     *   0 1 
+     *   m1 = 2 x 2 matrix
+     *   0 1
      *   2 3
-     * 
-     *   m2 = 2 x 2 matrix 
-     *   0 2 
+     *
+     *   m2 = 2 x 2 matrix
+     *   0 2
      *   4 6
-     * 
+     *
      *   m1.assign(m2, cern.jet.math.Functions.pow);
      *   --&gt;
      *   m1 == 2 x 2 matrix
-     *   1   1 
+     *   1   1
      *   16 729
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>.
-     * 
-     * @param y
-     *            the secondary matrix to operate on.
-     * @param function
-     *            a function object taking as first argument the current cell's
-     *            value of <tt>this</tt>, and as second argument the current
-     *            cell's value of <tt>y</tt>,
+     *
+     * @param y        the secondary matrix to operate on.
+     * @param function a function object taking as first argument the current cell's
+     *                 value of <tt>this</tt>, and as second argument the current
+     *                 cell's value of <tt>y</tt>,
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
      * @see cern.jet.math.tint.IntFunctions
      */
     public IntMatrix2D assign(final IntMatrix2D y, final cern.mateba.function.tint.IntIntFunction function) {
@@ -792,26 +758,20 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
 
     /**
      * Assigns the result of a function to all cells with a given indexes
-     * 
-     * @param y
-     *            the secondary matrix to operate on.
-     * @param function
-     *            a function object taking as first argument the current cell's
-     *            value of <tt>this</tt>, and as second argument the current
-     *            cell's value of <tt>y</tt>,
-     * @param rowList
-     *            row indexes.
-     * @param columnList
-     *            column indexes.
-     * 
+     *
+     * @param y          the secondary matrix to operate on.
+     * @param function   a function object taking as first argument the current cell's
+     *                   value of <tt>this</tt>, and as second argument the current
+     *                   cell's value of <tt>y</tt>,
+     * @param rowList    row indexes.
+     * @param columnList column indexes.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
      * @see cern.jet.math.tint.IntFunctions
      */
     public IntMatrix2D assign(final IntMatrix2D y, final cern.mateba.function.tint.IntIntFunction function,
-            IntArrayList rowList, IntArrayList columnList) {
+                              IntArrayList rowList, IntArrayList columnList) {
         checkShape(y);
         final int size = rowList.size();
         final int[] rowElements = rowList.elements();
@@ -829,7 +789,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                     public void run() {
                         for (int i = firstIdx; i < lastIdx; i++) {
                             setQuick(rowElements[i], columnElements[i], function.apply(getQuick(rowElements[i],
-                                    columnElements[i]), y.getQuick(rowElements[i], columnElements[i])));
+                                columnElements[i]), y.getQuick(rowElements[i], columnElements[i])));
                         }
                     }
 
@@ -839,7 +799,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
         } else {
             for (int i = 0; i < size; i++) {
                 setQuick(rowElements[i], columnElements[i], function.apply(getQuick(rowElements[i], columnElements[i]),
-                        y.getQuick(rowElements[i], columnElements[i])));
+                    y.getQuick(rowElements[i], columnElements[i])));
             }
         }
         return this;
@@ -847,7 +807,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns the number of cells having non-zero values; ignores tolerance.
-     * 
+     *
      * @return cardinality
      */
     public int cardinality() {
@@ -905,7 +865,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <b>Note that the returned matrix is an independent deep copy.</b> The
      * returned matrix is not backed by this matrix, so changes in the returned
      * matrix are not reflected in this matrix, and vice-versa.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
     public IntMatrix2D copy() {
@@ -914,18 +874,17 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns the elements of this matrix.
-     * 
+     *
      * @return the elements
      */
     public abstract Object elements();
 
     /**
      * Returns whether all cells are equal to the given value.
-     * 
-     * @param value
-     *            the value to test against.
+     *
+     * @param value the value to test against.
      * @return <tt>true</tt> if all cells are equal to the given value,
-     *         <tt>false</tt> otherwise.
+     * <tt>false</tt> otherwise.
      */
     public boolean equals(int value) {
         return cern.mateba.matrix.tint.algo.IntProperty.DEFAULT.equals(this, value);
@@ -937,11 +896,10 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * and is at least a <code>IntMatrix2D</code> object that has the same
      * number of columns and rows as the receiver and has exactly the same
      * values at the same coordinates.
-     * 
-     * @param obj
-     *            the object to compare with.
+     *
+     * @param obj the object to compare with.
      * @return <code>true</code> if the objects are the same; <code>false</code>
-     *         otherwise.
+     * otherwise.
      */
 
     public boolean equals(Object obj) {
@@ -961,13 +919,12 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * special-purpose iteration. If you want to modify another matrix instead
      * of <tt>this</tt> (i.e. work in read-only mode), simply return the input
      * value unchanged.
-     * 
+     * <p>
      * Parameters to function are as follows: <tt>first==row</tt>,
      * <tt>second==column</tt>, <tt>third==nonZeroValue</tt>.
-     * 
-     * @param function
-     *            a function object taking as argument the current non-zero
-     *            cell's row, column and value.
+     *
+     * @param function a function object taking as argument the current non-zero
+     *                 cell's row, column and value.
      * @return <tt>this</tt> (for convenience only).
      */
     public IntMatrix2D forEachNonZero(final cern.mateba.function.tint.IntIntIntFunction function) {
@@ -1013,15 +970,12 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>[row,column]</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      * @return the value of the specified cell.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
      */
     public int get(int row, int column) {
         if (column < 0 || column >= columns || row < 0 || row >= rows)
@@ -1042,16 +996,13 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * specified lists. Fills into the lists, starting at index 0. After this
      * call returns the specified lists all have a new size, the number of
      * non-zero values.
-     * 
-     * @param rowList
-     *            the list to be filled with row indexes, can have any size.
-     * @param columnList
-     *            the list to be filled with column indexes, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param rowList    the list to be filled with row indexes, can have any size.
+     * @param columnList the list to be filled with column indexes, can have any size.
+     * @param valueList  the list to be filled with values, can have any size.
      */
     public void getNegativeValues(final IntArrayList rowList, final IntArrayList columnList,
-            final IntArrayList valueList) {
+                                  final IntArrayList valueList) {
         rowList.clear();
         columnList.clear();
         valueList.clear();
@@ -1081,7 +1032,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * indexes are guaranteed to correspond to the same cell).
      * <p>
      * <b>Example:</b> <br>
-     * 
+     *
      * <pre>
      *   2 x 3 matrix:
      *   0, 0, 8
@@ -1090,17 +1041,14 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      *   rowList    = (0,1)
      *   columnList = (2,1)
      *   valueList  = (8,7)
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * In other words, <tt>get(0,2)==8, get(1,1)==7</tt>.
-     * 
-     * @param rowList
-     *            the list to be filled with row indexes, can have any size.
-     * @param columnList
-     *            the list to be filled with column indexes, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param rowList    the list to be filled with row indexes, can have any size.
+     * @param columnList the list to be filled with column indexes, can have any size.
+     * @param valueList  the list to be filled with values, can have any size.
      */
     public void getNonZeros(final IntArrayList rowList, final IntArrayList columnList, final IntArrayList valueList) {
         rowList.clear();
@@ -1123,16 +1071,13 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * specified lists. Fills into the lists, starting at index 0. After this
      * call returns the specified lists all have a new size, the number of
      * non-zero values.
-     * 
-     * @param rowList
-     *            the list to be filled with row indexes, can have any size.
-     * @param columnList
-     *            the list to be filled with column indexes, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param rowList    the list to be filled with row indexes, can have any size.
+     * @param columnList the list to be filled with column indexes, can have any size.
+     * @param valueList  the list to be filled with values, can have any size.
      */
     public void getPositiveValues(final IntArrayList rowList, final IntArrayList columnList,
-            final IntArrayList valueList) {
+                                  final IntArrayList valueList) {
         rowList.clear();
         columnList.clear();
         valueList.clear();
@@ -1150,18 +1095,16 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>[row,column]</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      * @return the value at the specified coordinate.
      */
     public abstract int getQuick(int row, int column);
@@ -1192,7 +1135,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * an instance of type <tt>SparseIntMatrix2D</tt> the new matrix must also
      * be of type <tt>SparseIntMatrix2D</tt>, etc. In general, the new matrix
      * should have internal parametrization as similar as possible.
-     * 
+     *
      * @return a new empty matrix of the same dynamic type.
      */
     public IntMatrix2D like() {
@@ -1207,11 +1150,9 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * receiver is an instance of type <tt>SparseIntMatrix2D</tt> the new matrix
      * must also be of type <tt>SparseIntMatrix2D</tt>, etc. In general, the new
      * matrix should have internal parametrization as similar as possible.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
     public abstract IntMatrix2D like(int rows, int columns);
@@ -1223,9 +1164,8 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * must be of type <tt>DenseIntMatrix1D</tt>, if the receiver is an instance
      * of type <tt>SparseIntMatrix2D</tt> the new matrix must be of type
      * <tt>SparseIntMatrix1D</tt>, etc.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
+     *
+     * @param size the number of cells the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
     public abstract IntMatrix1D like1D(int size);
@@ -1237,21 +1177,18 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <tt>DenseIntMatrix1D</tt>, if the receiver is an instance of type
      * <tt>SparseIntMatrix2D</tt> the new matrix must be of type
      * <tt>SparseIntMatrix1D</tt>, etc.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
+     *
+     * @param size   the number of cells the matrix shall have.
+     * @param zero   the index of the first element.
+     * @param stride the number of indexes between any two elements, i.e.
+     *               <tt>index(i+1)-index(i)</tt>.
      * @return a new matrix of the corresponding dynamic type.
      */
     protected abstract IntMatrix1D like1D(int size, int zero, int stride);
 
     /**
      * Return the maximum value of this matrix together with its location
-     * 
+     *
      * @return maximum_value, row_location, column_location };
      */
     public int[] getMaxLocation() {
@@ -1286,7 +1223,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                             }
                             d = 0;
                         }
-                        return new int[] { maxValue, rowLocation, columnLocation };
+                        return new int[]{maxValue, rowLocation, columnLocation};
                     }
                 });
             }
@@ -1295,13 +1232,13 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                     results[j] = (int[]) futures[j].get();
                 }
                 maxValue = results[0][0];
-                rowLocation = (int) results[0][1];
-                columnLocation = (int) results[0][2];
+                rowLocation = results[0][1];
+                columnLocation = results[0][2];
                 for (int j = 1; j < nthreads; j++) {
                     if (maxValue < results[j][0]) {
                         maxValue = results[j][0];
-                        rowLocation = (int) results[j][1];
-                        columnLocation = (int) results[j][2];
+                        rowLocation = results[j][1];
+                        columnLocation = results[j][2];
                     }
                 }
             } catch (ExecutionException ex) {
@@ -1325,12 +1262,12 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                 d = 0;
             }
         }
-        return new int[] { maxValue, rowLocation, columnLocation };
+        return new int[]{maxValue, rowLocation, columnLocation};
     }
 
     /**
      * Return the minimum value of this matrix together with its location
-     * 
+     *
      * @return minimum_value, row_location, column_location};
      */
     public int[] getMinLocation() {
@@ -1365,7 +1302,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                             }
                             d = 0;
                         }
-                        return new int[] { minValue, rowLocation, columnLocation };
+                        return new int[]{minValue, rowLocation, columnLocation};
                     }
                 });
             }
@@ -1374,13 +1311,13 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                     results[j] = (int[]) futures[j].get();
                 }
                 minValue = results[0][0];
-                rowLocation = (int) results[0][1];
-                columnLocation = (int) results[0][2];
+                rowLocation = results[0][1];
+                columnLocation = results[0][2];
                 for (int j = 1; j < nthreads; j++) {
                     if (minValue > results[j][0]) {
                         minValue = results[j][0];
-                        rowLocation = (int) results[j][1];
-                        columnLocation = (int) results[j][2];
+                        rowLocation = results[j][1];
+                        columnLocation = results[j][2];
                     }
                 }
             } catch (ExecutionException ex) {
@@ -1404,22 +1341,18 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
                 d = 0;
             }
         }
-        return new int[] { minValue, rowLocation, columnLocation };
+        return new int[]{minValue, rowLocation, columnLocation};
     }
 
     /**
      * Sets the matrix cell at coordinate <tt>[row,column]</tt> to the specified
      * value.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param value
-     *            the value to be filled into the specified cell.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param value  the value to be filled into the specified cell.
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
      */
     public void set(int row, int column, int value) {
         if (column < 0 || column >= columns || row < 0 || row >= rows)
@@ -1430,20 +1363,17 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
     /**
      * Sets the matrix cell at coordinate <tt>[row,column]</tt> to the specified
      * value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param value  the value to be filled into the specified cell.
      */
     public abstract void setQuick(int row, int column, int value);
 
@@ -1455,7 +1385,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
+     *
      * @return an array filled with the values of the cells.
      */
     public int[][] toArray() {
@@ -1494,7 +1424,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns a string representation using default formatting.
-     * 
+     *
      * @see cern.mateba.matrix.tint.algo.IntFormatter
      */
 
@@ -1505,7 +1435,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
     /**
      * Returns a vector obtained by stacking the columns of the matrix on top of
      * one another.
-     * 
+     *
      * @return a vector of columns of this matrix.
      */
     public abstract IntMatrix1D vectorize();
@@ -1520,7 +1450,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <p>
      * Use {@link #copy()} to construct an independent deep copy rather than a
      * new view.
-     * 
+     *
      * @return a new view of the receiver.
      */
     protected IntMatrix2D view() {
@@ -1545,12 +1475,10 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * 1, 4</td>
      * </tr>
      * </table>
-     * 
-     * @param column
-     *            the column to fix.
+     *
+     * @param column the column to fix.
      * @return a new slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>column < 0 || column >= columns()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>column < 0 || column >= columns()</tt>.
      * @see #viewRow(int)
      */
     public IntMatrix1D viewColumn(int column) {
@@ -1584,7 +1512,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * 4, 5, 6</td>
      * </tr>
      * </table>
-     * 
+     *
      * @return a new flip view.
      * @see #viewRowFlip()
      */
@@ -1621,7 +1549,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * 4, 5, 6</td>
      * </tr>
      * </table>
-     * 
+     *
      * @return a new dice view.
      */
     public IntMatrix2D viewDice() {
@@ -1631,7 +1559,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
     /**
      * Constructs and returns a new <i>sub-range view</i> that is a
      * <tt>height x width</tt> sub matrix starting at <tt>[row,column]</tt>.
-     * 
+     * <p>
      * Operations on the returned view can only be applied to the restricted
      * range. Any attempt to access coordinates not contained in the view will
      * throw an <tt>IndexOutOfBoundsException</tt>.
@@ -1649,20 +1577,14 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * any attempt to access a cell at a coordinate
      * <tt>column&lt;0 || column&gt;=view.columns() || row&lt;0 || row&gt;=view.rows()</tt>
      * will throw an <tt>IndexOutOfBoundsException</tt>.
-     * 
-     * @param row
-     *            The index of the row-coordinate.
-     * @param column
-     *            The index of the column-coordinate.
-     * @param height
-     *            The height of the box.
-     * @param width
-     *            The width of the box.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column<0 || width<0 || column+width>columns() || row<0 || height<0 || row+height>rows()</tt>
+     *
+     * @param row    The index of the row-coordinate.
+     * @param column The index of the column-coordinate.
+     * @param height The height of the box.
+     * @param width  The width of the box.
      * @return the new view.
-     * 
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column<0 || width<0 || column+width>columns() || row<0 || height<0 || row+height>rows()</tt>
      */
     public IntMatrix2D viewPart(int row, int column, int height, int width) {
         return (IntMatrix2D) (view().vPart(row, column, height, width));
@@ -1686,12 +1608,10 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * 1, 2, 3</td>
      * </tr>
      * </table>
-     * 
-     * @param row
-     *            the row to fix.
+     *
+     * @param row the row to fix.
      * @return a new slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>row < 0 || row >= rows()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>row < 0 || row >= rows()</tt>.
      * @see #viewColumn(int)
      */
     public IntMatrix1D viewRow(int row) {
@@ -1725,7 +1645,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * 4, 5, 6</td>
      * </tr>
      * </table>
-     * 
+     *
      * @return a new flip view.
      * @see #viewColumnFlip()
      */
@@ -1741,35 +1661,34 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * columns, use a dice view.
      * <p>
      * <b>Example:</b> <br>
-     * 
+     *
      * <pre>
      *   // extract and view all rows which have a value &lt; threshold in the first column (representing &quot;age&quot;)
      *   final int threshold = 16;
-     *   matrix.viewSelection( 
+     *   matrix.viewSelection(
      *      new IntMatrix1DProcedure() {
      *         public final boolean apply(IntMatrix1D m) { return m.get(0) &lt; threshold; }
      *      }
      *   );
-     * 
+     *
      *   // extract and view all rows with RMS &lt; threshold
      *   // The RMS (Root-Mean-Square) is a measure of the average &quot;size&quot; of the elements of a data sequence.
      *   matrix = 0 1 2 3
      *   final int threshold = 0.5;
-     *   matrix.viewSelection( 
+     *   matrix.viewSelection(
      *      new IntMatrix1DProcedure() {
      *         public final boolean apply(IntMatrix1D m) { return Math.sqrt(m.aggregate(F.plus,F.square) / m.size()) &lt; threshold; }
      *      }
      *   );
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>. The returned
      * view is backed by this matrix, so changes in the returned view are
      * reflected in this matrix, and vice-versa.
-     * 
-     * @param condition
-     *            The condition to be matched.
+     *
+     * @param condition The condition to be matched.
      * @return the new view.
      */
     public IntMatrix2D viewSelection(IntMatrix1DProcedure condition) {
@@ -1791,7 +1710,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * Indexes can occur multiple times and can be in arbitrary order.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      *   this = 2 x 3 matrix:
      *   1, 2, 3
@@ -1802,9 +1721,9 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      *   view = 2 x 4 matrix:
      *   2, 1, 2, 1
      *   5, 4, 5, 4
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * Note that modifying the index arguments after this call has returned has
      * no effect on the view. The returned view is backed by this matrix, so
      * changes in the returned view are reflected in this matrix, and
@@ -1812,22 +1731,18 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <p>
      * To indicate "all" rows or "all columns", simply set the respective
      * parameter
-     * 
-     * @param rowIndexes
-     *            The rows of the cells that shall be visible in the new view.
-     *            To indicate that <i>all</i> rows shall be visible, simply set
-     *            this parameter to <tt>null</tt>.
-     * @param columnIndexes
-     *            The columns of the cells that shall be visible in the new
-     *            view. To indicate that <i>all</i> columns shall be visible,
-     *            simply set this parameter to <tt>null</tt>.
+     *
+     * @param rowIndexes    The rows of the cells that shall be visible in the new view.
+     *                      To indicate that <i>all</i> rows shall be visible, simply set
+     *                      this parameter to <tt>null</tt>.
+     * @param columnIndexes The columns of the cells that shall be visible in the new
+     *                      view. To indicate that <i>all</i> columns shall be visible,
+     *                      simply set this parameter to <tt>null</tt>.
      * @return the new view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>!(0 <= rowIndexes[i] < rows())</tt> for any
-     *             <tt>i=0..rowIndexes.length()-1</tt>.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>!(0 <= columnIndexes[i] < columns())</tt> for any
-     *             <tt>i=0..columnIndexes.length()-1</tt>.
+     * @throws IndexOutOfBoundsException if <tt>!(0 <= rowIndexes[i] < rows())</tt> for any
+     *                                   <tt>i=0..rowIndexes.length()-1</tt>.
+     * @throws IndexOutOfBoundsException if <tt>!(0 <= columnIndexes[i] < columns())</tt> for any
+     *                                   <tt>i=0..columnIndexes.length()-1</tt>.
      */
     public IntMatrix2D viewSelection(int[] rowIndexes, int[] columnIndexes) {
         // check for "all"
@@ -1860,7 +1775,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
         int[] rowIndexes = new int[n];
         int[] columnIndexes = new int[n];
         int idx = 0;
-        for (Iterator<int[]> iterator = indexes.iterator(); iterator.hasNext();) {
+        for (Iterator<int[]> iterator = indexes.iterator(); iterator.hasNext(); ) {
             int[] is = iterator.next();
             rowIndexes[idx] = is[0];
             columnIndexes[idx] = is[1];
@@ -1881,11 +1796,9 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param rowOffsets
-     *            the offsets of the visible elements.
-     * @param columnOffsets
-     *            the offsets of the visible elements.
+     *
+     * @param rowOffsets    the offsets of the visible elements.
+     * @param columnOffsets the offsets of the visible elements.
      * @return a new view.
      */
     protected abstract IntMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets);
@@ -1894,13 +1807,12 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * Sorts the matrix rows into ascending order, according to the <i>natural
      * ordering</i> of the matrix values in the given column. This sort is
      * guaranteed to be <i>stable</i>. For further information, see
-     * {@link cern.mateba.matrix.tint.algo.IntSorting#sort(IntMatrix2D,int)}. For
+     * {@link cern.mateba.matrix.tint.algo.IntSorting#sort(IntMatrix2D, int)}. For
      * more advanced sorting functionality, see
      * {@link cern.mateba.matrix.tint.algo.IntSorting}.
-     * 
+     *
      * @return a new sorted vector (matrix) view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>column < 0 || column >= columns()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>column < 0 || column >= columns()</tt>.
      */
     public IntMatrix2D viewSorted(int column) {
         return cern.mateba.matrix.tint.algo.IntSorting.mergeSort.sort(this, column);
@@ -1915,14 +1827,11 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * <tt>i = 0..rows()/rowStride - 1, j = 0..columns()/columnStride - 1</tt>.
      * The returned view is backed by this matrix, so changes in the returned
      * view are reflected in this matrix, and vice-versa.
-     * 
-     * @param rowStride
-     *            the row step factor.
-     * @param columnStride
-     *            the column step factor.
+     *
+     * @param rowStride    the row step factor.
+     * @param columnStride the column step factor.
      * @return a new view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>rowStride<=0 || columnStride<=0</tt>.
+     * @throws IndexOutOfBoundsException if <tt>rowStride<=0 || columnStride<=0</tt>.
      */
     public IntMatrix2D viewStrides(int rowStride, int columnStride) {
         return (IntMatrix2D) (view().vStrides(rowStride, columnStride));
@@ -1943,20 +1852,16 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * . Where <tt>A == this</tt>. <br>
      * Note: Matrix shape conformance is checked <i>after</i> potential
      * transpositions.
-     * 
-     * @param y
-     *            the source vector.
-     * @param z
-     *            the vector where results are to be stored. Set this parameter
-     *            to <tt>null</tt> to indicate that a new result vector shall be
-     *            constructed.
+     *
+     * @param y the source vector.
+     * @param z the vector where results are to be stored. Set this parameter
+     *          to <tt>null</tt> to indicate that a new result vector shall be
+     *          constructed.
      * @return z (for convenience only).
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>A.columns() != y.size() || A.rows() > z.size())</tt>.
+     * @throws IllegalArgumentException if <tt>A.columns() != y.size() || A.rows() > z.size())</tt>.
      */
     public IntMatrix1D zMult(final IntMatrix1D y, IntMatrix1D z, final int alpha, final int beta,
-            final boolean transposeA) {
+                             final boolean transposeA) {
         if (transposeA)
             return viewDice().zMult(y, z, alpha, beta, false);
         final IntMatrix1D z_loc;
@@ -1967,7 +1872,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
         }
         if (columns != y.size() || rows > z_loc.size())
             throw new IllegalArgumentException("Incompatible args: " + toStringShort() + ", " + y.toStringShort()
-                    + ", " + z_loc.toStringShort());
+                + ", " + z_loc.toStringShort());
 
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
@@ -2018,25 +1923,19 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
      * Matrix shapes: <tt>A(m x n), B(n x p), C(m x p)</tt>. <br>
      * Note: Matrix shape conformance is checked <i>after</i> potential
      * transpositions.
-     * 
-     * @param B
-     *            the second source matrix.
-     * @param C
-     *            the matrix where results are to be stored. Set this parameter
-     *            to <tt>null</tt> to indicate that a new result matrix shall be
-     *            constructed.
+     *
+     * @param B the second source matrix.
+     * @param C the matrix where results are to be stored. Set this parameter
+     *          to <tt>null</tt> to indicate that a new result matrix shall be
+     *          constructed.
      * @return C (for convenience only).
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>B.rows() != A.columns()</tt>.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>C.rows() != A.rows() || C.columns() != B.columns()</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>A == C || B == C</tt>.
+     * @throws IllegalArgumentException if <tt>B.rows() != A.columns()</tt>.
+     * @throws IllegalArgumentException if
+     *                                  <tt>C.rows() != A.rows() || C.columns() != B.columns()</tt>.
+     * @throws IllegalArgumentException if <tt>A == C || B == C</tt>.
      */
     public IntMatrix2D zMult(final IntMatrix2D B, IntMatrix2D C, final int alpha, final int beta,
-            final boolean transposeA, final boolean transposeB) {
+                             final boolean transposeA, final boolean transposeB) {
         if (transposeA)
             return viewDice().zMult(B, C, alpha, beta, false, transposeB);
         if (transposeB)
@@ -2053,10 +1952,10 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
         }
         if (B.rows != n)
             throw new IllegalArgumentException("Matrix2D inner dimensions must agree:" + toStringShort() + ", "
-                    + B.toStringShort());
+                + B.toStringShort());
         if (C_loc.rows != m || C_loc.columns != p)
             throw new IllegalArgumentException("Incompatibe result matrix: " + toStringShort() + ", "
-                    + B.toStringShort() + ", " + C_loc.toStringShort());
+                + B.toStringShort() + ", " + C_loc.toStringShort());
         if (this == C_loc || B == C_loc)
             throw new IllegalArgumentException("Matrices must not be identical");
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -2098,7 +1997,7 @@ public abstract class IntMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns the sum of all cells; <tt>Sum( x[i,j] )</tt>.
-     * 
+     *
      * @return the sum.
      */
     public int zSum() {

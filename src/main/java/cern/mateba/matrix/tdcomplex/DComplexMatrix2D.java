@@ -22,7 +22,7 @@ import java.util.concurrent.Future;
 
 /**
  * Abstract base class for 2-d matrices holding <tt>complex</tt> elements.
- * 
+ * <p>
  * A matrix has a number of rows and columns, which are assigned upon instance
  * construction - The matrix's size is then <tt>rows()*columns()</tt>. Elements
  * are accessed via <tt>[row,column]</tt> coordinates. Legal coordinates range
@@ -32,9 +32,8 @@ import java.util.concurrent.Future;
  * will throw an <tt>IndexOutOfBoundsException</tt>.
  * <p>
  * <b>Note</b> that this implementation is not synchronized.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
@@ -50,18 +49,16 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Applies a function to each cell and aggregates the results.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell value.
-     * @param f
-     *            a function transforming the current cell value.
+     *
+     * @param aggr an aggregation function taking as first argument the current
+     *             aggregation and as second argument the transformed current
+     *             cell value.
+     * @param f    a function transforming the current cell value.
      * @return the aggregated measure.
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public double[] aggregate(final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
-            final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
+                              final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
         double[] b = new double[2];
         if (size() == 0) {
             b[0] = Double.NaN;
@@ -77,18 +74,16 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<double[]>() {
-                    public double[] call() throws Exception {
-                        double[] a = f.apply(getQuick(firstRow, 0));
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                a = aggr.apply(a, f.apply(getQuick(r, c)));
-                            }
-                            d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] a1 = f.apply(getQuick(firstRow, 0));
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            a1 = aggr.apply(a1, f.apply(getQuick(r, c)));
                         }
-                        return a;
+                        d = 0;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -108,22 +103,19 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
     /**
      * Applies a function to each corresponding cell of two matrices and
      * aggregates the results.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell values.
-     * @param f
-     *            a function transforming the current cell values.
+     *
+     * @param aggr an aggregation function taking as first argument the current
+     *             aggregation and as second argument the transformed current
+     *             cell values.
+     * @param f    a function transforming the current cell values.
      * @return the aggregated measure.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public double[] aggregate(final DComplexMatrix2D other,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
+                              final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
+                              final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
         checkShape(other);
         double[] b = new double[2];
         if (size() == 0) {
@@ -140,19 +132,16 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<double[]>() {
-
-                    public double[] call() throws Exception {
-                        double[] a = f.apply(getQuick(firstRow, 0), other.getQuick(firstRow, 0));
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                a = aggr.apply(a, f.apply(getQuick(r, c), other.getQuick(r, c)));
-                            }
-                            d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] a1 = f.apply(getQuick(firstRow, 0), other.getQuick(firstRow, 0));
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            a1 = aggr.apply(a1, f.apply(getQuick(r, c), other.getQuick(r, c)));
                         }
-                        return a;
+                        d = 0;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -171,9 +160,8 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Assigns the result of a function to each cell;
-     * 
-     * @param f
-     *            a function object taking as argument the current cell's value.
+     *
+     * @param f a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
@@ -186,12 +174,10 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, f.apply(getQuick(r, c)));
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, f.apply(getQuick(r, c)));
                         }
                     }
                 });
@@ -210,17 +196,14 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Assigns the result of a function to all cells that satisfy a condition.
-     * 
-     * @param cond
-     *            a condition.
-     * 
-     * @param f
-     *            a function object.
+     *
+     * @param cond a condition.
+     * @param f    a function object.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix2D assign(final cern.mateba.function.tdcomplex.DComplexProcedure cond,
-            final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
+                                   final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
             nthreads = Math.min(nthreads, rows);
@@ -229,15 +212,13 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        double[] elem;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                elem = getQuick(r, c);
-                                if (cond.apply(elem)) {
-                                    setQuick(r, c, f.apply(elem));
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] elem;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            elem = getQuick(r, c);
+                            if (cond.apply(elem)) {
+                                setQuick(r, c, f.apply(elem));
                             }
                         }
                     }
@@ -260,14 +241,10 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Assigns a value to all cells that satisfy a condition.
-     * 
-     * @param cond
-     *            a condition.
-     * 
-     * @param value
-     *            a value (re=value[0], im=value[1]).
+     *
+     * @param cond  a condition.
+     * @param value a value (re=value[0], im=value[1]).
      * @return <tt>this</tt> (for convenience only).
-     * 
      */
     public DComplexMatrix2D assign(final cern.mateba.function.tdcomplex.DComplexProcedure cond, final double[] value) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -278,15 +255,13 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        double[] elem;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                elem = getQuick(r, c);
-                                if (cond.apply(elem)) {
-                                    setQuick(r, c, value);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] elem;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            elem = getQuick(r, c);
+                            if (cond.apply(elem)) {
+                                setQuick(r, c, value);
                             }
                         }
                     }
@@ -310,9 +285,8 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
     /**
      * Assigns the result of a function to the real part of the receiver. The
      * imaginary part of the receiver is reset to zero.
-     * 
-     * @param f
-     *            a function object taking as argument the current cell's value.
+     *
+     * @param f a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
@@ -325,13 +299,11 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                double re = f.apply(getQuick(r, c));
-                                setQuick(r, c, re, 0);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            double re = f.apply(getQuick(r, c));
+                            setQuick(r, c, re, 0);
                         }
                     }
                 });
@@ -355,14 +327,12 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * derived from the same matrix) and intersect in an ambiguous way, then
      * replaces <i>as if</i> using an intermediate auxiliary deep copy of
      * <tt>other</tt>.
-     * 
-     * @param other
-     *            the source matrix to copy from (may be identical to the
-     *            receiver).
+     *
+     * @param other the source matrix to copy from (may be identical to the
+     *              receiver).
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
      */
     public DComplexMatrix2D assign(DComplexMatrix2D other) {
         if (other == this)
@@ -405,21 +375,18 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Assigns the result of a function to each cell.
-     * 
-     * @param y
-     *            the secondary matrix to operate on.
-     * @param f
-     *            a function object taking as first argument the current cell's
-     *            value of <tt>this</tt>, and as second argument the current
-     *            cell's value of <tt>y</tt>,
+     *
+     * @param y the secondary matrix to operate on.
+     * @param f a function object taking as first argument the current cell's
+     *          value of <tt>this</tt>, and as second argument the current
+     *          cell's value of <tt>y</tt>,
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix2D assign(final DComplexMatrix2D y,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
+                                   final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
         checkShape(y);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
@@ -452,22 +419,16 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Assigns the result of a function to all cells with a given indexes
-     * 
-     * @param y
-     *            the secondary matrix to operate on.
-     * @param function
-     *            a function object taking as first argument the current cell's
-     *            value of <tt>this</tt>, and as second argument the current
-     *            cell's value of <tt>y</tt>,
-     * @param rowList
-     *            row indexes.
-     * @param columnList
-     *            column indexes.
-     * 
+     *
+     * @param y          the secondary matrix to operate on.
+     * @param function   a function object taking as first argument the current cell's
+     *                   value of <tt>this</tt>, and as second argument the current
+     *                   cell's value of <tt>y</tt>,
+     * @param rowList    row indexes.
+     * @param columnList column indexes.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != other.columns() || rows() != other.rows()</tt>
      * @see cern.jet.math.tdouble.DoubleFunctions
      */
     public DComplexMatrix2D assign(final DComplexMatrix2D y,
@@ -490,7 +451,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
                     public void run() {
                         for (int i = firstIdx; i < lastIdx; i++) {
                             setQuick(rowElements[i], columnElements[i], function.apply(getQuick(rowElements[i],
-                                    columnElements[i]), y.getQuick(rowElements[i], columnElements[i])));
+                                columnElements[i]), y.getQuick(rowElements[i], columnElements[i])));
                         }
                     }
 
@@ -500,7 +461,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
         } else {
             for (int i = 0; i < size; i++) {
                 setQuick(rowElements[i], columnElements[i], function.apply(getQuick(rowElements[i], columnElements[i]),
-                        y.getQuick(rowElements[i], columnElements[i])));
+                    y.getQuick(rowElements[i], columnElements[i])));
             }
         }
         return this;
@@ -508,12 +469,9 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Sets all cells to the state specified by <tt>re</tt> and <tt>im</tt>.
-     * 
-     * @param re
-     *            the real part of the value to be filled into the cells.
-     * @param im
-     *            the imaginary part of the value to be filled into the cells.
-     * 
+     *
+     * @param re the real part of the value to be filled into the cells.
+     * @param im the imaginary part of the value to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
      */
     public DComplexMatrix2D assign(final double re, final double im) {
@@ -554,17 +512,15 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>values.length != rows()*2*columns()</tt>.
+     * @throws IllegalArgumentException if <tt>values.length != rows()*2*columns()</tt>.
      */
     public DComplexMatrix2D assign(final double[] values) {
         if (values.length != rows * 2 * columns)
             throw new IllegalArgumentException("Must have same length: length=" + values.length + "rows()*2*columns()="
-                    + rows() * 2 * columns());
+                + rows() * 2 * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
             nthreads = Math.min(nthreads, rows);
@@ -608,20 +564,18 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>values.length != rows() || for any 0 &lt;= row &lt; rows(): values[row].length != 2*columns()</tt>
-     *             .
+     * @throws IllegalArgumentException if
+     *                                  <tt>values.length != rows() || for any 0 &lt;= row &lt; rows(): values[row].length != 2*columns()</tt>
+     *                                  .
      */
     public DComplexMatrix2D assign(final double[][] values) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (values.length != rows)
             throw new IllegalArgumentException("Must have same number of rows: rows=" + values.length + "rows()="
-                    + rows());
+                + rows());
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
             nthreads = Math.min(nthreads, rows);
             Future<?>[] futures = new Future[nthreads];
@@ -635,8 +589,8 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
                             double[] currentRow = values[r];
                             if (currentRow.length != 2 * columns)
                                 throw new IllegalArgumentException(
-                                        "Must have same number of columns in every row: columns=" + currentRow.length
-                                                + "2*columns()=" + 2 * columns());
+                                    "Must have same number of columns in every row: columns=" + currentRow.length
+                                        + "2*columns()=" + 2 * columns());
                             for (int c = 0; c < columns; c++) {
                                 setQuick(r, c, currentRow[2 * c], currentRow[2 * c + 1]);
                             }
@@ -650,7 +604,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
                 double[] currentRow = values[r];
                 if (currentRow.length != 2 * columns)
                     throw new IllegalArgumentException("Must have same number of columns in every row: columns="
-                            + currentRow.length + "2*columns()=" + 2 * columns());
+                        + currentRow.length + "2*columns()=" + 2 * columns());
                 for (int c = 0; c < columns; c++) {
                     setQuick(r, c, currentRow[2 * c], currentRow[2 * c + 1]);
                 }
@@ -667,17 +621,15 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>values.length != rows()*2*columns()</tt>.
+     * @throws IllegalArgumentException if <tt>values.length != rows()*2*columns()</tt>.
      */
     public DComplexMatrix2D assign(final float[] values) {
         if (values.length != rows * 2 * columns)
             throw new IllegalArgumentException("Must have same length: length=" + values.length + "rows()*2*columns()="
-                    + rows() * 2 * columns());
+                + rows() * 2 * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
             nthreads = Math.min(nthreads, rows);
@@ -718,12 +670,10 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * Replaces imaginary part of the receiver with the values of another real
      * matrix. The real part of the receiver remains unchanged. Both matrices
      * must have the same size.
-     * 
-     * @param other
-     *            the source matrix to copy from
+     *
+     * @param other the source matrix to copy from
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
     public DComplexMatrix2D assignImaginary(final DoubleMatrix2D other) {
         checkShape(other);
@@ -764,12 +714,10 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * Replaces real part of the receiver with the values of another real
      * matrix. The imaginary part of the receiver remains unchanged. Both
      * matrices must have the same size.
-     * 
-     * @param other
-     *            the source matrix to copy from
+     *
+     * @param other the source matrix to copy from
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
     public DComplexMatrix2D assignReal(final DoubleMatrix2D other) {
         checkShape(other);
@@ -808,7 +756,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns the number of cells having non-zero values; ignores tolerance.
-     * 
+     *
      * @return the number of cells having non-zero values.
      */
     public int cardinality() {
@@ -869,7 +817,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <b>Note that the returned matrix is an independent deep copy.</b> The
      * returned matrix is not backed by this matrix, so changes in the returned
      * matrix are not reflected in this matrix, and vice-versa.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
     public DComplexMatrix2D copy() {
@@ -878,11 +826,10 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns whether all cells are equal to the given value.
-     * 
-     * @param value
-     *            the value to test against.
+     *
+     * @param value the value to test against.
      * @return <tt>true</tt> if all cells are equal to the given value,
-     *         <tt>false</tt> otherwise.
+     * <tt>false</tt> otherwise.
      */
     public boolean equals(double[] value) {
         return cern.mateba.matrix.tdcomplex.algo.DComplexProperty.DEFAULT.equals(this, value);
@@ -894,11 +841,10 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * and is at least a <code>DoubleMatrix2D</code> object that has the same
      * number of columns and rows as the receiver and has exactly the same
      * values at the same coordinates.
-     * 
-     * @param obj
-     *            the object to compare with.
+     *
+     * @param obj the object to compare with.
      * @return <code>true</code> if the objects are the same; <code>false</code>
-     *         otherwise.
+     * otherwise.
      */
 
     public boolean equals(Object obj) {
@@ -914,13 +860,12 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * method for fast special-purpose iteration. If you want to modify another
      * matrix instead of <tt>this</tt> (i.e. work in read-only mode), simply
      * return the input value unchanged.
-     * 
+     * <p>
      * Parameters to function are as follows: <tt>first==row</tt>,
      * <tt>second==column</tt>, <tt>third==nonZeroValue</tt>.
-     * 
-     * @param function
-     *            a function object taking as argument the current non-zero
-     *            cell's row, column and value.
+     *
+     * @param function a function object taking as argument the current non-zero
+     *                 cell's row, column and value.
      * @return <tt>this</tt> (for convenience only).
      */
     public DComplexMatrix2D forEachNonZero(final cern.mateba.function.tdcomplex.IntIntDComplexFunction function) {
@@ -963,15 +908,12 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>[row,column]</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      * @return the value of the specified cell.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
      */
     public double[] get(int row, int column) {
         if (column < 0 || column >= columns || row < 0 || row >= rows)
@@ -984,7 +926,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * unconjugated complex transposition is needed, one should use viewDice()
      * method. This method creates a new object (not a view), so changes in the
      * returned matrix are NOT reflected in this matrix.
-     * 
+     *
      * @return a complex conjugate matrix
      */
     public DComplexMatrix2D getConjugateTranspose() {
@@ -1026,14 +968,14 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns the elements of this matrix.
-     * 
+     *
      * @return the elements
      */
     public abstract Object elements();
 
     /**
      * Returns the imaginary part of this matrix
-     * 
+     *
      * @return the imaginary part
      */
     public abstract DoubleMatrix2D getImaginaryPart();
@@ -1049,16 +991,13 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * However, subclasses are free to us any other order, even an order that
      * may change over time as cell values are changed. (Of course, result lists
      * indexes are guaranteed to correspond to the same cell).
-     * 
-     * @param rowList
-     *            the list to be filled with row indexes, can have any size.
-     * @param columnList
-     *            the list to be filled with column indexes, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param rowList    the list to be filled with row indexes, can have any size.
+     * @param columnList the list to be filled with column indexes, can have any size.
+     * @param valueList  the list to be filled with values, can have any size.
      */
     public void getNonZeros(final IntArrayList rowList, final IntArrayList columnList,
-            final ArrayList<double[]> valueList) {
+                            final ArrayList<double[]> valueList) {
         rowList.clear();
         columnList.clear();
         valueList.clear();
@@ -1077,25 +1016,23 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>[row,column]</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      * @return the value at the specified coordinate.
      */
     public abstract double[] getQuick(int row, int column);
 
     /**
      * Returns the real part of this matrix
-     * 
+     *
      * @return the real part
      */
     public abstract DoubleMatrix2D getRealPart();
@@ -1107,7 +1044,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * new matrix must also be of type <tt>DenseComplexMatrix2D</tt>. In
      * general, the new matrix should have internal parametrization as similar
      * as possible.
-     * 
+     *
      * @return a new empty matrix of the same dynamic type.
      */
     public DComplexMatrix2D like() {
@@ -1121,11 +1058,9 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <tt>DenseComplexMatrix2D</tt> the new matrix must also be of type
      * <tt>DenseComplexMatrix2D</tt>. In general, the new matrix should have
      * internal parametrization as similar as possible.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
     public abstract DComplexMatrix2D like(int rows, int columns);
@@ -1135,9 +1070,8 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * type</i>, entirelly independent of the receiver. For example, if the
      * receiver is an instance of type <tt>DenseComplexMatrix2D</tt> the new
      * matrix must be of type <tt>DenseComplexMatrix1D</tt>.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
+     *
+     * @param size the number of cells the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
     public abstract DComplexMatrix1D like1D(int size);
@@ -1145,16 +1079,12 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
     /**
      * Sets the matrix cell at coordinate <tt>[row,column]</tt> to the specified
      * value.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param value
-     *            the value to be filled into the specified cell.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param value  the value to be filled into the specified cell.
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
      */
     public void set(int row, int column, double[] value) {
         if (column < 0 || column >= columns || row < 0 || row >= rows)
@@ -1165,20 +1095,15 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
     /**
      * Sets the matrix cell at coordinate <tt>[row,column]</tt> to the specified
      * value.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param re
-     *            the real part of the value to be filled into the specified
-     *            cell.
-     * @param im
-     *            the imaginary part of the value to be filled into the
-     *            specified cell.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param re     the real part of the value to be filled into the specified
+     *               cell.
+     * @param im     the imaginary part of the value to be filled into the
+     *               specified cell.
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column&lt;0 || column&gt;=columns() || row&lt;0 || row&gt;=rows()</tt>
      */
     public void set(int row, int column, double re, double im) {
         if (column < 0 || column >= columns || row < 0 || row >= rows)
@@ -1189,45 +1114,37 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
     /**
      * Sets the matrix cell at coordinate <tt>[row,column]</tt> to the specified
      * value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param re
-     *            the real part of the value to be filled into the specified
-     *            cell.
-     * @param im
-     *            the imaginary part of the value to be filled into the
-     *            specified cell.
-     * 
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param re     the real part of the value to be filled into the specified
+     *               cell.
+     * @param im     the imaginary part of the value to be filled into the
+     *               specified cell.
      */
     public abstract void setQuick(int row, int column, double re, double im);
 
     /**
      * Sets the matrix cell at coordinate <tt>[row,column]</tt> to the specified
      * value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param value  the value to be filled into the specified cell.
      */
     public abstract void setQuick(int row, int column, double[] value);
 
@@ -1239,7 +1156,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
+     *
      * @return an array filled with the values of the cells.
      */
     public double[][] toArray() {
@@ -1281,7 +1198,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns a string representation using default formatting ("%.4f").
-     * 
+     *
      * @return a string representation of the matrix.
      */
 
@@ -1291,10 +1208,9 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns a string representation using using given <tt>format</tt>
-     * 
+     *
      * @param format
      * @return a string representation of the matrix.
-     * 
      */
     public String toString(String format) {
         StringBuffer s = new StringBuffer(String.format("ComplexMatrix2D: %d rows, %d columns\n\n", rows, columns));
@@ -1324,7 +1240,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
     /**
      * Returns a vector obtained by stacking the columns of this matrix on top
      * of one another.
-     * 
+     *
      * @return a vector of columns of this matrix.
      */
     public abstract DComplexMatrix1D vectorize();
@@ -1335,12 +1251,10 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * in the returned view are reflected in this matrix, and vice-versa. To
      * obtain a slice view on subranges, construct a sub-ranging view (
      * <tt>viewPart(...)</tt>), then apply this method to the sub-range view.
-     * 
-     * @param column
-     *            the column to fix.
+     *
+     * @param column the column to fix.
      * @return a new slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>column < 0 || column >= columns()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>column < 0 || column >= columns()</tt>.
      * @see #viewRow(int)
      */
     public DComplexMatrix1D viewColumn(int column) {
@@ -1357,7 +1271,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * what used to be column <tt>columns()-1</tt> is now column <tt>0</tt>. The
      * returned view is backed by this matrix, so changes in the returned view
      * are reflected in this matrix, and vice-versa.
-     * 
+     *
      * @return a new flip view.
      * @see #viewRowFlip()
      */
@@ -1374,7 +1288,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * changes in the returned view are reflected in this matrix, and
      * vice-versa. Use idioms like <tt>result = viewDice(A).copy()</tt> to
      * generate an independent transposed matrix.
-     * 
+     *
      * @return a new dice view.
      */
     public DComplexMatrix2D viewDice() {
@@ -1384,7 +1298,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
     /**
      * Constructs and returns a new <i>sub-range view</i> that is a
      * <tt>height x width</tt> sub matrix starting at <tt>[row,column]</tt>.
-     * 
+     * <p>
      * Operations on the returned view can only be applied to the restricted
      * range. Any attempt to access coordinates not contained in the view will
      * throw an <tt>IndexOutOfBoundsException</tt>.
@@ -1402,20 +1316,14 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * any attempt to access a cell at a coordinate
      * <tt>column&lt;0 || column&gt;=view.columns() || row&lt;0 || row&gt;=view.rows()</tt>
      * will throw an <tt>IndexOutOfBoundsException</tt>.
-     * 
-     * @param row
-     *            The index of the row-coordinate.
-     * @param column
-     *            The index of the column-coordinate.
-     * @param height
-     *            The height of the box.
-     * @param width
-     *            The width of the box.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column<0 || width<0 || column+width>columns() || row<0 || height<0 || row+height>rows()</tt>
+     *
+     * @param row    The index of the row-coordinate.
+     * @param column The index of the column-coordinate.
+     * @param height The height of the box.
+     * @param width  The width of the box.
      * @return the new view.
-     * 
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column<0 || width<0 || column+width>columns() || row<0 || height<0 || row+height>rows()</tt>
      */
     public DComplexMatrix2D viewPart(int row, int column, int height, int width) {
         return (DComplexMatrix2D) (view().vPart(row, column, height, width));
@@ -1427,12 +1335,10 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * in the returned view are reflected in this matrix, and vice-versa. To
      * obtain a slice view on subranges, construct a sub-ranging view (
      * <tt>viewPart(...)</tt>), then apply this method to the sub-range view.
-     * 
-     * @param row
-     *            the row to fix.
+     *
+     * @param row the row to fix.
      * @return a new slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>row < 0 || row >= rows()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>row < 0 || row >= rows()</tt>.
      * @see #viewColumn(int)
      */
     public DComplexMatrix1D viewRow(int row) {
@@ -1449,7 +1355,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * be row <tt>rows()-1</tt> is now row <tt>0</tt>. The returned view is
      * backed by this matrix, so changes in the returned view are reflected in
      * this matrix, and vice-versa.
-     * 
+     *
      * @return a new flip view.
      * @see #viewColumnFlip()
      */
@@ -1463,9 +1369,8 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * condition to each row and takes only those row where
      * <tt>condition.apply(viewRow(i))</tt> yields <tt>true</tt>. To match
      * columns, use a dice view.
-     * 
-     * @param condition
-     *            The condition to be matched.
+     *
+     * @param condition The condition to be matched.
      * @return the new view.
      */
     public DComplexMatrix2D viewSelection(DComplexMatrix1DProcedure condition) {
@@ -1484,7 +1389,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <tt>view.rows() == rowIndexes.length, view.columns() == columnIndexes.length</tt>
      * and <tt>view.get(i,j) == this.get(rowIndexes[i],columnIndexes[j])</tt>.
      * Indexes can occur multiple times and can be in arbitrary order.
-     * 
+     * <p>
      * Note that modifying the index arguments after this call has returned has
      * no effect on the view. The returned view is backed by this matrix, so
      * changes in the returned view are reflected in this matrix, and
@@ -1492,22 +1397,18 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <p>
      * To indicate "all" rows or "all columns", simply set the respective
      * parameter
-     * 
-     * @param rowIndexes
-     *            The rows of the cells that shall be visible in the new view.
-     *            To indicate that <i>all</i> rows shall be visible, simply set
-     *            this parameter to <tt>null</tt>.
-     * @param columnIndexes
-     *            The columns of the cells that shall be visible in the new
-     *            view. To indicate that <i>all</i> columns shall be visible,
-     *            simply set this parameter to <tt>null</tt>.
+     *
+     * @param rowIndexes    The rows of the cells that shall be visible in the new view.
+     *                      To indicate that <i>all</i> rows shall be visible, simply set
+     *                      this parameter to <tt>null</tt>.
+     * @param columnIndexes The columns of the cells that shall be visible in the new
+     *                      view. To indicate that <i>all</i> columns shall be visible,
+     *                      simply set this parameter to <tt>null</tt>.
      * @return the new view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>!(0 <= rowIndexes[i] < rows())</tt> for any
-     *             <tt>i=0..rowIndexes.length()-1</tt>.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>!(0 <= columnIndexes[i] < columns())</tt> for any
-     *             <tt>i=0..columnIndexes.length()-1</tt>.
+     * @throws IndexOutOfBoundsException if <tt>!(0 <= rowIndexes[i] < rows())</tt> for any
+     *                                   <tt>i=0..rowIndexes.length()-1</tt>.
+     * @throws IndexOutOfBoundsException if <tt>!(0 <= columnIndexes[i] < columns())</tt> for any
+     *                                   <tt>i=0..columnIndexes.length()-1</tt>.
      */
     public DComplexMatrix2D viewSelection(int[] rowIndexes, int[] columnIndexes) {
         // check for "all"
@@ -1544,14 +1445,11 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <tt>i = 0..rows()/rowStride - 1, j = 0..columns()/columnStride - 1</tt>.
      * The returned view is backed by this matrix, so changes in the returned
      * view are reflected in this matrix, and vice-versa.
-     * 
-     * @param rowStride
-     *            the row step factor.
-     * @param columnStride
-     *            the column step factor.
+     *
+     * @param rowStride    the row step factor.
+     * @param columnStride the column step factor.
      * @return a new view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>rowStride<=0 || columnStride<=0</tt>.
+     * @throws IndexOutOfBoundsException if <tt>rowStride<=0 || columnStride<=0</tt>.
      */
     public DComplexMatrix2D viewStrides(int rowStride, int columnStride) {
         return (DComplexMatrix2D) (view().vStrides(rowStride, columnStride));
@@ -1560,17 +1458,15 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
     /**
      * Linear algebraic matrix-vector multiplication; <tt>z = A * y</tt>;
      * Equivalent to <tt>return A.zMult(y,z,1,0);</tt>
-     * 
-     * @param y
-     *            the source vector.
-     * @param z
-     *            the vector where results are to be stored. Set this parameter
-     *            to <tt>null</tt> to indicate that a new result vector shall be
-     *            constructed.
+     *
+     * @param y the source vector.
+     * @param z the vector where results are to be stored. Set this parameter
+     *          to <tt>null</tt> to indicate that a new result vector shall be
+     *          constructed.
      * @return z (for convenience only).
      */
     public DComplexMatrix1D zMult(DComplexMatrix1D y, DComplexMatrix1D z) {
-        return zMult(y, z, new double[] { 1, 0 }, (z == null ? new double[] { 1, 0 } : new double[] { 0, 0 }), false);
+        return zMult(y, z, new double[]{1, 0}, (z == null ? new double[]{1, 0} : new double[]{0, 0}), false);
     }
 
     /**
@@ -1578,20 +1474,16 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <tt>z = alpha * A * y + beta*z</tt>. Where <tt>A == this</tt>. <br>
      * Note: Matrix shape conformance is checked <i>after</i> potential
      * transpositions.
-     * 
-     * @param y
-     *            the source vector.
-     * @param z
-     *            the vector where results are to be stored. Set this parameter
-     *            to <tt>null</tt> to indicate that a new result vector shall be
-     *            constructed.
+     *
+     * @param y the source vector.
+     * @param z the vector where results are to be stored. Set this parameter
+     *          to <tt>null</tt> to indicate that a new result vector shall be
+     *          constructed.
      * @return z (for convenience only).
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>A.columns() != y.size() || A.rows() > z.size())</tt>.
+     * @throws IllegalArgumentException if <tt>A.columns() != y.size() || A.rows() > z.size())</tt>.
      */
     public DComplexMatrix1D zMult(final DComplexMatrix1D y, DComplexMatrix1D z, final double[] alpha,
-            final double[] beta, boolean transposeA) {
+                                  final double[] beta, boolean transposeA) {
         if (transposeA)
             return getConjugateTranspose().zMult(y, z, alpha, beta, false);
         final DComplexMatrix1D zz;
@@ -1602,7 +1494,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
         }
         if (columns != y.size() || rows > zz.size())
             throw new IllegalArgumentException("Incompatible args: " + toStringShort() + ", " + y.toStringShort()
-                    + ", " + zz.toStringShort());
+                + ", " + zz.toStringShort());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
             nthreads = Math.min(nthreads, rows);
@@ -1643,18 +1535,16 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
     /**
      * Linear algebraic matrix-matrix multiplication; <tt>C = A x B</tt>;
      * Equivalent to <tt>A.zMult(B,C,1,0,false,false)</tt>.
-     * 
-     * @param B
-     *            the second source matrix.
-     * @param C
-     *            the matrix where results are to be stored. Set this parameter
-     *            to <tt>null</tt> to indicate that a new result matrix shall be
-     *            constructed.
+     *
+     * @param B the second source matrix.
+     * @param C the matrix where results are to be stored. Set this parameter
+     *          to <tt>null</tt> to indicate that a new result matrix shall be
+     *          constructed.
      * @return C (for convenience only).
      */
     public DComplexMatrix2D zMult(DComplexMatrix2D B, DComplexMatrix2D C) {
-        return zMult(B, C, new double[] { 1, 0 }, (C == null ? new double[] { 1, 0 } : new double[] { 0, 0 }), false,
-                false);
+        return zMult(B, C, new double[]{1, 0}, (C == null ? new double[]{1, 0} : new double[]{0, 0}), false,
+            false);
     }
 
     /**
@@ -1663,25 +1553,19 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <tt>A(m x n), B(n x p), C(m x p)</tt>. <br>
      * Note: Matrix shape conformance is checked <i>after</i> potential
      * transpositions.
-     * 
-     * @param B
-     *            the second source matrix.
-     * @param C
-     *            the matrix where results are to be stored. Set this parameter
-     *            to <tt>null</tt> to indicate that a new result matrix shall be
-     *            constructed.
+     *
+     * @param B the second source matrix.
+     * @param C the matrix where results are to be stored. Set this parameter
+     *          to <tt>null</tt> to indicate that a new result matrix shall be
+     *          constructed.
      * @return C (for convenience only).
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>B.rows() != A.columns()</tt>.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>C.rows() != A.rows() || C.columns() != B.columns()</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>A == C || B == C</tt>.
+     * @throws IllegalArgumentException if <tt>B.rows() != A.columns()</tt>.
+     * @throws IllegalArgumentException if
+     *                                  <tt>C.rows() != A.rows() || C.columns() != B.columns()</tt>.
+     * @throws IllegalArgumentException if <tt>A == C || B == C</tt>.
      */
     public DComplexMatrix2D zMult(final DComplexMatrix2D B, DComplexMatrix2D C, final double[] alpha,
-            final double[] beta, boolean transposeA, boolean transposeB) {
+                                  final double[] beta, boolean transposeA, boolean transposeB) {
         if (transposeA)
             return getConjugateTranspose().zMult(B, C, alpha, beta, false, transposeB);
         if (transposeB)
@@ -1697,10 +1581,10 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
         }
         if (B.rows != n)
             throw new IllegalArgumentException("Matrix2D inner dimensions must agree:" + toStringShort() + ", "
-                    + B.toStringShort());
+                + B.toStringShort());
         if (CC.rows != m || CC.columns != p)
             throw new IllegalArgumentException("Incompatibe result matrix: " + toStringShort() + ", "
-                    + B.toStringShort() + ", " + CC.toStringShort());
+                + B.toStringShort() + ", " + CC.toStringShort());
         if (this == CC || B == CC)
             throw new IllegalArgumentException("Matrices must not be identical");
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1722,7 +1606,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
                                     s = DComplex.plus(s, DComplex.mult(getQuick(b, c), B.getQuick(c, a)));
                                 }
                                 CC.setQuick(b, a, DComplex.plus(DComplex.mult(s, alpha), DComplex.mult(CC
-                                        .getQuick(b, a), beta)));
+                                    .getQuick(b, a), beta)));
                             }
                         }
                     }
@@ -1747,20 +1631,20 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns the sum of all cells.
-     * 
+     *
      * @return the sum.
      */
     public double[] zSum() {
         if (size() == 0)
-            return new double[] { 0, 0 };
+            return new double[]{0, 0};
         return aggregate(cern.jet.math.tcomplex.DComplexFunctions.plus,
-                cern.jet.math.tcomplex.DComplexFunctions.identity);
+            cern.jet.math.tcomplex.DComplexFunctions.identity);
     }
 
     /**
      * Returns the content of this matrix if it is a wrapper; or <tt>this</tt>
      * otherwise. Override this method in wrappers.
-     * 
+     *
      * @return <tt>this</tt>
      */
     protected DComplexMatrix2D getContent() {
@@ -1769,9 +1653,8 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Returns <tt>true</tt> if both matrices share at least one identical cell.
-     * 
-     * @param other
-     *            matrix
+     *
+     * @param other matrix
      * @return <tt>true</tt> if both matrices share at least one identical cell.
      */
     protected boolean haveSharedCells(DComplexMatrix2D other) {
@@ -1784,9 +1667,8 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Always returns false
-     * 
-     * @param other
-     *            matrix
+     *
+     * @param other matrix
      * @return false
      */
     protected boolean haveSharedCellsRaw(DComplexMatrix2D other) {
@@ -1798,14 +1680,11 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * type</i>, sharing the same cells. For example, if the receiver is an
      * instance of type <tt>DenseComplexMatrix2D</tt> the new matrix must be of
      * type <tt>DenseComplexMatrix1D</tt>.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
+     *
+     * @param size   the number of cells the matrix shall have.
+     * @param zero   the index of the first element.
+     * @param stride the number of indexes between any two elements, i.e.
+     *               <tt>index(i+1)-index(i)</tt>.
      * @return a new matrix of the corresponding dynamic type.
      */
     protected abstract DComplexMatrix1D like1D(int size, int zero, int stride);
@@ -1820,7 +1699,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * <p>
      * Use {@link #copy()} to construct an independent deep copy rather than a
      * new view.
-     * 
+     *
      * @return a new view of the receiver.
      */
     protected DComplexMatrix2D view() {
@@ -1829,11 +1708,9 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param rowOffsets
-     *            the offsets of the visible elements.
-     * @param columnOffsets
-     *            the offsets of the visible elements.
+     *
+     * @param rowOffsets    the offsets of the visible elements.
+     * @param columnOffsets the offsets of the visible elements.
      * @return a new view.
      */
     protected abstract DComplexMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets);

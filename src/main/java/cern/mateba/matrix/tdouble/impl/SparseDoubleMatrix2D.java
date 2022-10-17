@@ -63,7 +63,7 @@ import cern.mateba.matrix.tdouble.DoubleMatrix2D;
  * Cells are internally addressed in row-major. Performance sensitive
  * applications can exploit this fact. Setting values in a loop row-by-row is
  * quicker than column-by-column, because fewer hash collisions occur. Thus
- * 
+ *
  * <pre>
  * for (int row = 0; row &lt; rows; row++) {
  *     for (int column = 0; column &lt; columns; column++) {
@@ -71,9 +71,9 @@ import cern.mateba.matrix.tdouble.DoubleMatrix2D;
  *     }
  * }
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -81,13 +81,12 @@ import cern.mateba.matrix.tdouble.DoubleMatrix2D;
  *     }
  * }
  * </pre>
- * 
+ *
+ * @author wolfgang.hoschek@cern.ch
+ * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 09/24/99
  * @see cern.mateba.map
  * @see cern.mateba.map.tdouble.OpenLongDoubleHashMap
- * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
- * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class SparseDoubleMatrix2D extends DoubleMatrix2D {
 
@@ -105,13 +104,11 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public SparseDoubleMatrix2D(double[][] values) {
         this(values.length, values.length == 0 ? 0 : values[0].length);
@@ -121,15 +118,12 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns and default
      * memory usage. All entries are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public SparseDoubleMatrix2D(int rows, int columns) {
         this(rows, columns, rows * (columns / 1000), 0.2, 0.5);
@@ -139,27 +133,20 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
      * Constructs a matrix with a given number of rows and columns using memory
      * as specified. All entries are initially <tt>0</tt>. For details related
      * to memory usage see {@link cern.mateba.map.tdouble.OpenLongDoubleHashMap}.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param initialCapacity
-     *            the initial capacity of the hash map. If not known, set
-     *            <tt>initialCapacity=0</tt> or small.
-     * @param minLoadFactor
-     *            the minimum load factor of the hash map.
-     * @param maxLoadFactor
-     *            the maximum load factor of the hash map.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows            the number of rows the matrix shall have.
+     * @param columns         the number of columns the matrix shall have.
+     * @param initialCapacity the initial capacity of the hash map. If not known, set
+     *                        <tt>initialCapacity=0</tt> or small.
+     * @param minLoadFactor   the minimum load factor of the hash map.
+     * @param maxLoadFactor   the maximum load factor of the hash map.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public SparseDoubleMatrix2D(int rows, int columns, int initialCapacity, double minLoadFactor, double maxLoadFactor) {
         try {
@@ -173,17 +160,12 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Constructs a matrix with a copy of the given indexes and a single value.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowIndexes
-     *            row indexes
-     * @param columnIndexes
-     *            column indexes
-     * @param value
-     *            numerical value
+     *
+     * @param rows          the number of rows the matrix shall have.
+     * @param columns       the number of columns the matrix shall have.
+     * @param rowIndexes    row indexes
+     * @param columnIndexes column indexes
+     * @param value         numerical value
      */
     public SparseDoubleMatrix2D(int rows, int columns, int[] rowIndexes, int[] columnIndexes, double value) {
         try {
@@ -198,17 +180,12 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Constructs a matrix with a copy of the given indexes and values.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowIndexes
-     *            row indexes
-     * @param columnIndexes
-     *            column indexes
-     * @param values
-     *            numerical values
+     *
+     * @param rows          the number of rows the matrix shall have.
+     * @param columns       the number of columns the matrix shall have.
+     * @param rowIndexes    row indexes
+     * @param columnIndexes column indexes
+     * @param values        numerical values
      */
     public SparseDoubleMatrix2D(int rows, int columns, int[] rowIndexes, int[] columnIndexes, double[] values) {
         try {
@@ -223,9 +200,8 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Constructs a matrix from MatrixVectorReader.
-     * 
-     * @param reader
-     *            matrix reader
+     *
+     * @param reader matrix reader
      * @throws IOException
      */
     public SparseDoubleMatrix2D(MatrixVectorReader reader) throws IOException {
@@ -278,30 +254,22 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Constructs a view with the given parameters.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             or flip's are illegal.
+     *
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param elements     the cells.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(i,j+1)-index(i,j)</tt>.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  or flip's are illegal.
      */
     protected SparseDoubleMatrix2D(int rows, int columns, AbstractLongDoubleMap elements, int rowZero, int columnZero,
-            int rowStride, int columnStride) {
+                                   int rowStride, int columnStride) {
         try {
             setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
         } catch (IllegalArgumentException exc) { // we can hold rows*columns>Integer.MAX_VALUE cells !
@@ -332,10 +300,9 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
 
     public DoubleMatrix2D assign(DoubleMatrix2D source) {
         // overriden for performance only
-        if (!(source instanceof SparseDoubleMatrix2D)) {
+        if (!(source instanceof SparseDoubleMatrix2D other)) {
             return super.assign(source);
         }
-        SparseDoubleMatrix2D other = (SparseDoubleMatrix2D) source;
         if (other == this)
             return this; // nothing to do
         checkShape(other);
@@ -396,21 +363,17 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
      * Assigns the result of a function to each cell;
      * <tt>x[row,col] = function(x[row,col],y[row,col])</tt>, where y is given
      * in the coordinate form with single numerical value.
-     * 
-     * @param rowIndexes
-     *            row indexes of y
-     * @param columnIndexes
-     *            column indexes of y
-     * @param value
-     *            numerical value of y
-     * @param function
-     *            a function object taking as first argument the current cell's
-     *            value of <tt>this</tt>, and as second argument the current
-     *            cell's value of <tt>y</tt>,
+     *
+     * @param rowIndexes    row indexes of y
+     * @param columnIndexes column indexes of y
+     * @param value         numerical value of y
+     * @param function      a function object taking as first argument the current cell's
+     *                      value of <tt>this</tt>, and as second argument the current
+     *                      cell's value of <tt>y</tt>,
      * @return <tt>this</tt> (for convenience only).
      */
     public SparseDoubleMatrix2D assign(final int[] rowIndexes, final int[] columnIndexes, final double value,
-            final cern.mateba.function.tdouble.DoubleDoubleFunction function) {
+                                       final cern.mateba.function.tdouble.DoubleDoubleFunction function) {
         int size = rowIndexes.length;
         if (function == cern.jet.math.tdouble.DoubleFunctions.plus) { // x[i] = x[i] + y[i]
             for (int i = 0; i < size; i++) {
@@ -452,21 +415,17 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
      * Assigns the result of a function to each cell;
      * <tt>x[row,col] = function(x[row,col],y[row,col])</tt>, where y is given
      * in the coordinate form.
-     * 
-     * @param rowIndexes
-     *            row indexes of y
-     * @param columnIndexes
-     *            column indexes of y
-     * @param values
-     *            numerical values of y
-     * @param function
-     *            a function object taking as first argument the current cell's
-     *            value of <tt>this</tt>, and as second argument the current
-     *            cell's value of <tt>y</tt>,
+     *
+     * @param rowIndexes    row indexes of y
+     * @param columnIndexes column indexes of y
+     * @param values        numerical values of y
+     * @param function      a function object taking as first argument the current cell's
+     *                      value of <tt>this</tt>, and as second argument the current
+     *                      cell's value of <tt>y</tt>,
      * @return <tt>this</tt> (for convenience only).
      */
     public SparseDoubleMatrix2D assign(final int[] rowIndexes, final int[] columnIndexes, final double[] values,
-            final cern.mateba.function.tdouble.DoubleDoubleFunction function) {
+                                       final cern.mateba.function.tdouble.DoubleDoubleFunction function) {
         int size = rowIndexes.length;
         if (function == cern.jet.math.tdouble.DoubleFunctions.plus) { // x[i] = x[i] + y[i]
             for (int i = 0; i < size; i++) {
@@ -517,11 +476,9 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a column-compressed form. This method creates a new object (not a view),
      * so changes in the returned matrix are NOT reflected in this matrix.
-     * 
-     * @param sortRowIndexes
-     *            if true, then row indexes in column compressed matrix are
-     *            sorted
-     * 
+     *
+     * @param sortRowIndexes if true, then row indexes in column compressed matrix are
+     *                       sorted
      * @return this matrix in a column-compressed form
      */
     public SparseCCDoubleMatrix2D getColumnCompressed(boolean sortRowIndexes) {
@@ -537,7 +494,7 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
             columnIndexes[k] = (int) (key % columns);
         }
         return new SparseCCDoubleMatrix2D(rows, columns, rowIndexes, columnIndexes, values, false, false,
-                sortRowIndexes);
+            sortRowIndexes);
     }
 
     /**
@@ -545,7 +502,7 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
      * a column-compressed modified form. This method creates a new object (not
      * a view), so changes in the returned matrix are NOT reflected in this
      * matrix.
-     * 
+     *
      * @return this matrix in a column-compressed modified form
      */
     public SparseCCMDoubleMatrix2D getColumnCompressedModified() {
@@ -565,11 +522,9 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a row-compressed form. This method creates a new object (not a view), so
      * changes in the returned matrix are NOT reflected in this matrix.
-     * 
-     * @param sortColumnIndexes
-     *            if true, then column indexes in row compressed matrix are
-     *            sorted
-     * 
+     *
+     * @param sortColumnIndexes if true, then column indexes in row compressed matrix are
+     *                          sorted
      * @return this matrix in a row-compressed form
      */
     public SparseRCDoubleMatrix2D getRowCompressed(boolean sortColumnIndexes) {
@@ -584,7 +539,7 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
             columnIndexes[k] = (int) (key % columns);
         }
         return new SparseRCDoubleMatrix2D(rows, columns, rowIndexes, columnIndexes, values, false, false,
-                sortColumnIndexes);
+            sortColumnIndexes);
     }
 
     /**
@@ -592,7 +547,7 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
      * a row-compressed modified form. This method creates a new object (not a
      * view), so changes in the returned matrix are NOT reflected in this
      * matrix.
-     * 
+     *
      * @return this matrix in a row-compressed modified form
      */
     public SparseRCMDoubleMatrix2D getRowCompressedModified() {
@@ -636,7 +591,7 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
 
     public synchronized double getQuick(int row, int column) {
         return this.elements.get((long) rowZero + (long) row * (long) rowStride + (long) columnZero + (long) column
-                * (long) columnStride);
+            * (long) columnStride);
     }
 
     public long index(int row, int column) {
@@ -653,7 +608,7 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
 
     public synchronized void setQuick(int row, int column, double value) {
         long index = (long) rowZero + (long) row * (long) rowStride + (long) columnZero + (long) column
-                * (long) columnStride;
+            * (long) columnStride;
         if (value == 0)
             this.elements.removeKey(index);
         else
@@ -663,13 +618,13 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(rows).append(" x ").append(columns).append(" sparse matrix, nnz = ").append(cardinality())
-                .append('\n');
+            .append('\n');
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < columns; c++) {
                 double elem = getQuick(r, c);
                 if (elem != 0) {
                     builder.append('(').append(r).append(',').append(c).append(')').append('\t').append(elem).append(
-                            '\n');
+                        '\n');
                 }
             }
         }
@@ -693,7 +648,7 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
     }
 
     public DoubleMatrix1D zMult(DoubleMatrix1D y, DoubleMatrix1D z, final double alpha, double beta,
-            final boolean transposeA) {
+                                final boolean transposeA) {
         int rowsA = rows;
         int columnsA = columns;
         if (transposeA) {
@@ -705,24 +660,22 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
         if (z == null)
             z = new DenseDoubleMatrix1D(rowsA);
 
-        if (!(this.isNoView && y instanceof DenseDoubleMatrix1D && z instanceof DenseDoubleMatrix1D)) {
+        if (!(this.isNoView && y instanceof DenseDoubleMatrix1D yy && z instanceof DenseDoubleMatrix1D zz)) {
             return super.zMult(y, z, alpha, beta, transposeA);
         }
 
         if (columnsA != y.size() || rowsA > z.size())
             throw new IllegalArgumentException("Incompatible args: "
-                    + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
-                    + z.toStringShort());
+                + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
+                + z.toStringShort());
 
         if (!ignore)
             z.assign(cern.jet.math.tdouble.DoubleFunctions.mult(beta));
 
-        DenseDoubleMatrix1D zz = (DenseDoubleMatrix1D) z;
         final double[] elementsZ = zz.elements;
         final int strideZ = zz.stride();
         final int zeroZ = (int) z.index(0);
 
-        DenseDoubleMatrix1D yy = (DenseDoubleMatrix1D) y;
         final double[] elementsY = yy.elements;
         final int strideY = yy.stride();
         final int zeroY = (int) y.index(0);
@@ -748,7 +701,7 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
     }
 
     public DoubleMatrix2D zMult(DoubleMatrix2D B, DoubleMatrix2D C, final double alpha, double beta,
-            final boolean transposeA, boolean transposeB) {
+                                final boolean transposeA, boolean transposeB) {
         if (!(this.isNoView)) {
             return super.zMult(B, C, alpha, beta, transposeA, transposeB);
         }
@@ -767,10 +720,10 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
 
         if (B.rows() != columnsA)
             throw new IllegalArgumentException("Matrix2D inner dimensions must agree:" + toStringShort() + ", "
-                    + (transposeB ? B.viewDice() : B).toStringShort());
+                + (transposeB ? B.viewDice() : B).toStringShort());
         if (C.rows() != rowsA || C.columns() != p)
             throw new IllegalArgumentException("Incompatibel result matrix: " + toStringShort() + ", "
-                    + (transposeB ? B.viewDice() : B).toStringShort() + ", " + C.toStringShort());
+                + (transposeB ? B.viewDice() : B).toStringShort() + ", " + C.toStringShort());
         if (this == C || B == C)
             throw new IllegalArgumentException("Matrices must not be identical");
 
@@ -779,10 +732,10 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
 
         // cache views
         final DoubleMatrix1D[] Brows = new DoubleMatrix1D[columnsA];
-        for (int i = columnsA; --i >= 0;)
+        for (int i = columnsA; --i >= 0; )
             Brows[i] = B.viewRow(i);
         final DoubleMatrix1D[] Crows = new DoubleMatrix1D[rowsA];
-        for (int i = rowsA; --i >= 0;)
+        for (int i = rowsA; --i >= 0; )
             Crows[i] = C.viewRow(i);
 
         final cern.jet.math.tdouble.DoublePlusMultSecond fun = cern.jet.math.tdouble.DoublePlusMultSecond.plusMult(0);
@@ -855,11 +808,9 @@ public class SparseDoubleMatrix2D extends DoubleMatrix2D {
     }
 
     protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
-        if (other instanceof SelectedSparseDoubleMatrix2D) {
-            SelectedSparseDoubleMatrix2D otherMatrix = (SelectedSparseDoubleMatrix2D) other;
+        if (other instanceof SelectedSparseDoubleMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseDoubleMatrix2D) {
-            SparseDoubleMatrix2D otherMatrix = (SparseDoubleMatrix2D) other;
+        } else if (other instanceof SparseDoubleMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;

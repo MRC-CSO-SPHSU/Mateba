@@ -45,7 +45,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * addressing. Setting/getting values in a loop slice-by-slice, row-by-row,
  * column-by-column is quicker than, for example, column-by-column, row-by-row,
  * slice-by-slice. Thus
- * 
+ *
  * <pre>
  * for (int slice = 0; slice &lt; slices; slice++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -55,9 +55,9 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -67,11 +67,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 09/24/99
  */
 public class DenseLongMatrix3D extends LongMatrix3D {
 
@@ -94,38 +93,30 @@ public class DenseLongMatrix3D extends LongMatrix3D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
+     *                                  .
      */
     public DenseLongMatrix3D(long[][][] values) {
         this(values.length, (values.length == 0 ? 0 : values[0].length), (values.length == 0 ? 0
-                : values[0].length == 0 ? 0 : values[0][0].length));
+            : values[0].length == 0 ? 0 : values[0][0].length));
         assign(values);
     }
 
     /**
      * Constructs a matrix with a given number of slices, rows and columns. All
      * entries are initially <tt>0</tt>.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>(int)slices*columns*rows > Long.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices  the number of slices the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>(int)slices*columns*rows > Long.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public DenseLongMatrix3D(int slices, int rows, int columns) {
         setUp(slices, rows, columns);
@@ -134,46 +125,33 @@ public class DenseLongMatrix3D extends LongMatrix3D {
 
     /**
      * Constructs a view with the given parameters.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param sliceZero
-     *            the position of the first element.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param sliceStride
-     *            the number of elements between two slices, i.e.
-     *            <tt>index(k+1,i,j)-index(k,i,j)</tt>.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(k,i+1,j)-index(k,i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(k,i,j+1)-index(k,i,j)</tt>.
-     * @param isView
-     *            if true then a matrix view is constructed
-     * @throws IllegalArgumentException
-     *             if <tt>(int)slices*columns*rows > Long.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices       the number of slices the matrix shall have.
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param elements     the cells.
+     * @param sliceZero    the position of the first element.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param sliceStride  the number of elements between two slices, i.e.
+     *                     <tt>index(k+1,i,j)-index(k,i,j)</tt>.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(k,i+1,j)-index(k,i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(k,i,j+1)-index(k,i,j)</tt>.
+     * @param isView       if true then a matrix view is constructed
+     * @throws IllegalArgumentException if <tt>(int)slices*columns*rows > Long.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public DenseLongMatrix3D(int slices, int rows, int columns, long[] elements, int sliceZero, int rowZero,
-            int columnZero, int sliceStride, int rowStride, int columnStride, boolean isView) {
+                             int columnZero, int sliceStride, int rowStride, int columnStride, boolean isView) {
         setUp(slices, rows, columns, sliceZero, rowZero, columnZero, sliceStride, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = !isView;
     }
 
     public long aggregate(final cern.mateba.function.tlong.LongLongFunction aggr,
-            final cern.mateba.function.tlong.LongFunction f) {
+                          final cern.mateba.function.tlong.LongFunction f) {
         if (size() == 0)
             throw new IllegalArgumentException("size == 0");
         long a = 0;
@@ -195,7 +173,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                             for (int r = 0; r < rows; r++) {
                                 for (int c = d; c < columns; c++) {
                                     a = aggr.apply(a, f.apply(elements[zero + s * sliceStride + r * rowStride + c
-                                            * columnStride]));
+                                        * columnStride]));
                                 }
                                 d = 0;
                             }
@@ -239,7 +217,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                     public Long call() throws Exception {
                         long elem = elements[zero + firstSlice * sliceStride];
                         long a = 0;
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             a = aggr.apply(a, f.apply(elem));
                         }
                         int d = 1;
@@ -247,7 +225,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                             for (int r = 0; r < rows; r++) {
                                 for (int c = d; c < columns; c++) {
                                     elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         a = aggr.apply(a, f.apply(elem));
                                     }
                                     d = 0;
@@ -261,7 +239,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             long elem = elements[zero];
-            if (cond.apply(elem) == true) {
+            if (cond.apply(elem)) {
                 a = aggr.apply(a, f.apply(elem));
             }
             int d = 1;
@@ -269,7 +247,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                 for (int r = 0; r < rows; r++) {
                     for (int c = d; c < columns; c++) {
                         elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             a = aggr.apply(a, f.apply(elem));
                         }
                         d = 0;
@@ -305,11 +283,11 @@ public class DenseLongMatrix3D extends LongMatrix3D {
 
                     public Long call() throws Exception {
                         long a = f.apply(elements[zero + sliceElements[firstIdx] * sliceStride + rowElements[firstIdx]
-                                * rowStride + columnElements[firstIdx] * columnStride]);
+                            * rowStride + columnElements[firstIdx] * columnStride]);
                         long elem;
                         for (int i = firstIdx + 1; i < lastIdx; i++) {
                             elem = elements[zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride
-                                    + columnElements[i] * columnStride];
+                                + columnElements[i] * columnStride];
                             a = aggr.apply(a, f.apply(elem));
                         }
                         return a;
@@ -319,11 +297,11 @@ public class DenseLongMatrix3D extends LongMatrix3D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             a = f.apply(elements[zero + sliceElements[0] * sliceStride + rowElements[0] * rowStride + columnElements[0]
-                    * columnStride]);
+                * columnStride]);
             long elem;
             for (int i = 1; i < size; i++) {
                 elem = elements[zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride + columnElements[i]
-                        * columnStride];
+                    * columnStride];
                 a = aggr.apply(a, f.apply(elem));
             }
         }
@@ -331,7 +309,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
     }
 
     public long aggregate(final LongMatrix3D other, final cern.mateba.function.tlong.LongLongFunction aggr,
-            final cern.mateba.function.tlong.LongLongFunction f) {
+                          final cern.mateba.function.tlong.LongLongFunction f) {
         if (!(other instanceof DenseLongMatrix3D)) {
             return super.aggregate(other, aggr, f);
         }
@@ -364,7 +342,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                                 for (int c = d; c < columns; c++) {
                                     idx = zero + s * sliceStride + r * rowStride + c * columnStride;
                                     idxOther = zeroOther + s * sliceStrideOther + r * rowStrideOther + c
-                                            * colStrideOther;
+                                        * colStrideOther;
                                     a = aggr.apply(a, f.apply(elements[idx], elemsOther[idxOther]));
                                 }
                                 d = 0;
@@ -482,7 +460,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
     public LongMatrix3D assign(final long[] values) {
         if (values.length != size())
             throw new IllegalArgumentException("Must have same length: length=" + values.length
-                    + "slices()*rows()*columns()=" + slices() * rows() * columns());
+                + "slices()*rows()*columns()=" + slices() * rows() * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             System.arraycopy(values, 0, this.elements, 0, values.length);
@@ -533,7 +511,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
     public LongMatrix3D assign(final int[] values) {
         if (values.length != size())
             throw new IllegalArgumentException("Must have same length: length=" + values.length
-                    + "slices()*rows()*columns()=" + slices() * rows() * columns());
+                + "slices()*rows()*columns()=" + slices() * rows() * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         final int zero = (int) index(0, 0, 0);
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_3D())) {
@@ -580,7 +558,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
     public LongMatrix3D assign(final long[][][] values) {
         if (values.length != slices)
             throw new IllegalArgumentException("Must have same number of slices: slices=" + values.length + "slices()="
-                    + slices());
+                + slices());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_3D())) {
@@ -598,14 +576,14 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                                 long[][] currentSlice = values[s];
                                 if (currentSlice.length != rows)
                                     throw new IllegalArgumentException(
-                                            "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                                    + "rows()=" + rows());
+                                        "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                            + "rows()=" + rows());
                                 for (int r = 0; r < rows; r++) {
                                     long[] currentRow = currentSlice[r];
                                     if (currentRow.length != columns)
                                         throw new IllegalArgumentException(
-                                                "Must have same number of columns in every row: columns="
-                                                        + currentRow.length + "columns()=" + columns());
+                                            "Must have same number of columns in every row: columns="
+                                                + currentRow.length + "columns()=" + columns());
                                     System.arraycopy(currentRow, 0, elements, i, columns);
                                     i += columns;
                                 }
@@ -620,13 +598,13 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                     long[][] currentSlice = values[s];
                     if (currentSlice.length != rows)
                         throw new IllegalArgumentException("Must have same number of rows in every slice: rows="
-                                + currentSlice.length + "rows()=" + rows());
+                            + currentSlice.length + "rows()=" + rows());
                     for (int r = 0; r < rows; r++) {
                         long[] currentRow = currentSlice[r];
                         if (currentRow.length != columns)
                             throw new IllegalArgumentException(
-                                    "Must have same number of columns in every row: columns=" + currentRow.length
-                                            + "columns()=" + columns());
+                                "Must have same number of columns in every row: columns=" + currentRow.length
+                                    + "columns()=" + columns());
                         System.arraycopy(currentRow, 0, this.elements, i, columns);
                         i += columns;
                     }
@@ -650,15 +628,15 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                                 long[][] currentSlice = values[s];
                                 if (currentSlice.length != rows)
                                     throw new IllegalArgumentException(
-                                            "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                                    + "rows()=" + rows());
+                                        "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                            + "rows()=" + rows());
                                 for (int r = 0; r < rows; r++) {
                                     idx = zero + s * sliceStride + r * rowStride;
                                     long[] currentRow = currentSlice[r];
                                     if (currentRow.length != columns)
                                         throw new IllegalArgumentException(
-                                                "Must have same number of columns in every row: columns="
-                                                        + currentRow.length + "columns()=" + columns());
+                                            "Must have same number of columns in every row: columns="
+                                                + currentRow.length + "columns()=" + columns());
                                     for (int c = 0; c < columns; c++) {
                                         elements[idx] = currentRow[c];
                                         idx += columnStride;
@@ -676,14 +654,14 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                     long[][] currentSlice = values[s];
                     if (currentSlice.length != rows)
                         throw new IllegalArgumentException("Must have same number of rows in every slice: rows="
-                                + currentSlice.length + "rows()=" + rows());
+                            + currentSlice.length + "rows()=" + rows());
                     for (int r = 0; r < rows; r++) {
                         idx = zero + s * sliceStride + r * rowStride;
                         long[] currentRow = currentSlice[r];
                         if (currentRow.length != columns)
                             throw new IllegalArgumentException(
-                                    "Must have same number of columns in every row: columns=" + currentRow.length
-                                            + "columns()=" + columns());
+                                "Must have same number of columns in every row: columns=" + currentRow.length
+                                    + "columns()=" + columns());
                         for (int c = 0; c < columns; c++) {
                             elements[idx] = currentRow[c];
                             idx += columnStride;
@@ -696,7 +674,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
     }
 
     public LongMatrix3D assign(final cern.mateba.function.tlong.LongProcedure cond,
-            final cern.mateba.function.tlong.LongFunction f) {
+                               final cern.mateba.function.tlong.LongFunction f) {
         final int zero = (int) index(0, 0, 0);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (slices * rows * columns >= ConcurrencyUtils.getThreadsBeginN_3D())) {
@@ -717,7 +695,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                                 idx = zero + s * sliceStride + r * rowStride;
                                 for (int c = 0; c < columns; c++) {
                                     elem = elements[idx];
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         elements[idx] = f.apply(elem);
                                     }
                                     idx += columnStride;
@@ -736,7 +714,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                     idx = zero + s * sliceStride + r * rowStride;
                     for (int c = 0; c < columns; c++) {
                         elem = elements[idx];
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             elements[idx] = f.apply(elem);
                         }
                         idx += columnStride;
@@ -768,7 +746,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                                 idx = zero + s * sliceStride + r * rowStride;
                                 for (int c = 0; c < columns; c++) {
                                     elem = elements[idx];
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         elements[idx] = value;
                                     }
                                     idx += columnStride;
@@ -787,7 +765,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                     idx = zero + s * sliceStride + r * rowStride;
                     for (int c = 0; c < columns; c++) {
                         elem = elements[idx];
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             elements[idx] = value;
                         }
                         idx += columnStride;
@@ -800,11 +778,10 @@ public class DenseLongMatrix3D extends LongMatrix3D {
 
     public LongMatrix3D assign(LongMatrix3D source) {
         // overriden for performance only
-        if (!(source instanceof DenseLongMatrix3D)) {
+        if (!(source instanceof DenseLongMatrix3D other)) {
             super.assign(source);
             return this;
         }
-        DenseLongMatrix3D other = (DenseLongMatrix3D) source;
         if (other == this)
             return this;
         checkShape(other);
@@ -936,7 +913,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
     }
 
     public LongMatrix3D assign(final LongMatrix3D y, final cern.mateba.function.tlong.LongLongFunction function,
-            final IntArrayList sliceList, final IntArrayList rowList, final IntArrayList columnList) {
+                               final IntArrayList sliceList, final IntArrayList rowList, final IntArrayList columnList) {
         if (!(y instanceof DenseLongMatrix3D)) {
             super.assign(y, function);
             return this;
@@ -965,9 +942,9 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                     public void run() {
                         for (int i = firstIdx; i < lastIdx; i++) {
                             int idx = zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride
-                                    + columnElements[i] * columnStride;
+                                + columnElements[i] * columnStride;
                             int idxOther = zeroOther + sliceElements[i] * sliceStrideOther + rowElements[i]
-                                    * rowStrideOther + columnElements[i] * columnStrideOther;
+                                * rowStrideOther + columnElements[i] * columnStrideOther;
                             elements[idx] = function.apply(elements[idx], elemsOther[idxOther]);
                         }
                     }
@@ -977,9 +954,9 @@ public class DenseLongMatrix3D extends LongMatrix3D {
         } else {
             for (int i = 0; i < size; i++) {
                 int idx = zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride + columnElements[i]
-                        * columnStride;
+                    * columnStride;
                 int idxOther = zeroOther + sliceElements[i] * sliceStrideOther + rowElements[i] * rowStrideOther
-                        + columnElements[i] * columnStrideOther;
+                    + columnElements[i] * columnStrideOther;
                 elements[idx] = function.apply(elements[idx], elemsOther[idxOther]);
             }
         }
@@ -1053,7 +1030,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
     }
 
     public void getNegativeValues(final IntArrayList sliceList, final IntArrayList rowList,
-            final IntArrayList columnList, final LongArrayList valueList) {
+                                  final IntArrayList columnList, final LongArrayList valueList) {
         sliceList.clear();
         rowList.clear();
         columnList.clear();
@@ -1080,7 +1057,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
     }
 
     public void getNonZeros(final IntArrayList sliceList, final IntArrayList rowList, final IntArrayList columnList,
-            final LongArrayList valueList) {
+                            final LongArrayList valueList) {
         sliceList.clear();
         rowList.clear();
         columnList.clear();
@@ -1107,7 +1084,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
     }
 
     public void getPositiveValues(final IntArrayList sliceList, final IntArrayList rowList,
-            final IntArrayList columnList, final LongArrayList valueList) {
+                                  final IntArrayList columnList, final LongArrayList valueList) {
         sliceList.clear();
         rowList.clear();
         columnList.clear();
@@ -1135,11 +1112,11 @@ public class DenseLongMatrix3D extends LongMatrix3D {
 
     public long getQuick(int slice, int row, int column) {
         return elements[sliceZero + slice * sliceStride + rowZero + row * rowStride + columnZero + column
-                * columnStride];
+            * columnStride];
     }
 
     public long index(int slice, int row, int column) {
-        return sliceZero + slice * sliceStride + rowZero + row * rowStride + columnZero + column * columnStride;
+        return sliceZero + (long) slice * sliceStride + rowZero + (long) row * rowStride + columnZero + (long) column * columnStride;
     }
 
     public LongMatrix3D like(int slices, int rows, int columns) {
@@ -1188,7 +1165,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                                 d = 0;
                             }
                         }
-                        return new long[] { maxValue, slice_loc, row_loc, col_loc };
+                        return new long[]{maxValue, slice_loc, row_loc, col_loc};
                     }
                 });
             }
@@ -1232,7 +1209,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                 }
             }
         }
-        return new long[] { maxValue, slice_loc, row_loc, col_loc };
+        return new long[]{maxValue, slice_loc, row_loc, col_loc};
     }
 
     public long[] getMinLocation() {
@@ -1273,7 +1250,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                                 d = 0;
                             }
                         }
-                        return new long[] { minValue, slice_loc, row_loc, col_loc };
+                        return new long[]{minValue, slice_loc, row_loc, col_loc};
                     }
                 });
             }
@@ -1317,7 +1294,7 @@ public class DenseLongMatrix3D extends LongMatrix3D {
                 }
             }
         }
-        return new long[] { minValue, slice_loc, row_loc, col_loc };
+        return new long[]{minValue, slice_loc, row_loc, col_loc};
     }
 
     public void setQuick(int slice, int row, int column, long value) {
@@ -1435,11 +1412,9 @@ public class DenseLongMatrix3D extends LongMatrix3D {
     }
 
     protected boolean haveSharedCellsRaw(LongMatrix3D other) {
-        if (other instanceof SelectedDenseLongMatrix3D) {
-            SelectedDenseLongMatrix3D otherMatrix = (SelectedDenseLongMatrix3D) other;
+        if (other instanceof SelectedDenseLongMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseLongMatrix3D) {
-            DenseLongMatrix3D otherMatrix = (DenseLongMatrix3D) other;
+        } else if (other instanceof DenseLongMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;

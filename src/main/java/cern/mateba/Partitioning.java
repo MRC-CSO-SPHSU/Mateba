@@ -23,11 +23,11 @@ import cern.mateba.list.tint.IntArrayList;
  * <p>
  * You may want to start out reading about the simplest case: Partitioning one
  * <tt>int[]</tt> array into two intervals. To do so, read
- * {@link #partition(int[],int,int,int)}.
- * 
+ * {@link #partition(int[], int, int, int)}.
+ * <p>
  * Next, building upon that foundation comes a method partitioning
  * <tt>int[]</tt> arrays into multiple intervals. See
- * {@link #partition(int[],int,int,int[],int,int,int[])} for related
+ * {@link #partition(int[], int, int, int[], int, int, int[])} for related
  * documentation.
  * <p>
  * All other methods are no different than the one's you now already understand,
@@ -38,11 +38,10 @@ import cern.mateba.list.tint.IntArrayList;
  * Partitioning into two intervals is <tt>O( N )</tt>. Partitioning into k
  * intervals is <tt>O( N * log(k))</tt>. Constants factors are minimized. No
  * temporary memory is allocated; Partitioning is in-place.
- * 
- * @see cern.mateba.matrix.tdouble.algo.DoublePartitioning
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 03-Jul-99
+ * @see cern.mateba.matrix.tdouble.algo.DoublePartitioning
  */
 public class Partitioning {
     private static final int SMALL = 7;
@@ -64,26 +63,22 @@ public class Partitioning {
     /**
      * Finds the given key "a" within some generic data using the binary search
      * algorithm.
-     * 
-     * @param a
-     *            the index of the key to search for.
-     * @param from
-     *            the leftmost search position, inclusive.
-     * @param to
-     *            the rightmost search position, inclusive.
-     * @param comp
-     *            the comparator determining the order of the generic data.
-     *            Takes as first argument the index <tt>a</tt> within the
-     *            generic splitters <tt>s</tt>. Takes as second argument the
-     *            index <tt>b</tt> within the generic data <tt>g</tt>.
+     *
+     * @param a    the index of the key to search for.
+     * @param from the leftmost search position, inclusive.
+     * @param to   the rightmost search position, inclusive.
+     * @param comp the comparator determining the order of the generic data.
+     *             Takes as first argument the index <tt>a</tt> within the
+     *             generic splitters <tt>s</tt>. Takes as second argument the
+     *             index <tt>b</tt> within the generic data <tt>g</tt>.
      * @return index of the search key, if it is contained in the list;
-     *         otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>. The
-     *         <i>insertion point</i> is defined as the the point at which the
-     *         value would be inserted into the list: the index of the first
-     *         element greater than the key, or <tt>list.length</tt>, if all
-     *         elements in the list are less than the specified key. Note that
-     *         this guarantees that the return value will be &gt;= 0 if and only
-     *         if the key is found.
+     * otherwise, <tt>(-(<i>insertion point</i>) - 1)</tt>. The
+     * <i>insertion point</i> is defined as the the point at which the
+     * value would be inserted into the list: the index of the first
+     * element greater than the key, or <tt>list.length</tt>, if all
+     * elements in the list are less than the specified key. Note that
+     * this guarantees that the return value will be &gt;= 0 if and only
+     * if the key is found.
      */
     private static int binarySearchFromTo(int a, int from, int to, IntComparator comp) {
         while (from <= to) {
@@ -100,19 +95,19 @@ public class Partitioning {
     }
 
     /**
-     * Same as {@link #dualPartition(int[],int[],int,int,int[],int,int,int[])}
+     * Same as {@link #dualPartition(int[], int[], int, int, int[], int, int, int[])}
      * except that it <i>synchronously</i> partitions <tt>double[]</tt> rather
      * than <tt>int[]</tt> arrays.
      */
     public static void dualPartition(double[] list, double[] secondary, int from, int to, double[] splitters,
-            int splitFrom, int splitTo, int[] splitIndexes) {
+                                     int splitFrom, int splitTo, int[] splitIndexes) {
         double splitter; // int, double --> template type dependent
 
         if (splitFrom > splitTo)
             return; // nothing to do
         if (from > to) { // all bins are empty
             from--;
-            for (int i = splitFrom; i <= splitTo;)
+            for (int i = splitFrom; i <= splitTo; )
                 splitIndexes[i++] = from;
             return;
         }
@@ -184,13 +179,13 @@ public class Partitioning {
     }
 
     /**
-     * Same as {@link #dualPartition(int[],int[],int,int,int)} except that it
+     * Same as {@link #dualPartition(int[], int[], int, int, int)} except that it
      * <i>synchronously</i> partitions <tt>double[]</tt> rather than
      * <tt>int[]</tt> arrays.
      */
     public static int dualPartition(double[] list, double[] secondary, int from, int to, double splitter) {
         double element; // int, double --> template type dependent
-        for (int i = from - 1; ++i <= to;) {
+        for (int i = from - 1; ++i <= to; ) {
             element = list[i];
             if (element < splitter) {
                 // swap x[i] with x[from]
@@ -206,7 +201,7 @@ public class Partitioning {
     }
 
     /**
-     * Same as {@link #partition(int[],int,int,int[],int,int,int[])} except that
+     * Same as {@link #partition(int[], int, int, int[], int, int, int[])} except that
      * this method <i>synchronously</i> partitions two arrays at the same time;
      * both arrays are partially sorted according to the elements of the primary
      * array. In other words, each time an element in the primary array is moved
@@ -228,14 +223,14 @@ public class Partitioning {
      * Same as for single-partition methods.
      */
     public static void dualPartition(int[] list, int[] secondary, int from, int to, int[] splitters, int splitFrom,
-            int splitTo, int[] splitIndexes) {
+                                     int splitTo, int[] splitIndexes) {
         int splitter; // int, double --> template type dependent
 
         if (splitFrom > splitTo)
             return; // nothing to do
         if (from > to) { // all bins are empty
             from--;
-            for (int i = splitFrom; i <= splitTo;)
+            for (int i = splitFrom; i <= splitTo; )
                 splitIndexes[i++] = from;
             return;
         }
@@ -307,7 +302,7 @@ public class Partitioning {
     }
 
     /**
-     * Same as {@link #partition(int[],int,int,int)} except that this method
+     * Same as {@link #partition(int[], int, int, int)} except that this method
      * <i>synchronously</i> partitions two arrays at the same time; both arrays
      * are partially sorted according to the elements of the primary array. In
      * other words, each time an element in the primary array is moved from
@@ -320,7 +315,7 @@ public class Partitioning {
      */
     public static int dualPartition(int[] list, int[] secondary, int from, int to, int splitter) {
         int element; // int, double --> template type dependent
-        for (int i = from - 1; ++i <= to;) {
+        for (int i = from - 1; ++i <= to; ) {
             element = list[i];
             if (element < splitter) {
                 // swap x[i] with x[from]
@@ -336,7 +331,7 @@ public class Partitioning {
     }
 
     /**
-     * Same as {@link #partition(int[],int,int,int[],int,int,int[])} except that
+     * Same as {@link #partition(int[], int, int, int[], int, int, int[])} except that
      * it <i>generically</i> partitions arbitrary shaped data (for example
      * matrices or multiple arrays) rather than <tt>int[]</tt> arrays.
      * <p>
@@ -360,69 +355,55 @@ public class Partitioning {
      * calling this method, the generic splitters <tt>s</tt> must be sorted
      * ascending and must not contain multiple equal values. These preconditions
      * are not checked; be sure that they are met.
-     * 
-     * @param from
-     *            the index of the first element within <tt>g</tt> to be
-     *            considered.
-     * @param to
-     *            the index of the last element within <tt>g</tt> to be
-     *            considered. The method considers the elements
-     *            <tt>g[from] .. g[to]</tt>.
-     * 
-     * 
-     * @param splitFrom
-     *            the index of the first splitter element to be considered.
-     * @param splitTo
-     *            the index of the last splitter element to be considered. The
-     *            method considers the splitter elements
-     *            <tt>s[splitFrom] .. s[splitTo]</tt>.
-     * 
-     * @param splitIndexes
-     *            a list into which this method fills the indexes of elements
-     *            delimiting intervals. Upon return
-     *            <tt>splitIndexes[splitFrom..splitTo]</tt> will be set
-     *            accordingly. Therefore, must satisfy
-     *            <tt>splitIndexes.length > splitTo</tt>.
-     * 
-     * @param comp
-     *            the comparator comparing a splitter with an element of the
-     *            generic data. Takes as first argument the index <tt>a</tt>
-     *            within the generic splitters <tt>s</tt>. Takes as second
-     *            argument the index <tt>b</tt> within the generic data
-     *            <tt>g</tt>.
-     * @param comp2
-     *            the comparator to determine the order of the generic data.
-     *            Takes as first argument the index <tt>a</tt> within the
-     *            generic data <tt>g</tt>. Takes as second argument the index
-     *            <tt>b</tt> within the generic data <tt>g</tt>.
-     * @param comp3
-     *            the comparator comparing a splitter with another splitter.
-     *            Takes as first argument the index <tt>a</tt> within the
-     *            generic splitters <tt>s</tt>. Takes as second argument the
-     *            index <tt>b</tt> within the generic splitters <tt>g</tt>.
-     * @param swapper
-     *            an object that knows how to swap the elements at any two
-     *            indexes (a,b). Takes as first argument the index <tt>b</tt>
-     *            within the generic data <tt>g</tt>. Takes as second argument
-     *            the index <tt>c</tt> within the generic data <tt>g</tt>.
-     * 
-     *            <p>
-     *            Tip: Normally you will have
-     *            <tt>splitIndexes.length == s.length</tt> as well as
-     *            <tt>from==0, to==g.length-1</tt> and
-     *            <tt>splitFrom==0, splitTo==s.length-1</tt>.
-     * 
-     * @see Sorting#binarySearchFromTo(int,int,IntComparator)
+     *
+     * @param from         the index of the first element within <tt>g</tt> to be
+     *                     considered.
+     * @param to           the index of the last element within <tt>g</tt> to be
+     *                     considered. The method considers the elements
+     *                     <tt>g[from] .. g[to]</tt>.
+     * @param splitFrom    the index of the first splitter element to be considered.
+     * @param splitTo      the index of the last splitter element to be considered. The
+     *                     method considers the splitter elements
+     *                     <tt>s[splitFrom] .. s[splitTo]</tt>.
+     * @param splitIndexes a list into which this method fills the indexes of elements
+     *                     delimiting intervals. Upon return
+     *                     <tt>splitIndexes[splitFrom..splitTo]</tt> will be set
+     *                     accordingly. Therefore, must satisfy
+     *                     <tt>splitIndexes.length > splitTo</tt>.
+     * @param comp         the comparator comparing a splitter with an element of the
+     *                     generic data. Takes as first argument the index <tt>a</tt>
+     *                     within the generic splitters <tt>s</tt>. Takes as second
+     *                     argument the index <tt>b</tt> within the generic data
+     *                     <tt>g</tt>.
+     * @param comp2        the comparator to determine the order of the generic data.
+     *                     Takes as first argument the index <tt>a</tt> within the
+     *                     generic data <tt>g</tt>. Takes as second argument the index
+     *                     <tt>b</tt> within the generic data <tt>g</tt>.
+     * @param comp3        the comparator comparing a splitter with another splitter.
+     *                     Takes as first argument the index <tt>a</tt> within the
+     *                     generic splitters <tt>s</tt>. Takes as second argument the
+     *                     index <tt>b</tt> within the generic splitters <tt>g</tt>.
+     * @param swapper      an object that knows how to swap the elements at any two
+     *                     indexes (a,b). Takes as first argument the index <tt>b</tt>
+     *                     within the generic data <tt>g</tt>. Takes as second argument
+     *                     the index <tt>c</tt> within the generic data <tt>g</tt>.
+     *
+     *                     <p>
+     *                     Tip: Normally you will have
+     *                     <tt>splitIndexes.length == s.length</tt> as well as
+     *                     <tt>from==0, to==g.length-1</tt> and
+     *                     <tt>splitFrom==0, splitTo==s.length-1</tt>.
+     * @see Sorting#binarySearchFromTo(int, int, IntComparator)
      */
     public static void genericPartition(int from, int to, int splitFrom, int splitTo, int[] splitIndexes,
-            IntComparator comp, IntComparator comp2, IntComparator comp3, Swapper swapper) {
+                                        IntComparator comp, IntComparator comp2, IntComparator comp3, Swapper swapper) {
         int splitter; // int, double --> template type dependent
 
         if (splitFrom > splitTo)
             return; // nothing to do
         if (from > to) { // all bins are empty
             from--;
-            for (int i = splitFrom; i <= splitTo;)
+            for (int i = splitFrom; i <= splitTo; )
                 splitIndexes[i++] = from;
             return;
         }
@@ -494,12 +475,12 @@ public class Partitioning {
     }
 
     /**
-     * Same as {@link #partition(int[],int,int,int)} except that it
+     * Same as {@link #partition(int[], int, int, int)} except that it
      * <i>generically</i> partitions arbitrary shaped data (for example matrices
      * or multiple arrays) rather than <tt>int[]</tt> arrays.
      */
     private static int genericPartition(int from, int to, int splitter, IntComparator comp, Swapper swapper) {
-        for (int i = from - 1; ++i <= to;) {
+        for (int i = from - 1; ++i <= to; ) {
             if (comp.compare(splitter, i) > 0) {
                 // swap x[i] with x[from]
                 swapper.swap(i, from);
@@ -512,21 +493,21 @@ public class Partitioning {
     /**
      * Returns the index of the median of the three indexed elements.
      */
-    private static int med3(double x[], int a, int b, int c) {
+    private static int med3(double[] x, int a, int b, int c) {
         return (x[a] < x[b] ? (x[b] < x[c] ? b : x[a] < x[c] ? c : a) : (x[b] > x[c] ? b : x[a] > x[c] ? c : a));
     }
 
     /**
      * Returns the index of the median of the three indexed elements.
      */
-    private static int med3(int x[], int a, int b, int c) {
+    private static int med3(int[] x, int a, int b, int c) {
         return (x[a] < x[b] ? (x[b] < x[c] ? b : x[a] < x[c] ? c : a) : (x[b] > x[c] ? b : x[a] > x[c] ? c : a));
     }
 
     /**
      * Returns the index of the median of the three indexed chars.
      */
-    private static int med3(Object x[], int a, int b, int c, java.util.Comparator comp) {
+    private static int med3(Object[] x, int a, int b, int c, java.util.Comparator comp) {
         int ab = comp.compare(x[a], x[b]);
         int ac = comp.compare(x[a], x[c]);
         int bc = comp.compare(x[b], x[c]);
@@ -544,18 +525,18 @@ public class Partitioning {
     }
 
     /**
-     * Same as {@link #partition(int[],int,int,int[],int,int,int[])} except that
+     * Same as {@link #partition(int[], int, int, int[], int, int, int[])} except that
      * it partitions <tt>double[]</tt> rather than <tt>int[]</tt> arrays.
      */
     public static void partition(double[] list, int from, int to, double[] splitters, int splitFrom, int splitTo,
-            int[] splitIndexes) {
+                                 int[] splitIndexes) {
         double splitter; // int, double --> template type dependent
 
         if (splitFrom > splitTo)
             return; // nothing to do
         if (from > to) { // all bins are empty
             from--;
-            for (int i = splitFrom; i <= splitTo;)
+            for (int i = splitFrom; i <= splitTo; )
                 splitIndexes[i++] = from;
             return;
         }
@@ -627,12 +608,12 @@ public class Partitioning {
     }
 
     /**
-     * Same as {@link #partition(int[],int,int,int)} except that it partitions
+     * Same as {@link #partition(int[], int, int, int)} except that it partitions
      * <tt>double[]</tt> rather than <tt>int[]</tt> arrays.
      */
     public static int partition(double[] list, int from, int to, double splitter) {
         double element; // int, double --> template type dependent
-        for (int i = from - 1; ++i <= to;) {
+        for (int i = from - 1; ++i <= to; ) {
             element = list[i];
             if (element < splitter) {
                 // swap x[i] with x[from]
@@ -701,56 +682,44 @@ public class Partitioning {
      * The algorithm can be seen as a Bentley/McIlroy quicksort where swapping
      * and insertion sort are omitted. It is designed to detect and take
      * advantage of skew while maintaining good performance in the uniform case.
-     * 
-     * @param list
-     *            the list to be partially sorted.
-     * 
-     * @param from
-     *            the index of the first element within <tt>list</tt> to be
-     *            considered.
-     * @param to
-     *            the index of the last element within <tt>list</tt> to be
-     *            considered. The method considers the elements
-     *            <tt>list[from] .. list[to]</tt>.
-     * 
-     * @param splitters
-     *            the values at which the list shall be split into intervals.
-     *            Must be sorted ascending and must not contain multiple
-     *            identical values. These preconditions are not checked; be sure
-     *            that they are met.
-     * 
-     * @param splitFrom
-     *            the index of the first splitter element to be considered.
-     * @param splitTo
-     *            the index of the last splitter element to be considered. The
-     *            method considers the splitter elements
-     *            <tt>splitters[splitFrom] .. splitters[splitTo]</tt>.
-     * 
-     * @param splitIndexes
-     *            a list into which this method fills the indexes of elements
-     *            delimiting intervals. Upon return
-     *            <tt>splitIndexes[splitFrom..splitTo]</tt> will be set
-     *            accordingly. Therefore, must satisfy
-     *            <tt>splitIndexes.length > splitTo</tt>.
-     *            <p>
-     *            Tip: Normally you will have
-     *            <tt>splitIndexes.length == splitters.length</tt> as well as
-     *            <tt>from==0, to==list.length-1</tt> and
-     *            <tt>splitFrom==0, splitTo==splitters.length-1</tt>.
-     * 
+     *
+     * @param list         the list to be partially sorted.
+     * @param from         the index of the first element within <tt>list</tt> to be
+     *                     considered.
+     * @param to           the index of the last element within <tt>list</tt> to be
+     *                     considered. The method considers the elements
+     *                     <tt>list[from] .. list[to]</tt>.
+     * @param splitters    the values at which the list shall be split into intervals.
+     *                     Must be sorted ascending and must not contain multiple
+     *                     identical values. These preconditions are not checked; be sure
+     *                     that they are met.
+     * @param splitFrom    the index of the first splitter element to be considered.
+     * @param splitTo      the index of the last splitter element to be considered. The
+     *                     method considers the splitter elements
+     *                     <tt>splitters[splitFrom] .. splitters[splitTo]</tt>.
+     * @param splitIndexes a list into which this method fills the indexes of elements
+     *                     delimiting intervals. Upon return
+     *                     <tt>splitIndexes[splitFrom..splitTo]</tt> will be set
+     *                     accordingly. Therefore, must satisfy
+     *                     <tt>splitIndexes.length > splitTo</tt>.
+     *                     <p>
+     *                     Tip: Normally you will have
+     *                     <tt>splitIndexes.length == splitters.length</tt> as well as
+     *                     <tt>from==0, to==list.length-1</tt> and
+     *                     <tt>splitFrom==0, splitTo==splitters.length-1</tt>.
      * @see cern.mateba.Arrays
      * @see cern.mateba.GenericSorting
      * @see java.util.Arrays
      */
     public static void partition(int[] list, int from, int to, int[] splitters, int splitFrom, int splitTo,
-            int[] splitIndexes) {
+                                 int[] splitIndexes) {
         int element, splitter; // int, double --> template type dependent
 
         if (splitFrom > splitTo)
             return; // nothing to do
         if (from > to) { // all bins are empty
             from--;
-            for (int i = splitFrom; i <= splitTo;)
+            for (int i = splitFrom; i <= splitTo; )
                 splitIndexes[i++] = from;
             return;
         }
@@ -791,9 +760,9 @@ public class Partitioning {
              */
             // else {
             /*
-             * 
+             *
              * int low = splitFrom; int high = splitTo; int comparison;
-             * 
+             *
              * int mid=0; while (low <= high) { mid = (low + high) / 2;
              * comparison = splitters[mid]-key; if (comparison < 0) low = mid +
              * 1; else if (comparison > 0) high = mid - 1; else break; //return
@@ -896,25 +865,18 @@ public class Partitioning {
      * Let <tt>N=to-from+1</tt> be the number of elements to be partially
      * sorted. Then the time complexity is <tt>O( N )</tt>. No temporary memory
      * is allocated; the sort is in-place.
-     * 
+     *
      * <p>
-     * 
-     * @param list
-     *            the list to be partially sorted.
-     * 
-     * @param from
-     *            the index of the first element within <tt>list</tt> to be
-     *            considered.
-     * @param to
-     *            the index of the last element within <tt>list</tt> to be
-     *            considered. The method considers the elements
-     *            <tt>list[from] .. list[to]</tt>.
-     * 
-     * @param splitter
-     *            the value at which the list shall be split.
-     * 
+     *
+     * @param list     the list to be partially sorted.
+     * @param from     the index of the first element within <tt>list</tt> to be
+     *                 considered.
+     * @param to       the index of the last element within <tt>list</tt> to be
+     *                 considered. The method considers the elements
+     *                 <tt>list[from] .. list[to]</tt>.
+     * @param splitter the value at which the list shall be split.
      * @return the index of the largest element falling into the interval
-     *         <tt>[-infinity,splitter)</tt>, as seen after partitioning.
+     * <tt>[-infinity,splitter)</tt>, as seen after partitioning.
      */
     public static int partition(int[] list, int from, int to, int splitter) {
         steps += to - from + 1;
@@ -932,7 +894,7 @@ public class Partitioning {
          */
 
         int element;
-        for (int i = from - 1; ++i <= to;) {
+        for (int i = from - 1; ++i <= to; ) {
             element = list[i];
             if (element < splitter) {
                 // swap x[i] with x[from]
@@ -956,9 +918,9 @@ public class Partitioning {
          * System.out.println("before="+new IntArrayList(list)); int head =
          * from; int trail = to; int element; while (head<=trail) { head--;
          * while (++head < trail && list[head] < splitter);
-         * 
+         *
          * trail++; while (--trail > head && list[trail] >= splitter);
-         * 
+         *
          * if (head != trail) { element = list[head]; list[head] = list[trail];
          * list[trail] = element; } head++; trail--; System.out.println("after
          * ="+new IntArrayList(list)+", head="+head); }
@@ -972,7 +934,7 @@ public class Partitioning {
          * to && list[from] < splitter); //if (head != to) { list[to] =
          * list[from]; list[from++] = element; //oldHead = list[head];
          * //list[head] = element; //list[i] = oldHead;
-         * 
+         *
          * //head++; //} //head++; } //System.out.println("after ="+new
          * IntArrayList(list)+", head="+head); }
          */
@@ -991,18 +953,18 @@ public class Partitioning {
     }
 
     /**
-     * Same as {@link #partition(int[],int,int,int[],int,int,int[])} except that
+     * Same as {@link #partition(int[], int, int, int[], int, int, int[])} except that
      * it partitions <tt>Object[]</tt> rather than <tt>int[]</tt> arrays.
      */
     public static void partition(Object[] list, int from, int to, Object[] splitters, int splitFrom, int splitTo,
-            int[] splitIndexes, java.util.Comparator comp) {
+                                 int[] splitIndexes, java.util.Comparator comp) {
         Object splitter; // int, double --> template type dependent
 
         if (splitFrom > splitTo)
             return; // nothing to do
         if (from > to) { // all bins are empty
             from--;
-            for (int i = splitFrom; i <= splitTo;)
+            for (int i = splitFrom; i <= splitTo; )
                 splitIndexes[i++] = from;
             return;
         }
@@ -1074,13 +1036,13 @@ public class Partitioning {
     }
 
     /**
-     * Same as {@link #partition(int[],int,int,int)} except that it
+     * Same as {@link #partition(int[], int, int, int)} except that it
      * <i>synchronously</i> partitions the objects of the given list by the
      * order of the given comparator.
      */
     public static int partition(Object[] list, int from, int to, Object splitter, java.util.Comparator comp) {
         Object element; // int, double --> template type dependent
-        for (int i = from - 1; ++i <= to;) {
+        for (int i = from - 1; ++i <= to; ) {
             element = list[i];
             if (comp.compare(element, splitter) < 0) {
                 // swap x[i] with x[from]
@@ -1098,7 +1060,7 @@ public class Partitioning {
      * .
      */
     public static void partition(DoubleArrayList list, int from, int to, DoubleArrayList splitters,
-            IntArrayList splitIndexes) {
+                                 IntArrayList splitIndexes) {
         partition(list.elements(), from, to, splitters.elements(), 0, splitters.size() - 1, splitIndexes.elements());
     }
 
@@ -1113,19 +1075,19 @@ public class Partitioning {
 
     /**
      * Same as
-     * {@link #triplePartition(int[],int[],int[],int,int,int[],int,int,int[])}
+     * {@link #triplePartition(int[], int[], int[], int, int, int[], int, int, int[])}
      * except that it <i>synchronously</i> partitions <tt>double[]</tt> rather
      * than <tt>int[]</tt> arrays.
      */
     public static void triplePartition(double[] list, double[] secondary, double[] tertiary, int from, int to,
-            double[] splitters, int splitFrom, int splitTo, int[] splitIndexes) {
+                                       double[] splitters, int splitFrom, int splitTo, int[] splitIndexes) {
         double splitter; // int, double --> template type dependent
 
         if (splitFrom > splitTo)
             return; // nothing to do
         if (from > to) { // all bins are empty
             from--;
-            for (int i = splitFrom; i <= splitTo;)
+            for (int i = splitFrom; i <= splitTo; )
                 splitIndexes[i++] = from;
             return;
         }
@@ -1188,25 +1150,25 @@ public class Partitioning {
         // recursively partition left half
         if (splitFrom <= medianIndex - 1) {
             triplePartition(list, secondary, tertiary, from, splitIndex, splitters, splitFrom, medianIndex - 1,
-                    splitIndexes);
+                splitIndexes);
         }
 
         // recursively partition right half
         if (medianIndex + 1 <= splitTo) {
             triplePartition(list, secondary, tertiary, splitIndex + 1, to, splitters, medianIndex + 1, splitTo,
-                    splitIndexes);
+                splitIndexes);
         }
     }
 
     /**
-     * Same as {@link #triplePartition(int[],int[],int[],int,int,int)} except
+     * Same as {@link #triplePartition(int[], int[], int[], int, int, int)} except
      * that it <i>synchronously</i> partitions <tt>double[]</tt> rather than
      * <tt>int[]</tt> arrays.
      */
     public static int triplePartition(double[] list, double[] secondary, double[] tertiary, int from, int to,
-            double splitter) {
+                                      double splitter) {
         double element; // int, double --> template type dependent
-        for (int i = from - 1; ++i <= to;) {
+        for (int i = from - 1; ++i <= to; ) {
             element = list[i];
             if (element < splitter) {
                 // swap x[i] with x[from]
@@ -1227,7 +1189,7 @@ public class Partitioning {
     }
 
     /**
-     * Same as {@link #partition(int[],int,int,int[],int,int,int[])} except that
+     * Same as {@link #partition(int[], int, int, int[], int, int, int[])} except that
      * this method <i>synchronously</i> partitions three arrays at the same
      * time; all three arrays are partially sorted according to the elements of
      * the primary array. In other words, each time an element in the primary
@@ -1250,14 +1212,14 @@ public class Partitioning {
      * Same as for single-partition methods.
      */
     public static void triplePartition(int[] list, int[] secondary, int[] tertiary, int from, int to, int[] splitters,
-            int splitFrom, int splitTo, int[] splitIndexes) {
+                                       int splitFrom, int splitTo, int[] splitIndexes) {
         int splitter; // int, double --> template type dependent
 
         if (splitFrom > splitTo)
             return; // nothing to do
         if (from > to) { // all bins are empty
             from--;
-            for (int i = splitFrom; i <= splitTo;)
+            for (int i = splitFrom; i <= splitTo; )
                 splitIndexes[i++] = from;
             return;
         }
@@ -1320,18 +1282,18 @@ public class Partitioning {
         // recursively partition left half
         if (splitFrom <= medianIndex - 1) {
             triplePartition(list, secondary, tertiary, from, splitIndex, splitters, splitFrom, medianIndex - 1,
-                    splitIndexes);
+                splitIndexes);
         }
 
         // recursively partition right half
         if (medianIndex + 1 <= splitTo) {
             triplePartition(list, secondary, tertiary, splitIndex + 1, to, splitters, medianIndex + 1, splitTo,
-                    splitIndexes);
+                splitIndexes);
         }
     }
 
     /**
-     * Same as {@link #partition(int[],int,int,int)} except that this method
+     * Same as {@link #partition(int[], int, int, int)} except that this method
      * <i>synchronously</i> partitions three arrays at the same time; all three
      * arrays are partially sorted according to the elements of the primary
      * array. In other words, each time an element in the primary array is moved
@@ -1345,7 +1307,7 @@ public class Partitioning {
      */
     public static int triplePartition(int[] list, int[] secondary, int[] tertiary, int from, int to, int splitter) {
         int element; // int, double --> template type dependent
-        for (int i = from - 1; ++i <= to;) {
+        for (int i = from - 1; ++i <= to; ) {
             element = list[i];
             if (element < splitter) {
                 // swap x[i] with x[from]

@@ -39,16 +39,15 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * <p>
  * <tt>O(1)</tt> (i.e. constant time) for the basic operations <tt>get</tt>,
  * <tt>getQuick</tt>, <tt>set</tt>, <tt>setQuick</tt> and <tt>size</tt>.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
 
 
     @Serial
     private static final long serialVersionUID = -6471969424209747070L;
-    private double[][][] elements;
+    private final double[][][] elements;
 
     private DoubleFFT_3D fft3;
 
@@ -79,10 +78,8 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
 
     /**
      * Computes the 3D discrete cosine transform (DCT-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void dct3(boolean scale) {
@@ -98,10 +95,8 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Computes the 2D discrete cosine transform (DCT-II) of each slice of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void dct2Slices(final boolean scale) {
@@ -156,7 +151,6 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Computes the 2D discrete Hartley transform (DHT) of each slice of this
      * matrix.
-     * 
      */
 
     public void dht2Slices() {
@@ -196,9 +190,8 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
 
     /**
      * Computes the 3D discrete sine transform (DST-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void dst3(boolean scale) {
@@ -214,9 +207,8 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Computes the 2D discrete sine transform (DST-II) of each slice of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void dst2Slices(final boolean scale) {
@@ -257,58 +249,57 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Computes the 3D discrete Fourier transform (DFT) of this matrix. The
      * physical layout of the output data is as follows:
-     * 
+     *
      * <pre>
      * this[k1][k2][2*k3] = Re[k1][k2][k3]
-     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
+     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
      * this[k1][k2][2*k3+1] = Im[k1][k2][k3]
-     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
-     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2, 
+     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
+     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2,
      * this[k1][k2][0] = Re[k1][k2][0]
-     *              = Re[(n1-k1)%n1][n2-k2][0], 
+     *              = Re[(n1-k1)%n1][n2-k2][0],
      * this[k1][k2][1] = Im[k1][k2][0]
-     *              = -Im[(n1-k1)%n1][n2-k2][0], 
+     *              = -Im[(n1-k1)%n1][n2-k2][0],
      * this[k1][n2-k2][1] = Re[(n1-k1)%n1][k2][n3/2]
-     *                 = Re[k1][n2-k2][n3/2], 
+     *                 = Re[k1][n2-k2][n3/2],
      * this[k1][n2-k2][0] = -Im[(n1-k1)%n1][k2][n3/2]
-     *                 = Im[k1][n2-k2][n3/2], 
-     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2, 
+     *                 = Im[k1][n2-k2][n3/2],
+     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2,
      * this[k1][0][0] = Re[k1][0][0]
-     *             = Re[n1-k1][0][0], 
+     *             = Re[n1-k1][0][0],
      * this[k1][0][1] = Im[k1][0][0]
-     *             = -Im[n1-k1][0][0], 
+     *             = -Im[n1-k1][0][0],
      * this[k1][n2/2][0] = Re[k1][n2/2][0]
-     *                = Re[n1-k1][n2/2][0], 
+     *                = Re[n1-k1][n2/2][0],
      * this[k1][n2/2][1] = Im[k1][n2/2][0]
-     *                = -Im[n1-k1][n2/2][0], 
+     *                = -Im[n1-k1][n2/2][0],
      * this[n1-k1][0][1] = Re[k1][0][n3/2]
-     *                = Re[n1-k1][0][n3/2], 
+     *                = Re[n1-k1][0][n3/2],
      * this[n1-k1][0][0] = -Im[k1][0][n3/2]
-     *                = Im[n1-k1][0][n3/2], 
+     *                = Im[n1-k1][0][n3/2],
      * this[n1-k1][n2/2][1] = Re[k1][n2/2][n3/2]
-     *                   = Re[n1-k1][n2/2][n3/2], 
+     *                   = Re[n1-k1][n2/2][n3/2],
      * this[n1-k1][n2/2][0] = -Im[k1][n2/2][n3/2]
-     *                   = Im[n1-k1][n2/2][n3/2], 
-     *     0&lt;k1&lt;n1/2, 
-     * this[0][0][0] = Re[0][0][0], 
-     * this[0][0][1] = Re[0][0][n3/2], 
-     * this[0][n2/2][0] = Re[0][n2/2][0], 
-     * this[0][n2/2][1] = Re[0][n2/2][n3/2], 
-     * this[n1/2][0][0] = Re[n1/2][0][0], 
-     * this[n1/2][0][1] = Re[n1/2][0][n3/2], 
-     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0], 
+     *                   = Im[n1-k1][n2/2][n3/2],
+     *     0&lt;k1&lt;n1/2,
+     * this[0][0][0] = Re[0][0][0],
+     * this[0][0][1] = Re[0][0][n3/2],
+     * this[0][n2/2][0] = Re[0][n2/2][0],
+     * this[0][n2/2][1] = Re[0][n2/2][n3/2],
+     * this[n1/2][0][0] = Re[n1/2][0][0],
+     * this[n1/2][0][1] = Re[n1/2][0][n3/2],
+     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0],
      * this[n1/2][n2/2][1] = Re[n1/2][n2/2][n3/2]
      * </pre>
-     * 
-     * 
+     * <p>
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * forward transform, use <code>getFft3</code>. To get back the original
      * data, use <code>ifft3</code>.
-     * 
-     * @throws IllegalArgumentException
-     *             if the slice size or the row size or the column size of this
-     *             matrix is not a power of 2 number.
+     *
+     * @throws IllegalArgumentException if the slice size or the row size or the column size of this
+     *                                  matrix is not a power of 2 number.
      */
 
     public void fft3() {
@@ -324,10 +315,9 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 2D discrete Fourier transform
      * (DFT) of each slice of this matrix.
-     * 
+     *
      * @return the 2D discrete Fourier transform (DFT) of each slice of this
-     *         matrix.
-     * 
+     * matrix.
      */
 
     public DenseLargeDComplexMatrix3D getFft2Slices() {
@@ -376,7 +366,7 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 3D discrete Fourier transform
      * (DFT) of this matrix.
-     * 
+     *
      * @return the 3D discrete Fourier transform (DFT) of this matrix.
      */
 
@@ -428,13 +418,10 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 2D inverse of the discrete
      * Fourier transform (IDFT) of each slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      * @return the 2D inverse of the discrete Fourier transform (IDFT) of each
-     *         slice of this matrix.
-     * 
+     * slice of this matrix.
      */
 
     public DenseLargeDComplexMatrix3D getIfft2Slices(final boolean scale) {
@@ -483,13 +470,10 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Returns new complex matrix which is the 3D inverse of the discrete
      * Fourier transform (IDFT) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      * @return the 3D inverse of the discrete Fourier transform (IDFT) of this
-     *         matrix.
-     * 
+     * matrix.
      */
 
     public DenseLargeDComplexMatrix3D getIfft3(boolean scale) {
@@ -544,10 +528,8 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Computes the 2D inverse of the discrete cosine transform (DCT-III) of
      * each slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idct2Slices(final boolean scale) {
@@ -588,14 +570,10 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete Hartley transform (IDHT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
-     * @throws IllegalArgumentException
-     *             if the slice size or the row size or the column size of this
-     *             matrix is not a power of 2 number.
-     * 
+     *
+     * @param scale if true then scaling is performed
+     * @throws IllegalArgumentException if the slice size or the row size or the column size of this
+     *                                  matrix is not a power of 2 number.
      */
 
     public void idht3(boolean scale) {
@@ -611,14 +589,10 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Computes the 2D inverse of the discrete Hartley transform (IDHT) of each
      * slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
-     * @throws IllegalArgumentException
-     *             if the slice size or the row size or the column size of this
-     *             matrix is not a power of 2 number.
-     * 
+     *
+     * @param scale if true then scaling is performed
+     * @throws IllegalArgumentException if the slice size or the row size or the column size of this
+     *                                  matrix is not a power of 2 number.
      */
 
     public void idht2Slices(final boolean scale) {
@@ -659,10 +633,8 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete cosine transform (DCT-III) of
      * this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idct3(boolean scale) {
@@ -678,10 +650,8 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Computes the 2D inverse of the discrete sine transform (DST-III) of each
      * slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idst2Slices(final boolean scale) {
@@ -722,10 +692,8 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete sine transform (DST-III) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
 
     public void idst3(boolean scale) {
@@ -741,59 +709,56 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
     /**
      * Computes the 3D inverse of the discrete Fourier transform (IDFT) of this
      * matrix. The physical layout of the input data has to be as follows:
-     * 
+     *
      * <pre>
      * this[k1][k2][2*k3] = Re[k1][k2][k3]
-     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
+     *                 = Re[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
      * this[k1][k2][2*k3+1] = Im[k1][k2][k3]
-     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3], 
-     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2, 
+     *                   = -Im[(n1-k1)%n1][(n2-k2)%n2][n3-k3],
+     *     0&lt;=k1&lt;n1, 0&lt;=k2&lt;n2, 0&lt;k3&lt;n3/2,
      * this[k1][k2][0] = Re[k1][k2][0]
-     *              = Re[(n1-k1)%n1][n2-k2][0], 
+     *              = Re[(n1-k1)%n1][n2-k2][0],
      * this[k1][k2][1] = Im[k1][k2][0]
-     *              = -Im[(n1-k1)%n1][n2-k2][0], 
+     *              = -Im[(n1-k1)%n1][n2-k2][0],
      * this[k1][n2-k2][1] = Re[(n1-k1)%n1][k2][n3/2]
-     *                 = Re[k1][n2-k2][n3/2], 
+     *                 = Re[k1][n2-k2][n3/2],
      * this[k1][n2-k2][0] = -Im[(n1-k1)%n1][k2][n3/2]
-     *                 = Im[k1][n2-k2][n3/2], 
-     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2, 
+     *                 = Im[k1][n2-k2][n3/2],
+     *     0&lt;=k1&lt;n1, 0&lt;k2&lt;n2/2,
      * this[k1][0][0] = Re[k1][0][0]
-     *             = Re[n1-k1][0][0], 
+     *             = Re[n1-k1][0][0],
      * this[k1][0][1] = Im[k1][0][0]
-     *             = -Im[n1-k1][0][0], 
+     *             = -Im[n1-k1][0][0],
      * this[k1][n2/2][0] = Re[k1][n2/2][0]
-     *                = Re[n1-k1][n2/2][0], 
+     *                = Re[n1-k1][n2/2][0],
      * this[k1][n2/2][1] = Im[k1][n2/2][0]
-     *                = -Im[n1-k1][n2/2][0], 
+     *                = -Im[n1-k1][n2/2][0],
      * this[n1-k1][0][1] = Re[k1][0][n3/2]
-     *                = Re[n1-k1][0][n3/2], 
+     *                = Re[n1-k1][0][n3/2],
      * this[n1-k1][0][0] = -Im[k1][0][n3/2]
-     *                = Im[n1-k1][0][n3/2], 
+     *                = Im[n1-k1][0][n3/2],
      * this[n1-k1][n2/2][1] = Re[k1][n2/2][n3/2]
-     *                   = Re[n1-k1][n2/2][n3/2], 
+     *                   = Re[n1-k1][n2/2][n3/2],
      * this[n1-k1][n2/2][0] = -Im[k1][n2/2][n3/2]
-     *                   = Im[n1-k1][n2/2][n3/2], 
-     *     0&lt;k1&lt;n1/2, 
-     * this[0][0][0] = Re[0][0][0], 
-     * this[0][0][1] = Re[0][0][n3/2], 
-     * this[0][n2/2][0] = Re[0][n2/2][0], 
-     * this[0][n2/2][1] = Re[0][n2/2][n3/2], 
-     * this[n1/2][0][0] = Re[n1/2][0][0], 
-     * this[n1/2][0][1] = Re[n1/2][0][n3/2], 
-     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0], 
+     *                   = Im[n1-k1][n2/2][n3/2],
+     *     0&lt;k1&lt;n1/2,
+     * this[0][0][0] = Re[0][0][0],
+     * this[0][0][1] = Re[0][0][n3/2],
+     * this[0][n2/2][0] = Re[0][n2/2][0],
+     * this[0][n2/2][1] = Re[0][n2/2][n3/2],
+     * this[n1/2][0][0] = Re[n1/2][0][0],
+     * this[n1/2][0][1] = Re[n1/2][0][n3/2],
+     * this[n1/2][n2/2][0] = Re[n1/2][n2/2][0],
      * this[n1/2][n2/2][1] = Re[n1/2][n2/2][n3/2]
      * </pre>
-     * 
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * inverse transform, use <code>getIfft3</code>.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
-     * @throws IllegalArgumentException
-     *             if the slice size or the row size or the column size of this
-     *             matrix is not a power of 2 number.
+     *
+     * @param scale if true then scaling is performed
+     * @throws IllegalArgumentException if the slice size or the row size or the column size of this
+     *                                  matrix is not a power of 2 number.
      */
 
     public void ifft3(boolean scale) {

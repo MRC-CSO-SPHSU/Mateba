@@ -28,16 +28,15 @@ import java.io.Serial;
  * <p>
  * <tt>O(1)</tt> (i.e. constant time) for the basic operations <tt>get</tt>,
  * <tt>getQuick</tt>, <tt>set</tt>, <tt>setQuick</tt> and <tt>size</tt>.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DenseLargeLongMatrix2D extends WrapperLongMatrix2D {
 
 
     @Serial
     private static final long serialVersionUID = -6197202822344913096L;
-    private long[][] elements;
+    private final long[][] elements;
 
     public DenseLargeLongMatrix2D(int rows, int columns) {
         super(null);

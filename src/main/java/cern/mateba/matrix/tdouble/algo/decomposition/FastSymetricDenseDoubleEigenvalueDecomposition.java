@@ -17,47 +17,45 @@ import cern.mateba.matrix.tdouble.algo.DoubleProperty;
 
 /**
  * Eigenvalues and eigenvectors of a real symetric matrix <tt>A</tt>.
- * <P>
+ * <p>
  * <tt>A = V*D*V'</tt> where the eigenvalue matrix
  * <tt>D</tt> is diagonal and the eigenvector matrix <tt>V</tt> is orthogonal.
  * I.e. <tt>A = V.mult(D.mult(transpose(V)))</tt> and
  * <tt>V.mult(transpose(V))</tt> equals the identity matrix.
- * 
  */
 public class FastSymetricDenseDoubleEigenvalueDecomposition implements java.io.Serializable {
     static final long serialVersionUID = 1020;
 
     /**
      * Row and column dimension (square matrix).
-     * 
+     *
      * @serial matrix dimension.
      */
-    private int n;
+    private final int n;
 
     /**
      * Arrays for internal storage of eigenvalues.
-     * 
+     *
      * @serial internal storage of eigenvalues.
      */
-    private double[] d, e;
+    private final double[] d;
+    private final double[] e;
 
     /**
      * Array for internal storage of eigenvectors.
-     * 
+     *
      * @serial internal storage of eigenvectors.
      */
-    private double[][] V;
+    private final double[][] V;
 
     /**
      * Constructs and returns a new eigenvalue decomposition object; The
      * decomposed matrices can be retrieved via instance methods of the returned
      * decomposition object. Checks for symmetry, then constructs the eigenvalue
      * decomposition.
-     * 
-     * @param A
-     *            A square matrix.
-     * @throws IllegalArgumentException
-     *             if <tt>A</tt> is not square.
+     *
+     * @param A A square matrix.
+     * @throws IllegalArgumentException if <tt>A</tt> is not square.
      */
     public FastSymetricDenseDoubleEigenvalueDecomposition(DoubleMatrix2D A) {
         DoubleProperty.DEFAULT.checkSquare(A);
@@ -76,7 +74,7 @@ public class FastSymetricDenseDoubleEigenvalueDecomposition implements java.io.S
 
     /**
      * Returns the block diagonal eigenvalue matrix, <tt>D</tt>.
-     * 
+     *
      * @return <tt>D</tt>
      */
     public DoubleMatrix2D getD() {
@@ -97,8 +95,8 @@ public class FastSymetricDenseDoubleEigenvalueDecomposition implements java.io.S
 
     /**
      * Returns the imaginary parts of the eigenvalues.
-     * 
-     * @return imag(diag(D))
+     *
+     * @return imag(diag ( D))
      */
     public DoubleMatrix1D getImagEigenvalues() {
         return DoubleFactory1D.dense.make(e);
@@ -106,8 +104,8 @@ public class FastSymetricDenseDoubleEigenvalueDecomposition implements java.io.S
 
     /**
      * Returns the real parts of the eigenvalues.
-     * 
-     * @return real(diag(D))
+     *
+     * @return real(diag ( D))
      */
     public DoubleMatrix1D getRealEigenvalues() {
         return DoubleFactory1D.dense.make(d);
@@ -115,7 +113,7 @@ public class FastSymetricDenseDoubleEigenvalueDecomposition implements java.io.S
 
     /**
      * Returns the eigenvector matrix, <tt>V</tt>
-     * 
+     *
      * @return <tt>V</tt>
      */
     public DoubleMatrix2D getV() {
@@ -125,11 +123,11 @@ public class FastSymetricDenseDoubleEigenvalueDecomposition implements java.io.S
     /**
      * Returns a String with (propertyName, propertyValue) pairs. Useful for
      * debugging or to quickly get the rough picture. For example,
-     * 
+     *
      * <pre>
      * 	 rank          : 3
      * 	 trace         : 0
-     * 
+     *
      * </pre>
      */
 
@@ -143,28 +141,28 @@ public class FastSymetricDenseDoubleEigenvalueDecomposition implements java.io.S
 
         buf.append("realEigenvalues = ");
         try {
-            buf.append(String.valueOf(this.getRealEigenvalues()));
+            buf.append(this.getRealEigenvalues());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\nimagEigenvalues = ");
         try {
-            buf.append(String.valueOf(this.getImagEigenvalues()));
+            buf.append(this.getImagEigenvalues());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\n\nD = ");
         try {
-            buf.append(String.valueOf(this.getD()));
+            buf.append(this.getD());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\n\nV = ");
         try {
-            buf.append(String.valueOf(this.getV()));
+            buf.append(this.getV());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
@@ -302,9 +300,7 @@ public class FastSymetricDenseDoubleEigenvalueDecomposition implements java.io.S
         // Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
         // Fortran subroutine in EISPACK.
 
-        for (int j = 0; j < n; ++j) {
-            d[j] = V[n - 1][j];
-        }
+        if (n >= 0) System.arraycopy(V[n - 1], 0, d, 0, n);
 
         // Householder reduction to tridiagonal form.
 
@@ -317,7 +313,7 @@ public class FastSymetricDenseDoubleEigenvalueDecomposition implements java.io.S
             for (int k = 0; k < i; ++k) {
                 scale += Math.abs(d[k]);
             }
-            
+
             if (scale == 0.0) {
                 e[i] = d[i - 1];
                 for (int j = 0; j < i; ++j) {
@@ -376,7 +372,7 @@ public class FastSymetricDenseDoubleEigenvalueDecomposition implements java.io.S
                     V[i][j] = 0.0;
                 }
             }
-            
+
             d[i] = h;
         }
 

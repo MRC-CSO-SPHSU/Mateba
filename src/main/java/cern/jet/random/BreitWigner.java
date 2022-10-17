@@ -1,10 +1,10 @@
 /**
-Copyright (C) 1999 CERN - European Organization for Nuclear Research.
-Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose 
-is hereby granted without fee, provided that the above copyright notice appear in all copies and 
-that both that copyright notice and this permission notice appear in supporting documentation. 
-CERN makes no representations about the suitability of this software for any purpose. 
-It is provided "as is" without expressed or implied warranty.
+ * Copyright (C) 1999 CERN - European Organization for Nuclear Research.
+ * Permission to use, copy, modify, distribute and sell this software and its documentation for any purpose
+ * is hereby granted without fee, provided that the above copyright notice appear in all copies and
+ * that both that copyright notice and this permission notice appear in supporting documentation.
+ * CERN makes no representations about the suitability of this software for any purpose.
+ * It is provided "as is" without expressed or implied warranty.
  */
 package cern.jet.random;
 
@@ -25,7 +25,7 @@ import java.io.Serial;
  * <b>Implementation:</b> This is a port of <A HREF="http://wwwinfo.cern.ch/asd/lhc++/clhep/manual/RefGuide/Random/RandBreitWigner.html"
  * >RandBreitWigner</A> used in <A
  * HREF="http://wwwinfo.cern.ch/asd/lhc++/clhep">CLHEP 1.4.0</A> (C++).
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -44,7 +44,7 @@ public class BreitWigner extends AbstractContinousDistribution {
 
     /**
      * Constructs a BreitWigner distribution.
-     * 
+     *
      * @param cut
      *            </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
      */
@@ -64,7 +64,7 @@ public class BreitWigner extends AbstractContinousDistribution {
     /**
      * Returns a random number from the distribution; bypasses the internal
      * state.
-     * 
+     *
      * @param cut
      *            </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
      */
@@ -88,7 +88,7 @@ public class BreitWigner extends AbstractContinousDistribution {
 
     /**
      * Sets the mean, gamma and cut parameters.
-     * 
+     *
      * @param cut
      *            </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
      */
@@ -100,7 +100,7 @@ public class BreitWigner extends AbstractContinousDistribution {
 
     /**
      * Returns a random number from the distribution.
-     * 
+     *
      * @param cut
      *            </tt>cut==Double.NEGATIVE_INFINITY</tt> indicates "don't cut".
      */
@@ -121,7 +121,7 @@ public class BreitWigner extends AbstractContinousDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
+     *
      * @param randomGenerator
      *            the new uniform random number generator to be shared.
      */

@@ -62,7 +62,7 @@ import java.io.Serial;
  * exploit this fact. Setting/getting values in a loop slice-by-slice,
  * row-by-row, column-by-column is quicker than, for example, column-by-column,
  * row-by-row, slice-by-slice. Thus
- * 
+ *
  * <pre>
  * for (int slice = 0; slice &lt; slices; slice++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -72,9 +72,9 @@ import java.io.Serial;
  *     }
  * }
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -84,15 +84,15 @@ import java.io.Serial;
  *     }
  * }
  * </pre>
- * 
- * @see cern.mateba.map
- * @see cern.mateba.map.tobject.OpenLongObjectHashMap
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
+ * @see cern.mateba.map
+ * @see cern.mateba.map.tobject.OpenLongObjectHashMap
  */
 public class SparseObjectMatrix3D extends ObjectMatrix3D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = -962192839110133496L;
@@ -109,38 +109,30 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
+     *                                  .
      */
     public SparseObjectMatrix3D(Object[][][] values) {
         this(values.length, (values.length == 0 ? 0 : values[0].length), (values.length == 0 ? 0
-                : values[0].length == 0 ? 0 : values[0][0].length));
+            : values[0].length == 0 ? 0 : values[0][0].length));
         assign(values);
     }
 
     /**
      * Constructs a matrix with a given number of slices, rows and columns and
      * default memory usage. All entries are initially <tt>null</tt>.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices  the number of slices the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public SparseObjectMatrix3D(int slices, int rows, int columns) {
         this(slices, rows, columns, slices * rows * (columns / 1000), 0.2, 0.5);
@@ -151,69 +143,48 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
      * memory as specified. All entries are initially <tt>null</tt>. For details
      * related to memory usage see
      * {@link cern.mateba.map.tobject.OpenLongObjectHashMap}.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param initialCapacity
-     *            the initial capacity of the hash map. If not known, set
-     *            <tt>initialCapacity=0</tt> or small.
-     * @param minLoadFactor
-     *            the minimum load factor of the hash map.
-     * @param maxLoadFactor
-     *            the maximum load factor of the hash map.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices          the number of slices the matrix shall have.
+     * @param rows            the number of rows the matrix shall have.
+     * @param columns         the number of columns the matrix shall have.
+     * @param initialCapacity the initial capacity of the hash map. If not known, set
+     *                        <tt>initialCapacity=0</tt> or small.
+     * @param minLoadFactor   the minimum load factor of the hash map.
+     * @param maxLoadFactor   the maximum load factor of the hash map.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
+     *                                  .
+     * @throws IllegalArgumentException if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public SparseObjectMatrix3D(int slices, int rows, int columns, int initialCapacity, double minLoadFactor,
-            double maxLoadFactor) {
+                                double maxLoadFactor) {
         setUp(slices, rows, columns);
         this.elements = new OpenLongObjectHashMap(initialCapacity, minLoadFactor, maxLoadFactor);
     }
 
     /**
      * Constructs a view with the given parameters.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param sliceZero
-     *            the position of the first element.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param sliceStride
-     *            the number of elements between two slices, i.e.
-     *            <tt>index(k+1,i,j)-index(k,i,j)</tt>.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(k,i+1,j)-index(k,i,j)</tt>.
-     * @param columnnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(k,i,j+1)-index(k,i,j)</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>(Object)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices        the number of slices the matrix shall have.
+     * @param rows          the number of rows the matrix shall have.
+     * @param columns       the number of columns the matrix shall have.
+     * @param elements      the cells.
+     * @param sliceZero     the position of the first element.
+     * @param rowZero       the position of the first element.
+     * @param columnZero    the position of the first element.
+     * @param sliceStride   the number of elements between two slices, i.e.
+     *                      <tt>index(k+1,i,j)-index(k,i,j)</tt>.
+     * @param rowStride     the number of elements between two rows, i.e.
+     *                      <tt>index(k,i+1,j)-index(k,i,j)</tt>.
+     * @param columnnStride the number of elements between two columns, i.e.
+     *                      <tt>index(k,i,j+1)-index(k,i,j)</tt>.
+     * @throws IllegalArgumentException if <tt>(Object)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     protected SparseObjectMatrix3D(int slices, int rows, int columns, AbstractLongObjectMap elements, int sliceZero,
-            int rowZero, int columnZero, int sliceStride, int rowStride, int columnStride) {
+                                   int rowZero, int columnZero, int sliceStride, int rowStride, int columnStride) {
         setUp(slices, rows, columns, sliceZero, rowZero, columnZero, sliceStride, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = false;
@@ -232,7 +203,7 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
 
     /**
      * Returns the elements of this matrix.
-     * 
+     *
      * @return the elements
      */
 
@@ -250,9 +221,8 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
      * Calling this method before tt>set()</tt>ing a large number of non-zero
      * values boosts performance, because the receiver will grow only once
      * instead of potentially many times and hash collisions get less probable.
-     * 
-     * @param minCapacity
-     *            the desired minimum number of non-zero cells.
+     *
+     * @param minCapacity the desired minimum number of non-zero cells.
      */
 
     public void ensureCapacity(int minCapacity) {
@@ -261,20 +231,17 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>[slice,row,column]</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>slice&lt;0 || slice&gt;=slices() || row&lt;0 || row&gt;=rows() || column&lt;0 || column&gt;=column()</tt>.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      * @return the value at the specified coordinate.
      */
 
@@ -286,7 +253,7 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
         // return elements.get(index(slice,row,column));
         // manually inlined:
         return elements.get((long) sliceZero + (long) slice * (long) sliceStride + (long) rowZero + (long) row
-                * (long) rowStride + (long) columnZero + (long) column * (long) columnStride);
+            * (long) rowStride + (long) columnZero + (long) column * (long) columnStride);
     }
 
     /**
@@ -294,11 +261,9 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
      */
 
     protected boolean haveSharedCellsRaw(ObjectMatrix3D other) {
-        if (other instanceof SelectedSparseObjectMatrix3D) {
-            SelectedSparseObjectMatrix3D otherMatrix = (SelectedSparseObjectMatrix3D) other;
+        if (other instanceof SelectedSparseObjectMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseObjectMatrix3D) {
-            SparseObjectMatrix3D otherMatrix = (SparseObjectMatrix3D) other;
+        } else if (other instanceof SparseObjectMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -307,13 +272,10 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
     /**
      * Returns the position of the given coordinate within the (virtual or
      * non-virtual) internal 1-dimensional array.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the third-coordinate.
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the third-coordinate.
      */
 
     public long index(int slice, int row, int column) {
@@ -321,7 +283,7 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
         // _columnOffset(_columnRank(column));
         // manually inlined:
         return (long) sliceZero + (long) slice * (long) sliceStride + (long) rowZero + (long) row * (long) rowStride
-                + (long) columnZero + (long) column * (long) columnStride;
+            + (long) columnZero + (long) column * (long) columnStride;
     }
 
     /**
@@ -333,13 +295,10 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
      * <tt>SparseObjectMatrix3D</tt> the new matrix must also be of type
      * <tt>SparseObjectMatrix3D</tt>, etc. In general, the new matrix should
      * have internal parametrization as similar as possible.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param slices  the number of slices the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -354,21 +313,15 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
      * of type <tt>DenseObjectMatrix2D</tt>, if the receiver is an instance of
      * type <tt>SparseObjectMatrix3D</tt> the new matrix must also be of type
      * <tt>SparseObjectMatrix2D</tt>, etc.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
+     *
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(i,j+1)-index(i,j)</tt>.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -379,22 +332,18 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
     /**
      * Sets the matrix cell at coordinate <tt>[slice,row,column]</tt> to the
      * specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>slice&lt;0 || slice&gt;=slices() || row&lt;0 || row&gt;=rows() || column&lt;0 || column&gt;=column()</tt>.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param value  the value to be filled into the specified cell.
      */
 
     public synchronized void setQuick(int slice, int row, int column, Object value) {
@@ -405,7 +354,7 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
         // int index = index(slice,row,column);
         // manually inlined:
         long index = (long) sliceZero + (long) slice * (long) sliceStride + (long) rowZero + (long) row
-                * (long) rowStride + (long) columnZero + (long) column * (long) columnStride;
+            * (long) rowStride + (long) columnZero + (long) column * (long) columnStride;
         if (value == null)
             this.elements.removeKey(index);
         else
@@ -437,7 +386,7 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
     public void trimToSize() {
         this.elements.trimToSize();
     }
-    
+
     public ObjectMatrix1D vectorize() {
         ObjectMatrix1D v = new SparseObjectMatrix1D((int) size());
         int length = rows * columns;
@@ -449,13 +398,10 @@ public class SparseObjectMatrix3D extends ObjectMatrix3D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param sliceOffsets
-     *            the offsets of the visible elements.
-     * @param rowOffsets
-     *            the offsets of the visible elements.
-     * @param columnOffsets
-     *            the offsets of the visible elements.
+     *
+     * @param sliceOffsets  the offsets of the visible elements.
+     * @param rowOffsets    the offsets of the visible elements.
+     * @param columnOffsets the offsets of the visible elements.
      * @return a new view.
      */
 

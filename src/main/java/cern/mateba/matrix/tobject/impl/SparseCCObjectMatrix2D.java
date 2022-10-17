@@ -34,10 +34,8 @@ import cern.mateba.matrix.tobject.ObjectMatrix2D;
  * is <i>not</i> automatically reclaimed. Reclamation can be triggered via
  * {@link #trimToSize()}.
  * </ul>
- * 
- * 
+ *
  * @author Piotr Wendykier
- * 
  */
 public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
     @Serial
@@ -60,13 +58,11 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public SparseCCObjectMatrix2D(Object[][] values) {
         this(values.length, values[0].length);
@@ -76,30 +72,23 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>rows<0 || columns<0</tt> .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>rows<0 || columns<0</tt> .
      */
     public SparseCCObjectMatrix2D(int rows, int columns) {
-        this(rows, columns, (int) Math.min(10l * rows, Integer.MAX_VALUE));
+        this(rows, columns, (int) Math.min(10L * rows, Integer.MAX_VALUE));
     }
 
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param nzmax
-     *            maximum number of nonzero elements
-     * @throws IllegalArgumentException
-     *             if <tt>rows<0 || columns<0</tt> .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @param nzmax   maximum number of nonzero elements
+     * @throws IllegalArgumentException if <tt>rows<0 || columns<0</tt> .
      */
     public SparseCCObjectMatrix2D(int rows, int columns, int nzmax) {
         super(null);
@@ -117,22 +106,16 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
     /**
      * Constructs a matrix with indexes given in the coordinate format and a
      * single value.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowIndexes
-     *            row indexes
-     * @param columnIndexes
-     *            column indexes
-     * @param value
-     *            numerical value
-     * @param sortRowIndexes
-     *            if true, then row indexes are sorted
+     *
+     * @param rows           the number of rows the matrix shall have.
+     * @param columns        the number of columns the matrix shall have.
+     * @param rowIndexes     row indexes
+     * @param columnIndexes  column indexes
+     * @param value          numerical value
+     * @param sortRowIndexes if true, then row indexes are sorted
      */
     public SparseCCObjectMatrix2D(int rows, int columns, int[] rowIndexes, int[] columnIndexes, Object value,
-            boolean sortRowIndexes) {
+                                  boolean sortRowIndexes) {
         super(null);
         try {
             setUp(rows, columns);
@@ -169,24 +152,17 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
     /**
      * Constructs a matrix with indexes and values given in the coordinate
      * format.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowIndexes
-     *            row indexes
-     * @param columnIndexes
-     *            column indexes
-     * @param values
-     *            numerical values
-     * @param removeZeroes
-     *            if true, then zeroes (if any) are removed
-     * @param sortRowIndexes
-     *            if true, then row indexes are sorted
+     *
+     * @param rows           the number of rows the matrix shall have.
+     * @param columns        the number of columns the matrix shall have.
+     * @param rowIndexes     row indexes
+     * @param columnIndexes  column indexes
+     * @param values         numerical values
+     * @param removeZeroes   if true, then zeroes (if any) are removed
+     * @param sortRowIndexes if true, then row indexes are sorted
      */
     public SparseCCObjectMatrix2D(int rows, int columns, int[] rowIndexes, int[] columnIndexes, Object[] values,
-            boolean removeZeroes, boolean sortRowIndexes) {
+                                  boolean removeZeroes, boolean sortRowIndexes) {
         super(null);
         try {
             setUp(rows, columns);
@@ -246,8 +222,7 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
             return this; // nothing to do
         checkShape(source);
 
-        if (source instanceof SparseCCObjectMatrix2D) {
-            SparseCCObjectMatrix2D other = (SparseCCObjectMatrix2D) source;
+        if (source instanceof SparseCCObjectMatrix2D other) {
             System.arraycopy(other.getColumnPointers(), 0, columnPointers, 0, columns + 1);
             int nzmax = other.getRowIndexes().length;
             if (rowIndexes.length < nzmax) {
@@ -284,9 +259,9 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
         final int[] columnPointersA = columnPointers;
         final Object[] valuesA = values;
 
-        for (int j = columns; --j >= 0;) {
+        for (int j = columns; --j >= 0; ) {
             int low = columnPointersA[j];
-            for (int k = columnPointersA[j + 1]; --k >= low;) {
+            for (int k = columnPointersA[j + 1]; --k >= low; ) {
                 int i = rowIndexesA[k];
                 Object value = valuesA[k];
                 Object r = function.apply(i, j, value);
@@ -298,7 +273,7 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
 
     /**
      * Returns column pointers
-     * 
+     *
      * @return column pointers
      */
     public int[] getColumnPointers() {
@@ -309,7 +284,7 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a dense form. This method creates a new object (not a view), so changes
      * in the returned matrix are NOT reflected in this matrix.
-     * 
+     *
      * @return this matrix in a dense form
      */
     public DenseObjectMatrix2D getDense() {
@@ -336,7 +311,7 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a row-compressed form. This method creates a new object (not a view), so
      * changes in the returned matrix are NOT reflected in this matrix.
-     * 
+     *
      * @return this matrix in a row-compressed form
      */
     public SparseRCObjectMatrix2D getRowCompressed() {
@@ -351,7 +326,7 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
 
     /**
      * Returns row indexes;
-     * 
+     *
      * @return row indexes
      */
     public int[] getRowIndexes() {
@@ -362,12 +337,21 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
      * Returns a new matrix that is the transpose of this matrix. This method
      * creates a new object (not a view), so changes in the returned matrix are
      * NOT reflected in this matrix.
-     * 
+     *
      * @return the transpose of this matrix
      */
     public SparseCCObjectMatrix2D getTranspose() {
-        int p, q, j, Cp[], Ci[], n, m, Ap[], Ai[], w[];
-        Object Cx[], Ax[];
+        int p;
+        int q;
+        int j;
+        int[] Cp;
+        int[] Ci;
+        int n;
+        int m;
+        int[] Ap;
+        int[] Ai;
+        int[] w;
+        Object[] Cx, Ax;
         m = rows;
         n = columns;
         Ap = columnPointers;
@@ -392,7 +376,7 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
 
     /**
      * Returns numerical values
-     * 
+     *
      * @return numerical values
      */
     public Object[] getValues() {
@@ -401,7 +385,7 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
 
     /**
      * Returns true if row indexes are sorted, false otherwise
-     * 
+     *
      * @return true if row indexes are sorted, false otherwise
      */
     public boolean hasRowIndexesSorted() {
@@ -450,8 +434,13 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
      * Removes zero entries (if any)
      */
     public void removeZeroes() {
-        int j, p, nz = 0, n, Ap[], Ai[];
-        Object Ax[];
+        int j;
+        int p;
+        int nz = 0;
+        int n;
+        int[] Ap;
+        int[] Ai;
+        Object[] Ax;
         n = columns;
         Ap = columnPointers;
         Ai = rowIndexes;
@@ -476,12 +465,12 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(rows).append(" x ").append(columns).append(" sparse matrix, nnz = ").append(cardinality())
-                .append('\n');
+            .append('\n');
         for (int i = 0; i < columns; i++) {
             int high = columnPointers[i + 1];
             for (int j = columnPointers[i]; j < high; j++) {
                 builder.append('(').append(rowIndexes[j]).append(',').append(i).append(')').append('\t').append(
-                        values[j]).append('\n');
+                    values[j]).append('\n');
             }
         }
         return builder.toString();
@@ -498,7 +487,7 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
         valuesList.setSizeRaw(columnPointers[columns]);
         rowIndexesList.beforeInsert(index, row);
         valuesList.beforeInsert(index, value);
-        for (int i = columnPointers.length; --i > column;)
+        for (int i = columnPointers.length; --i > column; )
             columnPointers[i]++;
         rowIndexes = rowIndexesList.elements();
         values = valuesList.elements();
@@ -509,7 +498,7 @@ public class SparseCCObjectMatrix2D extends WrapperObjectMatrix2D {
         ObjectArrayList valuesList = new ObjectArrayList(values);
         rowIndexesList.remove(index);
         valuesList.remove(index);
-        for (int i = columnPointers.length; --i > column;)
+        for (int i = columnPointers.length; --i > column; )
             columnPointers[i]--;
         rowIndexes = rowIndexesList.elements();
         values = valuesList.elements();

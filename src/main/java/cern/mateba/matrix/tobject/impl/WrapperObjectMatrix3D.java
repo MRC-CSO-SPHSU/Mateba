@@ -17,13 +17,12 @@ import java.io.Serial;
 /**
  * 3-d matrix holding <tt>Object</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
- * 
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class WrapperObjectMatrix3D extends ObjectMatrix3D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = -6883628016662874249L;
@@ -78,7 +77,7 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
             return this;
         WrapperObjectMatrix3D view = new WrapperObjectMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -112,7 +111,7 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
             return this;
         WrapperObjectMatrix3D view = new WrapperObjectMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -139,7 +138,7 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
     public ObjectMatrix3D viewDice(int axis0, int axis1, int axis2) {
         int d = 3;
         if (axis0 < 0 || axis0 >= d || axis1 < 0 || axis1 >= d || axis2 < 0 || axis2 >= d || axis0 == axis1
-                || axis0 == axis2 || axis1 == axis2) {
+            || axis0 == axis2 || axis1 == axis2) {
             throw new IllegalArgumentException("Illegal Axes: " + axis0 + ", " + axis1 + ", " + axis2);
         }
         WrapperObjectMatrix3D view = null;
@@ -148,7 +147,7 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
         } else if (axis0 == 1 && axis1 == 0 && axis2 == 2) {
             view = new WrapperObjectMatrix3D(this) {
                 /**
-                 * 
+                 *
                  */
                 private static final long serialVersionUID = 1L;
 
@@ -171,7 +170,7 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
         } else if (axis0 == 1 && axis1 == 2 && axis2 == 0) {
             view = new WrapperObjectMatrix3D(this) {
                 /**
-                 * 
+                 *
                  */
                 private static final long serialVersionUID = 1L;
 
@@ -194,7 +193,7 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
         } else if (axis0 == 2 && axis1 == 1 && axis2 == 0) {
             view = new WrapperObjectMatrix3D(this) {
                 /**
-                 * 
+                 *
                  */
                 private static final long serialVersionUID = 1L;
 
@@ -217,7 +216,7 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
         } else if (axis0 == 2 && axis1 == 0 && axis2 == 1) {
             view = new WrapperObjectMatrix3D(this) {
                 /**
-                 * 
+                 *
                  */
                 private static final long serialVersionUID = 1L;
 
@@ -250,7 +249,7 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
         checkBox(slice, row, column, depth, height, width);
         WrapperObjectMatrix3D view = new WrapperObjectMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -287,7 +286,7 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
             return this;
         WrapperObjectMatrix3D view = new WrapperObjectMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -315,17 +314,17 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
         // check for "all"
         if (sliceIndexes == null) {
             sliceIndexes = new int[slices];
-            for (int i = slices; --i >= 0;)
+            for (int i = slices; --i >= 0; )
                 sliceIndexes[i] = i;
         }
         if (rowIndexes == null) {
             rowIndexes = new int[rows];
-            for (int i = rows; --i >= 0;)
+            for (int i = rows; --i >= 0; )
                 rowIndexes[i] = i;
         }
         if (columnIndexes == null) {
             columnIndexes = new int[columns];
-            for (int i = columns; --i >= 0;)
+            for (int i = columns; --i >= 0; )
                 columnIndexes[i] = i;
         }
 
@@ -338,7 +337,7 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
 
         WrapperObjectMatrix3D view = new WrapperObjectMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -370,7 +369,7 @@ public class WrapperObjectMatrix3D extends ObjectMatrix3D {
             throw new IndexOutOfBoundsException("illegal stride");
         WrapperObjectMatrix3D view = new WrapperObjectMatrix3D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 

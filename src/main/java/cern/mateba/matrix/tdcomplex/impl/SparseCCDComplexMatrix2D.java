@@ -39,9 +39,8 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * is <i>not</i> automatically reclaimed. Reclamation can be triggered via
  * {@link #trimToSize()}.
  * </ul>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
     @Serial
@@ -62,13 +61,11 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public SparseCCDComplexMatrix2D(double[][] values) {
         this(values.length, values[0].length);
@@ -77,44 +74,36 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
 
     /**
      * Constructs a matrix with a given internal storage.
-     * 
-     * @param dzcs
-     *            internal storage.
+     *
+     * @param dzcs internal storage.
      */
-    public SparseCCDComplexMatrix2D(DZcs dzcs) {	
+    public SparseCCDComplexMatrix2D(DZcs dzcs) {
         this(dzcs.m, dzcs.n);
         rowIndexes = dzcs.i;
         columnPointers = dzcs.p;
-        values = dzcs.x;	    
+        values = dzcs.x;
     }
 
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>rows<0 || columns<0</tt> .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>rows<0 || columns<0</tt> .
      */
     public SparseCCDComplexMatrix2D(int rows, int columns) {
-        this(rows, columns, (int) Math.min(10l * rows, Integer.MAX_VALUE));
+        this(rows, columns, (int) Math.min(10L * rows, Integer.MAX_VALUE));
     }
 
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param nzmax
-     *            maximum number of nonzero elements
-     * @throws IllegalArgumentException
-     *             if <tt>rows<0 || columns<0</tt> .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @param nzmax   maximum number of nonzero elements
+     * @throws IllegalArgumentException if <tt>rows<0 || columns<0</tt> .
      */
     public SparseCCDComplexMatrix2D(int rows, int columns, int nzmax) {
         super(null);
@@ -131,17 +120,12 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
 
     /**
      * Constructs a matrix with given parameters. The arrays are not copied.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowIndexes
-     *            row indexes
-     * @param columnPointers
-     *            column pointers
-     * @param values
-     *            numerical values
+     *
+     * @param rows           the number of rows the matrix shall have.
+     * @param columns        the number of columns the matrix shall have.
+     * @param rowIndexes     row indexes
+     * @param columnPointers column pointers
+     * @param values         numerical values
      */
     public SparseCCDComplexMatrix2D(int rows, int columns, int[] rowIndexes, int[] columnPointers, double[] values) {
         super(null);
@@ -165,24 +149,17 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
     /**
      * Constructs a matrix with indexes given in the coordinate format and a
      * single value.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowIndexes
-     *            row indexes
-     * @param columnIndexes
-     *            column indexes
-     * @param re
-     *            the real part of numerical value
-     * @param im
-     *            the imaginary part of numerical value
-     * @param removeDuplicates
-     *            if true, then duplicates (if any) are removed
+     *
+     * @param rows             the number of rows the matrix shall have.
+     * @param columns          the number of columns the matrix shall have.
+     * @param rowIndexes       row indexes
+     * @param columnIndexes    column indexes
+     * @param re               the real part of numerical value
+     * @param im               the imaginary part of numerical value
+     * @param removeDuplicates if true, then duplicates (if any) are removed
      */
     public SparseCCDComplexMatrix2D(int rows, int columns, int[] rowIndexes, int[] columnIndexes, double re, double im,
-            boolean removeDuplicates) {
+                                    boolean removeDuplicates) {
         super(null);
         try {
             setUp(rows, columns);
@@ -220,24 +197,17 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
     /**
      * Constructs a matrix with indexes and values given in the coordinate
      * format.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowIndexes
-     *            row indexes
-     * @param columnIndexes
-     *            column indexes
-     * @param values
-     *            numerical values
-     * @param removeDuplicates
-     *            if true, then duplicates (if any) are removed
-     * @param removeZeroes
-     *            if true, then zeroes (if any) are removed
+     *
+     * @param rows             the number of rows the matrix shall have.
+     * @param columns          the number of columns the matrix shall have.
+     * @param rowIndexes       row indexes
+     * @param columnIndexes    column indexes
+     * @param values           numerical values
+     * @param removeDuplicates if true, then duplicates (if any) are removed
+     * @param removeZeroes     if true, then zeroes (if any) are removed
      */
     public SparseCCDComplexMatrix2D(int rows, int columns, int[] rowIndexes, int[] columnIndexes, double[] values,
-            boolean removeDuplicates, boolean removeZeroes) {
+                                    boolean removeDuplicates, boolean removeZeroes) {
         super(null);
         try {
             setUp(rows, columns);
@@ -320,8 +290,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             return this; // nothing to do
         checkShape(source);
 
-        if (source instanceof SparseCCDComplexMatrix2D) {
-            SparseCCDComplexMatrix2D other = (SparseCCDComplexMatrix2D) source;
+        if (source instanceof SparseCCDComplexMatrix2D other) {
             System.arraycopy(other.getColumnPointers(), 0, columnPointers, 0, columns + 1);
             int nzmax = other.getRowIndexes().length;
             if (rowIndexes.length < nzmax) {
@@ -348,14 +317,19 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
     }
 
     public DComplexMatrix2D assign(final DComplexMatrix2D y,
-            cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
+                                   cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
         checkShape(y);
 
-        if ((y instanceof SparseCCDComplexMatrix2D) && (function == cern.jet.math.tcomplex.DComplexFunctions.plus)) { // x[i] = x[i] + y[i] 
-            SparseCCDComplexMatrix2D yy = (SparseCCDComplexMatrix2D) y;
+        if ((y instanceof SparseCCDComplexMatrix2D yy) && (function == cern.jet.math.tcomplex.DComplexFunctions.plus)) { // x[i] = x[i] + y[i]
             int p, j, nz = 0, anz;
-            int Cp[], Ci[], Bp[], m, n, bnz, w[];
-            double x[], Cx[];
+            int[] Cp;
+            int[] Ci;
+            int[] Bp;
+            int m;
+            int n;
+            int bnz;
+            int[] w;
+            double[] x, Cx;
             m = rows;
             anz = columnPointers[columns];
             n = yy.columns;
@@ -367,7 +341,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             Cp = C.columnPointers;
             Ci = C.rowIndexes;
             Cx = C.values;
-            double[] one = new double[] { 1, 0 };
+            double[] one = new double[]{1, 0};
             for (j = 0; j < n; j++) {
                 Cp[j] = nz; /* column j of C starts here */
                 nz = scatter(this, j, one, w, x, j + 1, C, nz); /* alpha*A(:,j)*/
@@ -415,9 +389,9 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             final int[] columnPointersA = columnPointers;
             final double[] valuesA = values;
             double[] valA = new double[2];
-            for (int j = columns; --j >= 0;) {
+            for (int j = columns; --j >= 0; ) {
                 int low = columnPointersA[j];
-                for (int k = columnPointersA[j + 1]; --k >= low;) {
+                for (int k = columnPointersA[j + 1]; --k >= low; ) {
                     int i = rowIndexesA[k];
                     valA[0] = valuesA[2 * k];
                     valA[1] = valuesA[2 * k + 1];
@@ -437,9 +411,9 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             final double[] valuesA = values;
 
             double[] valA = new double[2];
-            for (int j = columns; --j >= 0;) {
+            for (int j = columns; --j >= 0; ) {
                 int low = columnPointersA[j];
-                for (int k = columnPointersA[j + 1]; --k >= low;) {
+                for (int k = columnPointersA[j + 1]; --k >= low; ) {
                     int i = rowIndexesA[k];
                     valA[0] = valuesA[2 * k];
                     valA[1] = valuesA[2 * k + 1];
@@ -464,9 +438,9 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
         final int[] columnPointersA = columnPointers;
         final double[] valuesA = values;
         double[] valA = new double[2];
-        for (int j = columns; --j >= 0;) {
+        for (int j = columns; --j >= 0; ) {
             int low = columnPointersA[j];
-            for (int k = columnPointersA[j + 1]; --k >= low;) {
+            for (int k = columnPointersA[j + 1]; --k >= low; ) {
                 int i = rowIndexesA[k];
                 valA[0] = valuesA[2 * k];
                 valA[1] = valuesA[2 * k + 1];
@@ -480,7 +454,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
 
     /**
      * Returns column pointers
-     * 
+     *
      * @return column pointers
      */
     public int[] getColumnPointers() {
@@ -491,7 +465,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a dense form. This method creates a new object (not a view), so changes
      * in the returned matrix are NOT reflected in this matrix.
-     * 
+     *
      * @return this matrix in a dense form
      */
     public DenseDComplexMatrix2D getDense() {
@@ -520,7 +494,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a row-compressed form. This method creates a new object (not a view), so
      * changes in the returned matrix are NOT reflected in this matrix.
-     * 
+     *
      * @return this matrix in a row-compressed form
      */
     public SparseRCDComplexMatrix2D getRowCompressed() {
@@ -534,7 +508,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
 
     /**
      * Returns row indexes;
-     * 
+     *
      * @return row indexes
      */
     public int[] getRowIndexes() {
@@ -546,7 +520,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
         DZcs cs = new DZcs();
         cs.m = rows;
         cs.n = columns;
-        cs.i = rowIndexes ;
+        cs.i = rowIndexes;
         cs.p = columnPointers;
         cs.x = values;
         cs.nz = -1;
@@ -558,7 +532,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
      * Returns a new matrix that is the transpose of this matrix. This method
      * creates a new object (not a view), so changes in the returned matrix are
      * NOT reflected in this matrix.
-     * 
+     *
      * @return the transpose of this matrix
      */
     public SparseCCDComplexMatrix2D getTranspose() {
@@ -568,8 +542,17 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
     }
 
     public SparseCCDComplexMatrix2D getConjugateTranspose() {
-        int p, q, j, Cp[], Ci[], n, m, Ap[], Ai[], w[];
-        double Cx[], Ax[];
+        int p;
+        int q;
+        int j;
+        int[] Cp;
+        int[] Ci;
+        int n;
+        int m;
+        int[] Ap;
+        int[] Ai;
+        int[] w;
+        double[] Cx, Ax;
         m = rows;
         n = columns;
         Ap = columnPointers;
@@ -595,7 +578,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
 
     /**
      * Returns numerical values
-     * 
+     *
      * @return numerical values
      */
     public double[] getValues() {
@@ -665,8 +648,17 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
      * Removes (sums) duplicate entries (if any}
      */
     public void removeDuplicates() {
-        int i, j, p, q, nz = 0, n, m, Ap[], Ai[], w[];
-        double Ax[];
+        int i;
+        int j;
+        int p;
+        int q;
+        int nz = 0;
+        int n;
+        int m;
+        int[] Ap;
+        int[] Ai;
+        int[] w;
+        double[] Ax;
         /* check inputs */
         m = rows;
         n = columns;
@@ -699,8 +691,13 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
      * Removes zero entries (if any)
      */
     public void removeZeroes() {
-        int j, p, nz = 0, n, Ap[], Ai[];
-        double Ax[];
+        int j;
+        int p;
+        int nz = 0;
+        int n;
+        int[] Ap;
+        int[] Ai;
+        double[] Ax;
         n = columns;
         Ap = columnPointers;
         Ai = rowIndexes;
@@ -727,19 +724,19 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(rows).append(" x ").append(columns).append(" sparse matrix, nnz = ").append(cardinality())
-                .append('\n');
+            .append('\n');
         for (int i = 0; i < columns; i++) {
             int high = columnPointers[i + 1];
             for (int j = columnPointers[i]; j < high; j++) {
                 if (values[2 * j + 1] > 0) {
                     builder.append('(').append(rowIndexes[j]).append(',').append(i).append(')').append('\t').append(
-                            values[2 * j]).append('+').append(values[2 * j + 1]).append('i').append('\n');
+                        values[2 * j]).append('+').append(values[2 * j + 1]).append('i').append('\n');
                 } else if (values[2 * j + 1] == 0) {
                     builder.append('(').append(rowIndexes[j]).append(',').append(i).append(')').append('\t').append(
-                            values[2 * j]).append('\n');
+                        values[2 * j]).append('\n');
                 } else {
                     builder.append('(').append(rowIndexes[j]).append(',').append(i).append(')').append('\t').append(
-                            values[2 * j]).append('-').append(values[2 * j + 1]).append('i').append('\n');
+                        values[2 * j]).append('-').append(values[2 * j + 1]).append('i').append('\n');
                 }
             }
         }
@@ -747,7 +744,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
     }
 
     public DComplexMatrix1D zMult(DComplexMatrix1D y, DComplexMatrix1D z, final double[] alpha, final double[] beta,
-            final boolean transposeA) {
+                                  final boolean transposeA) {
         final int rowsA = transposeA ? columns : rows;
         final int columnsA = transposeA ? rows : columns;
 
@@ -755,21 +752,19 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
         if (z == null)
             z = new DenseDComplexMatrix1D(rowsA);
 
-        if (!(y instanceof DenseDComplexMatrix1D && z instanceof DenseDComplexMatrix1D)) {
+        if (!(y instanceof DenseDComplexMatrix1D yy && z instanceof DenseDComplexMatrix1D zz)) {
             return super.zMult(y, z, alpha, beta, transposeA);
         }
 
         if (columnsA != y.size() || rowsA > z.size())
             throw new IllegalArgumentException("Incompatible args: "
-                    + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
-                    + z.toStringShort());
+                + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
+                + z.toStringShort());
 
-        DenseDComplexMatrix1D zz = (DenseDComplexMatrix1D) z;
         final double[] elementsZ = zz.elements;
         final int strideZ = zz.stride();
         final int zeroZ = (int) zz.index(0);
 
-        DenseDComplexMatrix1D yy = (DenseDComplexMatrix1D) y;
         final double[] elementsY = yy.elements;
         final int strideY = yy.stride();
         final int zeroY = (int) yy.index(0);
@@ -918,7 +913,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
     }
 
     public DComplexMatrix2D zMult(DComplexMatrix2D B, DComplexMatrix2D C, final double[] alpha, double[] beta,
-            final boolean transposeA, boolean transposeB) {
+                                  final boolean transposeA, boolean transposeB) {
         int rowsA = rows;
         int columnsA = columns;
         if (transposeA) {
@@ -943,10 +938,10 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
 
         if (rowsB != columnsA)
             throw new IllegalArgumentException("Matrix2D inner dimensions must agree:" + toStringShort() + ", "
-                    + (transposeB ? B.viewDice() : B).toStringShort());
+                + (transposeB ? B.viewDice() : B).toStringShort());
         if (C.rows() != rowsA || C.columns() != p)
             throw new IllegalArgumentException("Incompatible result matrix: " + toStringShort() + ", "
-                    + (transposeB ? B.viewDice() : B).toStringShort() + ", " + C.toStringShort());
+                + (transposeB ? B.viewDice() : B).toStringShort() + ", " + C.toStringShort());
         if (this == C || B == C)
             throw new IllegalArgumentException("Matrices must not be identical");
 
@@ -954,7 +949,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             C.assign(cern.jet.math.tcomplex.DComplexFunctions.mult(beta));
         }
 
-        if ((B instanceof DenseDComplexMatrix2D) && (C instanceof DenseDComplexMatrix2D)) {
+        if ((B instanceof DenseDComplexMatrix2D) && (C instanceof DenseDComplexMatrix2D CC)) {
             SparseCCDComplexMatrix2D AA;
             if (transposeA) {
                 AA = getConjugateTranspose();
@@ -967,7 +962,6 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             } else {
                 BB = (DenseDComplexMatrix2D) B;
             }
-            DenseDComplexMatrix2D CC = (DenseDComplexMatrix2D) C;
             int[] columnPointersA = AA.columnPointers;
             int[] rowIndexesA = AA.rowIndexes;
             double[] valuesA = AA.values;
@@ -1002,20 +996,26 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
                 C.assign(cern.jet.math.tcomplex.DComplexFunctions.mult(alpha));
             }
 
-        } else if ((B instanceof SparseCCDComplexMatrix2D) && (C instanceof SparseCCDComplexMatrix2D)) {
+        } else if ((B instanceof SparseCCDComplexMatrix2D BB) && (C instanceof SparseCCDComplexMatrix2D CC)) {
             SparseCCDComplexMatrix2D AA;
             if (transposeA) {
                 AA = getConjugateTranspose();
             } else {
                 AA = this;
             }
-            SparseCCDComplexMatrix2D BB = (SparseCCDComplexMatrix2D) B;
             if (transposeB) {
                 BB = BB.getConjugateTranspose();
             }
-            SparseCCDComplexMatrix2D CC = (SparseCCDComplexMatrix2D) C;
-            int j, nz = 0, Cp[], Ci[], Bp[], m, n, w[], Bi[];
-            double x[], Bx[], Cx[];
+            int j;
+            int nz = 0;
+            int[] Cp;
+            int[] Ci;
+            int[] Bp;
+            int m;
+            int n;
+            int[] w;
+            int[] Bi;
+            double[] x, Bx, Cx;
             m = rowsA;
             n = columnsB;
             Bp = BB.columnPointers;
@@ -1059,22 +1059,22 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             }
             // cache views
             final DComplexMatrix1D[] Brows = new DComplexMatrix1D[columnsA];
-            for (int i = columnsA; --i >= 0;)
+            for (int i = columnsA; --i >= 0; )
                 Brows[i] = B.viewRow(i);
             final DComplexMatrix1D[] Crows = new DComplexMatrix1D[rowsA];
-            for (int i = rowsA; --i >= 0;)
+            for (int i = rowsA; --i >= 0; )
                 Crows[i] = C.viewRow(i);
 
             final cern.jet.math.tcomplex.DComplexPlusMultSecond fun = cern.jet.math.tcomplex.DComplexPlusMultSecond
-                    .plusMult(new double[2]);
+                .plusMult(new double[2]);
 
             final int[] rowIndexesA = rowIndexes;
             final int[] columnPointersA = columnPointers;
             final double[] valuesA = values;
             double[] valA = new double[2];
-            for (int i = columns; --i >= 0;) {
+            for (int i = columns; --i >= 0; ) {
                 int low = columnPointersA[i];
-                for (int k = columnPointersA[i + 1]; --k >= low;) {
+                for (int k = columnPointersA[i + 1]; --k >= low; ) {
                     int j = rowIndexesA[k];
                     valA[0] = valuesA[2 * k];
                     valA[1] = valuesA[2 * k + 1];
@@ -1101,7 +1101,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
         rowIndexesList.beforeInsert(index, row);
         valuesList.beforeInsert(2 * index, value[0]);
         valuesList.beforeInsert(2 * index + 1, value[1]);
-        for (int i = columnPointers.length; --i > column;)
+        for (int i = columnPointers.length; --i > column; )
             columnPointers[i]++;
         rowIndexes = rowIndexesList.elements();
         values = valuesList.elements();
@@ -1115,7 +1115,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
         rowIndexesList.beforeInsert(index, row);
         valuesList.beforeInsert(2 * index, re);
         valuesList.beforeInsert(2 * index + 1, im);
-        for (int i = columnPointers.length; --i > column;)
+        for (int i = columnPointers.length; --i > column; )
             columnPointers[i]++;
         rowIndexes = rowIndexesList.elements();
         values = valuesList.elements();
@@ -1127,7 +1127,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
         rowIndexesList.remove(index);
         valuesList.remove(2 * index);
         valuesList.remove(2 * index + 1);
-        for (int i = columnPointers.length; --i > column;)
+        for (int i = columnPointers.length; --i > column; )
             columnPointers[i]--;
         rowIndexes = rowIndexesList.elements();
         values = valuesList.elements();
@@ -1172,9 +1172,9 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
     }
 
     private int scatter(SparseCCDComplexMatrix2D A, int j, double[] beta, int[] w, double[] x, int mark,
-            SparseCCDComplexMatrix2D C, int nz) {
+                        SparseCCDComplexMatrix2D C, int nz) {
         int i, p;
-        int Ap[], Ai[], Ci[];
+        int[] Ap, Ai, Ci;
         double[] Ax;
         Ap = A.columnPointers;
         Ai = A.rowIndexes;

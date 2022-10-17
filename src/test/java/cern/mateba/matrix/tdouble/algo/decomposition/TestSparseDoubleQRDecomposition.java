@@ -50,11 +50,11 @@ public class TestSparseDoubleQRDecomposition {
 
         System.out.print("\n");
         System.out.print("------ SparseDoubleQRFactorization tests-------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", M, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", M, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the factorization and the solution */
@@ -97,8 +97,8 @@ public class TestSparseDoubleQRDecomposition {
 
         System.out.print("============\n");
         System.out.print("Checking the Residual of the solution \n");
-        System.out.print(String.format("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
-                / ((Anorm * Xnorm + Bnorm) * N * eps)));
+        System.out.printf("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
+            / ((Anorm * Xnorm + Bnorm) * N * eps));
 
         if (Rnorm / ((Anorm * Xnorm + Bnorm) * N * eps) > 10.0) {
             System.out.print("-- The solution is suspicious ! \n");

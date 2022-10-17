@@ -39,9 +39,8 @@ abstract class QuantileEstimator implements QuantileFinder {
 
     /**
      * Adds a value to the receiver.
-     * 
-     * @param value
-     *            the value to add.
+     *
+     * @param value the value to add.
      */
     public void add(double value) {
         totalElementsFilled++;
@@ -63,9 +62,8 @@ abstract class QuantileEstimator implements QuantileFinder {
 
     /**
      * Adds all values of the specified list to the receiver.
-     * 
-     * @param values
-     *            the list of which all values shall be added.
+     *
+     * @param values the list of which all values shall be added.
      */
     public void addAllOf(DoubleArrayList values) {
         addAllOfFromTo(values, 0, values.size() - 1);
@@ -74,13 +72,10 @@ abstract class QuantileEstimator implements QuantileFinder {
     /**
      * Adds the part of the specified list between indexes <tt>from</tt>
      * (inclusive) and <tt>to</tt> (inclusive) to the receiver.
-     * 
-     * @param values
-     *            the list of which elements shall be added.
-     * @param from
-     *            the index of the first element to be added (inclusive).
-     * @param to
-     *            the index of the last element to be added (inclusive).
+     *
+     * @param values the list of which elements shall be added.
+     * @param from   the index of the first element to be added (inclusive).
+     * @param to     the index of the last element to be added (inclusive).
      */
     public void addAllOfFromTo(DoubleArrayList values, int from, int to) {
         /*
@@ -98,7 +93,7 @@ abstract class QuantileEstimator implements QuantileFinder {
             bufferSize = currentBufferToFill.size();
         }
 
-        for (int i = from - 1; ++i <= to;) {
+        for (int i = from - 1; ++i <= to; ) {
             if (sampleNextElement()) {
                 if (bufferSize == k) { // full
                     if (bufferSet._getFirstEmptyBuffer() == null)
@@ -145,7 +140,7 @@ abstract class QuantileEstimator implements QuantileFinder {
 
     /**
      * Returns a deep copy of the receiver.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
 
@@ -157,7 +152,7 @@ abstract class QuantileEstimator implements QuantileFinder {
             throw new RuntimeException(e);
         }
         if (this.bufferSet != null) {
-            copy.bufferSet = (BufferSet) copy.bufferSet.clone();
+            copy.bufferSet = copy.bufferSet.clone();
             if (this.currentBufferToFill != null) {
                 int index = new ObjectArrayList(this.bufferSet.buffers).indexOf(this.currentBufferToFill, true);
                 copy.currentBufferToFill = copy.bufferSet.buffers[index];
@@ -189,12 +184,11 @@ abstract class QuantileEstimator implements QuantileFinder {
     /**
      * Applies a procedure to each element of the receiver, if any. Iterates
      * over the receiver in no particular order.
-     * 
-     * @param procedure
-     *            the procedure to be applied. Stops iteration if the procedure
-     *            returns <tt>false</tt>, otherwise continues.
+     *
+     * @param procedure the procedure to be applied. Stops iteration if the procedure
+     *                  returns <tt>false</tt>, otherwise continues.
      * @return <tt>false</tt> if the procedure stopped before all elements where
-     *         iterated over, <tt>true</tt> otherwise.
+     * iterated over, <tt>true</tt> otherwise.
      */
     public boolean forEach(cern.mateba.function.tdouble.DoubleProcedure procedure) {
         return this.bufferSet.forEach(procedure);
@@ -218,11 +212,10 @@ abstract class QuantileEstimator implements QuantileFinder {
      * Returns how many percent of the elements contained in the receiver are
      * <tt>&lt;= element</tt>. Does linear interpolation if the element is not
      * contained but lies in between two contained elements.
-     * 
-     * @param element
-     *            element to search for.
+     *
+     * @param element element to search for.
      * @return the percentage <tt>p</tt> of elements <tt>&lt;= element</tt> (
-     *         <tt>0.0 &lt;= p &lt;=1.0)</tt>.
+     * <tt>0.0 &lt;= p &lt;=1.0)</tt>.
      */
     public double phi(double element) {
         return bufferSet.phi(element);
@@ -243,11 +236,10 @@ abstract class QuantileEstimator implements QuantileFinder {
     /**
      * Computes the specified quantile elements over the values previously
      * added.
-     * 
-     * @param phis
-     *            the quantiles for which elements are to be computed. Each phi
-     *            must be in the interval [0.0,1.0]. <tt>phis</tt> must be
-     *            sorted ascending.
+     *
+     * @param phis the quantiles for which elements are to be computed. Each phi
+     *             must be in the interval [0.0,1.0]. <tt>phis</tt> must be
+     *             sorted ascending.
      * @return the approximate quantile elements.
      */
     public DoubleArrayList quantileElements(DoubleArrayList phis) {
@@ -263,7 +255,7 @@ abstract class QuantileEstimator implements QuantileFinder {
 
         long[] triggerPositions = new long[phis.size()];
         long totalSize = this.bufferSet.totalSize();
-        for (int i = phis.size(); --i >= 0;) {
+        for (int i = phis.size(); --i >= 0; ) {
             triggerPositions[i] = Utils.epsilonCeiling(phis.get(i) * totalSize) - 1;
         }
 
@@ -313,7 +305,7 @@ abstract class QuantileEstimator implements QuantileFinder {
         int b = bufferSet.b();
         int k = bufferSet.k();
         return s + "(mem=" + memory() + ", b=" + b + ", k=" + k + ", size=" + size() + ", totalSize="
-                + this.bufferSet.totalSize() + ")";
+            + this.bufferSet.totalSize() + ")";
     }
 
     /**

@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003-2006 Bjørn-Ove Heimsund
- * 
+ *
  * This file is part of MTJ.
- * 
+ *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the
  * Free Software Foundation; either version 2.1 of the License, or (at your
  * option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -31,7 +31,7 @@ import cern.jet.math.tdouble.DoubleFunctions;
  * Chebyshev solver. Solves the symmetric positive definite linear system
  * <code>Ax = b</code> using the Preconditioned Chebyshev Method. Chebyshev
  * requires an acurate estimate on the bounds of the spectrum of the matrix.
- * 
+ *
  * @author Templates
  */
 public class DoubleChebyshev extends AbstractDoubleIterativeSolver {
@@ -44,21 +44,21 @@ public class DoubleChebyshev extends AbstractDoubleIterativeSolver {
     /**
      * Vectors for use in the iterative solution process
      */
-    private DoubleMatrix1D p, z, r, q;
+    private final DoubleMatrix1D p;
+    private final DoubleMatrix1D z;
+    private final DoubleMatrix1D r;
+    private final DoubleMatrix1D q;
 
     /**
      * Constructor for Chebyshev. Uses the given vector as template for creating
      * scratch vectors. Typically, the solution or the right hand side vector
      * can be passed, and the template is not modified. Eigenvalue estimates
      * must also be provided
-     * 
-     * @param template
-     *            Vector to use as template for the work vectors needed in the
-     *            solution process
-     * @param eigmin
-     *            Smallest eigenvalue. Must be positive
-     * @param eigmax
-     *            Largest eigenvalue. Must be positive
+     *
+     * @param template Vector to use as template for the work vectors needed in the
+     *                 solution process
+     * @param eigmin   Smallest eigenvalue. Must be positive
+     * @param eigmax   Largest eigenvalue. Must be positive
      */
     public DoubleChebyshev(DoubleMatrix1D template, double eigmin, double eigmax) {
         p = template.copy();
@@ -70,11 +70,9 @@ public class DoubleChebyshev extends AbstractDoubleIterativeSolver {
 
     /**
      * Sets the eigenvalue estimates.
-     * 
-     * @param eigmin
-     *            Smallest eigenvalue. Must be positive
-     * @param eigmax
-     *            Largest eigenvalue. Must be positive
+     *
+     * @param eigmin Smallest eigenvalue. Must be positive
+     * @param eigmax Largest eigenvalue. Must be positive
      */
     public void setEigenvalues(double eigmin, double eigmax) {
         this.eigmin = eigmin;
@@ -89,7 +87,7 @@ public class DoubleChebyshev extends AbstractDoubleIterativeSolver {
     }
 
     public DoubleMatrix1D solve(DoubleMatrix2D A, DoubleMatrix1D b, DoubleMatrix1D x)
-            throws IterativeSolverDoubleNotConvergedException {
+        throws IterativeSolverDoubleNotConvergedException {
         checkSizes(A, b, x);
 
         double alpha = 0, beta = 0, c = 0, d = 0;

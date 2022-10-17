@@ -18,7 +18,7 @@ import java.io.Serializable;
  * href="package-tree.html">tree view</a> to get the broad picture.
  * <p>
  * <b>Note that this implementation is not synchronized.</b>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -29,6 +29,7 @@ public abstract class AbstractMatrix implements Serializable, Cloneable {
     protected boolean isNoView = true;
 
     // public static boolean debug = true;
+
     /**
      * Makes this class non instantiable, but still let's others inherit from
      * it.
@@ -44,9 +45,8 @@ public abstract class AbstractMatrix implements Serializable, Cloneable {
      * <p>
      * This default implementation does nothing. Override this method if
      * necessary.
-     * 
-     * @param minNonZeros
-     *            the desired minimum number of non-zero (non-null) cells.
+     *
+     * @param minNonZeros the desired minimum number of non-zero (non-null) cells.
      */
     public void ensureCapacity(int minNonZeros) {
     }

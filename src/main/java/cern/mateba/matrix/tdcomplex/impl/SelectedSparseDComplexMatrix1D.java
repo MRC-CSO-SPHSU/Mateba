@@ -19,7 +19,7 @@ import cern.mateba.matrix.tdouble.DoubleMatrix1D;
 /**
  * Selection view on sparse 1-d matrices holding <tt>complex</tt> elements. This
  * implementation uses ConcurrentHashMap
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class SelectedSparseDComplexMatrix1D extends DComplexMatrix1D {
@@ -43,22 +43,17 @@ class SelectedSparseDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @param offsets
-     *            the offsets of the cells that shall be visible.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param zero     the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @param offsets  the offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedSparseDComplexMatrix1D(int size, ConcurrentHashMap<Long, double[]> elements, int zero,
-            int stride, int[] offsets, int offset) {
+                                             int stride, int[] offsets, int offset) {
         setUp(size, zero, stride);
 
         this.elements = elements;
@@ -69,11 +64,9 @@ class SelectedSparseDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param elements
-     *            the cells.
-     * @param indexes
-     *            The indexes of the cells that shall be visible.
+     *
+     * @param elements the cells.
+     * @param indexes  The indexes of the cells that shall be visible.
      */
     protected SelectedSparseDComplexMatrix1D(ConcurrentHashMap<Long, double[]> elements, int[] offsets) {
         this(offsets.length, elements, 0, 1, offsets, 0);
@@ -96,11 +89,9 @@ class SelectedSparseDComplexMatrix1D extends DComplexMatrix1D {
      */
 
     protected boolean haveSharedCellsRaw(DComplexMatrix1D other) {
-        if (other instanceof SelectedSparseDComplexMatrix1D) {
-            SelectedSparseDComplexMatrix1D otherMatrix = (SelectedSparseDComplexMatrix1D) other;
+        if (other instanceof SelectedSparseDComplexMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseDComplexMatrix1D) {
-            SparseDComplexMatrix1D otherMatrix = (SparseDComplexMatrix1D) other;
+        } else if (other instanceof SparseDComplexMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -130,17 +121,15 @@ class SelectedSparseDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell.
      */
 
     public void setQuick(int index, double[] value) {
@@ -153,17 +142,15 @@ class SelectedSparseDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell.
      */
 
     public void setQuick(int index, double re, double im) {
@@ -171,14 +158,13 @@ class SelectedSparseDComplexMatrix1D extends DComplexMatrix1D {
         if (re == 0 && im == 0)
             this.elements.remove(i);
         else
-            this.elements.put(i, new double[] { re, im });
+            this.elements.put(i, new double[]{re, im});
     }
 
     /**
      * Sets up a matrix with a given number of cells.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
+     *
+     * @param size the number of cells the matrix shall have.
      */
 
     protected void setUp(int size) {
@@ -189,9 +175,8 @@ class SelectedSparseDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param offsets
-     *            the offsets of the visible elements.
+     *
+     * @param offsets the offsets of the visible elements.
      * @return a new view.
      */
 

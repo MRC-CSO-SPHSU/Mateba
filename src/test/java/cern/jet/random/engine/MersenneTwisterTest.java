@@ -74,7 +74,7 @@ class MersenneTwisterTest {
 
     @Test
     void testConstructor9() {
-        assertThrows(NullPointerException.class, () -> new MersenneTwister((Date) null));
+        assertThrows(NullPointerException.class, () -> new MersenneTwister(null));
     }
 
     @Test

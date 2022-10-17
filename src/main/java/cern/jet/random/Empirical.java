@@ -39,7 +39,7 @@ import java.io.Serial;
  * "http://wwwinfo.cern.ch/asd/lhc++/clhep/manual/RefGuide/Random/RandGeneral.html"
  * >RandGeneral</A> used in <A
  * HREF="http://wwwinfo.cern.ch/asd/lhc++/clhep">CLHEP 1.4.0</A> (C++).
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -65,16 +65,12 @@ public class Empirical extends AbstractContinousDistribution {
      * <li><tt>0.0 &lt;= pdf[i] : 0&lt;=i&lt;=pdf.length-1</tt>
      * <li><tt>0.0 &lt; Sum(pdf[i]) : 0&lt;=i&lt;=pdf.length-1</tt>
      * </ul>
-     * 
-     * @param pdf
-     *            the probability distribution function.
-     * @param interpolationType
-     *            can be either <tt>Empirical.NO_INTERPOLATION</tt> or
-     *            <tt>Empirical.LINEAR_INTERPOLATION</tt>.
-     * @param randomGenerator
-     *            a uniform random number generator.
-     * @throws IllegalArgumentException
-     *             if at least one of the three conditions above is violated.
+     *
+     * @param pdf               the probability distribution function.
+     * @param interpolationType can be either <tt>Empirical.NO_INTERPOLATION</tt> or
+     *                          <tt>Empirical.LINEAR_INTERPOLATION</tt>.
+     * @param randomGenerator   a uniform random number generator.
+     * @throws IllegalArgumentException if at least one of the three conditions above is violated.
      */
     public Empirical(double[] pdf, int interpolationType, RandomEngine randomGenerator) {
         setRandomGenerator(randomGenerator);
@@ -96,7 +92,7 @@ public class Empirical extends AbstractContinousDistribution {
      * Returns a deep copy of the receiver; the copy will produce identical
      * sequences. After this call has returned, the copy and the receiver have
      * equal but separate state.
-     * 
+     *
      * @return a copy of the receiver.
      */
 
@@ -179,14 +175,11 @@ public class Empirical extends AbstractContinousDistribution {
      * <li><tt>0.0 &lt;= pdf[i] : 0 &lt; =i &lt;= pdf.length-1</tt>
      * <li><tt>0.0 &lt; Sum(pdf[i]) : 0 &lt;=i &lt;= pdf.length-1</tt>
      * </ul>
-     * 
-     * @param pdf
-     *            probability distribution function.
-     * @param interpolationType
-     *            can be either <tt>Empirical.NO_INTERPOLATION</tt> or
-     *            <tt>Empirical.LINEAR_INTERPOLATION</tt>.
-     * @throws IllegalArgumentException
-     *             if at least one of the three conditions above is violated.
+     *
+     * @param pdf               probability distribution function.
+     * @param interpolationType can be either <tt>Empirical.NO_INTERPOLATION</tt> or
+     *                          <tt>Empirical.LINEAR_INTERPOLATION</tt>.
+     * @throws IllegalArgumentException if at least one of the three conditions above is violated.
      */
     public void setState(double[] pdf, int interpolationType) {
         if (interpolationType != LINEAR_INTERPOLATION && interpolationType != NO_INTERPOLATION) {
@@ -235,7 +228,7 @@ public class Empirical extends AbstractContinousDistribution {
 
     /**
      * Not yet commented.
-     * 
+     *
      * @return int
      */
     private int xnBins() {

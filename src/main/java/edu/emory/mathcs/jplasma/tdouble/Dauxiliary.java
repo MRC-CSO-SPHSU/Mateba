@@ -35,9 +35,8 @@ package edu.emory.mathcs.jplasma.tdouble;
 
 /**
  * Auxiliary routines.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 class Dauxiliary {
 
@@ -53,13 +52,10 @@ class Dauxiliary {
     }
 
     /**
-     * 
      * Set PLASMA integer parameter
-     * 
-     * @param param
-     *            PLASMA parameter
-     * @param value
-     *            the value of the parameter.
+     *
+     * @param param PLASMA parameter
+     * @param value the value of the parameter.
      * @return Success or error code.
      */
     protected static int plasma_set_int(int param, int value) {
@@ -67,15 +63,13 @@ class Dauxiliary {
             plasma_warning("plasma_set_int", "PLASMA not initialized");
             return Dplasma.PLASMA_ERR_NOT_INITIALIZED;
         }
-        switch (param) {
-        case Dplasma.PLASMA_CONCURRENCY:
+        if (param == Dplasma.PLASMA_CONCURRENCY) {
             if (value <= 0 || value > Dcommon.plasma_cntrl.cores_max) {
                 plasma_warning("plasma_set_int", "illegal parameter value");
                 return Dplasma.PLASMA_ERR_ILLEGAL_VALUE;
             }
             Dcommon.plasma_cntrl.cores_num = value;
-            break;
-        default:
+        } else {
             plasma_error("plasma_set_int", "illegal parameter value");
             return Dplasma.PLASMA_ERR_ILLEGAL_VALUE;
         }
@@ -84,9 +78,8 @@ class Dauxiliary {
 
     /**
      * Get PLASMA integer parameter
-     * 
-     * @param param
-     *            PLASMA parameter
+     *
+     * @param param PLASMA parameter
      * @return the value of the parameter or the error code
      */
     protected static int plasma_get_int(int param) {
@@ -94,13 +87,11 @@ class Dauxiliary {
             plasma_warning("plasma_get_int", "PLASMA not initialized");
             return Dplasma.PLASMA_ERR_NOT_INITIALIZED;
         }
-        switch (param) {
-        case Dplasma.PLASMA_CONCURRENCY:
+        if (param == Dplasma.PLASMA_CONCURRENCY) {
             return Dcommon.plasma_cntrl.cores_num;
-        default:
-            plasma_error("plasma_get_int", "illegal parameter value");
-            return Dplasma.PLASMA_ERR_ILLEGAL_VALUE;
         }
+        plasma_error("plasma_get_int", "illegal parameter value");
+        return Dplasma.PLASMA_ERR_ILLEGAL_VALUE;
     }
 
     /*////////////////////////////////////////////////////////////////////////////////////////

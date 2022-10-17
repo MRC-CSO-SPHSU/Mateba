@@ -40,9 +40,8 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Benchmark of plasma_DGESV
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DgesvBenchmark {
     private static void dgesvBenchmarkJPlasma(int N, int NRHS, int NITERS, int NTHREADS) {
@@ -85,7 +84,7 @@ public class DgesvBenchmark {
             }
         }
         System.out.println("Average execution time of JPlasma DGESV (" + N + "x" + N + ", " + NRHS
-                + " right-hand sides, " + NTHREADS + " threads): " + avtime / NITERS / 1000000.0 + " milliseconds");
+            + " right-hand sides, " + NTHREADS + " threads): " + avtime / NITERS / 1000000.0 + " milliseconds");
         Dplasma.plasma_Finalize();
 
     }
@@ -126,7 +125,7 @@ public class DgesvBenchmark {
             }
         }
         System.out.println("Average execution time of JLAPACK DGESV (" + N + "x" + N + ", " + NRHS
-                + " right-hand sides: " + avtime / NITERS / 1000000.0 + " milliseconds");
+            + " right-hand sides: " + avtime / NITERS / 1000000.0 + " milliseconds");
 
     }
 

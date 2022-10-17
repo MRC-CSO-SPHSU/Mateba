@@ -24,10 +24,10 @@ import java.io.Serializable;
  * <tt>N</tt> elements has the same probability to be included in the <tt>n</tt>
  * chosen elements. This class is a convenience adapter for
  * <tt>RandomSampler</tt> using blocks.
- * 
- * @see RandomSampler
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 02/05/99
+ * @see RandomSampler
  */
 public class RandomSamplingAssistant implements Cloneable, Serializable {
 
@@ -50,14 +50,11 @@ public class RandomSamplingAssistant implements Cloneable, Serializable {
     /**
      * Constructs a random sampler that samples <tt>n</tt> random elements from
      * an input sequence of <tt>N</tt> elements.
-     * 
-     * @param n
-     *            the total number of elements to choose (must be &gt;= 0).
-     * @param N
-     *            number of elements to choose from (must be &gt;= n).
-     * @param randomGenerator
-     *            a random number generator. Set this parameter to <tt>null</tt>
-     *            to use the default random number generator.
+     *
+     * @param n               the total number of elements to choose (must be &gt;= 0).
+     * @param N               number of elements to choose from (must be &gt;= n).
+     * @param randomGenerator a random number generator. Set this parameter to <tt>null</tt>
+     *                        to use the default random number generator.
      */
     public RandomSamplingAssistant(long n, long N, RandomEngine randomGenerator) {
         this.n = n;
@@ -80,7 +77,7 @@ public class RandomSamplingAssistant implements Cloneable, Serializable {
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
-        copy.sampler = (RandomSampler) this.sampler.clone();
+        copy.sampler = this.sampler.clone();
         return copy;
     }
 
@@ -106,7 +103,7 @@ public class RandomSamplingAssistant implements Cloneable, Serializable {
     /**
      * Tests random sampling.
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         long n = Long.parseLong(args[0]);
         long N = Long.parseLong(args[1]);
         // test(n,N);
@@ -131,9 +128,9 @@ public class RandomSamplingAssistant implements Cloneable, Serializable {
     /**
      * Returns whether the next element of the input sequence shall be sampled
      * (picked) or not.
-     * 
+     *
      * @return <tt>true</tt> if the next element shall be sampled (picked),
-     *         <tt>false</tt> otherwise.
+     * <tt>false</tt> otherwise.
      */
     public boolean sampleNextElement() {
         if (n == 0)
@@ -194,8 +191,8 @@ public class RandomSamplingAssistant implements Cloneable, Serializable {
          * System.out.print("\nElements = ["); for (int i=0; i<N-1; i++)
          * System.out.print(elements[i]+", "); System.out.print(elements[N-1]);
          * System.out.println("]");
-         * 
-         * 
+         *
+         *
          * System.out.print("\nSample = ["); for (int i=0; i<n-1; i++)
          * System.out.print(sample[i]+", "); System.out.print(sample[n-1]);
          * System.out.println("]");
@@ -208,11 +205,10 @@ public class RandomSamplingAssistant implements Cloneable, Serializable {
      * Returns whether the next elements of the input sequence shall be sampled
      * (picked) or not. one is chosen from the first block, one from the second,
      * ..., one from the last block.
-     * 
-     * @param acceptList
-     *            a bitvector which will be filled with <tt>true</tt> where
-     *            sampling shall occur and <tt>false</tt> where it shall not
-     *            occur.
+     *
+     * @param acceptList a bitvector which will be filled with <tt>true</tt> where
+     *                   sampling shall occur and <tt>false</tt> where it shall not
+     *                   occur.
      */
     private void xsampleNextElements(BooleanArrayList acceptList) {
         // manually inlined

@@ -14,6 +14,7 @@ import cern.mateba.matrix.tdouble.algo.DenseDoubleAlgebra;
 import cern.mateba.matrix.tdouble.algo.SparseDoubleAlgebra;
 import cern.mateba.matrix.tdouble.impl.SparseRCDoubleMatrix2D;
 import cern.jet.math.tcomplex.DComplexFunctions;
+
 import static edu.emory.mathcs.utils.Utils.CNEG_ONE;
 import static edu.emory.mathcs.utils.Utils.CONE;
 import static edu.emory.mathcs.utils.Utils.CZERO;
@@ -117,7 +118,7 @@ public class TestSparseDComplexCholeskyDecomposition {
 
         System.out.print("============\n");
         System.out.print("Checking the Cholesky Factorization \n");
-        System.out.print(String.format("-- ||L'L-A||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps)));
+        System.out.printf("-- ||L'L-A||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps));
 
         if (Rnorm / (Anorm * N * eps) > 10.0) {
             System.out.print("-- Factorization is suspicious ! \n");
@@ -130,7 +131,7 @@ public class TestSparseDComplexCholeskyDecomposition {
     }
 
     /*------------------------------------------------------------------------
-     *  Check the accuracy of the solution of the linear system 
+     *  Check the accuracy of the solution of the linear system
      */
 
     private static int checkSolution(DComplexMatrix2D A1, DComplexMatrix1D B1, DComplexMatrix1D B2, double eps) {
@@ -142,7 +143,7 @@ public class TestSparseDComplexCholeskyDecomposition {
         double Rnorm, Anorm, Xnorm, Bnorm;
         double alpha, beta;
 
-        alpha = 1; 
+        alpha = 1;
         beta = -1;
 
         // TODO: test complex part
@@ -160,8 +161,8 @@ public class TestSparseDComplexCholeskyDecomposition {
 
         System.out.print("============\n");
         System.out.print("Checking the Residual of the solution \n");
-        System.out.print(String.format("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
-                / ((Anorm * Xnorm + Bnorm) * N * eps)));
+        System.out.printf("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
+            / ((Anorm * Xnorm + Bnorm) * N * eps));
 
         if (Rnorm / ((Anorm * Xnorm + Bnorm) * N * eps) > 10.0) {
             System.out.print("-- The solution is suspicious ! \n");

@@ -22,7 +22,7 @@ import java.io.Serializable;
  * need to specify <tt>minColumnWidth</tt>. Cells in a row are separated by a
  * separator string, similar separators can be set for rows and slices. For more
  * info, see the concrete subclasses.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -282,10 +282,9 @@ public abstract class AbstractFormatter implements Serializable, Cloneable {
 
     /**
      * Sets the column alignment (left,center,right,decimal).
-     * 
-     * @param alignment
-     *            the new alignment to be used; must be one of
-     *            <tt>{LEFT,CENTER,RIGHT,DECIMAL}</tt>.
+     *
+     * @param alignment the new alignment to be used; must be one of
+     *                  <tt>{LEFT,CENTER,RIGHT,DECIMAL}</tt>.
      */
     public void setAlignment(String alignment) {
         this.alignment = alignment;
@@ -293,9 +292,8 @@ public abstract class AbstractFormatter implements Serializable, Cloneable {
 
     /**
      * Sets the string separating any two columns from another.
-     * 
-     * @param columnSeparator
-     *            the new columnSeparator to be used.
+     *
+     * @param columnSeparator the new columnSeparator to be used.
      */
     public void setColumnSeparator(String columnSeparator) {
         this.columnSeparator = columnSeparator;
@@ -303,9 +301,8 @@ public abstract class AbstractFormatter implements Serializable, Cloneable {
 
     /**
      * Sets the way a <i>single</i> cell value is to be formatted.
-     * 
-     * @param format
-     *            the new format to be used.
+     *
+     * @param format the new format to be used.
      */
     public void setFormat(String format) {
         this.format = format;
@@ -313,9 +310,8 @@ public abstract class AbstractFormatter implements Serializable, Cloneable {
 
     /**
      * Sets the minimum number of characters a column may have.
-     * 
-     * @param minColumnWidth
-     *            the new minColumnWidth to be used.
+     *
+     * @param minColumnWidth the new minColumnWidth to be used.
      */
     public void setMinColumnWidth(int minColumnWidth) {
         if (minColumnWidth < 0)
@@ -326,9 +322,8 @@ public abstract class AbstractFormatter implements Serializable, Cloneable {
     /**
      * Specifies whether a string representation of a matrix is to be preceded
      * with a summary of its shape.
-     * 
-     * @param printShape
-     *            <tt>true</tt> shape summary is printed, otherwise not printed.
+     *
+     * @param printShape <tt>true</tt> shape summary is printed, otherwise not printed.
      */
     public void setPrintShape(boolean printShape) {
         this.printShape = printShape;
@@ -336,9 +331,8 @@ public abstract class AbstractFormatter implements Serializable, Cloneable {
 
     /**
      * Sets the string separating any two rows from another.
-     * 
-     * @param rowSeparator
-     *            the new rowSeparator to be used.
+     *
+     * @param rowSeparator the new rowSeparator to be used.
      */
     public void setRowSeparator(String rowSeparator) {
         this.rowSeparator = rowSeparator;
@@ -346,9 +340,8 @@ public abstract class AbstractFormatter implements Serializable, Cloneable {
 
     /**
      * Sets the string separating any two slices from another.
-     * 
-     * @param sliceSeparator
-     *            the new sliceSeparator to be used.
+     *
+     * @param sliceSeparator the new sliceSeparator to be used.
      */
     public void setSliceSeparator(String sliceSeparator) {
         this.sliceSeparator = sliceSeparator;
@@ -367,10 +360,10 @@ public abstract class AbstractFormatter implements Serializable, Cloneable {
         int size = 40;
         blanksCache = new String[size];
         StringBuffer buf = new StringBuffer(size);
-        for (int i = size; --i >= 0;)
+        for (int i = size; --i >= 0; )
             buf.append(' ');
         String str = buf.toString();
-        for (int i = size; --i >= 0;) {
+        for (int i = size; --i >= 0; ) {
             blanksCache[i] = str.substring(0, i);
             // System.out.println(i+"-"+blanksCache[i]+"-");
         }
@@ -402,9 +395,8 @@ public abstract class AbstractFormatter implements Serializable, Cloneable {
 
     /**
      * Returns a single string representation of the given string matrix.
-     * 
-     * @param strings
-     *            the matrix to be converted to a single string.
+     *
+     * @param strings the matrix to be converted to a single string.
      */
     protected String toString(String[][] strings) {
         int rows = strings.length;
@@ -429,9 +421,8 @@ public abstract class AbstractFormatter implements Serializable, Cloneable {
 
     /**
      * Returns a string representation of the given matrix.
-     * 
-     * @param matrix
-     *            the matrix to convert.
+     *
+     * @param matrix the matrix to convert.
      */
     protected String toString(AbstractMatrix2D matrix) {
         String[][] strings = this.format(matrix);

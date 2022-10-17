@@ -41,18 +41,16 @@ import java.util.Random;
 
 /**
  * Utility methods.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class IOUtils {
 
     /**
      * Fills 1D matrix with random numbers.
-     * 
-     * @param N
-     *            size
-     * @param m
-     *            1D matrix
+     *
+     * @param N size
+     * @param m 1D matrix
      */
     public static void fillMatrix_1D(int N, double[] m) {
         Random r = new Random(2);
@@ -63,11 +61,9 @@ public class IOUtils {
 
     /**
      * Fills 1D matrix with random numbers.
-     * 
-     * @param N
-     *            size
-     * @param m
-     *            1D matrix
+     *
+     * @param N size
+     * @param m 1D matrix
      */
     public static void fillMatrix_1D(int N, float[] m) {
         Random r = new Random(2);
@@ -78,13 +74,10 @@ public class IOUtils {
 
     /**
      * Fills 2D matrix with random numbers.
-     * 
-     * @param n1
-     *            rows
-     * @param n2
-     *            columns
-     * @param m
-     *            2D matrix
+     *
+     * @param n1 rows
+     * @param n2 columns
+     * @param m  2D matrix
      */
     public static void fillMatrix_2D(int n1, int n2, double[] m) {
         Random r = new Random(2);
@@ -97,13 +90,10 @@ public class IOUtils {
 
     /**
      * Fills 2D matrix with random numbers.
-     * 
-     * @param n1
-     *            rows
-     * @param n2
-     *            columns
-     * @param m
-     *            2D matrix
+     *
+     * @param n1 rows
+     * @param n2 columns
+     * @param m  2D matrix
      */
     public static void fillMatrix_2D(int n1, int n2, float[] m) {
         Random r = new Random(2);
@@ -116,13 +106,10 @@ public class IOUtils {
 
     /**
      * Fills 2D matrix with random numbers.
-     * 
-     * @param n1
-     *            rows
-     * @param n2
-     *            columns
-     * @param m
-     *            2D matrix
+     *
+     * @param n1 rows
+     * @param n2 columns
+     * @param m  2D matrix
      */
     public static void fillMatrix_2D(int n1, int n2, double[][] m) {
         Random r = new Random(2);
@@ -135,13 +122,10 @@ public class IOUtils {
 
     /**
      * Fills 2D matrix with random numbers.
-     * 
-     * @param n1
-     *            rows
-     * @param n2
-     *            columns
-     * @param m
-     *            2D matrix
+     *
+     * @param n1 rows
+     * @param n2 columns
+     * @param m  2D matrix
      */
     public static void fillMatrix_2D(int n1, int n2, float[][] m) {
         Random r = new Random(2);
@@ -154,15 +138,11 @@ public class IOUtils {
 
     /**
      * Fills 3D matrix with random numbers.
-     * 
-     * @param n1
-     *            slices
-     * @param n2
-     *            rows
-     * @param n3
-     *            columns
-     * @param m
-     *            3D matrix
+     *
+     * @param n1 slices
+     * @param n2 rows
+     * @param n3 columns
+     * @param m  3D matrix
      */
     public static void fillMatrix_3D(int n1, int n2, int n3, double[] m) {
         Random r = new Random(2);
@@ -179,15 +159,11 @@ public class IOUtils {
 
     /**
      * Fills 3D matrix with random numbers.
-     * 
-     * @param n1
-     *            slices
-     * @param n2
-     *            rows
-     * @param n3
-     *            columns
-     * @param m
-     *            3D matrix
+     *
+     * @param n1 slices
+     * @param n2 rows
+     * @param n3 columns
+     * @param m  3D matrix
      */
     public static void fillMatrix_3D(int n1, int n2, int n3, float[] m) {
         Random r = new Random(2);
@@ -204,15 +180,11 @@ public class IOUtils {
 
     /**
      * Fills 3D matrix with random numbers.
-     * 
-     * @param n1
-     *            slices
-     * @param n2
-     *            rows
-     * @param n3
-     *            columns
-     * @param m
-     *            3D matrix
+     *
+     * @param n1 slices
+     * @param n2 rows
+     * @param n3 columns
+     * @param m  3D matrix
      */
     public static void fillMatrix_3D(int n1, int n2, int n3, double[][][] m) {
         Random r = new Random(2);
@@ -227,15 +199,11 @@ public class IOUtils {
 
     /**
      * Fills 3D matrix with random numbers.
-     * 
-     * @param n1
-     *            slices
-     * @param n2
-     *            rows
-     * @param n3
-     *            columns
-     * @param m
-     *            3D matrix
+     *
+     * @param n1 slices
+     * @param n2 rows
+     * @param n3 columns
+     * @param m  3D matrix
      */
     public static void fillMatrix_3D(int n1, int n2, int n3, float[][][] m) {
         Random r = new Random(2);
@@ -252,7 +220,7 @@ public class IOUtils {
      * Displays elements of <code>x</code>, assuming that it is 1D complex
      * array. Complex data is represented by 2 double values in sequence: the
      * real and imaginary parts.
-     * 
+     *
      * @param x
      * @param title
      */
@@ -261,7 +229,7 @@ public class IOUtils {
         System.out.println("-------------------");
         for (int i = 0; i < x.length; i = i + 2) {
             if (x[i + 1] == 0) {
-                System.out.println(String.format(format, x[i]));
+                System.out.printf((format) + "%n", x[i]);
                 continue;
             }
             if (x[i] == 0) {
@@ -281,7 +249,7 @@ public class IOUtils {
      * Displays elements of <code>x</code>, assuming that it is 2D complex
      * array. Complex data is represented by 2 double values in sequence: the
      * real and imaginary parts.
-     * 
+     *
      * @param rows
      * @param columns
      * @param x
@@ -289,7 +257,7 @@ public class IOUtils {
      */
     public static void showComplex_2D(String format, int rows, int columns, double[] x, String title) {
         StringBuffer s = new StringBuffer(String.format(title + ": complex array 2D: %d rows, %d columns\n\n", rows,
-                columns));
+            columns));
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < 2 * columns; c = c + 2) {
                 if (x[r * 2 * columns + c + 1] == 0) {
@@ -302,22 +270,22 @@ public class IOUtils {
                 }
                 if (x[r * 2 * columns + c + 1] < 0) {
                     s.append(String.format(format + " - " + format + "i\t", x[r * 2 * columns + c], -x[r * 2 * columns
-                            + c + 1]));
+                        + c + 1]));
                     continue;
                 }
                 s.append(String.format(format + " + " + format + "i\t", x[r * 2 * columns + c], x[r * 2 * columns + c
-                        + 1]));
+                    + 1]));
             }
             s.append("\n");
         }
-        System.out.println(s.toString());
+        System.out.println(s);
     }
 
     /**
      * Displays elements of <code>x</code>, assuming that it is 3D complex
      * array. Complex data is represented by 2 double values in sequence: the
      * real and imaginary parts.
-     * 
+     *
      * @param n1
      * @param n2
      * @param n3
@@ -345,21 +313,21 @@ public class IOUtils {
                     }
                     if (x[i * sliceStride + j * rowStride + k + 1] < 0) {
                         System.out.print(String.format(format, x[i * sliceStride + j * rowStride + k]) + " - "
-                                + String.format(format, -x[i * sliceStride + j * rowStride + k + 1]) + "i\t");
+                            + String.format(format, -x[i * sliceStride + j * rowStride + k + 1]) + "i\t");
                         continue;
                     }
                     System.out.print(String.format(format, x[i * sliceStride + j * rowStride + k]) + " + "
-                            + String.format(format, x[i * sliceStride + j * rowStride + k + 1]) + "i\t");
+                        + String.format(format, x[i * sliceStride + j * rowStride + k + 1]) + "i\t");
                 }
-                System.out.println("");
+                System.out.println();
             }
         }
-        System.out.println("");
+        System.out.println();
     }
 
     /**
      * Displays elements of <code>x</code>, assuming that it is 1D real array.
-     * 
+     *
      * @param x
      * @param title
      */
@@ -367,14 +335,14 @@ public class IOUtils {
         System.out.println(title);
         System.out.println("-------------------");
         for (int j = 0; j < x.length; j++) {
-            System.out.println(String.format(format, x[j]));
+            System.out.printf((format) + "%n", x[j]);
         }
         System.out.println();
     }
 
     /**
      * Displays elements of <code>x</code>, assuming that it is 2D real array.
-     * 
+     *
      * @param n1
      * @param n2
      * @param x
@@ -398,7 +366,7 @@ public class IOUtils {
 
     /**
      * Displays elements of <code>x</code>, assuming that it is 3D real array.
-     * 
+     *
      * @param n1
      * @param n2
      * @param n3
@@ -433,7 +401,7 @@ public class IOUtils {
      * Saves elements of <code>x</code> in a file <code>filename</code>,
      * assuming that it is 1D complex array. Complex data is represented by 2
      * double values in sequence: the real and imaginary parts.
-     * 
+     *
      * @param x
      * @param filename
      */
@@ -470,7 +438,7 @@ public class IOUtils {
      * Saves elements of <code>x</code> in a file <code>filename</code>,
      * assuming that it is 2D complex array. Complex data is represented by 2
      * double values in sequence: the real and imaginary parts.
-     * 
+     *
      * @param n1
      * @param n2
      * @param x
@@ -508,11 +476,11 @@ public class IOUtils {
                     }
                     if (x[i * 2 * n2 + j + 1] < 0) {
                         out.write(String.format(format, x[i * 2 * n2 + j]) + " - "
-                                + String.format(format, -x[i * 2 * n2 + j + 1]) + "i\t");
+                            + String.format(format, -x[i * 2 * n2 + j + 1]) + "i\t");
                         continue;
                     }
                     out.write(String.format(format, x[i * 2 * n2 + j]) + " + "
-                            + String.format(format, x[i * 2 * n2 + j + 1]) + "i\t");
+                        + String.format(format, x[i * 2 * n2 + j + 1]) + "i\t");
                 }
                 out.newLine();
             }
@@ -528,7 +496,7 @@ public class IOUtils {
      * Saves elements of <code>x</code> in a file <code>filename</code>. Complex
      * data is represented by 2 double values in sequence: the real and
      * imaginary parts.
-     * 
+     *
      * @param n1
      * @param n2
      * @param x
@@ -584,7 +552,7 @@ public class IOUtils {
      * Saves elements of <code>x</code> in a file <code>filename</code>,
      * assuming that it is 3D complex array. Complex data is represented by 2
      * double values in sequence: the real and imaginary parts.
-     * 
+     *
      * @param n1
      * @param n2
      * @param n3
@@ -613,11 +581,11 @@ public class IOUtils {
                         }
                         if (x[i * sliceStride + j * rowStride + k + 1] < 0) {
                             out.write(String.format(format, x[i * sliceStride + j * rowStride + k]) + " - "
-                                    + String.format(format, -x[i * sliceStride + j * rowStride + k + 1]) + "i\t");
+                                + String.format(format, -x[i * sliceStride + j * rowStride + k + 1]) + "i\t");
                             continue;
                         }
                         out.write(String.format(format, x[i * sliceStride + j * rowStride + k]) + " + "
-                                + String.format(format, x[i * sliceStride + j * rowStride + k + 1]) + "i\t");
+                            + String.format(format, x[i * sliceStride + j * rowStride + k + 1]) + "i\t");
                     }
                     out.newLine();
                 }
@@ -633,7 +601,7 @@ public class IOUtils {
      * Saves elements of <code>x</code> in a file <code>filename</code>. Complex
      * data is represented by 2 double values in sequence: the real and
      * imaginary parts.
-     * 
+     *
      * @param n1
      * @param n2
      * @param n3
@@ -660,11 +628,11 @@ public class IOUtils {
                         }
                         if (x[i][j][k + 1] < 0) {
                             out.write(String.format(format, x[i][j][k]) + " - "
-                                    + String.format(format, -x[i][j][k + 1]) + "i\t");
+                                + String.format(format, -x[i][j][k + 1]) + "i\t");
                             continue;
                         }
                         out.write(String.format(format, x[i][j][k]) + " + " + String.format(format, x[i][j][k + 1])
-                                + "i\t");
+                            + "i\t");
                     }
                     out.newLine();
                 }
@@ -679,7 +647,7 @@ public class IOUtils {
     /**
      * Saves elements of <code>x</code> in a file <code>filename</code>,
      * assuming that it is 2D real array.
-     * 
+     *
      * @param x
      * @param filename
      */
@@ -699,7 +667,7 @@ public class IOUtils {
     /**
      * Saves elements of <code>x</code> in a file <code>filename</code>,
      * assuming that it is 2D real array.
-     * 
+     *
      * @param x
      * @param filename
      */
@@ -719,7 +687,7 @@ public class IOUtils {
     /**
      * Saves elements of <code>x</code> in a file <code>filename</code>,
      * assuming that it is 2D real array.
-     * 
+     *
      * @param n1
      * @param n2
      * @param x
@@ -742,7 +710,7 @@ public class IOUtils {
 
     /**
      * Saves elements of <code>x</code> in a file <code>filename</code>,
-     * 
+     *
      * @param x
      * @param filename
      */
@@ -763,7 +731,7 @@ public class IOUtils {
 
     /**
      * Saves elements of <code>x</code> in a file <code>filename</code>,
-     * 
+     *
      * @param x
      * @param filename
      */
@@ -785,7 +753,7 @@ public class IOUtils {
     /**
      * Saves elements of <code>x</code> in a file <code>filename</code>,
      * assuming that it is 3D real array.
-     * 
+     *
      * @param slices
      * @param rows
      * @param columns
@@ -820,7 +788,7 @@ public class IOUtils {
     /**
      * Saves elements of <code>x</code> in a file <code>filename</code>,
      * assuming that it is 2D real array.
-     * 
+     *
      * @param x
      * @param filename
      */
@@ -840,7 +808,7 @@ public class IOUtils {
     /**
      * Saves elements of <code>x</code> in a file <code>filename</code>,
      * assuming that it is 2D real array.
-     * 
+     *
      * @param n1
      * @param n2
      * @param x
@@ -868,7 +836,7 @@ public class IOUtils {
     /**
      * Saves elements of <code>x</code> in a file <code>filename</code>,
      * assuming that it is 3D real array.
-     * 
+     *
      * @param n1
      * @param n2
      * @param n3
@@ -902,7 +870,7 @@ public class IOUtils {
 
     /**
      * Saves results of the benchmark in a file
-     * 
+     *
      * @param filename
      * @param nthread
      * @param niter
@@ -912,8 +880,8 @@ public class IOUtils {
      * @param sizes
      */
     public static void writeFFTBenchmarkResultsToFile(String filename, int nthread, int niter, boolean doWarmup,
-            boolean doScaling, int[] sizes, double[] times) {
-        String[] properties = { "os.name", "os.version", "os.arch", "java.vendor", "java.version" };
+                                                      boolean doScaling, int[] sizes, double[] times) {
+        String[] properties = {"os.name", "os.version", "os.arch", "java.vendor", "java.version"};
         try {
             BufferedWriter out = new BufferedWriter(new FileWriter(filename, false));
             out.write(new Date().toString());
@@ -947,7 +915,7 @@ public class IOUtils {
             out.write("\tscaling performed = " + doScaling);
             out.newLine();
             out
-                    .write("--------------------------------------------------------------------------------------------------");
+                .write("--------------------------------------------------------------------------------------------------");
             out.newLine();
             out.write("sizes=[");
             for (int i = 0; i < sizes.length; i++) {

@@ -59,7 +59,7 @@ import java.io.Serial;
  * Cells are internally addressed in row-major. Performance sensitive
  * applications can exploit this fact. Setting values in a loop row-by-row is
  * quicker than column-by-column, because fewer hash collisions occur. Thus
- * 
+ *
  * <pre>
  * for (int row = 0; row &lt; rows; row++) {
  *     for (int column = 0; column &lt; columns; column++) {
@@ -67,9 +67,9 @@ import java.io.Serial;
  *     }
  * }
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -77,15 +77,15 @@ import java.io.Serial;
  *     }
  * }
  * </pre>
- * 
- * @see cern.mateba.map
- * @see cern.mateba.map.tobject.OpenLongObjectHashMap
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
+ * @see cern.mateba.map
+ * @see cern.mateba.map.tobject.OpenLongObjectHashMap
  */
 public class SparseObjectMatrix2D extends ObjectMatrix2D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = -8742336634182697746L;
@@ -101,13 +101,11 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public SparseObjectMatrix2D(Object[][] values) {
         this(values.length, values.length == 0 ? 0 : values[0].length);
@@ -117,15 +115,12 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns and default
      * memory usage. All entries are initially <tt>null</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public SparseObjectMatrix2D(int rows, int columns) {
         this(rows, columns, rows * (columns / 1000), 0.2, 0.5);
@@ -136,27 +131,20 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
      * as specified. All entries are initially <tt>null</tt>. For details
      * related to memory usage see
      * {@link cern.mateba.map.tobject.OpenLongObjectHashMap}.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param initialCapacity
-     *            the initial capacity of the hash map. If not known, set
-     *            <tt>initialCapacity=0</tt> or small.
-     * @param minLoadFactor
-     *            the minimum load factor of the hash map.
-     * @param maxLoadFactor
-     *            the maximum load factor of the hash map.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows            the number of rows the matrix shall have.
+     * @param columns         the number of columns the matrix shall have.
+     * @param initialCapacity the initial capacity of the hash map. If not known, set
+     *                        <tt>initialCapacity=0</tt> or small.
+     * @param minLoadFactor   the minimum load factor of the hash map.
+     * @param maxLoadFactor   the maximum load factor of the hash map.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public SparseObjectMatrix2D(int rows, int columns, int initialCapacity, double minLoadFactor, double maxLoadFactor) {
         setUp(rows, columns);
@@ -165,30 +153,22 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
 
     /**
      * Constructs a view with the given parameters.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             or flip's are illegal.
+     *
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param elements     the cells.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(i,j+1)-index(i,j)</tt>.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  or flip's are illegal.
      */
     protected SparseObjectMatrix2D(int rows, int columns, AbstractLongObjectMap elements, int rowZero, int columnZero,
-            int rowStride, int columnStride) {
+                                   int rowStride, int columnStride) {
         setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = false;
@@ -207,7 +187,7 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
 
     /**
      * Returns the elements of this matrix.
-     * 
+     *
      * @return the elements
      */
 
@@ -225,24 +205,21 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
      * Calling this method before tt>set()</tt>ing a large number of non-zero
      * values boosts performance, because the receiver will grow only once
      * instead of potentially many times and hash collisions get less probable.
-     * 
-     * @param minCapacity
-     *            the desired minimum number of non-zero cells.
+     *
+     * @param minCapacity the desired minimum number of non-zero cells.
      */
 
     public void ensureCapacity(int minCapacity) {
         this.elements.ensureCapacity(minCapacity);
     }
-    
+
     /**
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a column-compressed form. This method creates a new object (not a view),
      * so changes in the returned matrix are NOT reflected in this matrix.
-     * 
-     * @param sortRowIndexes
-     *            if true, then row indexes in column compressed matrix are
-     *            sorted
-     * 
+     *
+     * @param sortRowIndexes if true, then row indexes in column compressed matrix are
+     *                       sorted
      * @return this matrix in a column-compressed form
      */
     public SparseCCObjectMatrix2D getColumnCompressed(boolean sortRowIndexes) {
@@ -265,7 +242,7 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
      * a column-compressed modified form. This method creates a new object (not
      * a view), so changes in the returned matrix are NOT reflected in this
      * matrix.
-     * 
+     *
      * @return this matrix in a column-compressed modified form
      */
     public SparseCCMObjectMatrix2D getColumnCompressedModified() {
@@ -285,11 +262,9 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a row-compressed form. This method creates a new object (not a view), so
      * changes in the returned matrix are NOT reflected in this matrix.
-     * 
-     * @param sortColumnIndexes
-     *            if true, then column indexes in row compressed matrix are
-     *            sorted
-     * 
+     *
+     * @param sortColumnIndexes if true, then column indexes in row compressed matrix are
+     *                          sorted
      * @return this matrix in a row-compressed form
      */
     public SparseRCObjectMatrix2D getRowCompressed(boolean sortColumnIndexes) {
@@ -303,8 +278,8 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
             rowIndexes[k] = (int) (key / columns);
             columnIndexes[k] = (int) (key % columns);
         }
-        return new SparseRCObjectMatrix2D(rows, columns, rowIndexes, columnIndexes, values, false, 
-                sortColumnIndexes);
+        return new SparseRCObjectMatrix2D(rows, columns, rowIndexes, columnIndexes, values, false,
+            sortColumnIndexes);
     }
 
     /**
@@ -312,7 +287,7 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
      * a row-compressed modified form. This method creates a new object (not a
      * view), so changes in the returned matrix are NOT reflected in this
      * matrix.
-     * 
+     *
      * @return this matrix in a row-compressed modified form
      */
     public SparseRCMObjectMatrix2D getRowCompressedModified() {
@@ -330,18 +305,16 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>[row,column]</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      * @return the value at the specified coordinate.
      */
 
@@ -351,7 +324,7 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
         // return this.elements.get(index(row,column));
         // manually inlined:
         return this.elements.get((long) rowZero + (long) row * (long) rowStride + (long) columnZero + (long) column
-                * (long) columnStride);
+            * (long) columnStride);
     }
 
     /**
@@ -365,11 +338,9 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
      */
 
     protected boolean haveSharedCellsRaw(ObjectMatrix2D other) {
-        if (other instanceof SelectedSparseObjectMatrix2D) {
-            SelectedSparseObjectMatrix2D otherMatrix = (SelectedSparseObjectMatrix2D) other;
+        if (other instanceof SelectedSparseObjectMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseObjectMatrix2D) {
-            SparseObjectMatrix2D otherMatrix = (SparseObjectMatrix2D) other;
+        } else if (other instanceof SparseObjectMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -378,11 +349,9 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
     /**
      * Returns the position of the given coordinate within the (virtual or
      * non-virtual) internal 1-dimensional array.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      */
 
     public long index(int row, int column) {
@@ -400,11 +369,9 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
      * <tt>SparseObjectMatrix2D</tt> the new matrix must also be of type
      * <tt>SparseObjectMatrix2D</tt>, etc. In general, the new matrix should
      * have internal parametrization as similar as possible.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -419,9 +386,8 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
      * matrix must be of type <tt>DenseObjectMatrix1D</tt>, if the receiver is
      * an instance of type <tt>SparseObjectMatrix2D</tt> the new matrix must be
      * of type <tt>SparseObjectMatrix1D</tt>, etc.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
+     *
+     * @param size the number of cells the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -436,14 +402,11 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
      * type <tt>DenseObjectMatrix1D</tt>, if the receiver is an instance of type
      * <tt>SparseObjectMatrix2D</tt> the new matrix must be of type
      * <tt>SparseObjectMatrix1D</tt>, etc.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param offset
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
+     *
+     * @param size   the number of cells the matrix shall have.
+     * @param offset the index of the first element.
+     * @param stride the number of indexes between any two elements, i.e.
+     *               <tt>index(i+1)-index(i)</tt>.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -454,20 +417,17 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
     /**
      * Sets the matrix cell at coordinate <tt>[row,column]</tt> to the specified
      * value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param value  the value to be filled into the specified cell.
      */
 
     public synchronized void setQuick(int row, int column, Object value) {
@@ -476,14 +436,14 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
         // int index = index(row,column);
         // manually inlined:
         long index = (long) rowZero + (long) row * (long) rowStride + (long) columnZero + (long) column
-                * (long) columnStride;
+            * (long) columnStride;
 
         if (value == null)
             this.elements.removeKey(index);
         else
             this.elements.put(index, value);
     }
-    
+
     public ObjectMatrix1D vectorize() {
         SparseObjectMatrix1D v = new SparseObjectMatrix1D((int) size());
         int idx = 0;
@@ -524,11 +484,9 @@ public class SparseObjectMatrix2D extends ObjectMatrix2D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param rowOffsets
-     *            the offsets of the visible elements.
-     * @param columnOffsets
-     *            the offsets of the visible elements.
+     *
+     * @param rowOffsets    the offsets of the visible elements.
+     * @param columnOffsets the offsets of the visible elements.
      * @return a new view.
      */
 

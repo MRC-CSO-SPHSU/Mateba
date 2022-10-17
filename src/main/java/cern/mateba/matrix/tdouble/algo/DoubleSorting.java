@@ -44,18 +44,15 @@ import java.io.Serializable;
  * not. A stable sort is, for example, helpful, if matrices are sorted
  * successively by multiple columns. It preserves the relative position of equal
  * elements.
- * 
+ *
+ * @author wolfgang.hoschek@cern.ch
+ * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.1, 25/May/2000
  * @see cern.mateba.GenericSorting
  * @see cern.mateba.Sorting
  * @see java.util.Arrays
- * 
- * @author wolfgang.hoschek@cern.ch
- * @version 1.1, 25/May/2000
- * 
- * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
-public class DoubleSorting implements Serializable, Cloneable{
+public class DoubleSorting implements Serializable, Cloneable {
 
     /**
      * A prefabricated quicksort.
@@ -120,21 +117,20 @@ public class DoubleSorting implements Serializable, Cloneable{
      * <table border="1" cellspacing="0">
      * <tr nowrap>
      * <td valign="top"><tt> 7, 1, 3, 1<br>
-     </tt></td>
+     * </tt></td>
      * <td valign="top">
      * <p>
      * <tt> ==&gt; 1, 1, 3, 7<br>
-     The vector IS NOT SORTED.<br>
-     The new VIEW IS SORTED.</tt>
+     * The vector IS NOT SORTED.<br>
+     * The new VIEW IS SORTED.</tt>
      * </p>
      * </td>
      * </tr>
      * </table>
-     * 
-     * @param vector
-     *            the vector to be sorted.
+     *
+     * @param vector the vector to be sorted.
      * @return a new sorted vector (matrix) view. <b>Note that the original
-     *         matrix is left unaffected.</b>
+     * matrix is left unaffected.</b>
      */
     public DoubleMatrix1D sort(final DoubleMatrix1D vector) {
         return vector.viewSelection(sortIndex(vector));
@@ -143,14 +139,14 @@ public class DoubleSorting implements Serializable, Cloneable{
 
     /**
      * Sorts indexes of the <code>vector</code> into ascending order.
-     * 
+     *
      * @param vector
      * @return sorted indexes
      */
     public int[] sortIndex(final DoubleMatrix1D vector) {
         int[] indexes = new int[(int) vector.size()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = indexes.length; --i >= 0;)
+        for (int i = indexes.length; --i >= 0; )
             indexes[i] = i;
         IntComparator comp = null;
         if (vector instanceof DenseDoubleMatrix1D) {
@@ -188,7 +184,7 @@ public class DoubleSorting implements Serializable, Cloneable{
     /**
      * Multithreaded method that sorts indexes of the <code>vector</code>
      * according to the comparator <code>comp</code>.
-     * 
+     *
      * @param vector
      * @param comp
      * @return sorted indexes
@@ -196,7 +192,7 @@ public class DoubleSorting implements Serializable, Cloneable{
     public int[] sortIndex(final DoubleMatrix1D vector, IntComparator comp) {
         int[] indexes = new int[(int) vector.size()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = indexes.length; --i >= 0;)
+        for (int i = indexes.length; --i >= 0; )
             indexes[i] = i;
         runSort(indexes, 0, indexes.length, comp);
 
@@ -212,7 +208,7 @@ public class DoubleSorting implements Serializable, Cloneable{
      * use sub-ranging views. To sort descending, use flip views ...
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * // sort by sinus of cells
      * DoubleComparator comp = new DoubleComparator() {
@@ -224,13 +220,11 @@ public class DoubleSorting implements Serializable, Cloneable{
      * };
      * sorted = quickSort(vector, comp);
      * </pre>
-     * 
-     * @param vector
-     *            the vector to be sorted.
-     * @param c
-     *            the comparator to determine the order.
+     *
+     * @param vector the vector to be sorted.
+     * @param c      the comparator to determine the order.
      * @return a new matrix view sorted as specified. <b>Note that the original
-     *         vector (matrix) is left unaffected.</b>
+     * vector (matrix) is left unaffected.</b>
      */
     public DoubleMatrix1D sort(final DoubleMatrix1D vector, final cern.mateba.function.tdouble.DoubleComparator c) {
         return vector.viewSelection(sortIndex(vector, c));
@@ -239,7 +233,7 @@ public class DoubleSorting implements Serializable, Cloneable{
     /**
      * Sorts indexes of the <code>vector</code> according to the comparator
      * <code>c</code>.
-     * 
+     *
      * @param vector
      * @param c
      * @return sorted indexes
@@ -247,7 +241,7 @@ public class DoubleSorting implements Serializable, Cloneable{
     public int[] sortIndex(final DoubleMatrix1D vector, final cern.mateba.function.tdouble.DoubleComparator c) {
         int[] indexes = new int[(int) vector.size()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = indexes.length; --i >= 0;)
+        for (int i = indexes.length; --i >= 0; )
             indexes[i] = i;
         IntComparator comp = null;
         if (vector instanceof DenseDoubleMatrix1D) {
@@ -294,47 +288,47 @@ public class DoubleSorting implements Serializable, Cloneable{
      * <table border="1" * cellspacing="0">
      * <tr nowrap>
      * <td valign="top"><tt>4 x 2 matrix: <br>
-     1, 1<br>
-     5, 4<br>
-     3, 0<br>
-     4, 4 <br>
-     </tt></td>
+     * 1, 1<br>
+     * 5, 4<br>
+     * 3, 0<br>
+     * 4, 4 <br>
+     * </tt></td>
      * <td align="left" valign="top"> <tt>aggregates=<br>
-     2<br>
-     9<br>
-     3<br>
-     8<br>
-     ==></tt></td>
+     * 2<br>
+     * 9<br>
+     * 3<br>
+     * 8<br>
+     * ==></tt></td>
      * <td valign="top">
      * <p>
      * <tt>4 x 2 matrix:<br>
-     1, 1<br>
-     3, 0<br>
-     4, 4<br>
-     5, 4</tt><br>
+     * 1, 1<br>
+     * 3, 0<br>
+     * 4, 4<br>
+     * 5, 4</tt><br>
      * The matrix IS NOT SORTED.<br>
      * The new VIEW IS SORTED.
      * </p>
      * </td>
      * </tr>
      * </table>
-     * 
+     *
      * <table>
      * <td class="PRE">
-     * 
+     *
      * <pre>
      * // sort 10000 x 1000 matrix by sum of logarithms in a row (i.e. by geometric mean)
      * DoubleMatrix2D matrix = new DenseDoubleMatrix2D(10000, 1000);
      * matrix.assign(new cern.jet.random.engine.MersenneTwister()); // initialized randomly
      * cern.jet.math.Functions F = cern.jet.math.Functions.functions; // alias for convenience
-     * 
+     *
      * // THE QUICK VERSION (takes some 3 secs)
      * // aggregates[i] = Sum(log(row));
      * double[] aggregates = new double[matrix.rows()];
      * for (int i = matrix.rows(); --i &gt;= 0;)
      *     aggregates[i] = matrix.viewRow(i).aggregate(F.plus, F.log);
      * DoubleMatrix2D sorted = quickSort(matrix, aggregates);
-     * 
+     *
      * // THE SLOW VERSION (takes some 90 secs)
      * DoubleMatrix1DComparator comparator = new DoubleMatrix1DComparator() {
      *     public int compare(DoubleMatrix1D x, DoubleMatrix1D y) {
@@ -345,19 +339,16 @@ public class DoubleSorting implements Serializable, Cloneable{
      * };
      * DoubleMatrix2D sorted = quickSort(matrix, comparator);
      * </pre>
-     * 
+     *
      * </td>
      * </table>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param aggregates
-     *            the values to sort on. (As a side effect, this array will also
-     *            get sorted).
+     *
+     * @param matrix     the matrix to be sorted.
+     * @param aggregates the values to sort on. (As a side effect, this array will also
+     *                   get sorted).
      * @return a new matrix view having rows sorted. <b>Note that the original
-     *         matrix is left unaffected.</b>
-     * @throws IndexOutOfBoundsException
-     *             if <tt>aggregates.length != matrix.rows()</tt>.
+     * matrix is left unaffected.</b>
+     * @throws IndexOutOfBoundsException if <tt>aggregates.length != matrix.rows()</tt>.
      */
     public DoubleMatrix2D sort(DoubleMatrix2D matrix, final double[] aggregates) {
         int rows = matrix.rows();
@@ -366,7 +357,7 @@ public class DoubleSorting implements Serializable, Cloneable{
 
         // set up index reordering
         final int[] indexes = new int[rows];
-        for (int i = rows; --i >= 0;)
+        for (int i = rows; --i >= 0; )
             indexes[i] = i;
 
         // compares two aggregates at a time
@@ -413,41 +404,38 @@ public class DoubleSorting implements Serializable, Cloneable{
      * <table border="1" cellspacing="0">
      * <tr nowrap>
      * <td valign="top"><tt>4 x 2 matrix: <br>
-     7, 6<br>
-     5, 4<br>
-     3, 2<br>
-     1, 0 <br>
-     </tt></td>
+     * 7, 6<br>
+     * 5, 4<br>
+     * 3, 2<br>
+     * 1, 0 <br>
+     * </tt></td>
      * <td align="left" valign="top">
      * <p>
      * <tt>column = 0;<br>
-     view = quickSort(matrix,column);<br>
-     System.out.println(view); </tt><tt><br>
-     ==> </tt>
+     * view = quickSort(matrix,column);<br>
+     * System.out.println(view); </tt><tt><br>
+     * ==> </tt>
      * </p>
      * </td>
      * <td valign="top">
      * <p>
      * <tt>4 x 2 matrix:<br>
-     1, 0<br>
-     3, 2<br>
-     5, 4<br>
-     7, 6</tt><br>
+     * 1, 0<br>
+     * 3, 2<br>
+     * 5, 4<br>
+     * 7, 6</tt><br>
      * The matrix IS NOT SORTED.<br>
      * The new VIEW IS SORTED.
      * </p>
      * </td>
      * </tr>
      * </table>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param column
-     *            the index of the column inducing the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param column the index of the column inducing the order.
      * @return a new matrix view having rows sorted by the given column. <b>Note
-     *         that the original matrix is left unaffected.</b>
-     * @throws IndexOutOfBoundsException
-     *             if <tt>column < 0 || column >= matrix.columns()</tt>.
+     * that the original matrix is left unaffected.</b>
+     * @throws IndexOutOfBoundsException if <tt>column < 0 || column >= matrix.columns()</tt>.
      */
     public DoubleMatrix2D sort(DoubleMatrix2D matrix, int column) {
         if (column < 0 || column >= matrix.columns())
@@ -455,7 +443,7 @@ public class DoubleSorting implements Serializable, Cloneable{
 
         int[] rowIndexes = new int[matrix.rows()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = rowIndexes.length; --i >= 0;)
+        for (int i = rowIndexes.length; --i >= 0; )
             rowIndexes[i] = i;
 
         final DoubleMatrix1D col = matrix.viewColumn(column);
@@ -486,7 +474,7 @@ public class DoubleSorting implements Serializable, Cloneable{
      * flip views ...
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * // sort by sum of values in a row
      * DoubleMatrix1DComparator comp = new DoubleMatrix1DComparator() {
@@ -498,25 +486,23 @@ public class DoubleSorting implements Serializable, Cloneable{
      * };
      * sorted = quickSort(matrix, comp);
      * </pre>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param c
-     *            the comparator to determine the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param c      the comparator to determine the order.
      * @return a new matrix view having rows sorted as specified. <b>Note that
-     *         the original matrix is left unaffected.</b>
+     * the original matrix is left unaffected.</b>
      */
     public DoubleMatrix2D sort(final DoubleMatrix2D matrix, final DoubleMatrix1DComparator c) {
         int[] rowIndexes = new int[matrix.rows()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = rowIndexes.length; --i >= 0;)
+        for (int i = rowIndexes.length; --i >= 0; )
             rowIndexes[i] = i;
 
         final DoubleMatrix1D[] views = new DoubleMatrix1D[matrix.rows()]; // precompute
         // views
         // for
         // speed
-        for (int i = views.length; --i >= 0;)
+        for (int i = views.length; --i >= 0; )
             views[i] = matrix.viewRow(i);
 
         IntComparator comp = new IntComparator() {
@@ -552,41 +538,41 @@ public class DoubleSorting implements Serializable, Cloneable{
      * <table border="1" * cellspacing="0">
      * <tr nowrap>
      * <td valign="top"><tt>4 x 2 matrix: <br>
-     1, 1<br>
-     5, 4<br>
-     3, 0<br>
-     4, 4 <br>
-     </tt></td>
+     * 1, 1<br>
+     * 5, 4<br>
+     * 3, 0<br>
+     * 4, 4 <br>
+     * </tt></td>
      * <td align="left" valign="top"> <tt>aggregates=<br>
-     hep.aida.bin.BinFunctions1D.sum<br>
-     ==></tt></td>
+     * hep.aida.bin.BinFunctions1D.sum<br>
+     * ==></tt></td>
      * <td valign="top">
      * <p>
      * <tt>4 x 2 matrix:<br>
-     1, 1<br>
-     3, 0<br>
-     4, 4<br>
-     5, 4</tt><br>
+     * 1, 1<br>
+     * 3, 0<br>
+     * 4, 4<br>
+     * 5, 4</tt><br>
      * The matrix IS NOT SORTED.<br>
      * The new VIEW IS SORTED.
      * </p>
      * </td>
      * </tr>
      * </table>
-     * 
+     *
      * <table>
      * <td class="PRE">
-     * 
+     *
      * <pre>
      * // sort 10000 x 1000 matrix by median or by sum of logarithms in a row (i.e. by geometric mean)
      * DoubleMatrix2D matrix = new DenseDoubleMatrix2D(10000, 1000);
      * matrix.assign(new cern.jet.random.engine.MersenneTwister()); // initialized randomly
      * cern.jet.math.Functions F = cern.jet.math.Functions.functions; // alias for convenience
-     * 
+     *
      * // THE QUICK VERSION (takes some 10 secs)
      * DoubleMatrix2D sorted = quickSort(matrix, hep.aida.bin.BinFunctions1D.median);
      * //DoubleMatrix2D sorted = quickSort(matrix,hep.aida.bin.BinFunctions1D.sumOfLogarithms);
-     * 
+     *
      * // THE SLOW VERSION (takes some 300 secs)
      * DoubleMatrix1DComparator comparator = new DoubleMatrix1DComparator() {
      *     public int compare(DoubleMatrix1D x, DoubleMatrix1D y) {
@@ -599,16 +585,14 @@ public class DoubleSorting implements Serializable, Cloneable{
      * };
      * DoubleMatrix2D sorted = quickSort(matrix, comparator);
      * </pre>
-     * 
+     *
      * </td>
      * </table>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param aggregate
-     *            the function to sort on; aggregates values in a row.
+     *
+     * @param matrix    the matrix to be sorted.
+     * @param aggregate the function to sort on; aggregates values in a row.
      * @return a new matrix view having rows sorted. <b>Note that the original
-     *         matrix is left unaffected.</b>
+     * matrix is left unaffected.</b>
      */
     public DoubleMatrix2D sort(DoubleMatrix2D matrix, BinFunction1D aggregate) {
         // precompute aggregates over rows, as defined by "aggregate"
@@ -616,7 +600,7 @@ public class DoubleSorting implements Serializable, Cloneable{
         // a bit clumsy, because Statistic.aggregate(...) is defined on columns,
         // so we need to transpose views
         DoubleMatrix2D tmp = matrix.like(1, matrix.rows());
-        BinFunction1D[] func = { aggregate };
+        BinFunction1D[] func = {aggregate};
         DoubleStatistic.aggregate(matrix.viewDice(), func, tmp);
         double[] aggr = tmp.viewRow(0).toArray();
         return sort(matrix, aggr);
@@ -639,20 +623,16 @@ public class DoubleSorting implements Serializable, Cloneable{
      * <li><tt>A == B iff A.get(row,column) == B.get(row,column)</tt>
      * <li><tt>A &gt;  B  iff A.get(row,column) &gt;  B.get(row,column)</tt>
      * </ul>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param row
-     *            the index of the row inducing the order.
-     * @param column
-     *            the index of the column inducing the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param row    the index of the row inducing the order.
+     * @param column the index of the column inducing the order.
      * @return a new matrix view having slices sorted by the values of the slice
-     *         view <tt>matrix.viewRow(row).viewColumn(column)</tt>. <b>Note
-     *         that the original matrix is left unaffected.</b>
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>row < 0 || row >= matrix.rows() || column < 0 || column >= matrix.columns()</tt>
-     *             .
+     * view <tt>matrix.viewRow(row).viewColumn(column)</tt>. <b>Note
+     * that the original matrix is left unaffected.</b>
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>row < 0 || row >= matrix.rows() || column < 0 || column >= matrix.columns()</tt>
+     *                                   .
      */
     public DoubleMatrix3D sort(DoubleMatrix3D matrix, int row, int column) {
         if (row < 0 || row >= matrix.rows())
@@ -663,7 +643,7 @@ public class DoubleSorting implements Serializable, Cloneable{
         int[] sliceIndexes = new int[matrix.slices()]; // indexes to reorder
         // instead of matrix
         // itself
-        for (int i = sliceIndexes.length; --i >= 0;)
+        for (int i = sliceIndexes.length; --i >= 0; )
             sliceIndexes[i] = i;
 
         final DoubleMatrix1D sliceView = matrix.viewRow(row).viewColumn(column);
@@ -694,7 +674,7 @@ public class DoubleSorting implements Serializable, Cloneable{
      * descending, use flip views ...
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * // sort by sum of values in a slice
      * DoubleMatrix2DComparator comp = new DoubleMatrix2DComparator() {
@@ -706,26 +686,24 @@ public class DoubleSorting implements Serializable, Cloneable{
      * };
      * sorted = quickSort(matrix, comp);
      * </pre>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param c
-     *            the comparator to determine the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param c      the comparator to determine the order.
      * @return a new matrix view having slices sorted as specified. <b>Note that
-     *         the original matrix is left unaffected.</b>
+     * the original matrix is left unaffected.</b>
      */
     public DoubleMatrix3D sort(final DoubleMatrix3D matrix, final DoubleMatrix2DComparator c) {
         int[] sliceIndexes = new int[matrix.slices()]; // indexes to reorder
         // instead of matrix
         // itself
-        for (int i = sliceIndexes.length; --i >= 0;)
+        for (int i = sliceIndexes.length; --i >= 0; )
             sliceIndexes[i] = i;
 
         final DoubleMatrix2D[] views = new DoubleMatrix2D[matrix.slices()]; // precompute
         // views
         // for
         // speed
-        for (int i = views.length; --i >= 0;)
+        for (int i = views.length; --i >= 0; )
             views[i] = matrix.viewSlice(i);
 
         IntComparator comp = new IntComparator() {
@@ -781,7 +759,7 @@ public class DoubleSorting implements Serializable, Cloneable{
      */
     public static void zdemo3() {
         DoubleSorting sort = quickSort;
-        double[] values = { 0.5f, 1.5f, 2.5f, 3.5f };
+        double[] values = {0.5f, 1.5f, 2.5f, 3.5f};
         DoubleMatrix1D matrix = new DenseDoubleMatrix1D(values);
         cern.mateba.function.tdouble.DoubleComparator comp = new cern.mateba.function.tdouble.DoubleComparator() {
             public int compare(double a, double b) {
@@ -808,8 +786,8 @@ public class DoubleSorting implements Serializable, Cloneable{
      * Demonstrates applying functions.
      */
     protected static void zdemo4() {
-        double[] values1 = { 0, 1, 2, 3 };
-        double[] values2 = { 0, 2, 4, 6 };
+        double[] values1 = {0, 1, 2, 3};
+        double[] values2 = {0, 2, 4, 6};
         DoubleMatrix1D matrix1 = new DenseDoubleMatrix1D(values1);
         DoubleMatrix1D matrix2 = new DenseDoubleMatrix1D(values2);
         System.out.println("m1:" + matrix1);
@@ -875,18 +853,18 @@ public class DoubleSorting implements Serializable, Cloneable{
         // so we just show the first 5 rows
         if (print) {
             int r = Math.min(rows, 5);
-            BinFunction1D[] funs = { BinFunctions1D.median,
-                    BinFunctions1D.sumLog,
-                    BinFunctions1D.geometricMean };
+            BinFunction1D[] funs = {BinFunctions1D.median,
+                BinFunctions1D.sumLog,
+                BinFunctions1D.geometricMean};
             String[] rowNames = new String[r];
             String[] columnNames = new String[columns];
-            for (int i = columns; --i >= 0;)
+            for (int i = columns; --i >= 0; )
                 columnNames[i] = Integer.toString(i);
-            for (int i = r; --i >= 0;)
+            for (int i = r; --i >= 0; )
                 rowNames[i] = Integer.toString(i);
             System.out.println("first part of sorted result = \n"
-                    + new cern.mateba.matrix.tdouble.algo.DoubleFormatter("%G").toTitleString(A
-                            .viewPart(0, 0, r, columns), rowNames, columnNames, null, null, null, funs));
+                + new cern.mateba.matrix.tdouble.algo.DoubleFormatter("%G").toTitleString(A
+                .viewPart(0, 0, r, columns), rowNames, columnNames, null, null, null, funs));
         }
 
         System.out.print("now sorting - slow version... ");
@@ -909,8 +887,8 @@ public class DoubleSorting implements Serializable, Cloneable{
      * Demonstrates advanced sorting. Sorts by sum of row.
      */
     public static void zdemo6() {
-        double[][] values = { { 3, 7, 0 }, { 2, 1, 0 }, { 2, 2, 0 }, { 1, 8, 0 }, { 2, 5, 0 }, { 7, 0, 0 },
-                { 2, 3, 0 }, { 1, 0, 0 }, { 4, 0, 0 }, { 2, 0, 0 } };
+        double[][] values = {{3, 7, 0}, {2, 1, 0}, {2, 2, 0}, {1, 8, 0}, {2, 5, 0}, {7, 0, 0},
+            {2, 3, 0}, {1, 0, 0}, {4, 0, 0}, {2, 0, 0}};
         DoubleMatrix2D A = DoubleFactory2D.dense.make(values);
         DoubleMatrix2D B, C;
         System.out.println("\n\nunsorted:" + A);

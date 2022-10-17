@@ -40,9 +40,8 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Benchmark of plasma_DGELS
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DgelsBenchmark {
     private static void dgelsBenchmarkJPlasma(int M, int N, int NRHS, int NITERS, int NTHREADS) {
@@ -83,7 +82,7 @@ public class DgelsBenchmark {
             }
         }
         System.out.println("Average execution time of JPlasma DGELS (" + M + "x" + N + ", " + NRHS
-                + " right-hand sides, " + NTHREADS + " threads): " + avtime / NITERS / 1000000.0 + " milliseconds");
+            + " right-hand sides, " + NTHREADS + " threads): " + avtime / NITERS / 1000000.0 + " milliseconds");
         Dplasma.plasma_Finalize();
 
     }
@@ -126,7 +125,7 @@ public class DgelsBenchmark {
             }
         }
         System.out.println("Average execution time of JLAPACK DGELS (" + M + "x" + N + ", " + NRHS
-                + " right-hand sides): " + avtime / NITERS / 1000000.0 + " milliseconds");
+            + " right-hand sides): " + avtime / NITERS / 1000000.0 + " milliseconds");
         Dplasma.plasma_Finalize();
 
     }
@@ -134,7 +133,7 @@ public class DgelsBenchmark {
     public static void main(String[] args) {
         if (args.length != 5) {
             System.out
-                    .println("Usage: java edu.emory.mathcs.jplasma.benchmark.DgelsBenchmark M N NRHS NITERS NTHREADS");
+                .println("Usage: java edu.emory.mathcs.jplasma.benchmark.DgelsBenchmark M N NRHS NITERS NTHREADS");
             System.exit(1);
         }
         int M = Integer.parseInt(args[0]);

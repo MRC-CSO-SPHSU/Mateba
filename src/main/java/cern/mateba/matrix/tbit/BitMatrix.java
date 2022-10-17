@@ -142,7 +142,7 @@ public class BitMatrix implements Serializable, Cloneable {
 
     public BitMatrix clone() {
         try {
-            var clone =(BitMatrix) super.clone();
+            var clone = (BitMatrix) super.clone();
             if (this.bits != null)
                 clone.bits = this.bits.clone();
             return clone;
@@ -174,7 +174,7 @@ public class BitMatrix implements Serializable, Cloneable {
      * @return a shallow clone of the receiver.
      */
     public BitMatrix copy() {
-        return (BitMatrix) clone();
+        return clone();
     }
 
     protected long[] elements() {

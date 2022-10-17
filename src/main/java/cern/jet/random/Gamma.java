@@ -29,12 +29,12 @@ import java.io.Serial;
  * <p>
  * Note: For a Gamma distribution to have the mean <tt>mean</tt> and variance
  * <tt>variance</tt>, set the parameters as follows:
- * 
+ *
  * <pre>
  * alpha = mean * mean / variance;
  * lambda = 1 / (variance / mean);
  * </pre>
- * 
+ *
  * <p>
  * Instance methods operate on a user supplied uniform random number generator;
  * they are unsynchronized.
@@ -57,7 +57,7 @@ import java.io.Serial;
  * <p>
  * J.H. Ahrens, U. Dieter (1982): Generating gamma variates by a modified
  * rejection technique, Communications of the ACM 25, 47-54.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -74,9 +74,8 @@ public class Gamma extends AbstractContinousDistribution {
 
     /**
      * Constructs a Gamma distribution. Example: alpha=1.0, lambda=1.0.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>alpha &lt;= 0.0 || lambda &lt;= 0.0</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>alpha &lt;= 0.0 || lambda &lt;= 0.0</tt>.
      */
     public Gamma(double alpha, double lambda, RandomEngine randomGenerator) {
         setRandomGenerator(randomGenerator);
@@ -133,7 +132,7 @@ public class Gamma extends AbstractContinousDistribution {
 
         if (a < 1.0) { // CASE A: Acceptance rejection algorithm gs
             b = 1.0 + 0.36788794412 * a; // Step 1
-            for (;;) {
+            for (; ; ) {
                 p = b * randomGenerator.raw();
                 if (p <= 1.0) { // Step 2. Case gds <= 1
                     gds = Math.exp(Math.log(p) / a);
@@ -145,9 +144,7 @@ public class Gamma extends AbstractContinousDistribution {
                         return (gds / lambda);
                 }
             }
-        }
-
-        else { // CASE B: Acceptance complement algorithm gd (gaussian
+        } else { // CASE B: Acceptance complement algorithm gd (gaussian
             // distribution, box muller transformation)
             if (a != aa) { // Step 1. Preparations
                 aa = a;
@@ -197,17 +194,17 @@ public class Gamma extends AbstractContinousDistribution {
                     q = q0 - s * t + 0.25 * t * t + (ss + ss) * Math.log(1.0 + v);
                 } else {
                     q = q0
-                            + 0.5
-                            * t
-                            * t
-                            * ((((((((a9 * v + a8) * v + a7) * v + a6) * v + a5) * v + a4) * v + a3) * v + a2) * v + a1)
-                            * v;
+                        + 0.5
+                        * t
+                        * t
+                        * ((((((((a9 * v + a8) * v + a7) * v + a6) * v + a5) * v + a4) * v + a3) * v + a2) * v + a1)
+                        * v;
                 } // Step 7. Quotient acceptance
                 if (Math.log(1.0 - u) <= q)
                     return (gds / lambda);
             }
 
-            for (;;) { // Step 8. Double exponential deviate t
+            for (; ; ) { // Step 8. Double exponential deviate t
                 do {
                     e = -Math.log(randomGenerator.raw());
                     u = randomGenerator.raw();
@@ -220,11 +217,11 @@ public class Gamma extends AbstractContinousDistribution {
                     q = q0 - s * t + 0.25 * t * t + (ss + ss) * Math.log(1.0 + v);
                 } else {
                     q = q0
-                            + 0.5
-                            * t
-                            * t
-                            * ((((((((a9 * v + a8) * v + a7) * v + a6) * v + a5) * v + a4) * v + a3) * v + a2) * v + a1)
-                            * v;
+                        + 0.5
+                        * t
+                        * t
+                        * ((((((((a9 * v + a8) * v + a7) * v + a6) * v + a5) * v + a4) * v + a3) * v + a2) * v + a1)
+                        * v;
                 }
                 if (q <= 0.0)
                     continue; // Step 11.
@@ -261,9 +258,8 @@ public class Gamma extends AbstractContinousDistribution {
 
     /**
      * Sets the mean and variance.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>alpha &lt;= 0.0 || lambda &lt;= 0.0</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>alpha &lt;= 0.0 || lambda &lt;= 0.0</tt>.
      */
     public void setState(double alpha, double lambda) {
         if (alpha <= 0.0)
@@ -276,9 +272,8 @@ public class Gamma extends AbstractContinousDistribution {
 
     /**
      * Returns a random number from the distribution.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>alpha &lt;= 0.0 || lambda &lt;= 0.0</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>alpha &lt;= 0.0 || lambda &lt;= 0.0</tt>.
      */
     public static double staticNextDouble(double alpha, double lambda) {
         synchronized (shared) {
@@ -297,9 +292,8 @@ public class Gamma extends AbstractContinousDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

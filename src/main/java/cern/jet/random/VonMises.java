@@ -30,7 +30,7 @@ import java.io.Serial;
  * <p>
  * D.J. Best, N.I. Fisher (1979): Efficient simulation of the von Mises
  * distribution, Appl. Statist. 28, 152-157.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -50,9 +50,8 @@ public class VonMises extends AbstractContinousDistribution {
 
     /**
      * Constructs a Von Mises distribution. Example: k=1.0.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>k &lt;= 0.0</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>k &lt;= 0.0</tt>.
      */
     public VonMises(double freedom, RandomEngine randomGenerator) {
         setRandomGenerator(randomGenerator);
@@ -70,9 +69,8 @@ public class VonMises extends AbstractContinousDistribution {
     /**
      * Returns a random number from the distribution; bypasses the internal
      * state.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>k &lt;= 0.0</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>k &lt;= 0.0</tt>.
      */
     public double nextDouble(double k) {
         /***********************************************************************
@@ -115,9 +113,8 @@ public class VonMises extends AbstractContinousDistribution {
 
     /**
      * Sets the distribution parameter.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>k &lt;= 0.0</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>k &lt;= 0.0</tt>.
      */
     public void setState(double k) {
         if (k <= 0.0)
@@ -127,9 +124,8 @@ public class VonMises extends AbstractContinousDistribution {
 
     /**
      * Returns a random number from the distribution.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>k &lt;= 0.0</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>k &lt;= 0.0</tt>.
      */
     public static double staticNextDouble(double freedom) {
         synchronized (shared) {
@@ -148,9 +144,8 @@ public class VonMises extends AbstractContinousDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

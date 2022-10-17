@@ -35,7 +35,7 @@ import java.io.Serial;
  * HREF="http://wwwinfo.cern.ch/asd/lhc++/clhep">CLHEP 1.4.0</A> (C++). CLHEP's
  * implementation, in turn, is based upon "W.H.Press et al., Numerical Recipes
  * in C, Second Edition".
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -68,8 +68,8 @@ public class PoissonSlow extends AbstractDiscreteDistribution {
     // to method B
 
     protected static final double[] cof = { // for method logGamma()
-    76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2,
-            -0.5395239384953e-5 };
+        76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2,
+        -0.5395239384953e-5};
 
     // The uniform random number generated shared by all <b>static</b> methods.
     protected static PoissonSlow shared = new PoissonSlow(0.0, makeDefaultGenerator());
@@ -209,9 +209,8 @@ public class PoissonSlow extends AbstractDiscreteDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

@@ -39,18 +39,15 @@ import java.io.Serializable;
  * not. A stable sort is, for example, helpful, if matrices are sorted
  * successively by multiple columns. It preserves the relative position of equal
  * elements.
- * 
+ *
+ * @author wolfgang.hoschek@cern.ch
+ * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.1, 25/May/2000
  * @see cern.mateba.GenericSorting
  * @see cern.mateba.Sorting
  * @see java.util.Arrays
- * 
- * @author wolfgang.hoschek@cern.ch
- * @version 1.1, 25/May/2000
- * 
- * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
-public class LongSorting implements Serializable, Cloneable{
+public class LongSorting implements Serializable, Cloneable {
 
     /**
      * A prefabricated quicksort.
@@ -102,21 +99,20 @@ public class LongSorting implements Serializable, Cloneable{
      * <table border="1" cellspacing="0">
      * <tr nowrap>
      * <td valign="top"><tt> 7, 1, 3, 1<br>
-     </tt></td>
+     * </tt></td>
      * <td valign="top">
      * <p>
      * <tt> ==&gt; 1, 1, 3, 7<br>
-     The vector IS NOT SORTED.<br>
-     The new VIEW IS SORTED.</tt>
+     * The vector IS NOT SORTED.<br>
+     * The new VIEW IS SORTED.</tt>
      * </p>
      * </td>
      * </tr>
      * </table>
-     * 
-     * @param vector
-     *            the vector to be sorted.
+     *
+     * @param vector the vector to be sorted.
      * @return a new sorted vector (matrix) view. <b>Note that the original
-     *         matrix is left unaffected.</b>
+     * matrix is left unaffected.</b>
      */
     public LongMatrix1D sort(final LongMatrix1D vector) {
         return vector.viewSelection(sortIndex(vector));
@@ -124,14 +120,14 @@ public class LongSorting implements Serializable, Cloneable{
 
     /**
      * Sorts indexes of the <code>vector</code> into ascending order.
-     * 
+     *
      * @param vector
      * @return sorted indexes
      */
     public int[] sortIndex(final LongMatrix1D vector) {
         int[] indexes = new int[(int) vector.size()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = indexes.length; --i >= 0;)
+        for (int i = indexes.length; --i >= 0; )
             indexes[i] = i;
         IntComparator comp = null;
         if (vector instanceof DenseLongMatrix1D) {
@@ -171,7 +167,7 @@ public class LongSorting implements Serializable, Cloneable{
      * use sub-ranging views. To sort descending, use flip views ...
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * // sort by sinus of cells
      * IntComparator comp = new IntComparator() {
@@ -183,13 +179,11 @@ public class LongSorting implements Serializable, Cloneable{
      * };
      * sorted = quickSort(vector, comp);
      * </pre>
-     * 
-     * @param vector
-     *            the vector to be sorted.
-     * @param c
-     *            the comparator to determine the order.
+     *
+     * @param vector the vector to be sorted.
+     * @param c      the comparator to determine the order.
      * @return a new matrix view sorted as specified. <b>Note that the original
-     *         vector (matrix) is left unaffected.</b>
+     * vector (matrix) is left unaffected.</b>
      */
     public LongMatrix1D sort(final LongMatrix1D vector, final cern.mateba.function.tlong.LongComparator c) {
         return vector.viewSelection(sortIndex(vector, c));
@@ -198,7 +192,7 @@ public class LongSorting implements Serializable, Cloneable{
     /**
      * Sorts indexes of the <code>vector</code> according to the comparator
      * <code>c</code>.
-     * 
+     *
      * @param vector
      * @param c
      * @return sorted indexes
@@ -206,7 +200,7 @@ public class LongSorting implements Serializable, Cloneable{
     public int[] sortIndex(final LongMatrix1D vector, final cern.mateba.function.tlong.LongComparator c) {
         int[] indexes = new int[(int) vector.size()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = indexes.length; --i >= 0;)
+        for (int i = indexes.length; --i >= 0; )
             indexes[i] = i;
         IntComparator comp = null;
         if (vector instanceof DenseLongMatrix1D) {
@@ -253,47 +247,47 @@ public class LongSorting implements Serializable, Cloneable{
      * <table border="1" * cellspacing="0">
      * <tr nowrap>
      * <td valign="top"><tt>4 x 2 matrix: <br>
-     1, 1<br>
-     5, 4<br>
-     3, 0<br>
-     4, 4 <br>
-     </tt></td>
+     * 1, 1<br>
+     * 5, 4<br>
+     * 3, 0<br>
+     * 4, 4 <br>
+     * </tt></td>
      * <td align="left" valign="top"> <tt>aggregates=<br>
-     2<br>
-     9<br>
-     3<br>
-     8<br>
-     ==></tt></td>
+     * 2<br>
+     * 9<br>
+     * 3<br>
+     * 8<br>
+     * ==></tt></td>
      * <td valign="top">
      * <p>
      * <tt>4 x 2 matrix:<br>
-     1, 1<br>
-     3, 0<br>
-     4, 4<br>
-     5, 4</tt><br>
+     * 1, 1<br>
+     * 3, 0<br>
+     * 4, 4<br>
+     * 5, 4</tt><br>
      * The matrix IS NOT SORTED.<br>
      * The new VIEW IS SORTED.
      * </p>
      * </td>
      * </tr>
      * </table>
-     * 
+     *
      * <table>
      * <td class="PRE">
-     * 
+     *
      * <pre>
      * // sort 10000 x 1000 matrix by sum of logarithms in a row (i.e. by geometric mean)
      * LongMatrix2D matrix = new DenseLongMatrix2D(10000, 1000);
      * matrix.assign(new cern.jet.random.engine.MersenneTwister()); // initialized randomly
      * cern.jet.math.Functions F = cern.jet.math.Functions.functions; // alias for convenience
-     * 
+     *
      * // THE QUICK VERSION (takes some 3 secs)
      * // aggregates[i] = Sum(log(row));
      * int[] aggregates = new int[matrix.rows()];
      * for (int i = matrix.rows(); --i &gt;= 0;)
      *     aggregates[i] = matrix.viewRow(i).aggregate(F.plus, F.log);
      * LongMatrix2D sorted = quickSort(matrix, aggregates);
-     * 
+     *
      * // THE SLOW VERSION (takes some 90 secs)
      * LongMatrix1DComparator comparator = new LongMatrix1DComparator() {
      *     public int compare(LongMatrix1D x, LongMatrix1D y) {
@@ -304,19 +298,16 @@ public class LongSorting implements Serializable, Cloneable{
      * };
      * LongMatrix2D sorted = quickSort(matrix, comparator);
      * </pre>
-     * 
+     *
      * </td>
      * </table>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param aggregates
-     *            the values to sort on. (As a side effect, this array will also
-     *            get sorted).
+     *
+     * @param matrix     the matrix to be sorted.
+     * @param aggregates the values to sort on. (As a side effect, this array will also
+     *                   get sorted).
      * @return a new matrix view having rows sorted. <b>Note that the original
-     *         matrix is left unaffected.</b>
-     * @throws IndexOutOfBoundsException
-     *             if <tt>aggregates.length != matrix.rows()</tt>.
+     * matrix is left unaffected.</b>
+     * @throws IndexOutOfBoundsException if <tt>aggregates.length != matrix.rows()</tt>.
      */
     public LongMatrix2D sort(LongMatrix2D matrix, final long[] aggregates) {
         int rows = matrix.rows();
@@ -325,7 +316,7 @@ public class LongSorting implements Serializable, Cloneable{
 
         // set up index reordering
         final int[] indexes = new int[rows];
-        for (int i = rows; --i >= 0;)
+        for (int i = rows; --i >= 0; )
             indexes[i] = i;
 
         // compares two aggregates at a time
@@ -370,41 +361,38 @@ public class LongSorting implements Serializable, Cloneable{
      * <table border="1" cellspacing="0">
      * <tr nowrap>
      * <td valign="top"><tt>4 x 2 matrix: <br>
-     7, 6<br>
-     5, 4<br>
-     3, 2<br>
-     1, 0 <br>
-     </tt></td>
+     * 7, 6<br>
+     * 5, 4<br>
+     * 3, 2<br>
+     * 1, 0 <br>
+     * </tt></td>
      * <td align="left" valign="top">
      * <p>
      * <tt>column = 0;<br>
-     view = quickSort(matrix,column);<br>
-     System.out.println(view); </tt><tt><br>
-     ==> </tt>
+     * view = quickSort(matrix,column);<br>
+     * System.out.println(view); </tt><tt><br>
+     * ==> </tt>
      * </p>
      * </td>
      * <td valign="top">
      * <p>
      * <tt>4 x 2 matrix:<br>
-     1, 0<br>
-     3, 2<br>
-     5, 4<br>
-     7, 6</tt><br>
+     * 1, 0<br>
+     * 3, 2<br>
+     * 5, 4<br>
+     * 7, 6</tt><br>
      * The matrix IS NOT SORTED.<br>
      * The new VIEW IS SORTED.
      * </p>
      * </td>
      * </tr>
      * </table>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param column
-     *            the index of the column inducing the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param column the index of the column inducing the order.
      * @return a new matrix view having rows sorted by the given column. <b>Note
-     *         that the original matrix is left unaffected.</b>
-     * @throws IndexOutOfBoundsException
-     *             if <tt>column < 0 || column >= matrix.columns()</tt>.
+     * that the original matrix is left unaffected.</b>
+     * @throws IndexOutOfBoundsException if <tt>column < 0 || column >= matrix.columns()</tt>.
      */
     public LongMatrix2D sort(LongMatrix2D matrix, int column) {
         if (column < 0 || column >= matrix.columns())
@@ -412,7 +400,7 @@ public class LongSorting implements Serializable, Cloneable{
 
         int[] rowIndexes = new int[matrix.rows()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = rowIndexes.length; --i >= 0;)
+        for (int i = rowIndexes.length; --i >= 0; )
             rowIndexes[i] = i;
 
         final LongMatrix1D col = matrix.viewColumn(column);
@@ -441,7 +429,7 @@ public class LongSorting implements Serializable, Cloneable{
      * flip views ...
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * // sort by sum of values in a row
      * LongMatrix1DComparator comp = new LongMatrix1DComparator() {
@@ -453,25 +441,23 @@ public class LongSorting implements Serializable, Cloneable{
      * };
      * sorted = quickSort(matrix, comp);
      * </pre>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param c
-     *            the comparator to determine the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param c      the comparator to determine the order.
      * @return a new matrix view having rows sorted as specified. <b>Note that
-     *         the original matrix is left unaffected.</b>
+     * the original matrix is left unaffected.</b>
      */
     public LongMatrix2D sort(final LongMatrix2D matrix, final LongMatrix1DComparator c) {
         int[] rowIndexes = new int[matrix.rows()]; // row indexes to reorder
         // instead of matrix itself
-        for (int i = rowIndexes.length; --i >= 0;)
+        for (int i = rowIndexes.length; --i >= 0; )
             rowIndexes[i] = i;
 
         final LongMatrix1D[] views = new LongMatrix1D[matrix.rows()]; // precompute
         // views
         // for
         // speed
-        for (int i = views.length; --i >= 0;)
+        for (int i = views.length; --i >= 0; )
             views[i] = matrix.viewRow(i);
 
         IntComparator comp = new IntComparator() {
@@ -505,20 +491,16 @@ public class LongSorting implements Serializable, Cloneable{
      * <li><tt>A == B iff A.get(row,column) == B.get(row,column)</tt>
      * <li><tt>A &gt;  B  iff A.get(row,column) &gt;  B.get(row,column)</tt>
      * </ul>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param row
-     *            the index of the row inducing the order.
-     * @param column
-     *            the index of the column inducing the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param row    the index of the row inducing the order.
+     * @param column the index of the column inducing the order.
      * @return a new matrix view having slices sorted by the values of the slice
-     *         view <tt>matrix.viewRow(row).viewColumn(column)</tt>. <b>Note
-     *         that the original matrix is left unaffected.</b>
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>row < 0 || row >= matrix.rows() || column < 0 || column >= matrix.columns()</tt>
-     *             .
+     * view <tt>matrix.viewRow(row).viewColumn(column)</tt>. <b>Note
+     * that the original matrix is left unaffected.</b>
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>row < 0 || row >= matrix.rows() || column < 0 || column >= matrix.columns()</tt>
+     *                                   .
      */
     public LongMatrix3D sort(LongMatrix3D matrix, int row, int column) {
         if (row < 0 || row >= matrix.rows())
@@ -529,7 +511,7 @@ public class LongSorting implements Serializable, Cloneable{
         int[] sliceIndexes = new int[matrix.slices()]; // indexes to reorder
         // instead of matrix
         // itself
-        for (int i = sliceIndexes.length; --i >= 0;)
+        for (int i = sliceIndexes.length; --i >= 0; )
             sliceIndexes[i] = i;
 
         final LongMatrix1D sliceView = matrix.viewRow(row).viewColumn(column);
@@ -558,7 +540,7 @@ public class LongSorting implements Serializable, Cloneable{
      * descending, use flip views ...
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * // sort by sum of values in a slice
      * LongMatrix2DComparator comp = new LongMatrix2DComparator() {
@@ -570,26 +552,24 @@ public class LongSorting implements Serializable, Cloneable{
      * };
      * sorted = quickSort(matrix, comp);
      * </pre>
-     * 
-     * @param matrix
-     *            the matrix to be sorted.
-     * @param c
-     *            the comparator to determine the order.
+     *
+     * @param matrix the matrix to be sorted.
+     * @param c      the comparator to determine the order.
      * @return a new matrix view having slices sorted as specified. <b>Note that
-     *         the original matrix is left unaffected.</b>
+     * the original matrix is left unaffected.</b>
      */
     public LongMatrix3D sort(final LongMatrix3D matrix, final LongMatrix2DComparator c) {
         int[] sliceIndexes = new int[matrix.slices()]; // indexes to reorder
         // instead of matrix
         // itself
-        for (int i = sliceIndexes.length; --i >= 0;)
+        for (int i = sliceIndexes.length; --i >= 0; )
             sliceIndexes[i] = i;
 
         final LongMatrix2D[] views = new LongMatrix2D[matrix.slices()]; // precompute
         // views
         // for
         // speed
-        for (int i = views.length; --i >= 0;)
+        for (int i = views.length; --i >= 0; )
             views[i] = matrix.viewSlice(i);
 
         IntComparator comp = new IntComparator() {

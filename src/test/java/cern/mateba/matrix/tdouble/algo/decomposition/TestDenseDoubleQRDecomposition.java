@@ -39,10 +39,10 @@ public class TestDenseDoubleQRDecomposition {
                     B2.setQuick(i, j, B1.getQuick(i, j));
                 }
             }
-            
+
             testQR(A1, A2, B1, B2);
         }
-        System.out.println("All finished");       
+        System.out.println("All finished");
         System.exit(0);
     }
 
@@ -59,11 +59,11 @@ public class TestDenseDoubleQRDecomposition {
 
         System.out.print("\n");
         System.out.print("------ DenseDoubleQRFactorization tests-------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", M, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", M, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the orthogonality, factorization and the solution */
@@ -103,7 +103,7 @@ public class TestDenseDoubleQRDecomposition {
 
         System.out.print("============\n");
         System.out.print("Checking the orthogonality of Q \n");
-        System.out.print(String.format("||Id-Q'*Q||_oo / (N*eps) = %e\n", normQ / (M * eps)));
+        System.out.printf("||Id-Q'*Q||_oo / (N*eps) = %e\n", normQ / (M * eps));
 
         if (normQ / (M * eps) > 10.0) {
             System.out.print("-- Orthogonality is suspicious ! \n");
@@ -141,7 +141,7 @@ public class TestDenseDoubleQRDecomposition {
 
         System.out.print("============\n");
         System.out.print("Checking the QR Factorization \n");
-        System.out.print(String.format("-- ||QR-A||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps)));
+        System.out.printf("-- ||QR-A||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps));
 
         if (Rnorm / (Anorm * N * eps) > 10.0) {
             System.out.print("-- Factorization is suspicious ! \n");
@@ -154,7 +154,7 @@ public class TestDenseDoubleQRDecomposition {
     }
 
     /*------------------------------------------------------------------------
-     *  Check the accuracy of the solution of the linear system 
+     *  Check the accuracy of the solution of the linear system
      */
 
     private static int checkSolution(DoubleMatrix2D A1, DoubleMatrix2D B1, DoubleMatrix2D B2, double eps) {
@@ -177,14 +177,14 @@ public class TestDenseDoubleQRDecomposition {
         A1.zMult(B2, B1, alpha, beta, false, false);
 
         DoubleMatrix2D Residual = A1.zMult(B1.viewPart(0, 0, A1.rows(), B1.columns()).copy(), null, alpha, beta, true,
-                false);
+            false);
 
         Rnorm = DenseDoubleAlgebra.DEFAULT.normInfinity(Residual);
 
         System.out.print("============\n");
         System.out.print("Checking the Residual of the solution \n");
-        System.out.print(String.format("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
-                / ((Anorm * Xnorm + Bnorm) * N * eps)));
+        System.out.printf("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
+            / ((Anorm * Xnorm + Bnorm) * N * eps));
 
         if (Rnorm / ((Anorm * Xnorm + Bnorm) * N * eps) > 10.0) {
             System.out.print("-- The solution is suspicious ! \n");

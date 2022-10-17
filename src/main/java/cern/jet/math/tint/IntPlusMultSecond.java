@@ -30,14 +30,14 @@ public final class IntPlusMultSecond implements cern.mateba.function.tint.IntInt
     /**
      * Insert the method's description here. Creation date: (8/10/99 19:12:09)
      */
-    protected IntPlusMultSecond(final int multiplicator) {
+    IntPlusMultSecond(final int multiplicator) {
         this.multiplicator = multiplicator;
     }
 
     /**
      * Returns the result of the function evaluation.
      */
-    public final int apply(int a, int b) {
+    public int apply(int a, int b) {
         return a + b * multiplicator;
     }
 

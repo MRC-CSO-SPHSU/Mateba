@@ -18,7 +18,7 @@ import java.io.Serial;
 /**
  * 1-d matrix holding <tt>complex</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class WrapperDComplexMatrix1D extends DComplexMatrix1D {
@@ -139,7 +139,7 @@ public class WrapperDComplexMatrix1D extends DComplexMatrix1D {
         // check for "all"
         if (indexes == null) {
             indexes = new int[size];
-            for (int i = size; --i >= 0;)
+            for (int i = size; --i >= 0; )
                 indexes[i] = i;
         }
 

@@ -23,7 +23,7 @@ import java.io.Serializable;
  * replacement), no element will occur more than once. Each number from the
  * <tt>N</tt> numbers has the same probability to be included in the <tt>n</tt>
  * chosen numbers.
- * 
+ *
  * <p>
  * <b>Problem:</b> This class solves problems including the following: <i>
  * Suppose we have a file containing 10^12 objects. We would like to take a
@@ -32,7 +32,7 @@ import java.io.Serializable;
  * subset? In particular, how do we avoid multiple equal elements? How do we do
  * this quick and without consuming excessive memory? How do we avoid slowly
  * jumping back and forth within the file? </i>
- * 
+ *
  * <p>
  * <b>Sorted Simple Random Sample Without Replacement (SRSWOR):</b> What are the
  * exact semantics of this class? What is a SRSWOR? In which sense exactly is a
@@ -48,7 +48,7 @@ import java.io.Serializable;
  * <b>Note, however, that the implementation of this class uses a technique
  * orders of magnitudes better (both in time and space) than the one outlined
  * above.</b>
- * 
+ *
  * <p>
  * <b>Performance:</b> Space requirements are zero. Running time is
  * <tt>O(n)</tt> on average, <tt>O(N)</tt> in the worst case.
@@ -97,7 +97,7 @@ import java.io.Serializable;
  * </tr>
  * </table>
  * </center>
- * 
+ *
  * <p>
  * <b>Scalability:</b> This random sampler is designed to be scalable. In
  * iterator style, it is able to compute and deliver sorted random sets stepwise
@@ -109,7 +109,7 @@ import java.io.Serializable;
  * among blocks.) A block can be computed and retrieved with method
  * <tt>nextBlock</tt>. Successive calls to method <tt>nextBlock</tt> will
  * deliver as many random numbers as required.
- * 
+ *
  * <p>
  * Computing and retrieving samples in blocks is useful if you need very many
  * random numbers that cannot be stored in main memory at the same time. For
@@ -120,12 +120,12 @@ import java.io.Serializable;
  * next 500 elements into the block, process them, and so on. If you have the
  * time and need, by using such blocks you can compute random sets up to
  * <tt>n=10^19</tt> random numbers.
- * 
+ *
  * <p>
  * If you do not need the block feature, you can also directly call the static
  * methods of this class without needing to construct a <tt>RandomSampler</tt>
  * instance first.
- * 
+ *
  * <p>
  * <b>Random number generation:</b> By default uses <tt>MersenneTwister</tt>, a
  * very strong random number generator, much better than
@@ -133,15 +133,15 @@ import java.io.Serializable;
  * generators of Paul Houle's RngPack package. For example, <tt>Ranecu</tt>,
  * <tt>Ranmar</tt> and <tt>Ranlux</tt> are strong well analyzed research grade
  * pseudo-random number generators with known periods.
- * 
+ *
  * <p>
  * <b>Implementation:</b> after J.S. Vitter, An Efficient Algorithm for
  * Sequential Random Sampling, ACM Transactions on Mathematical Software, Vol
  * 13, 1987. Paper available <A HREF="http://www.cs.duke.edu/~jsv"> here</A>.
- * 
- * @see RandomSamplingAssistant
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.1 05/26/99
+ * @see RandomSamplingAssistant
  */
 public class RandomSampler implements Serializable, Cloneable {
 
@@ -159,25 +159,22 @@ public class RandomSampler implements Serializable, Cloneable {
 
     // static long negalphainv; // just to determine once and for all the best
     // value for negalphainv
+
     /**
      * Constructs a random sampler that computes and delivers sorted random sets
      * in blocks. A set block can be retrieved with method <tt>nextBlock</tt>.
      * Successive calls to method <tt>nextBlock</tt> will deliver as many random
      * numbers as required.
-     * 
-     * @param n
-     *            the total number of elements to choose (must be
-     *            <tt>n &gt;= 0</tt> and <tt>n &lt;= N</tt>).
-     * @param N
-     *            the interval to choose random numbers from is
-     *            <tt>[low,low+N-1]</tt>.
-     * @param low
-     *            the interval to choose random numbers from is
-     *            <tt>[low,low+N-1]</tt>. Hint: If <tt>low==0</tt>, then random
-     *            numbers will be drawn from the interval <tt>[0,N-1]</tt>.
-     * @param randomGenerator
-     *            a random number generator. Set this parameter to <tt>null</tt>
-     *            to use the default random number generator.
+     *
+     * @param n               the total number of elements to choose (must be
+     *                        <tt>n &gt;= 0</tt> and <tt>n &lt;= N</tt>).
+     * @param N               the interval to choose random numbers from is
+     *                        <tt>[low,low+N-1]</tt>.
+     * @param low             the interval to choose random numbers from is
+     *                        <tt>[low,low+N-1]</tt>. Hint: If <tt>low==0</tt>, then random
+     *                        numbers will be drawn from the interval <tt>[0,N-1]</tt>.
+     * @param randomGenerator a random number generator. Set this parameter to <tt>null</tt>
+     *                        to use the default random number generator.
      */
     public RandomSampler(long n, long N, long low, RandomEngine randomGenerator) {
         if (n < 0)
@@ -226,21 +223,18 @@ public class RandomSampler implements Serializable, Cloneable {
      * Computes the next <tt>count</tt> random numbers of the sorted random set
      * specified on instance construction and fills them into <tt>values</tt>,
      * starting at index <tt>fromIndex</tt>.
-     * 
+     *
      * <p>
      * Numbers are filled into the specified array starting at index
      * <tt>fromIndex</tt> to the right. The array is returned sorted ascending
      * in the range filled with numbers.
-     * 
-     * @param count
-     *            the number of elements to be filled into <tt>values</tt> by
-     *            this call (must be &gt;= 0).
-     * @param values
-     *            the array into which the random numbers are to be filled; must
-     *            have a length <tt>&gt;= count+fromIndex</tt>.
-     * @param fromIndex
-     *            the first index within <tt>values</tt> to be filled with
-     *            numbers (inclusive).
+     *
+     * @param count     the number of elements to be filled into <tt>values</tt> by
+     *                  this call (must be &gt;= 0).
+     * @param values    the array into which the random numbers are to be filled; must
+     *                  have a length <tt>&gt;= count+fromIndex</tt>.
+     * @param fromIndex the first index within <tt>values</tt> to be filled with
+     *                  numbers (inclusive).
      */
     public void nextBlock(int count, long[] values, int fromIndex) {
         if (count > my_n)
@@ -263,40 +257,33 @@ public class RandomSampler implements Serializable, Cloneable {
      * Efficiently computes a sorted random set of <tt>count</tt> elements from
      * the interval <tt>[low,low+N-1]</tt>. Since we are talking about a random
      * set, no element will occur more than once.
-     * 
+     *
      * <p>
      * Running time is <tt>O(count)</tt>, on average. Space requirements are
      * zero.
-     * 
+     *
      * <p>
      * Numbers are filled into the specified array starting at index
      * <tt>fromIndex</tt> to the right. The array is returned sorted ascending
      * in the range filled with numbers.
-     * 
-     * @param n
-     *            the total number of elements to choose (must be &gt;= 0).
-     * @param N
-     *            the interval to choose random numbers from is
-     *            <tt>[low,low+N-1]</tt>.
-     * @param count
-     *            the number of elements to be filled into <tt>values</tt> by
-     *            this call (must be &gt;= 0 and &lt;=<tt>n</tt>). Normally, you
-     *            will set <tt>count=n</tt>.
-     * @param low
-     *            the interval to choose random numbers from is
-     *            <tt>[low,low+N-1]</tt>. Hint: If <tt>low==0</tt>, then draws
-     *            random numbers from the interval <tt>[0,N-1]</tt>.
-     * @param values
-     *            the array into which the random numbers are to be filled; must
-     *            have a length <tt>&gt;= count+fromIndex</tt>.
-     * @param fromIndex
-     *            the first index within <tt>values</tt> to be filled with
-     *            numbers (inclusive).
-     * @param randomGenerator
-     *            a random number generator.
+     *
+     * @param n               the total number of elements to choose (must be &gt;= 0).
+     * @param N               the interval to choose random numbers from is
+     *                        <tt>[low,low+N-1]</tt>.
+     * @param count           the number of elements to be filled into <tt>values</tt> by
+     *                        this call (must be &gt;= 0 and &lt;=<tt>n</tt>). Normally, you
+     *                        will set <tt>count=n</tt>.
+     * @param low             the interval to choose random numbers from is
+     *                        <tt>[low,low+N-1]</tt>. Hint: If <tt>low==0</tt>, then draws
+     *                        random numbers from the interval <tt>[0,N-1]</tt>.
+     * @param values          the array into which the random numbers are to be filled; must
+     *                        have a length <tt>&gt;= count+fromIndex</tt>.
+     * @param fromIndex       the first index within <tt>values</tt> to be filled with
+     *                        numbers (inclusive).
+     * @param randomGenerator a random number generator.
      */
     protected static void rejectMethodD(long n, long N, int count, long low, long[] values, int fromIndex,
-            RandomEngine randomGenerator) {
+                                        RandomEngine randomGenerator) {
         /*
          * This algorithm is applicable if a large percentage (90%..100%) of N
          * shall be sampled. In such cases it is more efficient than
@@ -304,7 +291,7 @@ public class RandomSampler implements Serializable, Cloneable {
          * efficient to express sample(n,N,count) in terms of
          * reject(N-n,N,count) and then invert the result. For example, sampling
          * 99% turns into sampling 1% plus inversion.
-         * 
+         *
          * This algorithm is the same as method sampleMethodD(...) with the
          * exception that sampled elements are rejected, and not sampled
          * elements included in the result set.
@@ -331,8 +318,8 @@ public class RandomSampler implements Serializable, Cloneable {
 
         while (n > 1 && count > 0) { // && threshold<N) {
             nmin1inv = 1.0 / (-1.0 + nreal);
-            for (;;) {
-                for (;;) { // step D2: generate U and X
+            for (; ; ) {
+                for (; ; ) { // step D2: generate U and X
                     X = Nreal * (-Vprime + 1.0);
                     S = (long) X;
                     if (S < qu1)
@@ -377,8 +364,9 @@ public class RandomSampler implements Serializable, Cloneable {
                 iter = (int) S;
 
             count -= iter;
-            for (; --iter >= 0;)
+            while (--iter >= 0) {
                 values[fromIndex++] = ++chosen;
+            }
             chosen++;
 
             N -= S + 1;
@@ -400,14 +388,16 @@ public class RandomSampler implements Serializable, Cloneable {
                 iter = (int) S;
 
             count -= iter;
-            for (; --iter >= 0;)
+            while (--iter >= 0) {
                 values[fromIndex++] = ++chosen;
+            }
 
             chosen++;
 
             // fill the rest
-            for (; --count >= 0;)
+            while (--count >= 0) {
                 values[fromIndex++] = ++chosen;
+            }
         }
     }
 
@@ -415,16 +405,16 @@ public class RandomSampler implements Serializable, Cloneable {
      * Efficiently computes a sorted random set of <tt>count</tt> elements from
      * the interval <tt>[low,low+N-1]</tt>. Since we are talking about a random
      * set, no element will occur more than once.
-     * 
+     *
      * <p>
      * Running time is <tt>O(count)</tt>, on average. Space requirements are
      * zero.
-     * 
+     *
      * <p>
      * Numbers are filled into the specified array starting at index
      * <tt>fromIndex</tt> to the right. The array is returned sorted ascending
      * in the range filled with numbers.
-     * 
+     *
      * <p>
      * <b>Random number generation:</b> By default uses <tt>MersenneTwister</tt>
      * , a very strong random number generator, much better than
@@ -432,33 +422,26 @@ public class RandomSampler implements Serializable, Cloneable {
      * generators of Paul Houle's RngPack package. For example, <tt>Ranecu</tt>,
      * <tt>Ranmar</tt> and <tt>Ranlux</tt> are strong well analyzed research
      * grade pseudo-random number generators with known periods.
-     * 
-     * @param n
-     *            the total number of elements to choose (must be
-     *            <tt>n &gt;= 0</tt> and <tt>n &lt;= N</tt>).
-     * @param N
-     *            the interval to choose random numbers from is
-     *            <tt>[low,low+N-1]</tt>.
-     * @param count
-     *            the number of elements to be filled into <tt>values</tt> by
-     *            this call (must be &gt;= 0 and &lt;=<tt>n</tt>). Normally, you
-     *            will set <tt>count=n</tt>.
-     * @param low
-     *            the interval to choose random numbers from is
-     *            <tt>[low,low+N-1]</tt>. Hint: If <tt>low==0</tt>, then draws
-     *            random numbers from the interval <tt>[0,N-1]</tt>.
-     * @param values
-     *            the array into which the random numbers are to be filled; must
-     *            have a length <tt>&gt;= count+fromIndex</tt>.
-     * @param fromIndex
-     *            the first index within <tt>values</tt> to be filled with
-     *            numbers (inclusive).
-     * @param randomGenerator
-     *            a random number generator. Set this parameter to <tt>null</tt>
-     *            to use the default random number generator.
+     *
+     * @param n               the total number of elements to choose (must be
+     *                        <tt>n &gt;= 0</tt> and <tt>n &lt;= N</tt>).
+     * @param N               the interval to choose random numbers from is
+     *                        <tt>[low,low+N-1]</tt>.
+     * @param count           the number of elements to be filled into <tt>values</tt> by
+     *                        this call (must be &gt;= 0 and &lt;=<tt>n</tt>). Normally, you
+     *                        will set <tt>count=n</tt>.
+     * @param low             the interval to choose random numbers from is
+     *                        <tt>[low,low+N-1]</tt>. Hint: If <tt>low==0</tt>, then draws
+     *                        random numbers from the interval <tt>[0,N-1]</tt>.
+     * @param values          the array into which the random numbers are to be filled; must
+     *                        have a length <tt>&gt;= count+fromIndex</tt>.
+     * @param fromIndex       the first index within <tt>values</tt> to be filled with
+     *                        numbers (inclusive).
+     * @param randomGenerator a random number generator. Set this parameter to <tt>null</tt>
+     *                        to use the default random number generator.
      */
     public static void sample(long n, long N, int count, long low, long[] values, int fromIndex,
-            RandomEngine randomGenerator) {
+                              RandomEngine randomGenerator) {
         if (n <= 0 || count <= 0)
             return;
         if (count > n)
@@ -469,7 +452,7 @@ public class RandomSampler implements Serializable, Cloneable {
         if (count == N) { // rare case treated quickly
             long val = low;
             int limit = fromIndex + count;
-            for (int i = fromIndex; i < limit;)
+            for (int i = fromIndex; i < limit; )
                 values[i++] = val++;
             return;
         }
@@ -486,39 +469,32 @@ public class RandomSampler implements Serializable, Cloneable {
      * Computes a sorted random set of <tt>count</tt> elements from the interval
      * <tt>[low,low+N-1]</tt>. Since we are talking about a random set, no
      * element will occur more than once.
-     * 
+     *
      * <p>
      * Running time is <tt>O(N)</tt>, on average. Space requirements are zero.
-     * 
+     *
      * <p>
      * Numbers are filled into the specified array starting at index
      * <tt>fromIndex</tt> to the right. The array is returned sorted ascending
      * in the range filled with numbers.
-     * 
-     * @param n
-     *            the total number of elements to choose (must be &gt;= 0).
-     * @param N
-     *            the interval to choose random numbers from is
-     *            <tt>[low,low+N-1]</tt>.
-     * @param count
-     *            the number of elements to be filled into <tt>values</tt> by
-     *            this call (must be &gt;= 0 and &lt;=<tt>n</tt>). Normally, you
-     *            will set <tt>count=n</tt>.
-     * @param low
-     *            the interval to choose random numbers from is
-     *            <tt>[low,low+N-1]</tt>. Hint: If <tt>low==0</tt>, then draws
-     *            random numbers from the interval <tt>[0,N-1]</tt>.
-     * @param values
-     *            the array into which the random numbers are to be filled; must
-     *            have a length <tt>&gt;= count+fromIndex</tt>.
-     * @param fromIndex
-     *            the first index within <tt>values</tt> to be filled with
-     *            numbers (inclusive).
-     * @param randomGenerator
-     *            a random number generator.
+     *
+     * @param n               the total number of elements to choose (must be &gt;= 0).
+     * @param N               the interval to choose random numbers from is
+     *                        <tt>[low,low+N-1]</tt>.
+     * @param count           the number of elements to be filled into <tt>values</tt> by
+     *                        this call (must be &gt;= 0 and &lt;=<tt>n</tt>). Normally, you
+     *                        will set <tt>count=n</tt>.
+     * @param low             the interval to choose random numbers from is
+     *                        <tt>[low,low+N-1]</tt>. Hint: If <tt>low==0</tt>, then draws
+     *                        random numbers from the interval <tt>[0,N-1]</tt>.
+     * @param values          the array into which the random numbers are to be filled; must
+     *                        have a length <tt>&gt;= count+fromIndex</tt>.
+     * @param fromIndex       the first index within <tt>values</tt> to be filled with
+     *                        numbers (inclusive).
+     * @param randomGenerator a random number generator.
      */
     protected static void sampleMethodA(long n, long N, int count, long low, long[] values, int fromIndex,
-            RandomEngine randomGenerator) {
+                                        RandomEngine randomGenerator) {
         double V, quot, Nreal, top;
         long S;
         long chosen = -1 + low;
@@ -554,40 +530,33 @@ public class RandomSampler implements Serializable, Cloneable {
      * Efficiently computes a sorted random set of <tt>count</tt> elements from
      * the interval <tt>[low,low+N-1]</tt>. Since we are talking about a random
      * set, no element will occur more than once.
-     * 
+     *
      * <p>
      * Running time is <tt>O(count)</tt>, on average. Space requirements are
      * zero.
-     * 
+     *
      * <p>
      * Numbers are filled into the specified array starting at index
      * <tt>fromIndex</tt> to the right. The array is returned sorted ascending
      * in the range filled with numbers.
-     * 
-     * @param n
-     *            the total number of elements to choose (must be &gt;= 0).
-     * @param N
-     *            the interval to choose random numbers from is
-     *            <tt>[low,low+N-1]</tt>.
-     * @param count
-     *            the number of elements to be filled into <tt>values</tt> by
-     *            this call (must be &gt;= 0 and &lt;=<tt>n</tt>). Normally, you
-     *            will set <tt>count=n</tt>.
-     * @param low
-     *            the interval to choose random numbers from is
-     *            <tt>[low,low+N-1]</tt>. Hint: If <tt>low==0</tt>, then draws
-     *            random numbers from the interval <tt>[0,N-1]</tt>.
-     * @param values
-     *            the array into which the random numbers are to be filled; must
-     *            have a length <tt>&gt;= count+fromIndex</tt>.
-     * @param fromIndex
-     *            the first index within <tt>values</tt> to be filled with
-     *            numbers (inclusive).
-     * @param randomGenerator
-     *            a random number generator.
+     *
+     * @param n               the total number of elements to choose (must be &gt;= 0).
+     * @param N               the interval to choose random numbers from is
+     *                        <tt>[low,low+N-1]</tt>.
+     * @param count           the number of elements to be filled into <tt>values</tt> by
+     *                        this call (must be &gt;= 0 and &lt;=<tt>n</tt>). Normally, you
+     *                        will set <tt>count=n</tt>.
+     * @param low             the interval to choose random numbers from is
+     *                        <tt>[low,low+N-1]</tt>. Hint: If <tt>low==0</tt>, then draws
+     *                        random numbers from the interval <tt>[0,N-1]</tt>.
+     * @param values          the array into which the random numbers are to be filled; must
+     *                        have a length <tt>&gt;= count+fromIndex</tt>.
+     * @param fromIndex       the first index within <tt>values</tt> to be filled with
+     *                        numbers (inclusive).
+     * @param randomGenerator a random number generator.
      */
     protected static void sampleMethodD(long n, long N, int count, long low, long[] values, int fromIndex,
-            RandomEngine randomGenerator) {
+                                        RandomEngine randomGenerator) {
         double nreal, Nreal, ninv, nmin1inv, U, X, Vprime, y1, y2, top, bottom, negSreal, qu1real;
         long qu1, threshold, t, limit;
         long S;
@@ -607,8 +576,8 @@ public class RandomSampler implements Serializable, Cloneable {
 
         while (n > 1 && count > 0 && threshold < N) {
             nmin1inv = 1.0 / (-1.0 + nreal);
-            for (;;) {
-                for (;;) { // step D2: generate U and X
+            for (; ; ) {
+                for (; ; ) { // step D2: generate U and X
                     X = Nreal * (-Vprime + 1.0);
                     S = (long) X;
                     if (S < qu1)
@@ -687,9 +656,9 @@ public class RandomSampler implements Serializable, Cloneable {
         long chunks = n / chunkSize;
 
         cern.mateba.Timer timer = new cern.mateba.Timer().start();
-        for (long t = times; --t >= 0;) {
+        for (long t = times; --t >= 0; ) {
             RandomSampler sampler = new RandomSampler(n, N, low,
-                    AbstractDistribution.makeDefaultGenerator());
+                AbstractDistribution.makeDefaultGenerator());
             for (long i = 0; i < chunks; i++) {
                 sampler.nextBlock(chunkSize, values, 0);
 
@@ -724,27 +693,27 @@ public class RandomSampler implements Serializable, Cloneable {
      * recommendation for negalphainv=-13 is also good in the JDK 1.2
      * environment.
      */
-    protected static void testNegAlphaInv(String args[]) {
+    protected static void testNegAlphaInv(String[] args) {
         /*
          * long N = Long.parseLong(args[0]); int chunkSize =
          * Integer.parseInt(args[1]);
-         * 
+         *
          * long[] alphas = {-104, -52, -26, -13, -8, -4, -2}; for (int i=0; i<alphas.length;
          * i++) { negalphainv = alphas[i];
          * System.out.println("\n\nnegalphainv="+negalphainv);
-         * 
+         *
          * System.out.print(" n="+N/80+" --> "); test(N/80,N,0,chunkSize);
-         * 
+         *
          * System.out.print(" n="+N/40+" --> "); test(N/40,N,0,chunkSize);
-         * 
+         *
          * System.out.print(" n="+N/20+" --> "); test(N/20,N,0,chunkSize);
-         * 
+         *
          * System.out.print(" n="+N/10+" --> "); test(N/10,N,0,chunkSize);
-         * 
+         *
          * System.out.print(" n="+N/5+" --> "); test(N/5,N,0,chunkSize);
-         * 
+         *
          * System.out.print(" n="+N/2+" --> "); test(N/2,N,0,chunkSize);
-         * 
+         *
          * System.out.print(" n="+(N-3)+" --> "); test(N-3,N,0,chunkSize); }
          */
     }

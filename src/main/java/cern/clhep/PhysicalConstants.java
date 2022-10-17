@@ -21,7 +21,7 @@ public final class PhysicalConstants {
      * PhysicalConstants.c_light;
      * PhysicalConstants.h_Planck;
      * </pre>
-     *
+     * <p>
      * Since this class has only static methods, but no instance methods you can also shorten the name
      * "PhysicalConstants" to a name that better suits you, for example "P".
      *
@@ -54,7 +54,6 @@ public final class PhysicalConstants {
     public static final double amu = amu_c2 / c_squared;
 
 
-
     public static final double electron_charge = -Units.eplus;
     public static final double e_squared = Units.eplus * Units.eplus;
 
@@ -83,7 +82,7 @@ public final class PhysicalConstants {
 
     public static final double universe_mean_density = 1.e-25 * Units.g / Units.cm3;
 
-    private PhysicalConstants(){
+    private PhysicalConstants() {
         throw new AssertionError("Do not instantiate.");
     }
 }

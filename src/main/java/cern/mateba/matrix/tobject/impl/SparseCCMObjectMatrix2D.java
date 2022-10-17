@@ -15,28 +15,24 @@ import java.io.Serial;
 /**
  * Sparse column-compressed-modified 2-d matrix holding <tt>Object</tt> elements.
  * Each column is stored as SparseObjectMatrix1D.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class SparseCCMObjectMatrix2D extends WrapperObjectMatrix2D {
 
     @Serial
     private static final long serialVersionUID = -4140568062932591807L;
-    private SparseObjectMatrix1D[] elements;
+    private final SparseObjectMatrix1D[] elements;
 
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public SparseCCMObjectMatrix2D(int rows, int columns) {
         super(null);

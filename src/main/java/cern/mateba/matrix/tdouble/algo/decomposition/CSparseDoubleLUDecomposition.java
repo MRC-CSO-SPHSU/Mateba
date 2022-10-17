@@ -18,12 +18,12 @@ import edu.emory.mathcs.csparsej.tdouble.Dcs_common.Dcss;
 
 /**
  * LU decomposition implemented using CSparseJ.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class CSparseDoubleLUDecomposition implements SparseDoubleLUDecomposition {
-    private Dcss S;
-    private Dcsn N;
+    private final Dcss S;
+    private final Dcsn N;
     private DoubleMatrix2D L;
     private DoubleMatrix2D U;
     private boolean rcMatrix = false;
@@ -31,25 +31,20 @@ public class CSparseDoubleLUDecomposition implements SparseDoubleLUDecomposition
     /**
      * Row and column dimension (square matrix).
      */
-    private int n;
+    private final int n;
 
     /**
      * Constructs and returns a new LU Decomposition object; The decomposed
      * matrices can be retrieved via instance methods of the returned
      * decomposition object.
-     * 
-     * @param A
-     *            Square matrix
-     * @param order
-     *            ordering option (0 to 3); 0: natural ordering, 1: amd(A+A'),
-     *            2: amd(S'*S), 3: amd(A'*A)
-     * @param checkIfSingular
-     *            if true, then the singularity test (based on
-     *            Dulmage-Mendelsohn decomposition) is performed.
-     * @throws IllegalArgumentException
-     *             if <tt>A</tt> is not square or is not sparse.
-     * @throws IllegalArgumentException
-     *             if <tt>order</tt> is not in [0,3]
+     *
+     * @param A               Square matrix
+     * @param order           ordering option (0 to 3); 0: natural ordering, 1: amd(A+A'),
+     *                        2: amd(S'*S), 3: amd(A'*A)
+     * @param checkIfSingular if true, then the singularity test (based on
+     *                        Dulmage-Mendelsohn decomposition) is performed.
+     * @throws IllegalArgumentException if <tt>A</tt> is not square or is not sparse.
+     * @throws IllegalArgumentException if <tt>order</tt> is not in [0,3]
      */
     public CSparseDoubleLUDecomposition(DoubleMatrix2D A, int order, boolean checkIfSingular) {
         DoubleProperty.DEFAULT.checkSquare(A);
@@ -84,8 +79,8 @@ public class CSparseDoubleLUDecomposition implements SparseDoubleLUDecomposition
     }
 
     /* (non-Javadoc)
-	 * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#det()
-	 */
+     * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#det()
+     */
     public double det() {
         if (!isNonsingular())
             return 0; // avoid rounding errors
@@ -109,8 +104,8 @@ public class CSparseDoubleLUDecomposition implements SparseDoubleLUDecomposition
     }
 
     /* (non-Javadoc)
-	 * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#getL()
-	 */
+     * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#getL()
+     */
     public DoubleMatrix2D getL() {
         if (L == null) {
             L = new SparseCCDoubleMatrix2D(N.L);
@@ -122,8 +117,8 @@ public class CSparseDoubleLUDecomposition implements SparseDoubleLUDecomposition
     }
 
     /* (non-Javadoc)
-	 * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#getPivot()
-	 */
+     * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#getPivot()
+     */
     public int[] getPivot() {
         if (N.pinv == null)
             return null;
@@ -133,8 +128,8 @@ public class CSparseDoubleLUDecomposition implements SparseDoubleLUDecomposition
     }
 
     /* (non-Javadoc)
-	 * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#getU()
-	 */
+     * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#getU()
+     */
     public DoubleMatrix2D getU() {
         if (U == null) {
             U = new SparseCCDoubleMatrix2D(N.U);
@@ -146,8 +141,8 @@ public class CSparseDoubleLUDecomposition implements SparseDoubleLUDecomposition
     }
 
     /* (non-Javadoc)
-	 * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#getSymbolicAnalysis()
-	 */
+     * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#getSymbolicAnalysis()
+     */
     public Dcss getSymbolicAnalysis() {
         Dcss S2 = new Dcss();
         S2.cp = S.cp != null ? S.cp.clone() : null;
@@ -162,15 +157,15 @@ public class CSparseDoubleLUDecomposition implements SparseDoubleLUDecomposition
     }
 
     /* (non-Javadoc)
-	 * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#isNonsingular()
-	 */
+     * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#isNonsingular()
+     */
     public boolean isNonsingular() {
         return isNonSingular;
     }
 
     /* (non-Javadoc)
-	 * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#solve(cern.mateba.matrix.tdouble.DoubleMatrix1D)
-	 */
+     * @see cern.mateba.matrix.tdouble.algo.decomposition.SparseDoubleLUDecomposition#solve(cern.mateba.matrix.tdouble.DoubleMatrix1D)
+     */
     public void solve(DoubleMatrix1D b) {
         if (b.size() != n) {
             throw new IllegalArgumentException("b.size() != A.rows()");

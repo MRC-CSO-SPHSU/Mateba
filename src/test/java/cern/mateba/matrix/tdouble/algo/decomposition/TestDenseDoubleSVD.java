@@ -48,15 +48,15 @@ public class TestDenseDoubleSVD {
         DoubleMatrix2D S = svd.getS();
         DoubleMatrix2D V = svd.getV();
         DoubleMatrix2D U = svd.getU();
-        System.out.println(svd.toString());
+        System.out.println(svd);
 
         System.out.print("\n");
         System.out.print("------ DenseDoubleSingularValueDecomposition tests-------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", M, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", M, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the factorization */
@@ -75,7 +75,7 @@ public class TestDenseDoubleSVD {
     }
 
     private static int checkFactorization(DoubleMatrix2D A1, DoubleMatrix2D U, DoubleMatrix2D S, DoubleMatrix2D V,
-            double eps) {
+                                          double eps) {
         DoubleProperty.DEFAULT.checkDense(A1);
         DoubleProperty.DEFAULT.checkDense(U);
         DoubleProperty.DEFAULT.checkDense(V);
@@ -103,7 +103,7 @@ public class TestDenseDoubleSVD {
 
         System.out.print("============\n");
         System.out.print("Checking the SVD Factorization \n");
-        System.out.print(String.format("-- ||USV'-A||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps)));
+        System.out.printf("-- ||USV'-A||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps));
 
         if (Rnorm / (Anorm * N * eps) > 10.0) {
             System.out.print("-- Factorization is suspicious ! \n");

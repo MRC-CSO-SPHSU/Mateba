@@ -37,12 +37,11 @@ import edu.emory.mathcs.jplasma.tdouble.Dplasma;
 
 /**
  * Test of plasma_DGESV
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DgesvTest {
-    
+
     public static void main(String[] args) {
         int n = 10;
         for (int i = 0; i < n; i++) {
@@ -55,7 +54,7 @@ public class DgesvTest {
         /* Check for valid arguments*/
         if (args.length != 4) {
             System.out
-                    .print(" Proper Usage is : java edu.emory.mathcs.jplasma.test.DgesvTest N LDA NRHS LDB with \n - N : the size of the matrix \n - LDA : leading dimension of the matrix A \n - NRHS : number of RHS \n - LDB : leading dimension of the matrix B \n");
+                .print(" Proper Usage is : java edu.emory.mathcs.jplasma.test.DgesvTest N LDA NRHS LDB with \n - N : the size of the matrix \n - LDA : leading dimension of the matrix A \n - NRHS : number of RHS \n - LDB : leading dimension of the matrix B \n");
             System.exit(1);
         }
 
@@ -73,8 +72,8 @@ public class DgesvTest {
         double[] B2 = new double[LDB * NRHS];
 
         /*----------------------------------------------------------
-        *  TESTING DGESV
-        */
+         *  TESTING DGESV
+         */
 
         /*Plasma Initialize*/
         Dplasma.plasma_Init(N, N, NRHS);
@@ -83,7 +82,6 @@ public class DgesvTest {
         for (i = 0; i < N; i++)
             for (j = 0; j < N; j++)
                 A1[LDA * j + i] = A2[LDA * j + i] = 0.5 - Math.random();
-        ;
 
         /* Initialize B1 and B2 */
         for (i = 0; i < N; i++)
@@ -99,11 +97,11 @@ public class DgesvTest {
         eps = 1e-10;
         System.out.print("\n");
         System.out.print("------ TESTS FOR PLASMA DGESV ROUTINE -------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", N, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", N, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the factorization and the solution */
@@ -120,8 +118,8 @@ public class DgesvTest {
         }
 
         /*-------------------------------------------------------------
-        *  TESTING DGETRF + DGETRS
-        */
+         *  TESTING DGETRF + DGETRS
+         */
 
         /* Initialize A1 and A2  */
         for (i = 0; i < N; i++)
@@ -145,11 +143,11 @@ public class DgesvTest {
 
         System.out.print("\n");
         System.out.print("------ TESTS FOR PLASMA DGETRF + DGETRS ROUTINE -------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", N, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", N, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the solution */
@@ -166,8 +164,8 @@ public class DgesvTest {
         }
 
         /*-------------------------------------------------------------
-        *  TESTING DGETRF + DTRSMPL + DTRSM
-        */
+         *  TESTING DGETRF + DTRSMPL + DTRSM
+         */
 
         /* Initialize A1 and A2  */
         for (i = 0; i < N; i++)
@@ -190,16 +188,16 @@ public class DgesvTest {
         Dplasma.plasma_Finalize();
         Dplasma.plasma_Init(N, N, NRHS);
         Dplasma.plasma_DTRSM(Dplasma.PlasmaLeft, Dplasma.PlasmaUpper, Dplasma.PlasmaNoTrans, Dplasma.PlasmaNonUnit, N,
-                NRHS, A2, 0, LDA, B2, 0, LDB);
+            NRHS, A2, 0, LDA, B2, 0, LDB);
         Dplasma.plasma_Finalize();
 
         System.out.print("\n");
         System.out.print("------ TESTS FOR PLASMA DGETRF + DTRSMPL + DTRSM  ROUTINE -------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", N, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", N, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the solution */
@@ -217,11 +215,11 @@ public class DgesvTest {
     }
 
     /*------------------------------------------------------------------------
-     *  Check the accuracy of the solution of the linear system 
+     *  Check the accuracy of the solution of the linear system
      */
 
     private static int check_solution(int N, int NRHS, double[] A1, int LDA, double[] B1, double[] B2, int LDB,
-            double eps) {
+                                      double eps) {
         int info_solution;
         double Rnorm, Anorm, Xnorm, Bnorm;
         String norm = "I";
@@ -240,8 +238,8 @@ public class DgesvTest {
 
         System.out.print("============\n");
         System.out.print("Checking the Residual of the solution \n");
-        System.out.print(String.format("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
-                / ((Anorm * Xnorm + Bnorm) * N * eps)));
+        System.out.printf("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
+            / ((Anorm * Xnorm + Bnorm) * N * eps));
 
         if (Rnorm / ((Anorm * Xnorm + Bnorm) * N * eps) > 10.0) {
             System.out.print("-- The solution is suspicious ! \n");

@@ -56,7 +56,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * properly (i.e. upwards), each write is done much quicker:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  * // rather quick
  * matrix.assign(0);
@@ -66,7 +66,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *             matrix.setQuick(row, column, someValue);
  *     }
  * }
- * 
+ *
  * // poor
  * matrix.assign(0);
  * for (int row = rows; --row &gt;= 0;) {
@@ -76,7 +76,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ *
  * </td>
  * </table>
  * If for whatever reasons you can't iterate properly, consider to create an
@@ -90,7 +90,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * quite efficient user-level matrix-vector multiplication could look like:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  * // Linear algebraic y = A * x
  * A.forEachNonZero(new cern.mateba.function.IntIntLongFunction() {
@@ -100,7 +100,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * });
  * </pre>
- * 
+ *
  * </td>
  * </table>
  * <p>
@@ -108,7 +108,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * look like:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  * // Elementwise A = A + alpha*B
  * B.forEachNonZero(new cern.mateba.function.IntIntLongFunction() {
@@ -118,15 +118,14 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * });
  * </pre>
- * 
+ *
  * </td>
  * </table>
  * Method
- * {@link #assign(LongMatrix2D,cern.mateba.function.tlong.LongLongFunction)} does
+ * {@link #assign(LongMatrix2D, cern.mateba.function.tlong.LongLongFunction)} does
  * just that if you supply
  * {@link cern.jet.math.tlong.LongFunctions#plusMultSecond} as argument.
- * 
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 0.9, 04/14/2000
  */
@@ -164,13 +163,11 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public SparseRCLongMatrix2D(long[][] values) {
         this(values.length, values.length == 0 ? 0 : values[0].length);
@@ -180,34 +177,27 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public SparseRCLongMatrix2D(int rows, int columns) {
-        this(rows, columns, (int) Math.min(10l * rows, Integer.MAX_VALUE));
+        this(rows, columns, (int) Math.min(10L * rows, Integer.MAX_VALUE));
     }
 
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param nzmax
-     *            maximum number of nonzero elements
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @param nzmax   maximum number of nonzero elements
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public SparseRCLongMatrix2D(int rows, int columns, int nzmax) {
         super(null);
@@ -225,24 +215,17 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
     /**
      * Constructs a matrix with indexes given in the coordinate format and
      * single value.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowIndexes
-     *            row indexes
-     * @param columnIndexes
-     *            column indexes
-     * @param value
-     *            numerical value, cannot be zero
-     * @param removeDuplicates
-     *            if true, then duplicates (if any) are removed
-     * @param sortColumnIndexes
-     *            if true, then column indexes are sorted
+     *
+     * @param rows              the number of rows the matrix shall have.
+     * @param columns           the number of columns the matrix shall have.
+     * @param rowIndexes        row indexes
+     * @param columnIndexes     column indexes
+     * @param value             numerical value, cannot be zero
+     * @param removeDuplicates  if true, then duplicates (if any) are removed
+     * @param sortColumnIndexes if true, then column indexes are sorted
      */
     public SparseRCLongMatrix2D(int rows, int columns, int[] rowIndexes, int[] columnIndexes, long value,
-            boolean removeDuplicates, boolean sortColumnIndexes) {
+                                boolean removeDuplicates, boolean sortColumnIndexes) {
         super(null);
         try {
             setUp(rows, columns);
@@ -282,26 +265,18 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
     /**
      * Constructs a matrix with indexes and values given in the coordinate
      * format.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowIndexes
-     *            row indexes
-     * @param columnIndexes
-     *            column indexes
-     * @param values
-     *            numerical values
-     * @param removeDuplicates
-     *            if true, then duplicates (if any) are removed
-     * @param removeZeroes
-     *            if true, then zeroes (if any) are removed
-     * @param sortColumnIndexes
-     *            if true, then column indexes are sorted
+     *
+     * @param rows              the number of rows the matrix shall have.
+     * @param columns           the number of columns the matrix shall have.
+     * @param rowIndexes        row indexes
+     * @param columnIndexes     column indexes
+     * @param values            numerical values
+     * @param removeDuplicates  if true, then duplicates (if any) are removed
+     * @param removeZeroes      if true, then zeroes (if any) are removed
+     * @param sortColumnIndexes if true, then column indexes are sorted
      */
     public SparseRCLongMatrix2D(int rows, int columns, int[] rowIndexes, int[] columnIndexes, long[] values,
-            boolean removeDuplicates, boolean removeZeroes, boolean sortColumnIndexes) {
+                                boolean removeDuplicates, boolean removeZeroes, boolean sortColumnIndexes) {
         super(null);
         try {
             setUp(rows, columns);
@@ -341,17 +316,12 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
 
     /**
      * Constructs a matrix with given parameters. The arrays are not copied.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowPointers
-     *            row pointers
-     * @param columnIndexes
-     *            column indexes
-     * @param values
-     *            numerical values
+     *
+     * @param rows          the number of rows the matrix shall have.
+     * @param columns       the number of columns the matrix shall have.
+     * @param rowPointers   row pointers
+     * @param columnIndexes column indexes
+     * @param values        numerical values
      */
     public SparseRCLongMatrix2D(int rows, int columns, int[] rowPointers, int[] columnIndexes, long[] values) {
         super(null);
@@ -412,8 +382,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
             return this; // nothing to do
         checkShape(source);
 
-        if (source instanceof SparseRCLongMatrix2D) {
-            SparseRCLongMatrix2D other = (SparseRCLongMatrix2D) source;
+        if (source instanceof SparseRCLongMatrix2D other) {
             System.arraycopy(other.rowPointers, 0, rowPointers, 0, rows + 1);
             int nzmax = other.columnIndexes.length;
             if (columnIndexes.length < nzmax) {
@@ -443,8 +412,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
 
     public LongMatrix2D assign(final LongMatrix2D y, cern.mateba.function.tlong.LongLongFunction function) {
         checkShape(y);
-        if ((y instanceof SparseRCLongMatrix2D) && (function == cern.jet.math.tlong.LongFunctions.plus)) { // x[i] = x[i] + y[i] 
-            SparseRCLongMatrix2D yy = (SparseRCLongMatrix2D) y;
+        if ((y instanceof SparseRCLongMatrix2D yy) && (function == cern.jet.math.tlong.LongFunctions.plus)) { // x[i] = x[i] + y[i]
 
             final int[] rowPointersY = yy.rowPointers;
             final int[] columnIndexesY = yy.columnIndexes;
@@ -452,7 +420,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
 
             final int[] rowPointersC = new int[rows + 1];
             int cnz = Math.max(columnIndexes.length, (int) Math.min(Integer.MAX_VALUE, (long) rowPointers[rows]
-                    + (long) rowPointersY[rows]));
+                + (long) rowPointersY[rows]));
             final int[] columnIndexesC = new int[cnz];
             final long[] valuesC = new long[cnz];
             int nrow = rows;
@@ -535,9 +503,9 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
         }
 
         if (function == cern.jet.math.tlong.LongFunctions.mult) { // x[i] = x[i] * y[i]
-            for (int i = rows; --i >= 0;) {
+            for (int i = rows; --i >= 0; ) {
                 int low = rowPointers[i];
-                for (int k = rowPointers[i + 1]; --k >= low;) {
+                for (int k = rowPointers[i + 1]; --k >= low; ) {
                     int j = columnIndexes[k];
                     values[k] *= y.getQuick(i, j);
                     if (values[k] == 0)
@@ -549,9 +517,9 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
 
         if (function == cern.jet.math.tlong.LongFunctions.div) { // x[i] = x[i] / y[i]
 
-            for (int i = rows; --i >= 0;) {
+            for (int i = rows; --i >= 0; ) {
                 int low = rowPointers[i];
-                for (int k = rowPointers[i + 1]; --k >= low;) {
+                for (int k = rowPointers[i + 1]; --k >= low; ) {
                     int j = columnIndexes[k];
                     values[k] /= y.getQuick(i, j);
                     if (values[k] == 0)
@@ -570,9 +538,9 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
 
     public LongMatrix2D forEachNonZero(final cern.mateba.function.tlong.IntIntLongFunction function) {
 
-        for (int i = rows; --i >= 0;) {
+        for (int i = rows; --i >= 0; ) {
             int low = rowPointers[i];
-            for (int k = rowPointers[i + 1]; --k >= low;) {
+            for (int k = rowPointers[i + 1]; --k >= low; ) {
                 int j = columnIndexes[k];
                 long value = values[k];
                 long r = function.apply(i, j, value);
@@ -587,7 +555,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a column-compressed form. This method creates a new object (not a view),
      * so changes in the returned matrix are NOT reflected in this matrix.
-     * 
+     *
      * @return this matrix in a column-compressed form
      */
     public SparseCCLongMatrix2D getColumnCompressed() {
@@ -602,7 +570,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
 
     /**
      * Returns column indexes
-     * 
+     *
      * @return column indexes
      */
     public int[] getColumnIndexes() {
@@ -613,7 +581,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a dense form. This method creates a new object (not a view), so changes
      * in the returned matrix are NOT reflected in this matrix.
-     * 
+     *
      * @return this matrix in a dense form
      */
     public DenseLongMatrix2D getDense() {
@@ -639,7 +607,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
 
     /**
      * Returns row pointers
-     * 
+     *
      * @return row pointers
      */
     public int[] getRowPointers() {
@@ -650,7 +618,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
      * Returns a new matrix that is the transpose of this matrix. This method
      * creates a new object (not a view), so changes in the returned matrix are
      * NOT reflected in this matrix.
-     * 
+     *
      * @return the transpose of this matrix
      */
     public SparseRCLongMatrix2D getTranspose() {
@@ -681,7 +649,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
 
     /**
      * Returns numerical values
-     * 
+     *
      * @return numerical values
      */
     public long[] getValues() {
@@ -690,7 +658,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
 
     /**
      * Returns true if column indexes are sorted, false otherwise
-     * 
+     *
      * @return true if column indexes are sorted, false otherwise
      */
     public boolean hasColumnIndexesSorted() {
@@ -795,12 +763,12 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(rows).append(" x ").append(columns).append(" sparse matrix, nnz = ").append(cardinality())
-                .append('\n');
+            .append('\n');
         for (int i = 0; i < rows; i++) {
             int high = rowPointers[i + 1];
             for (int j = rowPointers[i]; j < high; j++) {
                 builder.append('(').append(i).append(',').append(columnIndexes[j]).append(')').append('\t').append(
-                        values[j]).append('\n');
+                    values[j]).append('\n');
             }
         }
         return builder.toString();
@@ -811,7 +779,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
     }
 
     public LongMatrix1D zMult(LongMatrix1D y, LongMatrix1D z, final long alpha, final long beta,
-            final boolean transposeA) {
+                              final boolean transposeA) {
         final int rowsA = transposeA ? columns : rows;
         final int columnsA = transposeA ? rows : columns;
 
@@ -819,21 +787,19 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
         if (z == null)
             z = new DenseLongMatrix1D(rowsA);
 
-        if (!(y instanceof DenseLongMatrix1D && z instanceof DenseLongMatrix1D)) {
+        if (!(y instanceof DenseLongMatrix1D yy && z instanceof DenseLongMatrix1D zz)) {
             return super.zMult(y, z, alpha, beta, transposeA);
         }
 
         if (columnsA != y.size() || rowsA > z.size())
             throw new IllegalArgumentException("Incompatible args: "
-                    + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
-                    + z.toStringShort());
+                + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
+                + z.toStringShort());
 
-        DenseLongMatrix1D zz = (DenseLongMatrix1D) z;
         final long[] elementsZ = zz.elements;
         final int strideZ = zz.stride();
         final int zeroZ = (int) z.index(0);
 
-        DenseLongMatrix1D yy = (DenseLongMatrix1D) y;
         final long[] elementsY = yy.elements;
         final int strideY = yy.stride();
         final int zeroY = (int) y.index(0);
@@ -925,15 +891,15 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
                                 for (; k + 10 < high; k += 10) {
                                     int ind = k + 9;
                                     sum += values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]];
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]];
                                 }
                                 for (; k < high; k++) {
                                     sum += values[k] * elementsY[columnIndexes[k]];
@@ -948,15 +914,15 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
                                 for (; k + 10 < high; k += 10) {
                                     int ind = k + 9;
                                     sum += values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                            + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]];
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]];
                                 }
                                 for (; k < high; k++) {
                                     sum += values[k] * elementsY[columnIndexes[k]];
@@ -979,15 +945,15 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
                     for (; k + 10 < high; k += 10) {
                         int ind = k + 9;
                         sum += values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]];
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]];
                     }
                     for (; k < high; k++) {
                         sum += values[k] * elementsY[columnIndexes[k]];
@@ -1002,15 +968,15 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
                     for (; k + 10 < high; k += 10) {
                         int ind = k + 9;
                         sum += values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
-                                * elementsY[zeroY + strideY * columnIndexes[ind--]];
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]] + values[ind]
+                            * elementsY[zeroY + strideY * columnIndexes[ind--]];
                     }
                     for (; k < high; k++) {
                         sum += values[k] * elementsY[columnIndexes[k]];
@@ -1024,7 +990,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
     }
 
     public LongMatrix2D zMult(LongMatrix2D B, LongMatrix2D C, final long alpha, long beta, final boolean transposeA,
-            boolean transposeB) {
+                              boolean transposeB) {
         int rowsA = rows;
         int columnsA = columns;
         if (transposeA) {
@@ -1049,10 +1015,10 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
 
         if (rowsB != columnsA)
             throw new IllegalArgumentException("Matrix2D inner dimensions must agree:" + toStringShort() + ", "
-                    + (transposeB ? B.viewDice() : B).toStringShort());
+                + (transposeB ? B.viewDice() : B).toStringShort());
         if (C.rows() != rowsA || C.columns() != p)
             throw new IllegalArgumentException("Incompatible result matrix: " + toStringShort() + ", "
-                    + (transposeB ? B.viewDice() : B).toStringShort() + ", " + C.toStringShort());
+                + (transposeB ? B.viewDice() : B).toStringShort() + ", " + C.toStringShort());
         if (this == C || B == C)
             throw new IllegalArgumentException("Matrices must not be identical");
 
@@ -1060,7 +1026,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
             C.assign(cern.jet.math.tlong.LongFunctions.mult(beta));
         }
 
-        if ((B instanceof DenseLongMatrix2D) && (C instanceof DenseLongMatrix2D)) {
+        if ((B instanceof DenseLongMatrix2D) && (C instanceof DenseLongMatrix2D CC)) {
             SparseRCLongMatrix2D AA;
             if (transposeA) {
                 AA = getTranspose();
@@ -1074,7 +1040,6 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
                 BB = (DenseLongMatrix2D) B;
             }
 
-            DenseLongMatrix2D CC = (DenseLongMatrix2D) C;
             int[] rowPointersA = AA.rowPointers;
             int[] columnIndexesA = AA.columnIndexes;
             long[] valuesA = AA.values;
@@ -1087,10 +1052,9 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
                     CC.viewRow(ii).assign(BB.viewRow(jj), LongFunctions.plusMultSecond(scal));
                 }
             }
-        } else if ((B instanceof SparseRCLongMatrix2D) && (C instanceof SparseRCLongMatrix2D)) {
+        } else if ((B instanceof SparseRCLongMatrix2D) && (C instanceof SparseRCLongMatrix2D CC)) {
             SparseRCLongMatrix2D AA;
             SparseRCLongMatrix2D BB;
-            SparseRCLongMatrix2D CC = (SparseRCLongMatrix2D) C;
             if (transposeA) {
                 AA = getTranspose();
             } else {
@@ -1133,7 +1097,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
                             len++;
                             if (len >= nzmax) {
                                 throw new IllegalArgumentException(
-                                        "The max number of nonzero elements in C is too small.");
+                                    "The max number of nonzero elements in C is too small.");
                             }
                             columnIndexesC[len] = jcol;
                             iw[jcol] = len;
@@ -1165,19 +1129,19 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
             }
             // cache views
             final LongMatrix1D[] Brows = new LongMatrix1D[columnsA];
-            for (int i = columnsA; --i >= 0;)
+            for (int i = columnsA; --i >= 0; )
                 Brows[i] = B.viewRow(i);
             final LongMatrix1D[] Crows = new LongMatrix1D[rowsA];
-            for (int i = rowsA; --i >= 0;)
+            for (int i = rowsA; --i >= 0; )
                 Crows[i] = C.viewRow(i);
 
             final cern.jet.math.tlong.LongPlusMultSecond fun = cern.jet.math.tlong.LongPlusMultSecond.plusMult(0);
 
             final int[] columnIndexesA = columnIndexes;
             final long[] valuesA = values;
-            for (int i = rows; --i >= 0;) {
+            for (int i = rows; --i >= 0; ) {
                 int low = rowPointers[i];
-                for (int k = rowPointers[i + 1]; --k >= low;) {
+                for (int k = rowPointers[i + 1]; --k >= low; ) {
                     int j = columnIndexesA[k];
                     fun.multiplicator = valuesA[k] * alpha;
                     if (!transposeA)
@@ -1227,7 +1191,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
         valuesList.setSizeRaw(rowPointers[rows]);
         columnIndexesList.beforeInsert(index, column);
         valuesList.beforeInsert(index, value);
-        for (int i = rowPointers.length; --i > row;)
+        for (int i = rowPointers.length; --i > row; )
             rowPointers[i]++;
         columnIndexes = columnIndexesList.elements();
         values = valuesList.elements();
@@ -1240,7 +1204,7 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
         valuesList.setSizeRaw(rowPointers[rows]);
         columnIndexesList.remove(index);
         valuesList.remove(index);
-        for (int i = rowPointers.length; --i > row;)
+        for (int i = rowPointers.length; --i > row; )
             rowPointers[i]--;
         columnIndexes = columnIndexesList.elements();
         values = valuesList.elements();

@@ -20,12 +20,12 @@ import java.io.Serializable;
  * cells. Use idioms like <tt>LongFactory3D.dense.make(4,4,4)</tt> to construct
  * dense matrices, <tt>LongFactory3D.sparse.make(4,4,4)</tt> to construct sparse
  * matrices.
- * 
+ * <p>
  * If the factory is used frequently it might be useful to streamline the
  * notation. For example by aliasing:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  *  LongFactory3D F = LongFactory3D.dense;
  *  F.make(4,4,4);
@@ -33,14 +33,14 @@ import java.io.Serializable;
  *  F.random(4,4,5);
  *  ...
  * </pre>
- * 
+ *
  * </td>
  * </table>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class LongFactory3D implements Serializable, Cloneable{
+public class LongFactory3D implements Serializable, Cloneable {
 
 
     /**
@@ -69,7 +69,7 @@ public class LongFactory3D implements Serializable, Cloneable{
     public LongMatrix3D ascending(int slices, int rows, int columns) {
         cern.jet.math.tlong.LongFunctions F = cern.jet.math.tlong.LongFunctions.longFunctions;
         return descending(slices, rows, columns).assign(
-                LongFunctions.chain(LongFunctions.neg, LongFunctions.minus(slices * rows * columns)));
+            LongFunctions.chain(LongFunctions.neg, LongFunctions.minus((long) slices * rows * columns)));
     }
 
     /**
@@ -79,9 +79,9 @@ public class LongFactory3D implements Serializable, Cloneable{
     public LongMatrix3D descending(int slices, int rows, int columns) {
         LongMatrix3D matrix = make(slices, rows, columns);
         int v = 0;
-        for (int slice = slices; --slice >= 0;) {
-            for (int row = rows; --row >= 0;) {
-                for (int column = columns; --column >= 0;) {
+        for (int slice = slices; --slice >= 0; ) {
+            for (int row = rows; --row >= 0; ) {
+                for (int column = columns; --column >= 0; ) {
                     matrix.setQuick(slice, row, column, v++);
                 }
             }
@@ -96,18 +96,15 @@ public class LongFactory3D implements Serializable, Cloneable{
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>values.length != slices() || for any 0 &lt;= slice &lt; slices(): values[slice].length != rows()</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 0 &lt;= column &lt; columns(): values[slice][row].length != columns()</tt>
-     *             .
+     * @throws IllegalArgumentException if
+     *                                  <tt>values.length != slices() || for any 0 &lt;= slice &lt; slices(): values[slice].length != rows()</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 0 &lt;= column &lt; columns(): values[slice][row].length != columns()</tt>
+     *                                  .
      */
     public LongMatrix3D make(long[][][] values) {
         if (this == sparse)

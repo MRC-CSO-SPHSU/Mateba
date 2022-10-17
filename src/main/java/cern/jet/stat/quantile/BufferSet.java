@@ -16,7 +16,7 @@ import java.io.Serial;
  */
 class BufferSet extends cern.jet.stat.BufferSet {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = 8895285165571770380L;
@@ -27,11 +27,9 @@ class BufferSet extends cern.jet.stat.BufferSet {
 
     /**
      * Constructs a buffer set with b buffers, each having k elements
-     * 
-     * @param b
-     *            the number of buffers
-     * @param k
-     *            the number of elements per buffer
+     *
+     * @param b the number of buffers
+     * @param k the number of elements per buffer
      */
     public BufferSet(int b, int k) {
         this.buffers = new Buffer[b];
@@ -45,7 +43,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
      */
     public Buffer _getFirstEmptyBuffer() {
         Buffer emptyBuffer = null;
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             if (buffers[i].isEmpty()) {
                 if (buffers[i].isAllocated())
                     return buffers[i];
@@ -62,7 +60,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
     public Buffer[] _getFullOrPartialBuffers() {
         // count buffers
         int count = 0;
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             if (!buffers[i].isEmpty())
                 count++;
         }
@@ -70,7 +68,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
         // collect buffers
         Buffer[] collectedBuffers = new Buffer[count];
         int j = 0;
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             if (!buffers[i].isEmpty()) {
                 collectedBuffers[j++] = buffers[i];
             }
@@ -81,13 +79,13 @@ class BufferSet extends cern.jet.stat.BufferSet {
 
     /**
      * Determines all full buffers having the specified level.
-     * 
+     *
      * @return all full buffers having the specified level
      */
     public Buffer[] _getFullOrPartialBuffersWithLevel(int level) {
         // count buffers
         int count = 0;
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             if ((!buffers[i].isEmpty()) && buffers[i].level() == level)
                 count++;
         }
@@ -95,7 +93,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
         // collect buffers
         Buffer[] collectedBuffers = new Buffer[count];
         int j = 0;
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             if ((!buffers[i].isEmpty()) && buffers[i].level() == level) {
                 collectedBuffers[j++] = buffers[i];
             }
@@ -126,7 +124,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
      */
     public int _getNumberOfEmptyBuffers() {
         int count = 0;
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             if (buffers[i].isEmpty())
                 count++;
         }
@@ -138,7 +136,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
      * Returns all empty buffers.
      */
     public Buffer _getPartialBuffer() {
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             if (buffers[i].isPartial())
                 return buffers[i];
         }
@@ -165,14 +163,14 @@ class BufferSet extends cern.jet.stat.BufferSet {
      * this call returns, and its memory requirements will be close to zero.
      */
     protected void clear(int k) {
-        for (int i = b(); --i >= 0;)
+        for (int i = b(); --i >= 0; )
             this.buffers[i] = new Buffer(k);
         this.nextTriggerCalculationState = true;
     }
 
     /**
      * Returns a deep copy of the receiver.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
 
@@ -181,20 +179,19 @@ class BufferSet extends cern.jet.stat.BufferSet {
         copy = (BufferSet) super.clone();
 
         copy.buffers = copy.buffers.clone();
-        for (int i = buffers.length; --i >= 0;) {
-            copy.buffers[i] = (Buffer) copy.buffers[i].clone();
+        for (int i = buffers.length; --i >= 0; ) {
+            copy.buffers[i] = copy.buffers[i].clone();
         }
         return copy;
     }
 
     /**
      * Collapses the specified full buffers (must not include partial buffer).
-     * 
+     *
+     * @param buffers the buffers to be collapsed (all of them must be full or
+     *                partially full)
      * @return a full buffer containing the collapsed values. The buffer has
-     *         accumulated weight.
-     * @param buffers
-     *            the buffers to be collapsed (all of them must be full or
-     *            partially full)
+     * accumulated weight.
      */
     public Buffer collapse(Buffer[] buffers) {
         // determine W
@@ -230,7 +227,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
      * Returns whether the specified element is contained in the receiver.
      */
     public boolean contains(double element) {
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             if ((!buffers[i].isEmpty()) && buffers[i].contains(element)) {
                 return true;
             }
@@ -242,14 +239,13 @@ class BufferSet extends cern.jet.stat.BufferSet {
     /**
      * Applies a procedure to each element of the receiver, if any. Iterates
      * over the receiver in no particular order.
-     * 
-     * @param procedure
-     *            the procedure to be applied. Stops iteration if the procedure
-     *            returns <tt>false</tt>, otherwise continues.
+     *
+     * @param procedure the procedure to be applied. Stops iteration if the procedure
+     *                  returns <tt>false</tt>, otherwise continues.
      */
     public boolean forEach(cern.mateba.function.tdouble.DoubleProcedure procedure) {
-        for (int i = buffers.length; --i >= 0;) {
-            for (int w = buffers[i].weight(); --w >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
+            for (int w = buffers[i].weight(); --w >= 0; ) {
                 if (!(buffers[i].values.forEach(procedure)))
                     return false;
             }
@@ -261,12 +257,10 @@ class BufferSet extends cern.jet.stat.BufferSet {
      * Determines all values of the specified buffers positioned at the
      * specified triggerPositions within the sorted sequence and fills them into
      * outputValues.
-     * 
-     * @param buffers
-     *            the buffers to be searched (all must be full or partial)
-     * @param triggerPositions
-     *            the positions of elements within the sorted sequence to be
-     *            retrieved
+     *
+     * @param buffers          the buffers to be searched (all must be full or partial)
+     * @param triggerPositions the positions of elements within the sorted sequence to be
+     *                         retrieved
      * @return outputValues a list filled with the values at triggerPositions
      */
     protected double[] getValuesAtPositions(Buffer[] buffers, long[] triggerPositions) {
@@ -285,7 +279,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
         // cern.it.util.Log.println("hitPositions="+cern.it.util.Arrays.toString(positions));
 
         // sort buffers.
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             buffers[i].sort();
         }
 
@@ -293,7 +287,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
         int[] bufferSizes = new int[buffers.length];
         double[][] bufferValues = new double[buffers.length][];
         int totalBuffersSize = 0;
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             bufferSizes[i] = buffers[i].size();
             bufferValues[i] = buffers[i].values.elements();
             totalBuffersSize += bufferSizes[i];
@@ -336,7 +330,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
             double minValue = Double.POSITIVE_INFINITY;
             int minBufferIndex = -1;
 
-            for (int b = buffersSize; --b >= 0;) {
+            for (int b = buffersSize; --b >= 0; ) {
                 // DoubleBuffer buffer = buffers[b];
                 // if (cursors[b] < buffer.length) {
                 if (cursors[b] < bufferSizes[b]) {
@@ -384,7 +378,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
      */
     public long memory() {
         long memory = 0;
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             memory = memory + buffers[i].memory();
         }
         return memory;
@@ -392,21 +386,17 @@ class BufferSet extends cern.jet.stat.BufferSet {
 
     /**
      * Computes the next triggerPosition for collapse
-     * 
+     *
+     * @param j specifies that the j-th trigger position is to be computed
+     * @param W the accumulated weights
      * @return the next triggerPosition for collapse
-     * @param j
-     *            specifies that the j-th trigger position is to be computed
-     * @param W
-     *            the accumulated weights
      */
     protected long nextTriggerPosition(int j, long W) {
         long nextTriggerPosition;
 
         if (W % 2L != 0) { // is W odd?
             nextTriggerPosition = j * W + (W + 1) / 2;
-        }
-
-        else { // W is even
+        } else { // W is even
             // alternate between both possible next hit positions upon
             // successive invocations
             if (nextTriggerCalculationState) {
@@ -423,15 +413,14 @@ class BufferSet extends cern.jet.stat.BufferSet {
      * Returns how many percent of the elements contained in the receiver are
      * <tt>&lt;= element</tt>. Does linear interpolation if the element is not
      * contained but lies in between two contained elements.
-     * 
-     * @param the
-     *            element to search for.
+     *
+     * @param the element to search for.
      * @return the percentage <tt>p</tt> of elements <tt>&lt;= element</tt> (
-     *         <tt>0.0 &lt;= p &lt;=1.0)</tt>.
+     * <tt>0.0 &lt;= p &lt;=1.0)</tt>.
      */
     public double phi(double element) {
         double elementsLessThanOrEqualToElement = 0.0;
-        for (int i = buffers.length; --i >= 0;) {
+        for (int i = buffers.length; --i >= 0; ) {
             if (!buffers[i].isEmpty()) {
                 elementsLessThanOrEqualToElement += buffers[i].weight * buffers[i].rank(element);
             }
@@ -461,7 +450,7 @@ class BufferSet extends cern.jet.stat.BufferSet {
     public long totalSize() {
         Buffer[] fullBuffers = _getFullOrPartialBuffers();
         long totalSize = 0;
-        for (int i = fullBuffers.length; --i >= 0;) {
+        for (int i = fullBuffers.length; --i >= 0; ) {
             totalSize += (long) fullBuffers[i].size() * fullBuffers[i].weight();
         }
 

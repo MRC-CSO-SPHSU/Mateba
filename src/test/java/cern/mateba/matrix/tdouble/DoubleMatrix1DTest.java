@@ -120,7 +120,7 @@ public abstract class DoubleMatrix1DTest extends TestCase {
 
     public void testAssignDoubleMatrix1D() {
         A.assign(B);
-        assertTrue(A.size() == B.size());
+        assertEquals(A.size(), B.size());
         for (int i = 0; i < (int) A.size(); i++) {
             assertEquals(B.getQuick(i), A.getQuick(i), TOL);
         }
@@ -137,11 +137,7 @@ public abstract class DoubleMatrix1DTest extends TestCase {
     public void testAssignDoubleProcedureDouble() {
         DoubleProcedure procedure = new DoubleProcedure() {
             public boolean apply(double element) {
-                if (Math.abs(element) > 0.1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 0.1;
             }
         };
         DoubleMatrix1D Acopy = A.copy();
@@ -158,11 +154,7 @@ public abstract class DoubleMatrix1DTest extends TestCase {
     public void testAssignDoubleProcedureDoubleFunction() {
         DoubleProcedure procedure = new DoubleProcedure() {
             public boolean apply(double element) {
-                if (Math.abs(element) > 0.1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 0.1;
             }
         };
         DoubleMatrix1D Acopy = A.copy();
@@ -262,7 +254,7 @@ public abstract class DoubleMatrix1DTest extends TestCase {
 
     public void testToArray() {
         double[] array = A.toArray();
-        assertTrue((int) A.size() == array.length);
+        assertEquals((int) A.size(), array.length);
         for (int i = 0; i < (int) A.size(); i++) {
             assertEquals(array[i], A.getQuick(i), TOL);
         }
@@ -343,7 +335,7 @@ public abstract class DoubleMatrix1DTest extends TestCase {
     }
 
     public void testViewSelectionIntArray() {
-        int[] indexes = new int[] { 5, 11, 22, 37, 101 };
+        int[] indexes = new int[]{5, 11, 22, 37, 101};
         DoubleMatrix1D b = A.viewSelection(indexes);
         for (int i = 0; i < indexes.length; i++) {
             assertEquals(A.getQuick(indexes[i]), b.getQuick(i), TOL);

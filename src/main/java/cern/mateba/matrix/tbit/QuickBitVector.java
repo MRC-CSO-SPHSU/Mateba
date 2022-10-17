@@ -23,7 +23,7 @@ package cern.mateba.matrix.tbit;
  * of a bitvector. Each long value holds 64 bits. The i-th bit is stored in
  * bits[i/64] at bit position i % 64 (where bit position 0 refers to the least
  * significant bit and 63 refers to the most significant bit).
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  * @see BitVector
@@ -53,13 +53,11 @@ public class QuickBitVector {
      * bits set. If <tt>to-from+1==0</tt> then returns zero (<tt>0L</tt>).
      * Precondition (not checked):
      * <tt>to-from+1 &gt;= 0 && to-from+1 &lt;= 64</tt>.
-     * 
-     * @param from
-     *            index of start bit (inclusive)
-     * @param to
-     *            index of end bit (inclusive).
+     *
+     * @param from index of start bit (inclusive)
+     * @param to   index of end bit (inclusive).
      * @return the bit mask having all bits between <tt>from</tt> and
-     *         <tt>to</tt> set to 1.
+     * <tt>to</tt> set to 1.
      */
     public static long bitMaskWithBitsSetFromTo(int from, int to) {
         return pows[to - from + 1] << from;
@@ -74,11 +72,9 @@ public class QuickBitVector {
     /**
      * Changes the bit with index <tt>bitIndex</tt> in the bitvector
      * <tt>bits</tt> to the "clear" (<tt>false</tt>) state.
-     * 
-     * @param bits
-     *            the bitvector.
-     * @param bitIndex
-     *            the index of the bit to be cleared.
+     *
+     * @param bits     the bitvector.
+     * @param bitIndex the index of the bit to be cleared.
      */
     public static void clear(long[] bits, int bitIndex) {
         bits[bitIndex >> ADDRESS_BITS_PER_UNIT] &= ~(1L << (bitIndex & BIT_INDEX_MASK));
@@ -88,11 +84,9 @@ public class QuickBitVector {
      * Returns from the bitvector the value of the bit with the specified index.
      * The value is <tt>true</tt> if the bit with the index <tt>bitIndex</tt> is
      * currently set; otherwise, returns <tt>false</tt>.
-     * 
-     * @param bits
-     *            the bitvector.
-     * @param bitIndex
-     *            the bit index.
+     *
+     * @param bits     the bitvector.
+     * @param bitIndex the bit index.
      * @return the value of the bit with the specified index.
      */
     public static boolean get(long[] bits, int bitIndex) {
@@ -106,13 +100,10 @@ public class QuickBitVector {
      * <code>to-from</code> set to bit <code>to</code>. All other bits of return
      * value are set to 0. If <tt>from &gt; to</tt> then returns zero (
      * <tt>0L</tt>). Precondition (not checked): <tt>to-from+1 &lt;= 64</tt>.
-     * 
-     * @param bits
-     *            the bitvector.
-     * @param from
-     *            index of start bit (inclusive).
-     * @param to
-     *            index of end bit (inclusive).
+     *
+     * @param bits the bitvector.
+     * @param from index of start bit (inclusive).
+     * @param to   index of end bit (inclusive).
      * @return the specified bits as long value.
      */
     public static long getLongFromTo(long[] bits, int from, int to) {
@@ -156,13 +147,13 @@ public class QuickBitVector {
     /**
      * Returns the index of the least significant bit in state "true". Returns
      * 32 if no bit is in state "true". Examples:
-     * 
+     *
      * <pre>
      * 	 0x80000000 --&gt; 31
      * 	 0x7fffffff --&gt; 0
      * 	 0x00000001 --&gt; 0
      * 	 0x00000000 --&gt; 32
-     * 
+     *
      * </pre>
      */
     static public int leastSignificantBit(int value) {
@@ -175,12 +166,10 @@ public class QuickBitVector {
     /**
      * Constructs a low level bitvector that holds <tt>size</tt> elements, with
      * each element taking <tt>bitsPerElement</tt> bits.
-     * 
-     * @param size
-     *            the number of elements to be stored in the bitvector (must be
-     *            &gt;= 0).
-     * @param bitsPerElement
-     *            the number of bits one single element takes.
+     *
+     * @param size           the number of elements to be stored in the bitvector (must be
+     *                       &gt;= 0).
+     * @param bitsPerElement the number of bits one single element takes.
      * @return a low level bitvector.
      */
     public static long[] makeBitVector(int size, int bitsPerElement) {
@@ -193,13 +182,13 @@ public class QuickBitVector {
     /**
      * Returns the index of the most significant bit in state "true". Returns -1
      * if no bit is in state "true". Examples:
-     * 
+     *
      * <pre>
      * 	 0x80000000 --&gt; 31
      * 	 0x7fffffff --&gt; 30
      * 	 0x00000001 --&gt; 0
      * 	 0x00000000 --&gt; -1
-     * 
+     *
      * </pre>
      */
     static public int mostSignificantBit(int value) {
@@ -225,7 +214,7 @@ public class QuickBitVector {
     private static long[] precomputePows() {
         long[] pows = new long[BITS_PER_UNIT + 1];
         long value = ~0L;
-        for (int i = BITS_PER_UNIT + 1; --i >= 1;) {
+        for (int i = BITS_PER_UNIT + 1; --i >= 1; ) {
             pows[i] = value >>> (BITS_PER_UNIT - i);
             // System.out.println((i)+":"+pows[i]);
         }
@@ -251,13 +240,10 @@ public class QuickBitVector {
     /**
      * Sets the bit with index <tt>bitIndex</tt> in the bitvector <tt>bits</tt>
      * to the state specified by <tt>value</tt>.
-     * 
-     * @param bits
-     *            the bitvector.
-     * @param bitIndex
-     *            the index of the bit to be changed.
-     * @param value
-     *            the value to be stored in the bit.
+     *
+     * @param bits     the bitvector.
+     * @param bitIndex the index of the bit to be changed.
+     * @param value    the value to be stored in the bit.
      */
     public static void put(long[] bits, int bitIndex, boolean value) {
         if (value)
@@ -273,15 +259,11 @@ public class QuickBitVector {
      * bit <code>to-from</code> of <code>value</code>. All other bits stay
      * unaffected. If <tt>from &gt; to</tt> then does nothing. Precondition (not
      * checked): <tt>to-from+1 &lt;= 64</tt>.
-     * 
-     * @param bits
-     *            the bitvector.
-     * @param value
-     *            the value to be copied into the bitvector.
-     * @param from
-     *            index of start bit (inclusive).
-     * @param to
-     *            index of end bit (inclusive).
+     *
+     * @param bits  the bitvector.
+     * @param value the value to be copied into the bitvector.
+     * @param from  index of start bit (inclusive).
+     * @param to    index of end bit (inclusive).
      */
     public static void putLongFromTo(long[] bits, long value, int from, int to) {
         if (from > to)
@@ -329,11 +311,9 @@ public class QuickBitVector {
     /**
      * Changes the bit with index <tt>bitIndex</tt> in the bitvector
      * <tt>bits</tt> to the "set" (<tt>true</tt>) state.
-     * 
-     * @param bits
-     *            the bitvector.
-     * @param bitIndex
-     *            the index of the bit to be set.
+     *
+     * @param bits     the bitvector.
+     * @param bitIndex the index of the bit to be set.
      */
     public static void set(long[] bits, int bitIndex) {
         bits[bitIndex >> ADDRESS_BITS_PER_UNIT] |= 1L << (bitIndex & BIT_INDEX_MASK);

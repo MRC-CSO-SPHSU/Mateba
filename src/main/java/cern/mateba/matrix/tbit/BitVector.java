@@ -239,7 +239,7 @@ public class BitVector implements Serializable, Cloneable {
 
     public BitVector clone() {
         try {
-            var clone =(BitVector) super.clone();
+            var clone = (BitVector) super.clone();
             if (this.bits != null)
                 clone.bits = this.bits.clone();
             return clone;
@@ -255,7 +255,7 @@ public class BitVector implements Serializable, Cloneable {
      * @return a deep copy of the receiver.
      */
     public BitVector copy() {
-        return (BitVector) clone();
+        return clone();
     }
 
     /**

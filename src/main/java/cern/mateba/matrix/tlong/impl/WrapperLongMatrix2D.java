@@ -20,15 +20,14 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 /**
  * 2-d matrix holding <tt>long</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 04/14/2000
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 04/14/2000
  */
 public class WrapperLongMatrix2D extends LongMatrix2D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = -276356916534149980L;
@@ -68,7 +67,7 @@ public class WrapperLongMatrix2D extends LongMatrix2D {
             final long[] elems = ((DiagonalLongMatrix2D) content).elements;
             if (values.length != dlength)
                 throw new IllegalArgumentException("Must have same length: length=" + values.length + " dlength="
-                        + dlength);
+                    + dlength);
             int nthreads = ConcurrencyUtils.getNumberOfThreads();
             if ((nthreads > 1) && (dlength >= ConcurrencyUtils.getThreadsBeginN_2D())) {
                 nthreads = Math.min(nthreads, dlength);
@@ -104,7 +103,7 @@ public class WrapperLongMatrix2D extends LongMatrix2D {
             final long[] elems = ((DiagonalLongMatrix2D) content).elements;
             if (values.length != dlength)
                 throw new IllegalArgumentException("Must have same length: length=" + values.length + " dlength="
-                        + dlength);
+                    + dlength);
             int nthreads = ConcurrencyUtils.getNumberOfThreads();
             if ((nthreads > 1) && (dlength >= ConcurrencyUtils.getThreadsBeginN_2D())) {
                 nthreads = Math.min(nthreads, dlength);
@@ -116,17 +115,14 @@ public class WrapperLongMatrix2D extends LongMatrix2D {
                     futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                         public void run() {
-                            for (int i = firstIdx; i < lastIdx; i++) {
-                                elems[i] = values[i];
-                            }
+                            if (lastIdx - firstIdx >= 0)
+                                System.arraycopy(values, firstIdx, elems, firstIdx, lastIdx - firstIdx);
                         }
                     });
                 }
                 ConcurrencyUtils.waitForCompletion(futures);
             } else {
-                for (int i = 0; i < dlength; i++) {
-                    elems[i] = values[i];
-                }
+                System.arraycopy(values, 0, elems, 0, dlength);
             }
             return this;
         } else {
@@ -159,15 +155,13 @@ public class WrapperLongMatrix2D extends LongMatrix2D {
     }
 
     public boolean equals(Object obj) {
-        if (content instanceof DiagonalLongMatrix2D && obj instanceof DiagonalLongMatrix2D) {
+        if (content instanceof DiagonalLongMatrix2D A && obj instanceof DiagonalLongMatrix2D B) {
             if (this == obj)
                 return true;
             if (!(this != null && obj != null))
                 return false;
-            DiagonalLongMatrix2D A = (DiagonalLongMatrix2D) content;
-            DiagonalLongMatrix2D B = (DiagonalLongMatrix2D) obj;
             if (A.columns() != B.columns() || A.rows() != B.rows() || A.diagonalIndex() != B.diagonalIndex()
-                    || A.diagonalLength() != B.diagonalLength())
+                || A.diagonalLength() != B.diagonalLength())
                 return false;
             long[] AElements = A.elements();
             long[] BElements = B.elements();
@@ -240,7 +234,7 @@ public class WrapperLongMatrix2D extends LongMatrix2D {
             return this;
         WrapperLongMatrix2D view = new WrapperLongMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -268,7 +262,7 @@ public class WrapperLongMatrix2D extends LongMatrix2D {
     public LongMatrix2D viewDice() {
         WrapperLongMatrix2D view = new WrapperLongMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -299,7 +293,7 @@ public class WrapperLongMatrix2D extends LongMatrix2D {
         checkBox(row, column, height, width);
         WrapperLongMatrix2D view = new WrapperLongMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -336,7 +330,7 @@ public class WrapperLongMatrix2D extends LongMatrix2D {
             return this;
         WrapperLongMatrix2D view = new WrapperLongMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -364,12 +358,12 @@ public class WrapperLongMatrix2D extends LongMatrix2D {
         // check for "all"
         if (rowIndexes == null) {
             rowIndexes = new int[rows];
-            for (int i = rows; --i >= 0;)
+            for (int i = rows; --i >= 0; )
                 rowIndexes[i] = i;
         }
         if (columnIndexes == null) {
             columnIndexes = new int[columns];
-            for (int i = columns; --i >= 0;)
+            for (int i = columns; --i >= 0; )
                 columnIndexes[i] = i;
         }
 
@@ -380,7 +374,7 @@ public class WrapperLongMatrix2D extends LongMatrix2D {
 
         WrapperLongMatrix2D view = new WrapperLongMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -412,7 +406,7 @@ public class WrapperLongMatrix2D extends LongMatrix2D {
             throw new IndexOutOfBoundsException("illegal stride");
         WrapperLongMatrix2D view = new WrapperLongMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 

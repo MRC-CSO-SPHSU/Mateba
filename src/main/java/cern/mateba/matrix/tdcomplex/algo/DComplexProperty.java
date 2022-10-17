@@ -45,9 +45,8 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * Note that this implementation is not synchronized.
  *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.1, 28/May/2000 (fixed strange bugs involving NaN, -inf, inf)
- *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.1, 28/May/2000 (fixed strange bugs involving NaN, -inf, inf)
  */
 public class DComplexProperty {
 
@@ -87,8 +86,7 @@ public class DComplexProperty {
     /**
      * Sets the tolerance to <tt>Math.abs(newTolerance)</tt>.
      *
-     * @throws UnsupportedOperationException
-     *             if <tt>this==DEFAULT || this==ZERO || this==TWELVE</tt>.
+     * @throws UnsupportedOperationException if <tt>this==DEFAULT || this==ZERO || this==TWELVE</tt>.
      */
     public void setTolerance(double newTolerance) {
         if (this == DEFAULT || this == ZERO || this == TWELVE) {
@@ -111,9 +109,8 @@ public class DComplexProperty {
 
     /**
      * Checks whether the given matrix <tt>A</tt> is <i>square</i>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>A.rows() != A.columns()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>A.rows() != A.columns()</tt>.
      */
     public void checkSquare(DComplexMatrix2D A) {
         if (A.rows() != A.columns())
@@ -129,12 +126,10 @@ public class DComplexProperty {
      * Returns whether all cells of the given matrix <tt>A</tt> are equal to the
      * given value.
      *
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DComplexMatrix1D A, final double[] value) {
         if (A == null)
@@ -159,8 +154,8 @@ public class DComplexProperty {
                             diff[0] = Math.abs(value[0] - x[0]);
                             diff[1] = Math.abs(value[1] - x[1]);
                             if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                    || (DComplex.isEqual(value, x, epsilon))) {
+                                && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                                || (DComplex.isEqual(value, x, epsilon))) {
                                 diff[0] = 0;
                                 diff[1] = 0;
                             }
@@ -193,8 +188,8 @@ public class DComplexProperty {
                 diff[0] = Math.abs(value[0] - x[0]);
                 diff[1] = Math.abs(value[1] - x[1]);
                 if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                        || (DComplex.isEqual(value, x, epsilon))) {
+                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                    || (DComplex.isEqual(value, x, epsilon))) {
                     diff[0] = 0;
                     diff[1] = 0;
                 }
@@ -209,12 +204,10 @@ public class DComplexProperty {
     /**
      * Returns whether both given matrices <tt>A</tt> and <tt>B</tt> are equal.
      *
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DComplexMatrix1D A, final DComplexMatrix1D B) {
         if (A == B)
@@ -245,8 +238,8 @@ public class DComplexProperty {
                             diff[0] = Math.abs(value[0] - x[0]);
                             diff[1] = Math.abs(value[1] - x[1]);
                             if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                    || (DComplex.isEqual(value, x, epsilon))) {
+                                && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                                || (DComplex.isEqual(value, x, epsilon))) {
                                 diff[0] = 0;
                                 diff[1] = 0;
                             }
@@ -280,8 +273,8 @@ public class DComplexProperty {
                 diff[0] = Math.abs(value[0] - x[0]);
                 diff[1] = Math.abs(value[1] - x[1]);
                 if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                        || (DComplex.isEqual(value, x, epsilon))) {
+                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                    || (DComplex.isEqual(value, x, epsilon))) {
                     diff[0] = 0;
                     diff[1] = 0;
                 }
@@ -297,12 +290,10 @@ public class DComplexProperty {
      * Returns whether all cells of the given matrix <tt>A</tt> are equal to the
      * given value.
      *
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DComplexMatrix2D A, final double[] value) {
         if (A == null)
@@ -329,8 +320,8 @@ public class DComplexProperty {
                                 diff[0] = Math.abs(value[0] - x[0]);
                                 diff[1] = Math.abs(value[1] - x[1]);
                                 if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                        || (DComplex.isEqual(value, x, epsilon))) {
+                                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                                    || (DComplex.isEqual(value, x, epsilon))) {
                                     diff[0] = 0;
                                     diff[1] = 0;
                                 }
@@ -365,8 +356,8 @@ public class DComplexProperty {
                     diff[0] = Math.abs(value[0] - x[0]);
                     diff[1] = Math.abs(value[1] - x[1]);
                     if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                            && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                            || (DComplex.isEqual(value, x, epsilon))) {
+                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                        || (DComplex.isEqual(value, x, epsilon))) {
                         diff[0] = 0;
                         diff[1] = 0;
                     }
@@ -382,12 +373,10 @@ public class DComplexProperty {
     /**
      * Returns whether both given matrices <tt>A</tt> and <tt>B</tt> are equal.
      *
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DComplexMatrix2D A, final DComplexMatrix2D B) {
         if (A == B)
@@ -419,8 +408,8 @@ public class DComplexProperty {
                                 diff[0] = Math.abs(value[0] - x[0]);
                                 diff[1] = Math.abs(value[1] - x[1]);
                                 if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                        || (DComplex.isEqual(value, x, epsilon))) {
+                                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                                    || (DComplex.isEqual(value, x, epsilon))) {
                                     diff[0] = 0;
                                     diff[1] = 0;
                                 }
@@ -457,8 +446,8 @@ public class DComplexProperty {
                     diff[0] = Math.abs(value[0] - x[0]);
                     diff[1] = Math.abs(value[1] - x[1]);
                     if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                            && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                            || (DComplex.isEqual(value, x, epsilon))) {
+                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                        || (DComplex.isEqual(value, x, epsilon))) {
                         diff[0] = 0;
                         diff[1] = 0;
                     }
@@ -475,12 +464,10 @@ public class DComplexProperty {
      * Returns whether all cells of the given matrix <tt>A</tt> are equal to the
      * given value.
      *
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DComplexMatrix3D A, final double[] value) {
         if (A == null)
@@ -509,8 +496,8 @@ public class DComplexProperty {
                                     diff[0] = Math.abs(value[0] - x[0]);
                                     diff[1] = Math.abs(value[1] - x[1]);
                                     if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                            && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                            || (DComplex.isEqual(value, x, epsilon))) {
+                                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                                        || (DComplex.isEqual(value, x, epsilon))) {
                                         diff[0] = 0;
                                         diff[1] = 0;
                                     }
@@ -547,8 +534,8 @@ public class DComplexProperty {
                         diff[0] = Math.abs(value[0] - x[0]);
                         diff[1] = Math.abs(value[1] - x[1]);
                         if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                || (DComplex.isEqual(value, x, epsilon))) {
+                            && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                            || (DComplex.isEqual(value, x, epsilon))) {
                             diff[0] = 0;
                             diff[1] = 0;
                         }
@@ -565,12 +552,10 @@ public class DComplexProperty {
     /**
      * Returns whether both given matrices <tt>A</tt> and <tt>B</tt> are equal.
      *
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DComplexMatrix3D A, final DComplexMatrix3D B) {
         if (A == B)
@@ -609,8 +594,8 @@ public class DComplexProperty {
                                     diff[0] = Math.abs(value[0] - x[0]);
                                     diff[1] = Math.abs(value[1] - x[1]);
                                     if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                            && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                            || (DComplex.isEqual(value, x, epsilon))) {
+                                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                                        || (DComplex.isEqual(value, x, epsilon))) {
                                         diff[0] = 0;
                                         diff[1] = 0;
                                     }
@@ -648,8 +633,8 @@ public class DComplexProperty {
                         diff[0] = Math.abs(value[0] - x[0]);
                         diff[1] = Math.abs(value[1] - x[1]);
                         if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                || (DComplex.isEqual(value, x, epsilon))) {
+                            && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                            || (DComplex.isEqual(value, x, epsilon))) {
                             diff[0] = 0;
                             diff[1] = 0;
                         }

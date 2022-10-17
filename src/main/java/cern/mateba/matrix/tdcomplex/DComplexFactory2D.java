@@ -37,15 +37,15 @@ import java.io.Serializable;
  * </tr>
  * <tr align="left" valign="top">
  * <td><i> Appending rows and columns </i></td>
- * <td>Use methods {@link #appendColumns(DComplexMatrix2D,DComplexMatrix2D)
- * appendColumns}, {@link #appendColumns(DComplexMatrix2D,DComplexMatrix2D)
- * appendRows} and {@link #repeat(DComplexMatrix2D,int,int) repeat} to append
+ * <td>Use methods {@link #appendColumns(DComplexMatrix2D, DComplexMatrix2D)
+ * appendColumns}, {@link #appendColumns(DComplexMatrix2D, DComplexMatrix2D)
+ * appendRows} and {@link #repeat(DComplexMatrix2D, int, int) repeat} to append
  * rows and columns.</td>
  * </tr>
  * <tr align="left" valign="top">
  * <td><i> General block matrices </i></td>
  * <td>Use methods {@link #compose(DComplexMatrix2D[][]) compose} and
- * {@link #decompose(DComplexMatrix2D[][],DComplexMatrix2D) decompose} to work
+ * {@link #decompose(DComplexMatrix2D[][], DComplexMatrix2D) decompose} to work
  * with general block matrices.</td>
  * </tr>
  * <tr align="left" valign="top">
@@ -57,13 +57,13 @@ import java.io.Serializable;
  * <tr align="left" valign="top">
  * <td><i> Diagonal block matrices </i></td>
  * <td>Use method
- * {@link #composeDiagonal(DComplexMatrix2D,DComplexMatrix2D,DComplexMatrix2D)
+ * {@link #composeDiagonal(DComplexMatrix2D, DComplexMatrix2D, DComplexMatrix2D)
  * composeDiagonal} to work with diagonal block matrices.</td>
  * </tr>
  * <tr align="left" valign="top">
  * <td><i>Random</i></td>
- * <td>Use methods {@link #random(int,int) random} and
- * {@link #sample(int,int,double[],double) sample} to construct random matrices.
+ * <td>Use methods {@link #random(int, int) random} and
+ * {@link #sample(int, int, double[], double) sample} to construct random matrices.
  * </td>
  * </tr>
  * </table>
@@ -76,17 +76,17 @@ import java.io.Serializable;
  * </p>
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  *  ComplexFactory2D F = ComplexFactory2D.dense;
  *  F.make(4,4);
  *  F.random(4,4);
  *  ...
  * </pre>
- * 
+ *
  * </td>
  * </table>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class DComplexFactory2D implements Serializable, Cloneable {
@@ -114,7 +114,7 @@ public class DComplexFactory2D implements Serializable, Cloneable {
     /**
      * C = A||B; Constructs a new matrix which is the column-wise concatenation
      * of two other matrices.
-     * 
+     *
      * <pre>
      * 	 0 1 2
      * 	 3 4 5
@@ -122,9 +122,9 @@ public class DComplexFactory2D implements Serializable, Cloneable {
      * 	 6 7
      * 	 8 9
      * 	 --&gt;
-     * 	 0 1 2 6 7 
+     * 	 0 1 2 6 7
      * 	 3 4 5 8 9
-     * 
+     *
      * </pre>
      */
     public DComplexMatrix2D appendColumns(DComplexMatrix2D A, DComplexMatrix2D B) {
@@ -147,17 +147,17 @@ public class DComplexFactory2D implements Serializable, Cloneable {
     /**
      * C = A||b; Constructs a new matrix which is the column-wise concatenation
      * of two other matrices.
-     * 
+     *
      * <pre>
      *   0 1 2
      *   3 4 5
      *   appendColumn
-     *   6 
-     *   8 
+     *   6
+     *   8
      *   --&gt;
-     *   0 1 2 6  
+     *   0 1 2 6
      *   3 4 5 8
-     * 
+     *
      * </pre>
      */
     public DComplexMatrix2D appendColumn(DComplexMatrix2D A, DComplexMatrix1D b) {
@@ -180,7 +180,6 @@ public class DComplexFactory2D implements Serializable, Cloneable {
     /**
      * C = A||B; Constructs a new matrix which is the row-wise concatenation of
      * two other matrices.
-     * 
      */
     public DComplexMatrix2D appendRows(DComplexMatrix2D A, DComplexMatrix2D B) {
         // force both to have maximal shared number of columns.
@@ -202,7 +201,6 @@ public class DComplexFactory2D implements Serializable, Cloneable {
     /**
      * C = A||b; Constructs a new matrix which is the row-wise concatenation of
      * two other matrices.
-     * 
      */
     public DComplexMatrix2D appendRow(DComplexMatrix2D A, DComplexMatrix1D b) {
         // force both to have maximal shared number of columns.
@@ -224,9 +222,8 @@ public class DComplexFactory2D implements Serializable, Cloneable {
     /**
      * Checks whether the given array is rectangular, that is, whether all rows
      * have the same number of columns.
-     * 
-     * @throws IllegalArgumentException
-     *             if the array is not rectangular.
+     *
+     * @throws IllegalArgumentException if the array is not rectangular.
      */
     protected static void checkRectangularShape(double[][] array) {
         int columns = -1;
@@ -243,9 +240,8 @@ public class DComplexFactory2D implements Serializable, Cloneable {
     /**
      * Checks whether the given array is rectangular, that is, whether all rows
      * have the same number of columns.
-     * 
-     * @throws IllegalArgumentException
-     *             if the array is not rectangular.
+     *
+     * @throws IllegalArgumentException if the array is not rectangular.
      */
     protected static void checkRectangularShape(DComplexMatrix2D[][] array) {
         int columns = -1;
@@ -269,9 +265,8 @@ public class DComplexFactory2D implements Serializable, Cloneable {
      * <tt>IllegalArgumentException</tt> is thrown. Note that <tt>null</tt>s
      * within <tt>parts[row,col]</tt> are an exception to this rule: they are
      * ignored. Cells are copied.
-     * 
-     * @throws IllegalArgumentException
-     *             subject to the conditions outlined above.
+     *
+     * @throws IllegalArgumentException subject to the conditions outlined above.
      */
     public DComplexMatrix2D compose(DComplexMatrix2D[][] parts) {
         checkRectangularShape(parts);
@@ -346,16 +341,16 @@ public class DComplexFactory2D implements Serializable, Cloneable {
     /**
      * Constructs a diagonal block matrix from the given parts (the <i>direct
      * sum</i> of two matrices). That is the concatenation
-     * 
+     *
      * <pre>
      * 	 A 0
      * 	 0 B
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * (The direct sum has <tt>A.rows()+B.rows()</tt> rows and
      * <tt>A.columns()+B.columns()</tt> columns). Cells are copied.
-     * 
+     *
      * @return a new matrix which is the direct sum.
      */
     public DComplexMatrix2D composeDiagonal(DComplexMatrix2D A, DComplexMatrix2D B) {
@@ -372,14 +367,14 @@ public class DComplexFactory2D implements Serializable, Cloneable {
     /**
      * Constructs a diagonal block matrix from the given parts. The
      * concatenation has the form
-     * 
+     *
      * <pre>
      * 	 A 0 0
      * 	 0 B 0
      * 	 0 0 C
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * from the given parts. Cells are copied.
      */
     public DComplexMatrix2D composeDiagonal(DComplexMatrix2D A, DComplexMatrix2D B, DComplexMatrix2D C) {
@@ -392,7 +387,7 @@ public class DComplexFactory2D implements Serializable, Cloneable {
 
     /**
      * Constructs a bidiagonal block matrix from the given parts.
-     * 
+     * <p>
      * from the given parts. Cells are copied.
      */
     public DComplexMatrix2D composeBidiagonal(DComplexMatrix2D A, DComplexMatrix2D B) {
@@ -417,9 +412,8 @@ public class DComplexFactory2D implements Serializable, Cloneable {
      * <tt>IllegalArgumentException</tt> is thrown. Note that <tt>null</tt>s
      * within <tt>parts[row,col]</tt> are an exception to this rule: they are
      * ignored. Cells are copied.
-     * 
-     * @throws IllegalArgumentException
-     *             subject to the conditions outlined above.
+     *
+     * @throws IllegalArgumentException subject to the conditions outlined above.
      */
     public void decompose(DComplexMatrix2D[][] parts, DComplexMatrix2D matrix) {
         checkRectangularShape(parts);
@@ -494,9 +488,9 @@ public class DComplexFactory2D implements Serializable, Cloneable {
      */
     public void demo1() {
         System.out.println("\n\n");
-        DComplexMatrix2D[][] parts1 = { { null, make(2, 2, new double[] { 1, 2 }), null },
-                { make(4, 4, new double[] { 3, 4 }), null, make(4, 3, new double[] { 5, 6 }) },
-                { null, make(2, 2, new double[] { 7, 8 }), null } };
+        DComplexMatrix2D[][] parts1 = {{null, make(2, 2, new double[]{1, 2}), null},
+            {make(4, 4, new double[]{3, 4}), null, make(4, 3, new double[]{5, 6})},
+            {null, make(2, 2, new double[]{7, 8}), null}};
         System.out.println("\n" + compose(parts1));
     }
 
@@ -508,11 +502,11 @@ public class DComplexFactory2D implements Serializable, Cloneable {
         DComplexMatrix2D matrix;
         DComplexMatrix2D A, B, C, D;
         DComplexMatrix2D __ = null;
-        A = make(2, 2, new double[] { 1, 2 });
-        B = make(4, 4, new double[] { 3, 4 });
-        C = make(4, 3, new double[] { 5, 6 });
-        D = make(2, 2, new double[] { 7, 8 });
-        DComplexMatrix2D[][] parts1 = { { __, A, __ }, { B, __, C }, { __, D, __ } };
+        A = make(2, 2, new double[]{1, 2});
+        B = make(4, 4, new double[]{3, 4});
+        C = make(4, 3, new double[]{5, 6});
+        D = make(2, 2, new double[]{7, 8});
+        DComplexMatrix2D[][] parts1 = {{__, A, __}, {B, __, C}, {__, D, __}};
         matrix = compose(parts1);
         System.out.println("\n" + matrix);
 
@@ -531,7 +525,7 @@ public class DComplexFactory2D implements Serializable, Cloneable {
      * Constructs a new diagonal matrix whose diagonal elements are the elements
      * of <tt>vector</tt>. Cells values are copied. The new matrix is not a
      * view.
-     * 
+     *
      * @return a new matrix.
      */
     public DComplexMatrix2D diagonal(DComplexMatrix1D vector) {
@@ -546,9 +540,8 @@ public class DComplexFactory2D implements Serializable, Cloneable {
     /**
      * Constructs a new vector consisting of the diagonal elements of <tt>A</tt>
      * . Cells values are copied. The new vector is not a view.
-     * 
-     * @param A
-     *            the matrix, need not be square.
+     *
+     * @param A the matrix, need not be square.
      * @return a new vector.
      */
     public DComplexMatrix1D diagonal(DComplexMatrix2D A) {
@@ -566,8 +559,8 @@ public class DComplexFactory2D implements Serializable, Cloneable {
      */
     public DComplexMatrix2D identity(int rowsAndColumns) {
         DComplexMatrix2D matrix = make(rowsAndColumns, rowsAndColumns);
-        double[] one = new double[] { 1, 0 };
-        for (int i = rowsAndColumns; --i >= 0;) {
+        double[] one = new double[]{1, 0};
+        for (int i = rowsAndColumns; --i >= 0; ) {
             matrix.setQuick(i, i, one);
         }
         return matrix;
@@ -580,13 +573,11 @@ public class DComplexFactory2D implements Serializable, Cloneable {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public DComplexMatrix2D make(double[][] values) {
         if (this == sparse) {
@@ -655,9 +646,8 @@ public class DComplexFactory2D implements Serializable, Cloneable {
      * zero. Note that this is not the same as setting each cell with
      * probability <tt>nonZeroFraction</tt> to <tt>value</tt>. Note: The random
      * seed is a constant.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
      * @see cern.jet.random.sampling.RandomSampler
      */
     public DComplexMatrix2D sample(int rows, int columns, double[] value, double nonZeroFraction) {
@@ -673,9 +663,8 @@ public class DComplexFactory2D implements Serializable, Cloneable {
      * zero. Note that this is not the same as setting each cell with
      * probability <tt>nonZeroFraction</tt> to <tt>value</tt>. Note: The random
      * seed is a constant.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
      * @see cern.jet.random.sampling.RandomSampler
      */
     public DComplexMatrix2D sample(DComplexMatrix2D matrix, double[] value, double nonZeroFraction) {

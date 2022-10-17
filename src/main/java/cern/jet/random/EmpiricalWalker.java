@@ -41,7 +41,7 @@ import java.io.Serial;
  * <p>
  * See also: D. E. Knuth, The Art of Computer Programming, Volume 2
  * (Seminumerical algorithms), 3rd edition, Addison-Wesley (1997), p120.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -60,24 +60,24 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
     /*
      * James Theiler, jt@lanl.gov, the author of the GSL routine this port is
      * based on, describes his approach as follows:
-     * 
+     *
      * Based on: Alastair J Walker, An efficient method for generating discrete
      * random variables with general distributions, ACM Trans Math Soft 3,
      * 253-256 (1977). See also: D. E. Knuth, The Art of Computer Programming,
      * Volume 2 (Seminumerical algorithms), 3rd edition, Addison-Wesley (1997),
      * p120.
-     * 
+     *
      * Walker's algorithm does some preprocessing, and provides two arrays:
      * floating point F[k] and integer A[k]. A value k is chosen from 0..K-1
      * with equal likelihood, and then a uniform random number u is compared to
      * F[k]. If it is less than F[k], then k is returned. Otherwise, A[k] is
      * returned.
-     * 
+     *
      * Walker's original paper describes an O(K^2) algorithm for setting up the
      * F and A arrays. I found this disturbing since I wanted to use very large
      * values of K. I'm sure I'm not the first to realize this, but in fact the
      * preprocessing can be done in O(K) steps.
-     * 
+     *
      * A figure of merit for the preprocessing is the average value for the
      * F[k]'s (that is, SUM_k F[k]/K); this corresponds to the probability that
      * k is returned, instead of A[k], thereby saving a redirection. Walker's
@@ -92,14 +92,14 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
      * maximum I could expect from the most expensive preprocessing. Folding in
      * the difference of 0.6 vs 0.75, I'd estimate that the speedup would be
      * less than 10%.
-     * 
+     *
      * I've not implemented it here, but one compromise is to sort the
      * probabilities once, and then work from the two ends inward. This requires
      * O(K log K), still lots cheaper than O(K^2), and from my experiments with
      * the perl script, the figure of merit is within about 0.01 for K up to
      * 1000, and no sign of diverging (in fact, they seemed to be converging,
      * but it's hard to say with just a handful of runs).
-     * 
+     *
      * The O(K) algorithm goes through all the p_k's and decides if they are
      * "smalls" or "bigs" according to whether they are less than or greater
      * than the mean value 1/K. The indexes to the smalls and the bigs are put
@@ -112,34 +112,34 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
      * "pushed" to the small stack. Otherwise, it stays put. Since every time we
      * pop a small, we are able to deal with it right then and there, and we
      * never have to pop more than K smalls, then the algorithm is O(K).
-     * 
+     *
      * This implementation sets up two separate stacks, and allocates K elements
      * between them. Since neither stack ever grows, we do an extra O(K) pass
      * through the data to determine how many smalls and bigs there are to begin
      * with and allocate appropriately. In all there are 2*K*sizeof(double)
      * transient bytes of memory that are used than returned, and
      * K*(sizeof(int)+sizeof(double)) bytes used in the lookup table.
-     * 
+     *
      * Walker spoke of using two random numbers (an integer 0..K-1, and a
      * floating point u in [0,1]), but Knuth points out that one can just use
      * the integer and fractional parts of K*u where u is in [0,1]. In fact,
      * Knuth further notes that taking F'[k]=(k+F[k])/K, one can directly
      * compare u to F'[k] without having to explicitly set u=K*u-int(K*u).
-     * 
+     *
      * Usage:
-     * 
+     *
      * Starting with an array of probabilities P, initialize and do
      * preprocessing with a call to:
-     * 
+     *
      * gsl_rng *r; gsl_ran_discrete_t *f; f = gsl_ran_discrete_preproc(K,P);
-     * 
+     *
      * Then, whenever a random index 0..K-1 is desired, use
-     * 
+     *
      * k = gsl_ran_discrete(r,f);
-     * 
+     *
      * Note that several different randevent struct's can be simultaneously
      * active.
-     * 
+     *
      * Aside: A very clever alternative approach is described in Abramowitz and
      * Stegun, p 950, citing: Marsaglia, Random variables and computers, Proc
      * Third Prague Conference in Probability Theory, 1962. A more accesible
@@ -149,10 +149,10 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
      * I've done some comparisons, and the Walker method is both faster and more
      * stingy with memory. So, in the end I decided not to include it with the
      * GSL package.
-     * 
+     *
      * Written 26 Jan 1999, James Theiler, jt@lanl.gov Adapted to GSL, 30 Jan
      * 1999, jt
-     * 
+     *
      */
 
     /**
@@ -165,16 +165,12 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
      * <li><tt>0.0 &lt;= pdf[i] : 0&lt;=i&lt;=pdf.length-1</tt>
      * <li><tt>0.0 &lt; Sum(pdf[i]) : 0&lt;=i&lt;=pdf.length-1</tt>
      * </ul>
-     * 
-     * @param pdf
-     *            the probability distribution function.
-     * @param interpolationType
-     *            can be either <tt>Empirical.NO_INTERPOLATION</tt> or
-     *            <tt>Empirical.LINEAR_INTERPOLATION</tt>.
-     * @param randomGenerator
-     *            a uniform random number generator.
-     * @throws IllegalArgumentException
-     *             if at least one of the three conditions above is violated.
+     *
+     * @param pdf               the probability distribution function.
+     * @param interpolationType can be either <tt>Empirical.NO_INTERPOLATION</tt> or
+     *                          <tt>Empirical.LINEAR_INTERPOLATION</tt>.
+     * @param randomGenerator   a uniform random number generator.
+     * @throws IllegalArgumentException if at least one of the three conditions above is violated.
      */
     public EmpiricalWalker(double[] pdf, int interpolationType, RandomEngine randomGenerator) {
         setRandomGenerator(randomGenerator);
@@ -197,7 +193,7 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
      * Returns a deep copy of the receiver; the copy will produce identical
      * sequences. After this call has returned, the copy and the receiver have
      * equal but separate state.
-     * 
+     *
      * @return a copy of the receiver.
      */
 
@@ -255,11 +251,9 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
      * <li><tt>0.0 &lt;= pdf[i] : 0 &lt; =i &lt;= pdf.length-1</tt>
      * <li><tt>0.0 &lt; Sum(pdf[i]) : 0 &lt;=i &lt;= pdf.length-1</tt>
      * </ul>
-     * 
-     * @param pdf
-     *            probability distribution function.
-     * @throws IllegalArgumentException
-     *             if at least one of the three conditions above is violated.
+     *
+     * @param pdf probability distribution function.
+     * @throws IllegalArgumentException if at least one of the three conditions above is violated.
      */
     public void setState(double[] pdf, int interpolationType) {
         if (pdf == null || pdf.length == 0) {
@@ -293,11 +287,9 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
      * <li><tt>0.0 &lt;= pdf[i] : 0 &lt; =i &lt;= pdf.length-1</tt>
      * <li><tt>0.0 &lt; Sum(pdf[i]) : 0 &lt;=i &lt;= pdf.length-1</tt>
      * </ul>
-     * 
-     * @param pdf
-     *            probability distribution function.
-     * @throws IllegalArgumentException
-     *             if at least one of the three conditions above is violated.
+     *
+     * @param pdf probability distribution function.
+     * @throws IllegalArgumentException if at least one of the three conditions above is violated.
      */
     public void setState2(double[] pdf) {
         int size = pdf.length;
@@ -413,7 +405,7 @@ public class EmpiricalWalker extends AbstractDiscreteDistribution {
          */
         /*
          * free_stack(Bigs); free_stack(Smalls); free((char *)E);
-         * 
+         *
          * return g;
          */
 

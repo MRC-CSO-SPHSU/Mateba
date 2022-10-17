@@ -39,9 +39,8 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 /**
  * Example for solving a system of linear equations using Cholesky
  * factorization.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DposvExample {
     public static void main(String[] args) {

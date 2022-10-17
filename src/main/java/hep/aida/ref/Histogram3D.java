@@ -15,11 +15,11 @@ public class Histogram3D extends AbstractHistogram3D implements IHistogram3D {
 
     @Serial
     private static final long serialVersionUID = -2739175819970738380L;
-    private double[][][] heights;
+    private final double[][][] heights;
 
-    private double[][][] errors;
+    private final double[][][] errors;
 
-    private int[][][] entries;
+    private final int[][][] entries;
 
     private int nEntry;
 

@@ -23,12 +23,12 @@ import java.io.Serializable;
  * cells. Use idioms like <tt>IntFactory1D.dense.make(1000)</tt> to construct
  * dense matrices, <tt>IntFactory1D.sparse.make(1000)</tt> to construct sparse
  * matrices.
- * 
+ * <p>
  * If the factory is used frequently it might be useful to streamline the
  * notation. For example by aliasing:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  *  IntFactory1D F = IntFactory1D.dense;
  *  F.make(1000);
@@ -36,10 +36,10 @@ import java.io.Serializable;
  *  F.random(3);
  *  ...
  * </pre>
- * 
+ *
  * </td>
  * </table>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -92,7 +92,7 @@ public class IntFactory1D implements Serializable, Cloneable {
     public IntMatrix1D descending(int size) {
         IntMatrix1D matrix = make(size);
         int v = 0;
-        for (int i = size; --i >= 0;) {
+        for (int i = size; --i >= 0; ) {
             matrix.setQuick(i, v++);
         }
         return matrix;
@@ -102,9 +102,8 @@ public class IntFactory1D implements Serializable, Cloneable {
      * Constructs a matrix with the given cell values. The values are copied. So
      * subsequent changes in <tt>values</tt> are not reflected in the matrix,
      * and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      */
     public IntMatrix1D make(int[] values) {
         if (this == sparse)
@@ -157,15 +156,14 @@ public class IntFactory1D implements Serializable, Cloneable {
      * Constructs a matrix from the values of the given list. The values are
      * copied. So subsequent changes in <tt>values</tt> are not reflected in the
      * matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      * @return a new matrix.
      */
     public IntMatrix1D make(IntArrayList values) {
         int size = values.size();
         IntMatrix1D vector = make(size);
-        for (int i = size; --i >= 0;)
+        for (int i = size; --i >= 0; )
             vector.set(i, values.get(i));
         return vector;
     }
@@ -181,18 +179,18 @@ public class IntFactory1D implements Serializable, Cloneable {
     /**
      * C = A||A||..||A; Constructs a new matrix which is concatenated
      * <tt>repeat</tt> times. Example:
-     * 
+     *
      * <pre>
      *   0 1
      *   repeat(3) --&gt;
      *   0 1 0 1 0 1
-     * 
+     *
      * </pre>
      */
     public IntMatrix1D repeat(IntMatrix1D A, int repeat) {
         int size = (int) A.size();
         IntMatrix1D matrix = make(repeat * size);
-        for (int i = repeat; --i >= 0;) {
+        for (int i = repeat; --i >= 0; ) {
             matrix.viewPart(size * i, size).assign(A);
         }
         return matrix;
@@ -204,9 +202,8 @@ public class IntFactory1D implements Serializable, Cloneable {
      * them to <tt>value</tt>, all the rest will be initialized to zero. Note
      * that this is not the same as setting each cell with probability
      * <tt>nonZeroFraction</tt> to <tt>value</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
      * @see cern.jet.random.sampling.RandomSamplingAssistant
      */
     public IntMatrix1D sample(int size, int value, int nonZeroFraction) {
@@ -224,8 +221,8 @@ public class IntFactory1D implements Serializable, Cloneable {
         if (n == 0)
             return matrix;
 
-        RandomSamplingAssistant sampler = new RandomSamplingAssistant( n, size, new MersenneTwister());
-        for (int i = size; --i >= 0;) {
+        RandomSamplingAssistant sampler = new RandomSamplingAssistant(n, size, new MersenneTwister());
+        for (int i = size; --i >= 0; ) {
             if (sampler.sampleNextElement()) {
                 matrix.set(i, value);
             }
@@ -238,16 +235,15 @@ public class IntFactory1D implements Serializable, Cloneable {
      * Constructs a list from the given matrix. The values are copied. So
      * subsequent changes in <tt>values</tt> are not reflected in the list, and
      * vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new list.
+     *
+     * @param values The values to be filled into the new list.
      * @return a new list.
      */
     public cern.mateba.list.tint.IntArrayList toList(IntMatrix1D values) {
         int size = (int) values.size();
         cern.mateba.list.tint.IntArrayList list = new cern.mateba.list.tint.IntArrayList(size);
         list.setSize(size);
-        for (int i = size; --i >= 0;)
+        for (int i = size; --i >= 0; )
             list.set(i, values.get(i));
         return list;
     }

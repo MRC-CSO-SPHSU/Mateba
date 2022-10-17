@@ -23,12 +23,10 @@ public class VariableAxis implements IAxis {
      * <tt>edges = (0.2, 1.0, 5.0)</tt> yields an axis with 2 in-range bins
      * <tt>[0.2,1.0), [1.0,5.0)</tt> and 2 extra bins
      * <tt>[-inf,0.2), [5.0,inf]</tt>.
-     * 
-     * @param edges
-     *            the bin boundaries the partition shall have; must be sorted
-     *            ascending and must not contain multiple identical elements.
-     * @throws IllegalArgumentException
-     *             if <tt>edges.length < 1</tt>.
+     *
+     * @param edges the bin boundaries the partition shall have; must be sorted
+     *              ascending and must not contain multiple identical elements.
+     * @throws IllegalArgumentException if <tt>edges.length < 1</tt>.
      */
     public VariableAxis(double[] edges) {
         if (edges.length < 1)
@@ -38,7 +36,7 @@ public class VariableAxis implements IAxis {
         for (int i = 0; i < edges.length - 1; i++) {
             if (edges[i + 1] <= edges[i]) {
                 throw new IllegalArgumentException(
-                        "edges must be sorted ascending and must not contain multiple identical values");
+                    "edges must be sorted ascending and must not contain multiple identical values");
             }
         }
 
@@ -101,7 +99,7 @@ public class VariableAxis implements IAxis {
      * representation consists of a list of the arrays's elements, enclosed in
      * square brackets (<tt>"[]"</tt>). Adjacent elements are separated by the
      * characters <tt>", "</tt> (comma and space).
-     * 
+     *
      * @return a string representation of the specified array.
      */
     protected static String toString(double[] array) {

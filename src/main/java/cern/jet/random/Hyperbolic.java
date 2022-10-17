@@ -30,7 +30,7 @@ import java.io.Serial;
  * <p>
  * L. Devroye (1986): Non-Uniform Random Variate Generation, Springer Verlag,
  * New York.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -121,7 +121,7 @@ public class Hyperbolic extends AbstractContinousDistribution {
         }
 
         // GENERATOR
-        for (;;) {
+        for (; ; ) {
             u = randomGenerator.raw();
             v = randomGenerator.raw();
             if (u <= pm) { // Rejection with a uniform majorizing function
@@ -177,9 +177,8 @@ public class Hyperbolic extends AbstractContinousDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

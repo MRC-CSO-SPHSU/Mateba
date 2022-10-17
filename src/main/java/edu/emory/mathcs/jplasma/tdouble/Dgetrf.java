@@ -47,7 +47,7 @@ class Dgetrf {
      *  Computes LU factorization
      */
     protected static int plasma_DGETRF(int M, int N, double[] A, int A_offset, int LDA, double[] L, int L_offset,
-            int[] IPIV, int IPIV_offset) {
+                                       int[] IPIV, int IPIV_offset) {
         int NB, MT, NT;
         int status;
         double[] Abdl;
@@ -156,9 +156,9 @@ class Dgetrf {
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
         Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
         DbdlConvert.plasma_lapack_to_bdl(Dcommon.plasma_args.F77, Dcommon.plasma_args.F77_offset,
-                Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N,
-                Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
-                Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
+            Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N,
+            Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
+            Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
         /* Clear IPIV and Lbdl */
@@ -202,10 +202,10 @@ class Dgetrf {
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
         Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
         Pdgetrf.plasma_pDGETRF(Dcommon.plasma_args.M, Dcommon.plasma_args.N, Dcommon.plasma_args.A,
-                Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB, Dcommon.plasma_args.NBNBSIZE,
-                Dcommon.plasma_args.IBNBSIZE, Dcommon.plasma_args.IB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
-                Dcommon.plasma_args.L, Dcommon.plasma_args.L_offset, Dcommon.plasma_args.IPIV,
-                Dcommon.plasma_args.IPIV_offset, Dcommon.plasma_args.INFO, Dcommon.plasma_cntrl.cores_num, 0);
+            Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB, Dcommon.plasma_args.NBNBSIZE,
+            Dcommon.plasma_args.IBNBSIZE, Dcommon.plasma_args.IB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
+            Dcommon.plasma_args.L, Dcommon.plasma_args.L_offset, Dcommon.plasma_args.IPIV,
+            Dcommon.plasma_args.IPIV_offset, Dcommon.plasma_args.INFO, Dcommon.plasma_cntrl.cores_num, 0);
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
         /* Return L to the user */
@@ -237,9 +237,9 @@ class Dgetrf {
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
         Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
         DbdlConvert.plasma_bdl_to_lapack(Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.F77,
-                Dcommon.plasma_args.F77_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N, Dcommon.plasma_args.LDA,
-                Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT, Dcommon.plasma_args.NBNBSIZE,
-                Dcommon.plasma_cntrl.cores_num, 0);
+            Dcommon.plasma_args.F77_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N, Dcommon.plasma_args.LDA,
+            Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT, Dcommon.plasma_args.NBNBSIZE,
+            Dcommon.plasma_cntrl.cores_num, 0);
         Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
         return Dcommon.plasma_args.INFO.val;
     }

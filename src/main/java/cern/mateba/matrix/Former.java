@@ -10,7 +10,7 @@ package cern.mateba.matrix;
 
 /**
  * Formats a double or complex (double[]) into a string (like sprintf in C).
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  * @version 1.0, 21/07/00
@@ -21,67 +21,55 @@ package cern.mateba.matrix;
 public interface Former {
     /**
      * Formats a double into a string (like sprintf in C).
-     * 
-     * @param value
-     *            the number to format
+     *
+     * @param value the number to format
      * @return the formatted string
-     * @exception IllegalArgumentException
-     *                if bad argument
+     * @throws IllegalArgumentException if bad argument
      */
     String form(double value);
 
     /**
      * Formats a float into a string (like sprintf in C).
-     * 
-     * @param value
-     *            the number to format
+     *
+     * @param value the number to format
      * @return the formatted string
-     * @exception IllegalArgumentException
-     *                if bad argument
+     * @throws IllegalArgumentException if bad argument
      */
     String form(float value);
 
     /**
      * Formats an int into a string (like sprintf in C).
-     * 
-     * @param value
-     *            the number to format
+     *
+     * @param value the number to format
      * @return the formatted string
-     * @exception IllegalArgumentException
-     *                if bad argument
+     * @throws IllegalArgumentException if bad argument
      */
     String form(int value);
 
     /**
      * Formats an long into a string (like sprintf in C).
-     * 
-     * @param value
-     *            the number to format
+     *
+     * @param value the number to format
      * @return the formatted string
-     * @exception IllegalArgumentException
-     *                if bad argument
+     * @throws IllegalArgumentException if bad argument
      */
     String form(long value);
 
     /**
      * Formats a complex (double[]) into a string (like sprintf in C).
-     * 
-     * @param value
-     *            the number to format
+     *
+     * @param value the number to format
      * @return the formatted string
-     * @exception IllegalArgumentException
-     *                if bad argument
+     * @throws IllegalArgumentException if bad argument
      */
     String form(double[] value);
 
     /**
      * Formats a complex (float[]) into a string (like sprintf in C).
-     * 
-     * @param value
-     *            the number to format
+     *
+     * @param value the number to format
      * @return the formatted string
-     * @exception IllegalArgumentException
-     *                if bad argument
+     * @throws IllegalArgumentException if bad argument
      */
     String form(float[] value);
 

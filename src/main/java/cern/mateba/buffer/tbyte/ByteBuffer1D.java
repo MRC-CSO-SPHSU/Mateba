@@ -89,9 +89,10 @@ public class ByteBuffer1D implements ByteBuffer1DConsumer, Serializable, Cloneab
 
     /**
      * An implementation of the {@link Cloneable}.
+     *
      * @return a copy of the object.
-     * @implSpec Deep copy.
      * @throws AssertionError when there is no {@link Cloneable} interface.
+     * @implSpec Deep copy.
      */
     @Override
     public @NotNull ByteBuffer1D clone() {

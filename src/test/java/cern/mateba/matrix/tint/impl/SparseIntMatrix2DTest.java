@@ -22,8 +22,8 @@ public class SparseIntMatrix2DTest extends IntMatrix2DTest {
         int[] columnindexes = new int[SIZE];
         int[] values = new int[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            rowindexes[i] = (int) Math.abs(rand.nextInt() % NROWS);
-            columnindexes[i] = (int) Math.abs(rand.nextInt() % NCOLUMNS);
+            rowindexes[i] = Math.abs(rand.nextInt() % NROWS);
+            columnindexes[i] = Math.abs(rand.nextInt() % NCOLUMNS);
             values[i] = rand.nextInt();
         }
         SparseIntMatrix2D A = new SparseIntMatrix2D(NROWS, NCOLUMNS, rowindexes, columnindexes, values);
@@ -47,8 +47,8 @@ public class SparseIntMatrix2DTest extends IntMatrix2DTest {
         int[] columnindexes = new int[SIZE];
         int[] values = new int[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            rowindexes[i] = (int) Math.abs(rand.nextInt() % NROWS);
-            columnindexes[i] = (int) Math.abs(rand.nextInt() % NCOLUMNS);
+            rowindexes[i] = Math.abs(rand.nextInt() % NROWS);
+            columnindexes[i] = Math.abs(rand.nextInt() % NCOLUMNS);
             values[i] = rand.nextInt();
         }
         SparseIntMatrix2D S = new SparseIntMatrix2D(A.rows(), A.columns(), rowindexes, columnindexes, values);
@@ -66,8 +66,8 @@ public class SparseIntMatrix2DTest extends IntMatrix2DTest {
         int[] columnindexes = new int[SIZE];
         int[] values = new int[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            rowindexes[i] = (int) Math.abs(rand.nextInt() % NROWS);
-            columnindexes[i] = (int) Math.abs(rand.nextInt() % NCOLUMNS);
+            rowindexes[i] = Math.abs(rand.nextInt() % NROWS);
+            columnindexes[i] = Math.abs(rand.nextInt() % NCOLUMNS);
             values[i] = rand.nextInt();
         }
         SparseIntMatrix2D S = new SparseIntMatrix2D(A.rows(), A.columns(), rowindexes, columnindexes, values);
@@ -92,8 +92,8 @@ public class SparseIntMatrix2DTest extends IntMatrix2DTest {
         int[] columnindexes = new int[SIZE];
         int[] values = new int[SIZE];
         for (int i = 0; i < SIZE; i++) {
-            rowindexes[i] = (int) Math.abs(rand.nextInt() % NROWS);
-            columnindexes[i] = (int) Math.abs(rand.nextInt() % NCOLUMNS);
+            rowindexes[i] = Math.abs(rand.nextInt() % NROWS);
+            columnindexes[i] = Math.abs(rand.nextInt() % NCOLUMNS);
             values[i] = rand.nextInt();
         }
         SparseIntMatrix2D S = new SparseIntMatrix2D(A.rows(), A.columns(), rowindexes, columnindexes, values);

@@ -9,16 +9,15 @@ import cern.jet.math.tdouble.DoubleFunctions;
 /**
  * CGLS is Conjugate Gradient for Least Squares method used for solving
  * large-scale, ill-posed inverse problems of the form: b = A*x + noise.
- * 
+ *
  * <p>
  * Reference:<br>
  * <p>
  * A. Bjorck, "Numerical Methods for Least Squares Problems" SIAM, 1996, pg.
  * 289.
  * </p>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DoubleCGLS extends AbstractDoubleIterativeSolver {
 
@@ -31,7 +30,7 @@ public class DoubleCGLS extends AbstractDoubleIterativeSolver {
     }
 
     public DoubleMatrix1D solve(DoubleMatrix2D A, DoubleMatrix1D b, DoubleMatrix1D x)
-            throws IterativeSolverDoubleNotConvergedException {
+        throws IterativeSolverDoubleNotConvergedException {
         DoubleMatrix1D p, q, r, s;
         double alpha;
         double beta;

@@ -19,13 +19,13 @@ import edu.emory.mathcs.jplasma.tdouble.Dplasma;
  * For an <tt>m x n</tt> matrix <tt>A</tt> with <tt>m >= n</tt>, the QR
  * decomposition is an <tt>m x n</tt> orthogonal matrix <tt>Q</tt> and an
  * <tt>n x n</tt> upper triangular matrix <tt>R</tt> so that <tt>A = Q*R</tt>.
- * <P>
+ * <p>
  * The QR decompostion always exists, even if the matrix does not have full
  * rank, so the constructor will never fail. The primary use of the QR
  * decomposition is in the least squares solution of nonsquare systems of
  * simultaneous linear equations. This will fail if <tt>isFullRank()</tt>
  * returns <tt>false</tt>.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class DenseDoubleQRDecomposition implements java.io.Serializable {
@@ -33,12 +33,12 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
 
     /**
      * Array for internal storage of decomposition.
-     * 
+     *
      * @serial internal array storage.
      */
-    private double[] elementsA;
+    private final double[] elementsA;
 
-    private double[] T;
+    private final double[] T;
 
     private boolean columnMatrix = false;
 
@@ -48,22 +48,20 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
 
     /**
      * Row and column dimensions.
-     * 
+     *
      * @serial column dimension.
      * @serial row dimension.
      */
-    private int m, n;
+    private final int m;
+    private final int n;
 
     /**
      * Constructs and returns a new QR decomposition object; computed by
      * Householder reflections; The decomposed matrices can be retrieved via
      * instance methods of the returned decomposition object.
-     * 
-     * @param A
-     *            A rectangular matrix.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>A.rows() < A.columns()</tt>.
+     *
+     * @param A A rectangular matrix.
+     * @throws IllegalArgumentException if <tt>A.rows() < A.columns()</tt>.
      */
 
     public DenseDoubleQRDecomposition(DoubleMatrix2D A) {
@@ -89,10 +87,8 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
 
     /**
      * Generates and returns a copy of the orthogonal factor <tt>Q</tt>.
-     * 
-     * @param economySize
-     *            if true, then Q is m-by-n, otherwise, Q is m-by-m
-     * 
+     *
+     * @param economySize if true, then Q is m-by-n, otherwise, Q is m-by-m
      * @return <tt>Q</tt>
      */
     public DoubleMatrix2D getQ(boolean economySize) {
@@ -103,7 +99,7 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
             for (int i = 0; i < m; i++)
                 elementsQ[m * i + i] = 1.0;
             int info = Dplasma.plasma_DORMQR(Dplasma.PlasmaLeft, Dplasma.PlasmaNoTrans, m, m, n, elementsA, 0, m, T, 0,
-                    elementsQ, 0, m);
+                elementsQ, 0, m);
             Dplasma.plasma_Finalize();
             if (info != 0) {
                 throw new IllegalArgumentException("Error occured while computing matrix Q: " + info);
@@ -127,10 +123,8 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
 
     /**
      * Returns a copy of the upper triangular factor, <tt>R</tt>.
-     * 
-     * @param economySize
-     *            if true, then R is n-by-n, otherwise, R is m-by-n
-     * 
+     *
+     * @param economySize if true, then R is n-by-n, otherwise, R is m-by-n
      * @return <tt>R</tt>
      */
     public DoubleMatrix2D getR(boolean economySize) {
@@ -152,7 +146,7 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
             }
         } else {
             if (economySize) {
-                return ((DenseColumnDoubleMatrix2D) R.viewPart(0, 0, n, n)).copy();
+                return R.viewPart(0, 0, n, n).copy();
             } else {
                 return R.copy();
             }
@@ -161,7 +155,7 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
 
     /**
      * Returns whether the matrix <tt>A</tt> has full rank.
-     * 
+     *
      * @return true if <tt>R</tt>, and hence <tt>A</tt>, has full rank.
      */
     public boolean hasFullRank() {
@@ -175,14 +169,11 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
     /**
      * Least squares solution of <tt>A*x = b</tt> (in-place). Upon return
      * <tt>b</tt> is overridden with the result <tt>x</tt>.
-     * 
-     * @param b
-     *            right-hand side.
-     * @exception IllegalArgumentException
-     *                if <tt>b.size() != A.rows()</tt>.
-     * @exception IllegalArgumentException
-     *                if <tt>!this.hasFullRank()</tt> (<tt>A</tt> is rank
-     *                deficient).
+     *
+     * @param b right-hand side.
+     * @throws IllegalArgumentException if <tt>b.size() != A.rows()</tt>.
+     * @throws IllegalArgumentException if <tt>!this.hasFullRank()</tt> (<tt>A</tt> is rank
+     *                                  deficient).
      */
     public void solve(DoubleMatrix1D b) {
         DoubleProperty.DEFAULT.checkDense(b);
@@ -200,17 +191,17 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
         }
         Dplasma.plasma_Init(m, n, 1);
         int info = Dplasma.plasma_DORMQR(Dplasma.PlasmaLeft, Dplasma.PlasmaNoTrans, m, 1, n, elementsA, 0, m, T, 0,
-                elementsX, 0, m);
+            elementsX, 0, m);
         if (info != 0) {
             throw new IllegalArgumentException(
-                    "Error occured while solving the system of equation using QR decomposition: " + info);
+                "Error occured while solving the system of equation using QR decomposition: " + info);
         }
         info = Dplasma.plasma_DTRSM(Dplasma.PlasmaLeft, Dplasma.PlasmaUpper, Dplasma.PlasmaNoTrans,
-                Dplasma.PlasmaNonUnit, n, 1, elementsA, 0, m, elementsX, 0, m);
+            Dplasma.PlasmaNonUnit, n, 1, elementsA, 0, m, elementsX, 0, m);
         Dplasma.plasma_Finalize();
         if (info != 0) {
             throw new IllegalArgumentException(
-                    "Error occured while solving the system of equation using QR decomposition: " + info);
+                "Error occured while solving the system of equation using QR decomposition: " + info);
         }
         if (b.isView()) {
             b.assign(elementsX);
@@ -220,15 +211,12 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
     /**
      * Least squares solution of <tt>A*X = B</tt>(in-place). Upon return
      * <tt>B</tt> is overridden with the result <tt>X</tt>.
-     * 
-     * @param B
-     *            A matrix with as many rows as <tt>A</tt> and any number of
-     *            columns.
-     * @exception IllegalArgumentException
-     *                if <tt>B.rows() != A.rows()</tt>.
-     * @exception IllegalArgumentException
-     *                if <tt>!this.hasFullRank()</tt> (<tt>A</tt> is rank
-     *                deficient).
+     *
+     * @param B A matrix with as many rows as <tt>A</tt> and any number of
+     *          columns.
+     * @throws IllegalArgumentException if <tt>B.rows() != A.rows()</tt>.
+     * @throws IllegalArgumentException if <tt>!this.hasFullRank()</tt> (<tt>A</tt> is rank
+     *                                  deficient).
      */
     public void solve(DoubleMatrix2D B) {
         if (B.rows() != m) {
@@ -251,17 +239,17 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
         int nrhs = B.columns();
         Dplasma.plasma_Init(m, n, nrhs);
         int info = Dplasma.plasma_DORMQR(Dplasma.PlasmaLeft, Dplasma.PlasmaNoTrans, m, nrhs, n, elementsA, 0, m, T, 0,
-                elementsX, 0, m);
+            elementsX, 0, m);
         if (info != 0) {
             throw new IllegalArgumentException(
-                    "Error occured while solving the system of equation using QR decomposition: " + info);
+                "Error occured while solving the system of equation using QR decomposition: " + info);
         }
         info = Dplasma.plasma_DTRSM(Dplasma.PlasmaLeft, Dplasma.PlasmaUpper, Dplasma.PlasmaNoTrans,
-                Dplasma.PlasmaNonUnit, n, nrhs, elementsA, 0, m, elementsX, 0, m);
+            Dplasma.PlasmaNonUnit, n, nrhs, elementsA, 0, m, elementsX, 0, m);
         Dplasma.plasma_Finalize();
         if (info != 0) {
             throw new IllegalArgumentException(
-                    "Error occured while solving the system of equation using QR decomposition: " + info);
+                "Error occured while solving the system of equation using QR decomposition: " + info);
         }
         if (B instanceof DenseDoubleMatrix2D) {
             B.viewDice().assign(elementsX);
@@ -275,11 +263,11 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
     /**
      * Returns a String with (propertyName, propertyValue) pairs. Useful for
      * debugging or to quickly get the rough picture. For example,
-     * 
+     *
      * <pre>
      *   rank          : 3
      *   trace         : 0
-     * 
+     *
      * </pre>
      */
 
@@ -293,21 +281,21 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
 
         buf.append("hasFullRank = ");
         try {
-            buf.append(String.valueOf(this.hasFullRank()));
+            buf.append(this.hasFullRank());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\n\nQ = ");
         try {
-            buf.append(String.valueOf(this.getQ(false)));
+            buf.append(this.getQ(false));
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\n\nR = ");
         try {
-            buf.append(String.valueOf(this.getR(false)));
+            buf.append(this.getR(false));
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
@@ -316,7 +304,7 @@ public class DenseDoubleQRDecomposition implements java.io.Serializable {
         try {
             DoubleMatrix2D X = cern.mateba.matrix.tdouble.DoubleFactory2D.dense.identity(m);
             this.solve(X);
-            buf.append(String.valueOf(X));
+            buf.append(X);
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }

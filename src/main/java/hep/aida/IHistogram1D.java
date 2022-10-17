@@ -43,13 +43,13 @@ public interface IHistogram1D extends IHistogram {
      * Fill histogram with specified data and weight 1.
      */
     void fill_2D(final double[] data, final int rows, final int columns, final int zero, final int rowStride,
-                        final int columnStride);
+                 final int columnStride);
 
     /**
      * Fill histogram with specified data and weights.
      */
     void fill_2D(final double[] data, final double[] weights, final int rows, final int columns, final int zero,
-                        final int rowStride, final int columnStride);
+                 final int rowStride, final int columnStride);
 
     /**
      * Returns the mean of the whole histogram as calculated on filling-time.

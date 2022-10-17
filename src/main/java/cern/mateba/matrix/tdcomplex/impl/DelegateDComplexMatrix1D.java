@@ -18,7 +18,7 @@ import java.io.Serial;
 /**
  * 1-d matrix holding <tt>complex</tt> elements; either a view wrapping another
  * 2-d matrix and therefore delegating calls to it.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class DelegateDComplexMatrix1D extends DComplexMatrix1D {
@@ -38,11 +38,9 @@ class DelegateDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Creates new instance of DelegateDComplexMatrix1D
-     * 
-     * @param newContent
-     *            the content
-     * @param row
-     *            the row this view is bound to
+     *
+     * @param newContent the content
+     * @param row        the row this view is bound to
      */
     public DelegateDComplexMatrix1D(DComplexMatrix2D newContent, int row) {
         if (row < 0 || row >= newContent.rows())

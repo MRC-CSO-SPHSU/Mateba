@@ -21,11 +21,11 @@ import cern.jet.random.engine.MersenneTwister;
  * {@link DoubleFunctions} except operating on longs.
  * <p>
  * For aliasing see {@link #intFunctions}.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
-public class IntFunctions extends Object {
+public class IntFunctions {
     /**
      * Little trick to allow for "aliasing", that is, renaming this class.
      * Writing code like
@@ -36,7 +36,7 @@ public class IntFunctions extends Object {
      * write
      * <p>
      * <tt>IntFunctions F = IntFunctions.longFunctions; <br>
-    F.chain(F.plus,F.mult(3),F.chain(F.square,F.div(2)));</tt>
+     * F.chain(F.plus,F.mult(3),F.chain(F.square,F.div(2)));</tt>
      * <p>
      */
     public static final IntFunctions intFunctions = new IntFunctions();
@@ -48,7 +48,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>Math.abs(a) == (a < 0) ? -a : a</tt>.
      */
     public static final IntFunction abs = new IntFunction() {
-        public final int apply(int a) {
+        public int apply(int a) {
             return (a < 0) ? -a : a;
         }
     };
@@ -57,7 +57,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a--</tt>.
      */
     public static final IntFunction dec = new IntFunction() {
-        public final int apply(int a) {
+        public int apply(int a) {
             return a--;
         }
     };
@@ -66,7 +66,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>(int) Arithmetic.factorial(a)</tt>.
      */
     public static final IntFunction factorial = new IntFunction() {
-        public final int apply(int a) {
+        public int apply(int a) {
             return (int) DoubleArithmetic.factorial(a);
         }
     };
@@ -75,7 +75,7 @@ public class IntFunctions extends Object {
      * Function that returns its argument.
      */
     public static final IntFunction identity = new IntFunction() {
-        public final int apply(int a) {
+        public int apply(int a) {
             return a;
         }
     };
@@ -84,7 +84,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a++</tt>.
      */
     public static final IntFunction inc = new IntFunction() {
-        public final int apply(int a) {
+        public int apply(int a) {
             return a++;
         }
     };
@@ -93,7 +93,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>-a</tt>.
      */
     public static final IntFunction neg = new IntFunction() {
-        public final int apply(int a) {
+        public int apply(int a) {
             return -a;
         }
     };
@@ -102,7 +102,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>~a</tt>.
      */
     public static final IntFunction not = new IntFunction() {
-        public final int apply(int a) {
+        public int apply(int a) {
             return ~a;
         }
     };
@@ -111,7 +111,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a < 0 ? -1 : a > 0 ? 1 : 0</tt>.
      */
     public static final IntFunction sign = new IntFunction() {
-        public final int apply(int a) {
+        public int apply(int a) {
             return a < 0 ? -1 : a > 0 ? 1 : 0;
         }
     };
@@ -120,7 +120,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a * a</tt>.
      */
     public static final IntFunction square = new IntFunction() {
-        public final int apply(int a) {
+        public int apply(int a) {
             return a * a;
         }
     };
@@ -133,7 +133,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a & b</tt>.
      */
     public static final IntIntFunction and = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a & b;
         }
     };
@@ -142,7 +142,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a < b ? -1 : a > b ? 1 : 0</tt>.
      */
     public static final IntIntFunction compare = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a < b ? -1 : a > b ? 1 : 0;
         }
     };
@@ -151,7 +151,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a / b</tt>.
      */
     public static final IntIntFunction div = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a / b;
         }
     };
@@ -160,7 +160,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>-(a / b)</tt>.
      */
     public static final IntIntFunction divNeg = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return -(a / b);
         }
     };
@@ -169,7 +169,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a == b ? 1 : 0</tt>.
      */
     public static final IntIntFunction equals = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a == b ? 1 : 0;
         }
     };
@@ -178,7 +178,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a == b</tt>.
      */
     public static final IntIntProcedure isEqual = new IntIntProcedure() {
-        public final boolean apply(int a, int b) {
+        public boolean apply(int a, int b) {
             return a == b;
         }
     };
@@ -187,7 +187,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a < b</tt>.
      */
     public static final IntIntProcedure isLess = new IntIntProcedure() {
-        public final boolean apply(int a, int b) {
+        public boolean apply(int a, int b) {
             return a < b;
         }
     };
@@ -196,7 +196,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a > b</tt>.
      */
     public static final IntIntProcedure isGreater = new IntIntProcedure() {
-        public final boolean apply(int a, int b) {
+        public boolean apply(int a, int b) {
             return a > b;
         }
     };
@@ -205,7 +205,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>Math.max(a,b)</tt>.
      */
     public static final IntIntFunction max = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return (a >= b) ? a : b;
         }
     };
@@ -214,7 +214,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>Math.min(a,b)</tt>.
      */
     public static final IntIntFunction min = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return (a <= b) ? a : b;
         }
     };
@@ -223,7 +223,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a - b</tt>.
      */
     public static final IntIntFunction minus = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a - b;
         }
     };
@@ -232,7 +232,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a % b</tt>.
      */
     public static final IntIntFunction mod = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a % b;
         }
     };
@@ -241,7 +241,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a * b</tt>.
      */
     public static final IntIntFunction mult = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a * b;
         }
     };
@@ -250,7 +250,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>-(a * b)</tt>.
      */
     public static final IntIntFunction multNeg = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return -(a * b);
         }
     };
@@ -259,7 +259,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a * b^2</tt>.
      */
     public static final IntIntFunction multSquare = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a * b * b;
         }
     };
@@ -268,7 +268,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a | b</tt>.
      */
     public static final IntIntFunction or = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a | b;
         }
     };
@@ -277,7 +277,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a + b</tt>.
      */
     public static final IntIntFunction plus = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a + b;
         }
     };
@@ -286,7 +286,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>Math.abs(a) + Math.abs(b)</tt>.
      */
     public static final IntIntFunction plusAbs = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return Math.abs(a) + Math.abs(b);
         }
     };
@@ -295,7 +295,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>(int) Math.pow(a,b)</tt>.
      */
     public static final IntIntFunction pow = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return (int) Math.pow(a, b);
         }
     };
@@ -304,7 +304,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a << b</tt>.
      */
     public static final IntIntFunction shiftLeft = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a << b;
         }
     };
@@ -313,7 +313,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a >> b</tt>.
      */
     public static final IntIntFunction shiftRightSigned = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a >> b;
         }
     };
@@ -322,7 +322,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a >>> b</tt>.
      */
     public static final IntIntFunction shiftRightUnsigned = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a >>> b;
         }
     };
@@ -331,7 +331,7 @@ public class IntFunctions extends Object {
      * Function that returns <tt>a ^ b</tt>.
      */
     public static final IntIntFunction xor = new IntIntFunction() {
-        public final int apply(int a, int b) {
+        public int apply(int a, int b) {
             return a ^ b;
         }
     };
@@ -349,7 +349,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction and(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a & b;
             }
         };
@@ -361,7 +361,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction between(final int from, final int to) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return (from <= a && a <= to) ? 1 : 0;
             }
         };
@@ -371,15 +371,14 @@ public class IntFunctions extends Object {
      * Constructs a unary function from a binary function with the first operand
      * (argument) fixed to the given constant <tt>c</tt>. The second operand is
      * variable (free).
-     * 
-     * @param function
-     *            a binary function taking operands in the form
-     *            <tt>function.apply(c,var)</tt>.
+     *
+     * @param function a binary function taking operands in the form
+     *                 <tt>function.apply(c,var)</tt>.
      * @return the unary function <tt>function(c,var)</tt>.
      */
     public static IntFunction bindArg1(final IntIntFunction function, final int c) {
         return new IntFunction() {
-            public final int apply(int var) {
+            public int apply(int var) {
                 return function.apply(c, var);
             }
         };
@@ -389,15 +388,14 @@ public class IntFunctions extends Object {
      * Constructs a unary function from a binary function with the second
      * operand (argument) fixed to the given constant <tt>c</tt>. The first
      * operand is variable (free).
-     * 
-     * @param function
-     *            a binary function taking operands in the form
-     *            <tt>function.apply(var,c)</tt>.
+     *
+     * @param function a binary function taking operands in the form
+     *                 <tt>function.apply(var,c)</tt>.
      * @return the unary function <tt>function(var,c)</tt>.
      */
     public static IntFunction bindArg2(final IntIntFunction function, final int c) {
         return new IntFunction() {
-            public final int apply(int var) {
+            public int apply(int var) {
                 return function.apply(var, c);
             }
         };
@@ -405,16 +403,14 @@ public class IntFunctions extends Object {
 
     /**
      * Constructs the function <tt>g( h(a) )</tt>.
-     * 
-     * @param g
-     *            a unary function.
-     * @param h
-     *            a unary function.
+     *
+     * @param g a unary function.
+     * @param h a unary function.
      * @return the unary function <tt>g( h(a) )</tt>.
      */
     public static IntFunction chain(final IntFunction g, final IntFunction h) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return g.apply(h.apply(a));
             }
         };
@@ -422,16 +418,14 @@ public class IntFunctions extends Object {
 
     /**
      * Constructs the function <tt>g( h(a,b) )</tt>.
-     * 
-     * @param g
-     *            a unary function.
-     * @param h
-     *            a binary function.
+     *
+     * @param g a unary function.
+     * @param h a binary function.
      * @return the unary function <tt>g( h(a,b) )</tt>.
      */
     public static IntIntFunction chain(final IntFunction g, final IntIntFunction h) {
         return new IntIntFunction() {
-            public final int apply(int a, int b) {
+            public int apply(int a, int b) {
                 return g.apply(h.apply(a, b));
             }
         };
@@ -439,18 +433,15 @@ public class IntFunctions extends Object {
 
     /**
      * Constructs the function <tt>f( g(a), h(b) )</tt>.
-     * 
-     * @param f
-     *            a binary function.
-     * @param g
-     *            a unary function.
-     * @param h
-     *            a unary function.
+     *
+     * @param f a binary function.
+     * @param g a unary function.
+     * @param h a unary function.
      * @return the binary function <tt>f( g(a), h(b) )</tt>.
      */
     public static IntIntFunction chain(final IntIntFunction f, final IntFunction g, final IntFunction h) {
         return new IntIntFunction() {
-            public final int apply(int a, int b) {
+            public int apply(int a, int b) {
                 return f.apply(g.apply(a), h.apply(b));
             }
         };
@@ -462,7 +453,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction compare(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a < b ? -1 : a > b ? 1 : 0;
             }
         };
@@ -473,7 +464,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction constant(final int c) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return c;
             }
         };
@@ -485,7 +476,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction div(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a / b;
             }
         };
@@ -497,7 +488,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction equals(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a == b ? 1 : 0;
             }
         };
@@ -509,7 +500,7 @@ public class IntFunctions extends Object {
      */
     public static IntProcedure isBetween(final int from, final int to) {
         return new IntProcedure() {
-            public final boolean apply(int a) {
+            public boolean apply(int a) {
                 return from <= a && a <= to;
             }
         };
@@ -521,7 +512,7 @@ public class IntFunctions extends Object {
      */
     public static IntProcedure isEqual(final int b) {
         return new IntProcedure() {
-            public final boolean apply(int a) {
+            public boolean apply(int a) {
                 return a == b;
             }
         };
@@ -533,7 +524,7 @@ public class IntFunctions extends Object {
      */
     public static IntProcedure isGreater(final int b) {
         return new IntProcedure() {
-            public final boolean apply(int a) {
+            public boolean apply(int a) {
                 return a > b;
             }
         };
@@ -545,7 +536,7 @@ public class IntFunctions extends Object {
      */
     public static IntProcedure isLess(final int b) {
         return new IntProcedure() {
-            public final boolean apply(int a) {
+            public boolean apply(int a) {
                 return a < b;
             }
         };
@@ -557,7 +548,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction max(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return (a >= b) ? a : b;
             }
         };
@@ -569,7 +560,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction min(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return (a <= b) ? a : b;
             }
         };
@@ -581,7 +572,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction minus(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a - b;
             }
         };
@@ -601,7 +592,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction mod(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a % b;
             }
         };
@@ -613,7 +604,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction mult(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a * b;
             }
         };
@@ -625,7 +616,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction or(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a | b;
             }
         };
@@ -637,7 +628,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction plus(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a + b;
             }
         };
@@ -649,7 +640,7 @@ public class IntFunctions extends Object {
     public static IntIntFunction multSecond(final int constant) {
 
         return new IntIntFunction() {
-            public final int apply(int a, int b) {
+            public int apply(int a, int b) {
                 return b * constant;
             }
         };
@@ -662,7 +653,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction pow(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return (int) Math.pow(a, b);
             }
         };
@@ -710,7 +701,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction shiftLeft(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a << b;
             }
         };
@@ -722,7 +713,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction shiftRightSigned(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a >> b;
             }
         };
@@ -734,7 +725,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction shiftRightUnsigned(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a >>> b;
             }
         };
@@ -744,15 +735,14 @@ public class IntFunctions extends Object {
      * Constructs a function that returns <tt>function.apply(b,a)</tt>, i.e.
      * applies the function with the first operand as second operand and the
      * second operand as first operand.
-     * 
-     * @param function
-     *            a function taking operands in the form
-     *            <tt>function.apply(a,b)</tt>.
+     *
+     * @param function a function taking operands in the form
+     *                 <tt>function.apply(a,b)</tt>.
      * @return the binary function <tt>function(b,a)</tt>.
      */
     public static IntIntFunction swapArgs(final IntIntFunction function) {
         return new IntIntFunction() {
-            public final int apply(int a, int b) {
+            public int apply(int a, int b) {
                 return function.apply(b, a);
             }
         };
@@ -764,7 +754,7 @@ public class IntFunctions extends Object {
      */
     public static IntFunction xor(final int b) {
         return new IntFunction() {
-            public final int apply(int a) {
+            public int apply(int a) {
                 return a ^ b;
             }
         };

@@ -24,6 +24,6 @@ public class AllTests {
     }
 
     public static void main(String[] args) {
-        org.junit.runner.JUnitCore.main(AllTests.class.getName().toString());
+        org.junit.runner.JUnitCore.main(AllTests.class.getName());
     }
 }

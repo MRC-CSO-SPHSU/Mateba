@@ -37,13 +37,13 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * <tt>O(1)</tt> (i.e. constant time) for the basic operations <tt>get</tt>,
  * <tt>getQuick</tt>, <tt>set</tt>, <tt>setQuick</tt> and <tt>size</tt>,
  * <p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
 public class DenseObjectMatrix1D extends ObjectMatrix1D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = -7509232094163050783L;
@@ -56,9 +56,8 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
      * Constructs a matrix with a copy of the given values. The values are
      * copied. So subsequent changes in <tt>values</tt> are not reflected in the
      * matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      */
     public DenseObjectMatrix1D(Object[] values) {
         this(values.length);
@@ -68,11 +67,9 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
     /**
      * Constructs a matrix with a given number of cells. All entries are
      * initially <tt>0</tt>.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size the number of cells the matrix shall have.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public DenseObjectMatrix1D(int size) {
         setUp(size);
@@ -81,29 +78,23 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @param isView
-     *            if true then a matrix view is constructed
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param zero     the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @param isView   if true then a matrix view is constructed
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     protected DenseObjectMatrix1D(int size, Object[] elements, int zero, int stride, boolean isView) {
         setUp(size, zero, stride);
         this.elements = elements;
         this.isNoView = !isView;
     }
-    
+
     public Object aggregate(final cern.mateba.function.tobject.ObjectObjectFunction aggr,
-            final cern.mateba.function.tobject.ObjectFunction f) {
+                            final cern.mateba.function.tobject.ObjectFunction f) {
         if (size == 0)
             throw new IllegalArgumentException("size == 0");
         Object a = null;
@@ -184,7 +175,7 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
     }
 
     public Object aggregate(final ObjectMatrix1D other, final cern.mateba.function.tobject.ObjectObjectFunction aggr,
-            final cern.mateba.function.tobject.ObjectObjectFunction f) {
+                            final cern.mateba.function.tobject.ObjectObjectFunction f) {
         if (!(other instanceof DenseObjectMatrix1D)) {
             return super.aggregate(other, aggr, f);
         }
@@ -230,7 +221,7 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
         }
         return a;
     }
-    
+
 
     /**
      * Sets all cells to the state specified by <tt>values</tt>. <tt>values</tt>
@@ -238,19 +229,17 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>values.length != size()</tt>.
+     * @throws IllegalArgumentException if <tt>values.length != size()</tt>.
      */
 
     public ObjectMatrix1D assign(Object[] values) {
         if (isNoView) {
             if (values.length != size)
                 throw new IllegalArgumentException("Must have same number of cells: length=" + values.length
-                        + "size()=" + size());
+                    + "size()=" + size());
             System.arraycopy(values, 0, this.elements, 0, values.length);
         } else {
             super.assign(values);
@@ -264,21 +253,20 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
      * <tt>[size()-1]</tt> to <tt>[0]</tt>).
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * 	 // change each cell to its sine
-     * 	 matrix =   0.5      1.5      2.5       3.5 
+     * 	 matrix =   0.5      1.5      2.5       3.5
      * 	 matrix.assign(cern.jet.math.Functions.sin);
      * 	 --&gt;
      * 	 matrix ==  0.479426 0.997495 0.598472 -0.350783
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>.
-     * 
-     * @param function
-     *            a function object taking as argument the current cell's value.
+     *
+     * @param function a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tdouble.DoubleFunctions
      */
@@ -325,21 +313,18 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
      * same cells (as is the case if they are views derived from the same
      * matrix) and intersect in an ambiguous way, then replaces <i>as if</i>
      * using an intermediate auxiliary deep copy of <tt>other</tt>.
-     * 
-     * @param source
-     *            the source matrix to copy from (may be identical to the
-     *            receiver).
+     *
+     * @param source the source matrix to copy from (may be identical to the
+     *               receiver).
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
 
     public ObjectMatrix1D assign(ObjectMatrix1D source) {
         // overriden for performance only
-        if (!(source instanceof DenseObjectMatrix1D)) {
+        if (!(source instanceof DenseObjectMatrix1D other)) {
             return super.assign(source);
         }
-        DenseObjectMatrix1D other = (DenseObjectMatrix1D) source;
         if (other == this)
             return this;
         checkSize(other);
@@ -400,7 +385,7 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
      * <tt>[size()-1]</tt> to <tt>[0]</tt>).
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * 	 // assign x[i] = x[i]&lt;sup&gt;y[i]&lt;/sup&gt;
      * 	 m1 = 0 1 2 3;
@@ -408,28 +393,25 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
      * 	 m1.assign(m2, cern.jet.math.Functions.pow);
      * 	 --&gt;
      * 	 m1 == 1 1 16 729
-     * 
-     * 	 // for non-standard functions there is no shortcut: 
+     *
+     * 	 // for non-standard functions there is no shortcut:
      * 	 m1.assign(m2,
      * 	    new ObjectobjectFunction() {
      * 	       public Object apply(Object x, Object y) { return Math.pow(x,y); }
-     * 	    }
+     *        }
      * 	 );
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>.
-     * 
-     * @param y
-     *            the secondary matrix to operate on.
-     * @param function
-     *            a function object taking as first argument the current cell's
-     *            value of <tt>this</tt>, and as second argument the current
-     *            cell's value of <tt>y</tt>,
+     *
+     * @param y        the secondary matrix to operate on.
+     * @param function a function object taking as first argument the current cell's
+     *                 value of <tt>this</tt>, and as second argument the current
+     *                 cell's value of <tt>y</tt>,
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != y.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != y.size()</tt>.
      * @see cern.jet.math.tdouble.DoubleFunctions
      */
 
@@ -483,7 +465,7 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
         }
         return this;
     }
-    
+
     public ObjectMatrix1D assign(final Object value) {
         final Object[] elems = this.elements;
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -521,15 +503,14 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>index</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
+     *
+     * @param index the index of the cell.
      * @return the value of the specified cell.
      */
 
@@ -545,11 +526,9 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
      */
 
     protected boolean haveSharedCellsRaw(ObjectMatrix1D other) {
-        if (other instanceof SelectedDenseObjectMatrix1D) {
-            SelectedDenseObjectMatrix1D otherMatrix = (SelectedDenseObjectMatrix1D) other;
+        if (other instanceof SelectedDenseObjectMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseObjectMatrix1D) {
-            DenseObjectMatrix1D otherMatrix = (DenseObjectMatrix1D) other;
+        } else if (other instanceof DenseObjectMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -559,15 +538,14 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
      * Returns the position of the element with the given relative rank within
      * the (virtual or non-virtual) internal 1-dimensional array. You may want
      * to override this method for performance.
-     * 
-     * @param rank
-     *            the rank of the element.
+     *
+     * @param rank the rank of the element.
      */
 
     public long index(int rank) {
         // overriden for manual inlining only
         // return _offset(_rank(rank));
-        return zero + rank * stride;
+        return zero + (long) rank * stride;
     }
 
     /**
@@ -578,9 +556,8 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
      * instance of type <tt>SparseObjectMatrix1D</tt> the new matrix must also
      * be of type <tt>SparseObjectMatrix1D</tt>, etc. In general, the new matrix
      * should have internal parametrization as similar as possible.
-     * 
-     * @param size
-     *            the number of cell the matrix shall have.
+     *
+     * @param size the number of cell the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -595,18 +572,16 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
      * matrix must be of type <tt>DenseObjectMatrix2D</tt>, if the receiver is
      * an instance of type <tt>SparseObjectMatrix1D</tt> the new matrix must be
      * of type <tt>SparseObjectMatrix2D</tt>, etc.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
 
     public ObjectMatrix2D like2D(int rows, int columns) {
         return new DenseObjectMatrix2D(rows, columns);
     }
-    
+
     public ObjectMatrix2D reshape(final int rows, final int columns) {
         if (rows * columns != size) {
             throw new IllegalArgumentException("rows*columns != size");
@@ -712,17 +687,15 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell.
      */
 
     public void setQuick(int index, Object value) {
@@ -734,9 +707,8 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Swaps each element <tt>this[i]</tt> with <tt>other[i]</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
 
     public void swap(ObjectMatrix1D other) {
@@ -796,9 +768,8 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
      * the matrix, and vice-versa. After this call returns the array
      * <tt>values</tt> has the form <br>
      * <tt>for (int i=0; i < size(); i++) values[i] = get(i);</tt>
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>values.length < size()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>values.length < size()</tt>.
      */
 
     public void toArray(Object[] values) {
@@ -812,9 +783,8 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param offsets
-     *            the offsets of the visible elements.
+     *
+     * @param offsets the offsets of the visible elements.
      * @return a new view.
      */
 

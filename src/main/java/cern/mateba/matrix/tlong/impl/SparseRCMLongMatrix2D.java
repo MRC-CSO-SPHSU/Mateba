@@ -15,28 +15,24 @@ import java.io.Serial;
 /**
  * Sparse row-compressed-modified 2-d matrix holding <tt>long</tt> elements.
  * Each row is stored as SparseLongMatrix1D.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class SparseRCMLongMatrix2D extends WrapperLongMatrix2D {
 
     @Serial
     private static final long serialVersionUID = 8465851977392676563L;
-    private SparseLongMatrix1D[] elements;
+    private final SparseLongMatrix1D[] elements;
 
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public SparseRCMLongMatrix2D(int rows, int columns) {
         super(null);

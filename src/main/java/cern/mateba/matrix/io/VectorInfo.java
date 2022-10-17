@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003-2006 Bjørn-Ove Heimsund
- * 
+ *
  * This file is part of MTJ.
- * 
+ *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the
  * Free Software Foundation; either version 2.1 of the License, or (at your
  * option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -48,26 +48,24 @@ public class VectorInfo {
         /**
          * Pattern matrix. No numbers stored
          */
-        Pattern;
+        Pattern
     }
 
     /**
      * True if the vector is sparse, else false
      */
-    private boolean sparse;
+    private final boolean sparse;
 
     /**
      * Type of data stored
      */
-    private VectorField field;
+    private final VectorField field;
 
     /**
      * Creates a specific type
-     * 
-     * @param sparse
-     *            True for sparse vectors, else false
-     * @param field
-     *            Type of data stored
+     *
+     * @param sparse True for sparse vectors, else false
+     * @param field  Type of data stored
      */
     public VectorInfo(boolean sparse, VectorField field) {
         this.sparse = sparse;
@@ -152,7 +150,7 @@ public class VectorInfo {
      * Returns a string representation of the specifier. Can be used to provide
      * a header for writing to a file. It is a two-line output, which can look
      * like this:
-     * 
+     *
      * <pre>
      *      %%MatrixMarket vector coordinate real
      * </pre>

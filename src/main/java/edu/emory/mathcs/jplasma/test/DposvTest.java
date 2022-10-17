@@ -37,9 +37,8 @@ import edu.emory.mathcs.jplasma.tdouble.Dplasma;
 
 /**
  * Test of plasma_DPOSV
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DposvTest {
 
@@ -49,13 +48,13 @@ public class DposvTest {
             dposvTest(args);
         }
     }
-    
+
     public static void dposvTest(String[] args) {
 
         /* Check for number of arguments*/
         if (args.length != 4) {
             System.out
-                    .print(" Proper Usage is : java edu.emory.mathcs.jplasma.test.DposvTest N LDA NRHS LDB with \n - N : the size of the matrix \n - LDA : leading dimension of the matrix A \n - NRHS : number of RHS \n - LDB : leading dimension of the RHS B \n");
+                .print(" Proper Usage is : java edu.emory.mathcs.jplasma.test.DposvTest N LDA NRHS LDB with \n - N : the size of the matrix \n - LDA : leading dimension of the matrix A \n - NRHS : number of RHS \n - LDB : leading dimension of the RHS B \n");
             System.exit(1);
         }
 
@@ -77,8 +76,8 @@ public class DposvTest {
         Dplasma.plasma_Init(N, N, NRHS);
 
         /*-------------------------------------------------------------
-        *  TESTING DPOSV
-        */
+         *  TESTING DPOSV
+         */
 
         /* Initialize A1 and A2 for Symmetric Positive Matrix */
         for (i = 0; i < N; i++)
@@ -108,11 +107,11 @@ public class DposvTest {
         eps = 1e-10;
         System.out.print("\n");
         System.out.print("------ TESTS FOR PLASMA DPOSV ROUTINE -------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", N, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", N, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the factorization and the solution */
@@ -130,8 +129,8 @@ public class DposvTest {
         }
 
         /*-------------------------------------------------------------
-        *  TESTING DPOTRF + DPOTRS
-        */
+         *  TESTING DPOTRF + DPOTRS
+         */
 
         /* Initialize A1 and A2 for Symmetric Positive Matrix */
         for (i = 0; i < N; i++)
@@ -163,11 +162,11 @@ public class DposvTest {
 
         System.out.print("\n");
         System.out.print("------ TESTS FOR PLASMA DPOTRF + DPOTRS ROUTINE -------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", N, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", N, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the factorization and the solution */
@@ -185,8 +184,8 @@ public class DposvTest {
         }
 
         /*-------------------------------------------------------------
-        *  TESTING DPOTRF + DPTRSM + DTRSM
-        */
+         *  TESTING DPOTRF + DPTRSM + DTRSM
+         */
 
         /* Initialize A1 and A2 for Symmetric Positive Matrix */
         for (i = 0; i < N; i++)
@@ -213,21 +212,21 @@ public class DposvTest {
         Dplasma.plasma_Finalize();
         Dplasma.plasma_Init(N, N, NRHS);
         Dplasma.plasma_DTRSM(Dplasma.PlasmaLeft, Dplasma.PlasmaLower, Dplasma.PlasmaNoTrans, Dplasma.PlasmaNonUnit, N,
-                NRHS, A2, 0, LDA, B2, 0, LDB);
+            NRHS, A2, 0, LDA, B2, 0, LDB);
         Dplasma.plasma_Finalize();
         Dplasma.plasma_Init(N, N, NRHS);
         Dplasma.plasma_DTRSM(Dplasma.PlasmaLeft, Dplasma.PlasmaLower, Dplasma.PlasmaTrans, Dplasma.PlasmaNonUnit, N,
-                NRHS, A2, 0, LDA, B2, 0, LDB);
+            NRHS, A2, 0, LDA, B2, 0, LDB);
         Dplasma.plasma_Finalize();
         uplo = Dplasma.PlasmaLower;
 
         System.out.print("\n");
         System.out.print("------ TESTS FOR PLASMA DPOTRF + DTRSM + DTRSM  ROUTINE -------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", N, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", N, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the factorization and the solution */
@@ -285,7 +284,7 @@ public class DposvTest {
 
         System.out.print("============\n");
         System.out.print("Checking the Cholesky Factorization \n");
-        System.out.print(String.format("-- ||L'L-A||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps)));
+        System.out.printf("-- ||L'L-A||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps));
 
         if (Rnorm / (Anorm * N * eps) > 10.0) {
             System.out.print("-- Factorization is suspicious ! \n");
@@ -298,11 +297,11 @@ public class DposvTest {
     }
 
     /*------------------------------------------------------------------------
-     *  Check the accuracy of the solution of the linear system 
+     *  Check the accuracy of the solution of the linear system
      */
 
     private static int check_solution(int N, int NRHS, double[] A1, int LDA, double[] B1, double[] B2, int LDB,
-            double eps) {
+                                      double eps) {
         int info_solution;
         double Rnorm, Anorm, Xnorm, Bnorm;
         String norm = "I";
@@ -321,8 +320,8 @@ public class DposvTest {
 
         System.out.print("============\n");
         System.out.print("Checking the Residual of the solution \n");
-        System.out.print(String.format("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
-                / ((Anorm * Xnorm + Bnorm) * N * eps)));
+        System.out.printf("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
+            / ((Anorm * Xnorm + Bnorm) * N * eps));
 
         if (Rnorm / ((Anorm * Xnorm + Bnorm) * N * eps) > 10.0) {
             System.out.print("-- The solution is suspicious ! \n");

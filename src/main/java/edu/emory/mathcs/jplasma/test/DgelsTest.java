@@ -37,25 +37,24 @@ import edu.emory.mathcs.jplasma.tdouble.Dplasma;
 
 /**
  * Test of plasma_DGELS
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DgelsTest {
 
     public static void main(String[] args) {
         int n = 10;
         for (int i = 0; i < n; i++) {
-           dgelsTest(args);
+            dgelsTest(args);
         }
     }
-    
+
     public static void dgelsTest(String[] args) {
 
         /* Check for number of arguments*/
         if (args.length != 5) {
             System.out
-                    .println(" Proper Usage is : java edu.emory.mathcs.jplasma.test.DgelsTest M N LDA NRHS LDB with \n - M : number of rows of the matrix A \n - N : number of columns of the matrix A \n - LDA : leading dimension of the matrix A \n - NRHS : number of RHS \n - LDB : leading dimension of the matrix B");
+                .println(" Proper Usage is : java edu.emory.mathcs.jplasma.test.DgelsTest M N LDA NRHS LDB with \n - M : number of rows of the matrix A \n - N : number of columns of the matrix A \n - LDA : leading dimension of the matrix A \n - NRHS : number of RHS \n - LDB : leading dimension of the matrix B");
             System.exit(1);
         }
 
@@ -70,7 +69,6 @@ public class DgelsTest {
 
         double[] A1 = new double[LDA * N];
         double[] A2 = new double[LDA * N];
-        ;
         double[] Q = new double[M * M];
         double[] B1 = new double[LDB * NRHS];
         double[] B2 = new double[LDB * NRHS];
@@ -79,8 +77,8 @@ public class DgelsTest {
         Dplasma.plasma_Init(M, N, NRHS);
 
         /*----------------------------------------------------------
-        *  TESTING DGELS
-        */
+         *  TESTING DGELS
+         */
 
         /* Initialize A1 and A2 */
         for (i = 0; i < M; i++)
@@ -105,11 +103,11 @@ public class DgelsTest {
         eps = 1e-10;
         System.out.print("\n");
         System.out.print("------ TESTS FOR PLASMA DGELS ROUTINE -------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", M, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", M, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the orthogonality, factorization and the solution */
@@ -128,8 +126,8 @@ public class DgelsTest {
         }
 
         /*----------------------------------------------------------
-        *  TESTING DGEQRF + DORMQR + DTRSM
-        */
+         *  TESTING DGEQRF + DORMQR + DTRSM
+         */
 
         /* Initialize A1 and A2 */
         for (i = 0; i < M; i++)
@@ -157,16 +155,16 @@ public class DgelsTest {
         Dplasma.plasma_Finalize();
         Dplasma.plasma_Init(M, N, NRHS);
         Dplasma.plasma_DTRSM(Dplasma.PlasmaLeft, Dplasma.PlasmaUpper, Dplasma.PlasmaNoTrans, Dplasma.PlasmaNonUnit, N,
-                NRHS, A2, 0, LDA, B2, 0, LDB);
+            NRHS, A2, 0, LDA, B2, 0, LDB);
         Dplasma.plasma_Finalize();
 
         System.out.print("\n");
         System.out.print("------ TESTS FOR PLASMA DGEQRF + DORMQR + DTRSM  ROUTINE -------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", M, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", M, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the orthogonality, factorization and the solution */
@@ -212,7 +210,7 @@ public class DgelsTest {
 
         System.out.print("============\n");
         System.out.print("Checking the orthogonality of Q \n");
-        System.out.print(String.format("||Id-Q'*Q||_oo / (N*eps) = %e\n", normQ / (M * eps)));
+        System.out.printf("||Id-Q'*Q||_oo / (N*eps) = %e\n", normQ / (M * eps));
 
         if (normQ / (M * eps) > 10.0) {
             System.out.print("-- Orthogonality is suspicious ! \n");
@@ -260,7 +258,7 @@ public class DgelsTest {
 
         System.out.print("============\n");
         System.out.print("Checking the QR Factorization \n");
-        System.out.print(String.format("-- ||A-QR||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps)));
+        System.out.printf("-- ||A-QR||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps));
 
         if (Rnorm / (Anorm * N * eps) > 10.0) {
             System.out.print("-- Factorization is suspicious ! \n");
@@ -273,11 +271,11 @@ public class DgelsTest {
     }
 
     /*--------------------------------------------------------------
-     * Check the solution 
+     * Check the solution
      */
 
     private static int check_solution(int M, int N, int NRHS, double[] A1, int LDA, double[] B1, double[] B2, int LDB,
-            double eps) {
+                                      double eps) {
         int info_solution;
         double Rnorm, Anorm, Xnorm, Bnorm;
         String norm = "I";
@@ -301,8 +299,8 @@ public class DgelsTest {
 
         System.out.print("============\n");
         System.out.print("Checking the Residual of the solution \n");
-        System.out.print(String.format("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||)_oo.N.eps) = %e \n", Rnorm
-                / ((Anorm * Xnorm + Bnorm) * N * eps)));
+        System.out.printf("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||)_oo.N.eps) = %e \n", Rnorm
+            / ((Anorm * Xnorm + Bnorm) * N * eps));
 
         if (Rnorm / ((Anorm * Xnorm + Bnorm) * N * eps) > 10.0) {
             System.out.print("-- The solution is suspicious ! \n");

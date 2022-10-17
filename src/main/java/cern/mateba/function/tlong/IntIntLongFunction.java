@@ -15,14 +15,11 @@ package cern.mateba.function.tlong;
 public interface IntIntLongFunction {
     /**
      * Applies a function to three arguments.
-     * 
-     * @param first
-     *            first argument passed to the function.
-     * @param second
-     *            second argument passed to the function.
-     * @param third
-     *            third argument passed to the function.
+     *
+     * @param first  first argument passed to the function.
+     * @param second second argument passed to the function.
+     * @param third  third argument passed to the function.
      * @return the result of the function.
      */
-    abstract public long apply(int first, int second, long third);
+    long apply(int first, int second, long third);
 }

@@ -21,11 +21,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 /**
  * 2-d matrix holding <tt>double</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 04/14/2000
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 04/14/2000
  */
 public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
 
@@ -53,7 +52,7 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
             final double[] elems = ((DiagonalDoubleMatrix2D) content).elements;
             if (values.length != dlength)
                 throw new IllegalArgumentException("Must have same length: length=" + values.length + " dlength="
-                        + dlength);
+                    + dlength);
             int nthreads = ConcurrencyUtils.getNumberOfThreads();
             if ((nthreads > 1) && (dlength >= ConcurrencyUtils.getThreadsBeginN_2D())) {
                 nthreads = Math.min(nthreads, dlength);
@@ -65,17 +64,14 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
                     futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                         public void run() {
-                            for (int i = firstIdx; i < lastIdx; i++) {
-                                elems[i] = values[i];
-                            }
+                            if (lastIdx - firstIdx >= 0)
+                                System.arraycopy(values, firstIdx, elems, firstIdx, lastIdx - firstIdx);
                         }
                     });
                 }
                 ConcurrencyUtils.waitForCompletion(futures);
             } else {
-                for (int i = 0; i < dlength; i++) {
-                    elems[i] = values[i];
-                }
+                System.arraycopy(values, 0, elems, 0, dlength);
             }
             return this;
         } else {
@@ -89,7 +85,7 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
             final double[] elems = ((DiagonalDoubleMatrix2D) content).elements;
             if (values.length != dlength)
                 throw new IllegalArgumentException("Must have same length: length=" + values.length + " dlength="
-                        + dlength);
+                    + dlength);
             int nthreads = ConcurrencyUtils.getNumberOfThreads();
             if ((nthreads > 1) && (dlength >= ConcurrencyUtils.getThreadsBeginN_2D())) {
                 nthreads = Math.min(nthreads, dlength);
@@ -161,16 +157,14 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     }
 
     public boolean equals(Object obj) {
-        if (content instanceof DiagonalDoubleMatrix2D && obj instanceof DiagonalDoubleMatrix2D) {
+        if (content instanceof DiagonalDoubleMatrix2D A && obj instanceof DiagonalDoubleMatrix2D B) {
             double epsilon = cern.mateba.matrix.tdouble.algo.DoubleProperty.DEFAULT.tolerance();
             if (this == obj)
                 return true;
             if (!(this != null && obj != null))
                 return false;
-            DiagonalDoubleMatrix2D A = (DiagonalDoubleMatrix2D) content;
-            DiagonalDoubleMatrix2D B = (DiagonalDoubleMatrix2D) obj;
             if (A.columns() != B.columns() || A.rows() != B.rows() || A.diagonalIndex() != B.diagonalIndex()
-                    || A.diagonalLength() != B.diagonalLength())
+                || A.diagonalLength() != B.diagonalLength())
                 return false;
             double[] AElements = A.elements();
             double[] BElements = B.elements();
@@ -200,14 +194,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Computes the 2D discrete cosine transform (DCT-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dct2(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).dct2(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -222,13 +214,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the discrete cosine transform (DCT-II) of each column of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void dctColumns(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).dctColumns(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -243,13 +234,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the discrete cosine transform (DCT-II) of each row of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void dctRows(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).dctRows(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -263,13 +253,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Computes the 2D discrete sine transform (DST-II) of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void dst2(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).dst2(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -284,14 +273,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the discrete sine transform (DST-II) of each column of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void dstColumns(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).dstColumns(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -305,13 +292,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Computes the discrete sine transform (DST-II) of each row of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void dstRows(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).dstRows(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -328,7 +314,7 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
      */
     public void dht2() {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).dht2();
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -346,7 +332,7 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
      */
     public void dhtColumns() {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).dhtColumns();
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -363,7 +349,7 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
      */
     public void dhtRows() {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).dhtRows();
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -378,38 +364,36 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the 2D discrete Fourier transform (DFT) of this matrix. The
      * physical layout of the output data is as follows:
-     * 
+     *
      * <pre>
-     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2], 
-     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2], 
-     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2, 
-     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2], 
-     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2], 
-     *       0&lt;k2&lt;columns/2, 
-     * this[k1][0] = Re[k1][0] = Re[rows-k1][0], 
-     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0], 
-     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2], 
-     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2], 
-     *       0&lt;k1&lt;rows/2, 
-     * this[0][0] = Re[0][0], 
-     * this[0][1] = Re[0][columns/2], 
-     * this[rows/2][0] = Re[rows/2][0], 
+     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2],
+     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2],
+     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2,
+     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2],
+     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2],
+     *       0&lt;k2&lt;columns/2,
+     * this[k1][0] = Re[k1][0] = Re[rows-k1][0],
+     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0],
+     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2],
+     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2],
+     *       0&lt;k1&lt;rows/2,
+     * this[0][0] = Re[0][0],
+     * this[0][1] = Re[0][columns/2],
+     * this[rows/2][0] = Re[rows/2][0],
      * this[rows/2][1] = Re[rows/2][columns/2]
      * </pre>
-     * 
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * forward transform, use <code>getFft2</code>. To get back the original
      * data, use <code>ifft2</code>.
-     * 
-     * @throws IllegalArgumentException
-     *             if the row size or the column size of this matrix is not a
-     *             power of 2 number.
-     * 
+     *
+     * @throws IllegalArgumentException if the row size or the column size of this matrix is not a
+     *                                  power of 2 number.
      */
     public void fft2() {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).fft2();
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -424,13 +408,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the 2D discrete Fourier transform
      * (DFT) of this matrix.
-     * 
+     *
      * @return the 2D discrete Fourier transform (DFT) of this matrix.
-     * 
      */
     public DenseLargeDComplexMatrix2D getFft2() {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 return ((DenseLargeDoubleMatrix2D) content).getFft2();
             } else {
                 return ((DenseLargeDoubleMatrix2D) copy()).getFft2();
@@ -443,13 +426,13 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the 2D inverse of the discrete
      * Fourier transform (IDFT) of this matrix.
-     * 
+     *
      * @return the 2D inverse of the discrete Fourier transform (IDFT) of this
-     *         matrix.
+     * matrix.
      */
     public DenseLargeDComplexMatrix2D getIfft2(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 return ((DenseLargeDoubleMatrix2D) content).getIfft2(scale);
             } else {
                 return ((DenseLargeDoubleMatrix2D) copy()).getIfft2(scale);
@@ -462,13 +445,13 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the discrete Fourier transform (DFT)
      * of each column of this matrix.
-     * 
+     *
      * @return the discrete Fourier transform (DFT) of each column of this
-     *         matrix.
+     * matrix.
      */
     public DenseLargeDComplexMatrix2D getFftColumns() {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 return ((DenseLargeDoubleMatrix2D) content).getFftColumns();
             } else {
                 return ((DenseLargeDoubleMatrix2D) copy()).getFftColumns();
@@ -481,12 +464,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the discrete Fourier transform (DFT)
      * of each row of this matrix.
-     * 
+     *
      * @return the discrete Fourier transform (DFT) of each row of this matrix.
      */
     public DenseLargeDComplexMatrix2D getFftRows() {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 return ((DenseLargeDoubleMatrix2D) content).getFftRows();
             } else {
                 return ((DenseLargeDoubleMatrix2D) copy()).getFftRows();
@@ -499,13 +482,13 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the inverse of the discrete Fourier
      * transform (IDFT) of each column of this matrix.
-     * 
+     *
      * @return the inverse of the discrete Fourier transform (IDFT) of each
-     *         column of this matrix.
+     * column of this matrix.
      */
     public DenseLargeDComplexMatrix2D getIfftColumns(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 return ((DenseLargeDoubleMatrix2D) content).getIfftColumns(scale);
             } else {
                 return ((DenseLargeDoubleMatrix2D) copy()).getIfftColumns(scale);
@@ -518,12 +501,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns new complex matrix which is the inverse of the discrete Fourier
      * transform (IDFT) of each row of this matrix.
-     * 
+     *
      * @return the inverse of the discrete Fourier transform (IDFT) of each row
-     *         of this matrix.
+     * of this matrix.
      */
     public DenseLargeDComplexMatrix2D getIfftRows(final boolean scale) {
-        if (this.isNoView == true) {
+        if (this.isNoView) {
             return ((DenseLargeDoubleMatrix2D) content).getIfftRows(scale);
         } else {
             return ((DenseLargeDoubleMatrix2D) copy()).getIfftRows(scale);
@@ -534,13 +517,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete cosine transform (DCT-III) of
      * this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idct2(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).idct2(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -555,13 +537,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete cosine transform (DCT-III) of each
      * column of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idctColumns(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).idctColumns(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -576,13 +557,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete cosine transform (DCT-III) of each
      * row of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idctRows(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).idctRows(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -597,13 +577,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete size transform (DST-III) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idst2(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).idst2(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -618,13 +597,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete sine transform (DST-III) of each
      * column of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idstColumns(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).idstColumns(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -639,14 +617,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete sine transform (DST-III) of each row
      * of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idstRows(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).idstRows(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -661,13 +637,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete Hartley transform (DHT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idht2(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).idht2(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -682,13 +657,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete Hartley transform (DHT) of each
      * column of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void idhtColumns(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).idhtColumns(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -703,14 +677,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the inverse of the discrete Hartley transform (DHT) of each row
      * of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void idhtRows(final boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).idhtRows(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -725,40 +697,36 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Computes the 2D inverse of the discrete Fourier transform (IDFT) of this
      * matrix. The physical layout of the input data has to be as follows:
-     * 
+     *
      * <pre>
-     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2], 
-     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2], 
-     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2, 
-     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2], 
-     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2], 
-     *       0&lt;k2&lt;columns/2, 
-     * this[k1][0] = Re[k1][0] = Re[rows-k1][0], 
-     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0], 
-     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2], 
-     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2], 
-     *       0&lt;k1&lt;rows/2, 
-     * this[0][0] = Re[0][0], 
-     * this[0][1] = Re[0][columns/2], 
-     * this[rows/2][0] = Re[rows/2][0], 
+     * this[k1][2*k2] = Re[k1][k2] = Re[rows-k1][columns-k2],
+     * this[k1][2*k2+1] = Im[k1][k2] = -Im[rows-k1][columns-k2],
+     *       0&lt;k1&lt;rows, 0&lt;k2&lt;columns/2,
+     * this[0][2*k2] = Re[0][k2] = Re[0][columns-k2],
+     * this[0][2*k2+1] = Im[0][k2] = -Im[0][columns-k2],
+     *       0&lt;k2&lt;columns/2,
+     * this[k1][0] = Re[k1][0] = Re[rows-k1][0],
+     * this[k1][1] = Im[k1][0] = -Im[rows-k1][0],
+     * this[rows-k1][1] = Re[k1][columns/2] = Re[rows-k1][columns/2],
+     * this[rows-k1][0] = -Im[k1][columns/2] = Im[rows-k1][columns/2],
+     *       0&lt;k1&lt;rows/2,
+     * this[0][0] = Re[0][0],
+     * this[0][1] = Re[0][columns/2],
+     * this[rows/2][0] = Re[rows/2][0],
      * this[rows/2][1] = Re[rows/2][columns/2]
      * </pre>
-     * 
+     * <p>
      * This method computes only half of the elements of the real transform. The
      * other half satisfies the symmetry condition. If you want the full real
      * inverse transform, use <code>getIfft2</code>.
-     * 
-     * @throws IllegalArgumentException
-     *             if the row size or the column size of this matrix is not a
-     *             power of 2 number.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
+     * @throws IllegalArgumentException if the row size or the column size of this matrix is not a
+     *                                  power of 2 number.
      */
     public void ifft2(boolean scale) {
         if (content instanceof DenseLargeDoubleMatrix2D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDoubleMatrix2D) content).ifft2(scale);
             } else {
                 DenseLargeDoubleMatrix2D copy = (DenseLargeDoubleMatrix2D) copy();
@@ -817,7 +785,7 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
             return this;
         WrapperDoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -845,7 +813,7 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
     public DoubleMatrix2D viewDice() {
         WrapperDoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -876,7 +844,7 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
         checkBox(row, column, height, width);
         WrapperDoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -913,7 +881,7 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
             return this;
         WrapperDoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -941,12 +909,12 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
         // check for "all"
         if (rowIndexes == null) {
             rowIndexes = new int[rows];
-            for (int i = rows; --i >= 0;)
+            for (int i = rows; --i >= 0; )
                 rowIndexes[i] = i;
         }
         if (columnIndexes == null) {
             columnIndexes = new int[columns];
-            for (int i = columns; --i >= 0;)
+            for (int i = columns; --i >= 0; )
                 columnIndexes[i] = i;
         }
 
@@ -957,7 +925,7 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
 
         WrapperDoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -989,7 +957,7 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
             throw new IndexOutOfBoundsException("illegal stride");
         WrapperDoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 

@@ -38,7 +38,8 @@ public class RandomSupport {
 
     static long generateNextLong(final RandomEngine rng, final long origin, final long bound) {
         val rangePower = bound - origin + 1;
-        if (rangePower > 0) return rng.nextLong(rangePower) + origin; //fixme this nextlong introduces extra checks, change this
+        if (rangePower > 0)
+            return rng.nextLong(rangePower) + origin; //fixme this nextlong introduces extra checks, change this
         if (rangePower < 0) {
             var value = rng.nextLong();
             while (!(value >= origin && value <= bound)) value = rng.nextLong();
@@ -98,6 +99,7 @@ public class RandomSupport {
 
     /**
      * The bound is not included.
+     *
      * @see #generateNextIntCO(RandomEngine, int)
      */
     static long generateNextLongCO(final RandomEngine rng, final long bound) {
@@ -122,6 +124,7 @@ public class RandomSupport {
 
     /**
      * The bound is included by default.
+     *
      * @see #generateNextIntCC(RandomEngine, int)
      */
     static long generateNextLongCC(final RandomEngine rng, final long bound) {
@@ -199,15 +202,16 @@ public class RandomSupport {
 
     /**
      * Correctly divides {@code b - a} by {@code gamma} that is always a power of {@code 2}.
-     * @param a The leftmost value.
-     * @param b The rightmost value.
-     * @param gamma The output of {@link #gamma(double, double)}.
+     *
+     * @param a        The leftmost value.
+     * @param b        The rightmost value.
+     * @param gamma    The output of {@link #gamma(double, double)}.
      * @param inverseG The inverse of {@code gamma} to speed up the calculations.
      * @return The number of intervals in range.
-     * @see <a href="https://dl.acm.org/doi/full/10.1145/3503512">Frédéric Goualard. 2022. Drawing Random Floating-point
-     * Numbers from an Interval. ACM Trans. Model. Comput. Simul. 32, 3, Article 16 (July 2022), 24 pages.</a>
      * @implSpec {@code ceil(b / g - a / g)} cannot be larger than {@code Long.MAX_VALUE} otherwise evaluation of
      * {@link #protoCeilLong(double, double, double, double)} might result in a negative value.
+     * @see <a href="https://dl.acm.org/doi/full/10.1145/3503512">Frédéric Goualard. 2022. Drawing Random Floating-point
+     * Numbers from an Interval. ACM Trans. Model. Comput. Simul. 32, 3, Article 16 (July 2022), 24 pages.</a>
      */
     static long ceilLong(final double a, final double b, final double gamma, final double inverseG) {
         val bg = fastDivision(b, gamma, inverseG);
@@ -224,6 +228,7 @@ public class RandomSupport {
 
     /**
      * Generates uniformly distributed floating-point numbers in the {@code [a, b]} range.
+     *
      * @param a The leftmost value of the interval.
      * @param b The rightmost value of the interval.
      * @return a number in the range.
@@ -240,6 +245,7 @@ public class RandomSupport {
 
     /**
      * Generates uniformly distributed floating-point numbers in the {@code [a, b)} range.
+     *
      * @param a The leftmost value of the interval.
      * @param b The rightmost value of the interval (not included).
      * @return a number in the range.
@@ -255,6 +261,7 @@ public class RandomSupport {
 
     /**
      * Generates uniformly distributed floating-point numbers in the {@code (a, b]} range.
+     *
      * @param a The leftmost value of the interval (not included).
      * @param b The rightmost value of the interval.
      * @return a number in the range.
@@ -264,12 +271,13 @@ public class RandomSupport {
     static double gammaSectionOC(RandomEngine rng, final double a, final double b) {
         val g = gamma(a, b);
         val hi = ceilLong(a, b, g, 1. / g);
-        val k  = generateNextLongCC(rng, hi - 1);
+        val k = generateNextLongCC(rng, hi - 1);
         return abs(a) <= abs(b) ? fma(-k, g, b) : (k == hi - 1) ? b : fma(k + 1, g, a);
     }
 
     /**
      * Generates uniformly distributed floating-point numbers in the {@code (a, b)} range.
+     *
      * @param a The leftmost value of the interval (not included).
      * @param b The rightmost value of the interval (not included).
      * @return a number in the range.

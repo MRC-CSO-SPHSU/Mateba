@@ -12,7 +12,7 @@ import cern.mateba.function.tdcomplex.RealDComplexFunction;
 
 /**
  * Complex function objects to be passed to generic methods.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class DComplexFunctions {
@@ -24,7 +24,7 @@ public class DComplexFunctions {
      **************************************************************************/
 
     public static final DComplexRealFunction abs = new DComplexRealFunction() {
-        public final double apply(double[] x) {
+        public double apply(double[] x) {
             double absX = Math.abs(x[0]);
             double absY = Math.abs(x[1]);
             if (absX == 0.0 && absY == 0.0) {
@@ -40,7 +40,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexFunction acos = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
 
             double re, im;
@@ -66,7 +66,7 @@ public class DComplexFunctions {
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
 
             double re2, im2;
@@ -94,13 +94,13 @@ public class DComplexFunctions {
     };
 
     public static final DComplexRealFunction arg = new DComplexRealFunction() {
-        public final double apply(double[] x) {
+        public double apply(double[] x) {
             return Math.atan2(x[1], x[0]);
         }
     };
 
     public static final DComplexDComplexFunction asin = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
 
             double re, im;
@@ -126,7 +126,7 @@ public class DComplexFunctions {
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
 
             double re2, im2;
@@ -154,7 +154,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexFunction atan = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
 
             double re, im;
@@ -176,7 +176,7 @@ public class DComplexFunctions {
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
 
             double re2, im2;
@@ -200,14 +200,14 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexFunction conj = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
             z[0] = x[0];
             z[1] = -x[1];
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
             z[0] = re;
             z[1] = -im;
@@ -216,7 +216,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexFunction cos = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
 
             double re1, im1, re2, im2;
@@ -243,7 +243,7 @@ public class DComplexFunctions {
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
 
             double re1, im1, re2, im2;
@@ -272,7 +272,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexFunction exp = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
             double scalar = Math.exp(x[0]);
             z[0] = (scalar * Math.cos(x[1]));
@@ -280,7 +280,7 @@ public class DComplexFunctions {
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
             double scalar = Math.exp(re);
             z[0] = (scalar * Math.cos(im));
@@ -290,17 +290,17 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexFunction identity = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             return x;
         }
 
-        public final double[] apply(double re, double im) {
-            return new double[] { re, im };
+        public double[] apply(double re, double im) {
+            return new double[]{re, im};
         }
     };
 
     public static final DComplexDComplexFunction inv = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
             if (x[1] != 0.0) {
                 double tmp = (x[0] * x[0]) + (x[1] * x[1]);
@@ -313,7 +313,7 @@ public class DComplexFunctions {
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
             if (im != 0.0) {
                 double scalar;
@@ -335,14 +335,14 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexFunction log = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
             z[0] = Math.log(DComplex.abs(x));
             z[1] = DComplex.arg(x);
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
             z[0] = Math.log(DComplex.abs(re, im));
             z[1] = DComplex.arg(re, im);
@@ -351,17 +351,17 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexFunction neg = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
-            return new double[] { -x[0], -x[1] };
+        public double[] apply(double[] x) {
+            return new double[]{-x[0], -x[1]};
         }
 
-        public final double[] apply(double re, double im) {
-            return new double[] { -re, -im };
+        public double[] apply(double re, double im) {
+            return new double[]{-re, -im};
         }
     };
 
     public static final DComplexDComplexFunction sin = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
             double re1, im1, re2, im2;
             double scalar;
@@ -387,7 +387,7 @@ public class DComplexFunctions {
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
             double re1, im1, re2, im2;
             double scalar;
@@ -415,7 +415,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexFunction sqrt = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
             double absx = DComplex.abs(x);
             double tmp;
@@ -439,7 +439,7 @@ public class DComplexFunctions {
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
             double absx = DComplex.abs(re, im);
             double tmp;
@@ -465,14 +465,14 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexFunction square = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
             z[0] = x[0] * x[0] - x[1] * x[1];
             z[1] = x[1] * x[0] + x[0] * x[1];
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
             z[0] = re * re - im * im;
             z[1] = im * re + re * im;
@@ -481,7 +481,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexFunction tan = new DComplexDComplexFunction() {
-        public final double[] apply(double[] x) {
+        public double[] apply(double[] x) {
             double[] z = new double[2];
             double scalar;
             double iz_re, iz_im;
@@ -516,7 +516,7 @@ public class DComplexFunctions {
             return z;
         }
 
-        public final double[] apply(double re, double im) {
+        public double[] apply(double re, double im) {
             double[] z = new double[2];
             double scalar;
             double iz_re, iz_im;
@@ -557,7 +557,7 @@ public class DComplexFunctions {
      **************************************************************************/
 
     public static final DComplexDComplexDComplexFunction div = new DComplexDComplexDComplexFunction() {
-        public final double[] apply(double[] x, double[] y) {
+        public double[] apply(double[] x, double[] y) {
             double re = y[0];
             double im = y[1];
 
@@ -582,7 +582,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexRealRealFunction equals = new DComplexDComplexRealRealFunction() {
-        public final double apply(double[] x, double[] y, double tol) {
+        public double apply(double[] x, double[] y, double tol) {
             if (DComplex.abs(x[0] - y[0], x[1] - y[1]) <= Math.abs(tol)) {
                 return 1;
             } else {
@@ -592,17 +592,13 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexRealProcedure isEqual = new DComplexDComplexRealProcedure() {
-        public final boolean apply(double[] x, double[] y, double tol) {
-            if (DComplex.abs(x[0] - y[0], x[1] - y[1]) <= Math.abs(tol)) {
-                return true;
-            } else {
-                return false;
-            }
+        public boolean apply(double[] x, double[] y, double tol) {
+            return DComplex.abs(x[0] - y[0], x[1] - y[1]) <= Math.abs(tol);
         }
     };
 
     public static final DComplexDComplexDComplexFunction minus = new DComplexDComplexDComplexFunction() {
-        public final double[] apply(double[] x, double[] y) {
+        public double[] apply(double[] x, double[] y) {
             double[] z = new double[2];
             z[0] = x[0] - y[0];
             z[1] = x[1] - y[1];
@@ -611,7 +607,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexDComplexFunction mult = new DComplexDComplexDComplexFunction() {
-        public final double[] apply(double[] x, double[] y) {
+        public double[] apply(double[] x, double[] y) {
             double[] z = new double[2];
             z[0] = x[0] * y[0] - x[1] * y[1];
             z[1] = x[1] * y[0] + x[0] * y[1];
@@ -620,7 +616,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexDComplexFunction multConjFirst = new DComplexDComplexDComplexFunction() {
-        public final double[] apply(double[] x, double[] y) {
+        public double[] apply(double[] x, double[] y) {
             double[] z = new double[2];
             z[0] = x[0] * y[0] + x[1] * y[1];
             z[1] = -x[1] * y[0] + x[0] * y[1];
@@ -629,7 +625,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexDComplexFunction multConjSecond = new DComplexDComplexDComplexFunction() {
-        public final double[] apply(double[] x, double[] y) {
+        public double[] apply(double[] x, double[] y) {
             double[] z = new double[2];
             z[0] = x[0] * y[0] + x[1] * y[1];
             z[1] = x[1] * y[0] - x[0] * y[1];
@@ -638,7 +634,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexDComplexFunction plus = new DComplexDComplexDComplexFunction() {
-        public final double[] apply(double[] x, double[] y) {
+        public double[] apply(double[] x, double[] y) {
             double[] z = new double[2];
             z[0] = x[0] + y[0];
             z[1] = x[1] + y[1];
@@ -647,7 +643,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexRealDComplexFunction pow1 = new DComplexRealDComplexFunction() {
-        public final double[] apply(double[] x, double y) {
+        public double[] apply(double[] x, double y) {
             double[] z = new double[2];
             double re = (y * Math.log(DComplex.abs(x)));
             double im = y * DComplex.arg(x);
@@ -659,7 +655,7 @@ public class DComplexFunctions {
     };
 
     public static final RealDComplexDComplexFunction pow2 = new RealDComplexDComplexFunction() {
-        public final double[] apply(double x, double[] y) {
+        public double[] apply(double x, double[] y) {
             double[] z = new double[2];
             double re = Math.log(Math.abs(x));
             double im = Math.atan2(0.0, x);
@@ -676,7 +672,7 @@ public class DComplexFunctions {
     };
 
     public static final DComplexDComplexDComplexFunction pow3 = new DComplexDComplexDComplexFunction() {
-        public final double[] apply(double[] x, double[] y) {
+        public double[] apply(double[] x, double[] y) {
             double[] z = new double[2];
             double re = Math.log(DComplex.abs(x));
             double im = DComplex.arg(x);
@@ -694,41 +690,41 @@ public class DComplexFunctions {
 
     public static DComplexDComplexFunction bindArg1(final DComplexDComplexDComplexFunction function, final double[] c) {
         return new DComplexDComplexFunction() {
-            public final double[] apply(double[] var) {
+            public double[] apply(double[] var) {
                 return function.apply(c, var);
             }
 
-            public final double[] apply(double re, double im) {
-                return function.apply(c, new double[] { re, im });
+            public double[] apply(double re, double im) {
+                return function.apply(c, new double[]{re, im});
             }
         };
     }
 
     public static DComplexDComplexFunction bindArg2(final DComplexDComplexDComplexFunction function, final double[] c) {
         return new DComplexDComplexFunction() {
-            public final double[] apply(double[] var) {
+            public double[] apply(double[] var) {
                 return function.apply(var, c);
             }
 
-            public final double[] apply(double re, double im) {
-                return function.apply(new double[] { re, im }, c);
+            public double[] apply(double re, double im) {
+                return function.apply(new double[]{re, im}, c);
             }
         };
     }
 
     public static DComplexDComplexDComplexFunction chain(final DComplexDComplexDComplexFunction f,
-            final DComplexDComplexFunction g, final DComplexDComplexFunction h) {
+                                                         final DComplexDComplexFunction g, final DComplexDComplexFunction h) {
         return new DComplexDComplexDComplexFunction() {
-            public final double[] apply(double[] x, double[] y) {
+            public double[] apply(double[] x, double[] y) {
                 return f.apply(g.apply(x), h.apply(y));
             }
         };
     }
 
     public static DComplexDComplexDComplexFunction chain(final DComplexDComplexFunction g,
-            final DComplexDComplexDComplexFunction h) {
+                                                         final DComplexDComplexDComplexFunction h) {
         return new DComplexDComplexDComplexFunction() {
-            public final double[] apply(double[] x, double[] y) {
+            public double[] apply(double[] x, double[] y) {
                 return g.apply(h.apply(x, y));
             }
         };
@@ -736,24 +732,24 @@ public class DComplexFunctions {
 
     public static DComplexDComplexFunction chain(final DComplexDComplexFunction g, final DComplexDComplexFunction h) {
         return new DComplexDComplexFunction() {
-            public final double[] apply(double[] x) {
+            public double[] apply(double[] x) {
                 return g.apply(h.apply(x));
             }
 
-            public final double[] apply(double re, double im) {
-                return g.apply(h.apply(new double[] { re, im }));
+            public double[] apply(double re, double im) {
+                return g.apply(h.apply(new double[]{re, im}));
             }
         };
     }
 
     public static DComplexDComplexFunction constant(final double[] c) {
         return new DComplexDComplexFunction() {
-            public final double[] apply(double[] x) {
+            public double[] apply(double[] x) {
                 return c;
             }
 
-            public final double[] apply(double re, double im) {
-                return new double[] { re, im };
+            public double[] apply(double re, double im) {
+                return new double[]{re, im};
             }
         };
     }
@@ -763,13 +759,13 @@ public class DComplexFunctions {
     }
 
     public static DComplexDComplexFunction div(final double b) {
-        double[] tmp = new double[] { b, 0 };
+        double[] tmp = new double[]{b, 0};
         return mult(DComplex.inv(tmp));
     }
 
     public static DComplexRealFunction equals(final double[] y) {
         return new DComplexRealFunction() {
-            public final double apply(double[] x) {
+            public double apply(double[] x) {
                 if (x[0] == y[0] && x[1] == y[1]) {
                     return 1;
                 } else {
@@ -781,12 +777,8 @@ public class DComplexFunctions {
 
     public static DComplexProcedure isEqual(final double[] y) {
         return new DComplexProcedure() {
-            public final boolean apply(double[] x) {
-                if (x[0] == y[0] && x[1] == y[1]) {
-                    return true;
-                } else {
-                    return false;
-                }
+            public boolean apply(double[] x) {
+                return x[0] == y[0] && x[1] == y[1];
             }
         };
     }
@@ -810,19 +802,19 @@ public class DComplexFunctions {
     }
 
     public static DComplexDComplexFunction mult(final double x) {
-        return new DComplexMult(new double[] { x, 0 });
+        return new DComplexMult(new double[]{x, 0});
     }
 
     public static DComplexDComplexFunction plus(final double[] y) {
         return new DComplexDComplexFunction() {
-            public final double[] apply(double[] x) {
+            public double[] apply(double[] x) {
                 double[] z = new double[2];
                 z[0] = x[0] + y[0];
                 z[1] = x[1] + y[1];
                 return z;
             }
 
-            public final double[] apply(double re, double im) {
+            public double[] apply(double re, double im) {
                 double[] z = new double[2];
                 z[0] = re + y[0];
                 z[1] = im + y[1];
@@ -841,7 +833,7 @@ public class DComplexFunctions {
 
     public static DComplexDComplexFunction pow1(final double y) {
         return new DComplexDComplexFunction() {
-            public final double[] apply(double[] x) {
+            public double[] apply(double[] x) {
                 double[] z = new double[2];
                 double re = (y * Math.log(DComplex.abs(x)));
                 double im = y * DComplex.arg(x);
@@ -851,7 +843,7 @@ public class DComplexFunctions {
                 return z;
             }
 
-            public final double[] apply(double re, double im) {
+            public double[] apply(double re, double im) {
                 double[] z = new double[2];
                 double re2 = (y * Math.log(DComplex.abs(re, im)));
                 double im2 = y * DComplex.arg(re, im);
@@ -865,7 +857,7 @@ public class DComplexFunctions {
 
     public static RealDComplexFunction pow2(final double[] y) {
         return new RealDComplexFunction() {
-            public final double[] apply(double x) {
+            public double[] apply(double x) {
                 double[] z = new double[2];
                 double re = Math.log(Math.abs(x));
                 double im = Math.atan2(0.0, x);
@@ -884,7 +876,7 @@ public class DComplexFunctions {
 
     public static DComplexDComplexFunction pow3(final double[] y) {
         return new DComplexDComplexFunction() {
-            public final double[] apply(double[] x) {
+            public double[] apply(double[] x) {
                 double[] z = new double[2];
                 double re = Math.log(DComplex.abs(x));
                 double im = DComplex.arg(x);
@@ -895,22 +887,22 @@ public class DComplexFunctions {
                 double scalar = Math.exp(re2);
 
                 z[0] = (scalar * Math.cos(im2));
-                z[1] = (double) (scalar * Math.sin(im2));
+                z[1] = scalar * Math.sin(im2);
                 return z;
             }
 
-            public final double[] apply(double re, double im) {
+            public double[] apply(double re, double im) {
                 double[] z = new double[2];
-                double re1 = (double) Math.log(DComplex.abs(re, im));
+                double re1 = Math.log(DComplex.abs(re, im));
                 double im1 = DComplex.arg(re, im);
 
                 double re2 = (re1 * y[0]) - (im1 * y[1]);
                 double im2 = (re1 * y[1]) + (im1 * y[0]);
 
-                double scalar = (double) Math.exp(re2);
+                double scalar = Math.exp(re2);
 
-                z[0] = (double) (scalar * Math.cos(im2));
-                z[1] = (double) (scalar * Math.sin(im2));
+                z[0] = scalar * Math.cos(im2);
+                z[1] = scalar * Math.sin(im2);
                 return z;
             }
         };
@@ -923,18 +915,18 @@ public class DComplexFunctions {
     private static class RandomComplexFunction implements DComplexDComplexFunction {
 
         public double[] apply(double[] argument) {
-            return new double[] { (double) Math.random(), (double) Math.random() };
+            return new double[]{Math.random(), Math.random()};
         }
 
         public double[] apply(double re, double im) {
-            return new double[] { (double) Math.random(), (double) Math.random() };
+            return new double[]{Math.random(), Math.random()};
         }
 
     }
 
     public static DComplexDComplexDComplexFunction swapArgs(final DComplexDComplexDComplexFunction function) {
         return new DComplexDComplexDComplexFunction() {
-            public final double[] apply(double[] x, double[] y) {
+            public double[] apply(double[] x, double[] y) {
                 return function.apply(y, x);
             }
         };

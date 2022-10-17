@@ -728,7 +728,7 @@ public class ObjectArrayList extends AbstractList {
      * any null elements.
      *
      * @param array the array into which the elements of the receiver are to be stored, if it is big enough; otherwise,
-     *             a new array of the same runtime type is allocated for this purpose.
+     *              a new array of the same runtime type is allocated for this purpose.
      * @return an array containing the elements of the receiver.
      */
     public @NotNull Object[] toArray(Object @NotNull [] array) {// fixme go through this: some objects can be null as a padding technique

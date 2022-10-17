@@ -45,7 +45,7 @@ class Pdpotrf {
      *  Parallel Cholesky factorization
      */
     protected static void plasma_pDPOTRF(int uplo, int N, double[] A, int A_offset, int NB, int NBNBSIZE, int NT,
-            intW INFO, int cores_num, int my_core_id) {
+                                         intW INFO, int cores_num, int my_core_id) {
         int[] progress = Dcommon.plasma_aux.progress;
         int k, m, n;
         int next_k;
@@ -79,10 +79,10 @@ class Pdpotrf {
                 if (n == k) {
                     if (uplo == Dplasma.PlasmaLower)
                         DcoreBLAS.core_DPOTRF(Dplasma.PlasmaLower, k == NT - 1 ? N - k * NB : NB, A, A_offset
-                                + NBNBSIZE * (k) + NBNBSIZE * NT * (k), NB, INFO);
+                            + NBNBSIZE * (k) + NBNBSIZE * NT * (k), NB, INFO);
                     else
                         DcoreBLAS.core_DPOTRF(Dplasma.PlasmaUpper, k == NT - 1 ? N - k * NB : NB, A, A_offset
-                                + NBNBSIZE * (k) + NBNBSIZE * NT * (k), NB, INFO);
+                            + NBNBSIZE * (k) + NBNBSIZE * NT * (k), NB, INFO);
                     if (INFO.val != 0)
                         INFO.val += NB * k;
                     progress[(k) + NT * (k)] = 1;
@@ -91,12 +91,12 @@ class Pdpotrf {
                         Dcommon.delay();
                     if (uplo == Dplasma.PlasmaLower)
                         DcoreBLAS.core_DSYRK(Dplasma.PlasmaLower, Dplasma.PlasmaNoTrans, k == NT - 1 ? N - k * NB : NB,
-                                NB, -1.0, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * NT * (n), NB, 1.0, A, A_offset
-                                        + NBNBSIZE * (k) + NBNBSIZE * NT * (k), NB);
+                            NB, -1.0, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * NT * (n), NB, 1.0, A, A_offset
+                                + NBNBSIZE * (k) + NBNBSIZE * NT * (k), NB);
                     else
                         DcoreBLAS.core_DSYRK(Dplasma.PlasmaUpper, Dplasma.PlasmaTrans, k == NT - 1 ? N - k * NB : NB,
-                                NB, -1.0, A, A_offset + NBNBSIZE * (n) + NBNBSIZE * NT * (k), NB, 1.0, A, A_offset
-                                        + NBNBSIZE * (k) + NBNBSIZE * NT * (k), NB);
+                            NB, -1.0, A, A_offset + NBNBSIZE * (n) + NBNBSIZE * NT * (k), NB, 1.0, A, A_offset
+                                + NBNBSIZE * (k) + NBNBSIZE * NT * (k), NB);
                 }
             } else {
                 if (n == k) {
@@ -104,14 +104,14 @@ class Pdpotrf {
                         Dcommon.delay();
                     if (uplo == Dplasma.PlasmaLower)
                         DcoreBLAS.core_DTRSM(Dplasma.PlasmaRight, Dplasma.PlasmaLower, Dplasma.PlasmaTrans,
-                                Dplasma.PlasmaNonUnit, m == NT - 1 ? N - m * NB : NB, NB, 1.0, A, A_offset + NBNBSIZE
-                                        * (k) + NBNBSIZE * NT * (k), NB, A, A_offset + NBNBSIZE * (m) + NBNBSIZE * NT
-                                        * (k), NB);
+                            Dplasma.PlasmaNonUnit, m == NT - 1 ? N - m * NB : NB, NB, 1.0, A, A_offset + NBNBSIZE
+                                * (k) + NBNBSIZE * NT * (k), NB, A, A_offset + NBNBSIZE * (m) + NBNBSIZE * NT
+                                * (k), NB);
                     else
                         DcoreBLAS.core_DTRSM(Dplasma.PlasmaLeft, Dplasma.PlasmaUpper, Dplasma.PlasmaTrans,
-                                Dplasma.PlasmaNonUnit, NB, m == NT - 1 ? N - m * NB : NB, 1.0, A, A_offset + NBNBSIZE
-                                        * (k) + NBNBSIZE * NT * (k), NB, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * NT
-                                        * (m), NB);
+                            Dplasma.PlasmaNonUnit, NB, m == NT - 1 ? N - m * NB : NB, 1.0, A, A_offset + NBNBSIZE
+                                * (k) + NBNBSIZE * NT * (k), NB, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * NT
+                                * (m), NB);
                     progress[(m) + NT * (k)] = 1;
                 } else {
                     while (progress[(k) + NT * (n)] != 1 && INFO.val == 0)
@@ -120,14 +120,14 @@ class Pdpotrf {
                         Dcommon.delay();
                     if (uplo == Dplasma.PlasmaLower)
                         DcoreBLAS.core_DGEMM(Dplasma.PlasmaNoTrans, Dplasma.PlasmaTrans, m == NT - 1 ? N - m * NB : NB,
-                                NB, NB, -1.0, A, A_offset + NBNBSIZE * (m) + NBNBSIZE * NT * (n), NB, A, A_offset
-                                        + NBNBSIZE * (k) + NBNBSIZE * NT * (n), NB, 1.0, A, A_offset + NBNBSIZE * (m)
-                                        + NBNBSIZE * NT * (k), NB);
+                            NB, NB, -1.0, A, A_offset + NBNBSIZE * (m) + NBNBSIZE * NT * (n), NB, A, A_offset
+                                + NBNBSIZE * (k) + NBNBSIZE * NT * (n), NB, 1.0, A, A_offset + NBNBSIZE * (m)
+                                + NBNBSIZE * NT * (k), NB);
                     else
                         DcoreBLAS.core_DGEMM(Dplasma.PlasmaTrans, Dplasma.PlasmaNoTrans, NB, m == NT - 1 ? N - m * NB
-                                : NB, NB, -1.0, A, A_offset + NBNBSIZE * (n) + NBNBSIZE * NT * (k), NB, A, A_offset
-                                + NBNBSIZE * (n) + NBNBSIZE * NT * (m), NB, 1.0, A, A_offset + NBNBSIZE * (k)
-                                + NBNBSIZE * NT * (m), NB);
+                            : NB, NB, -1.0, A, A_offset + NBNBSIZE * (n) + NBNBSIZE * NT * (k), NB, A, A_offset
+                            + NBNBSIZE * (n) + NBNBSIZE * NT * (m), NB, 1.0, A, A_offset + NBNBSIZE * (k)
+                            + NBNBSIZE * NT * (m), NB);
                 }
             }
             if (INFO.val != 0)

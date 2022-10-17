@@ -49,7 +49,7 @@ import java.io.Serial;
  * <p>
  * Depends on the parent view holding cells.
  * <p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -76,47 +76,35 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param elements
-     *            the cells.
-     * @param rowOffsets
-     *            The row offsets of the cells that shall be visible.
-     * @param columnOffsets
-     *            The column offsets of the cells that shall be visible.
+     *
+     * @param elements      the cells.
+     * @param rowOffsets    The row offsets of the cells that shall be visible.
+     * @param columnOffsets The column offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedSparseDoubleMatrix2D(AbstractLongDoubleMap elements, int[] rowOffsets, int[] columnOffsets,
-            int offset) {
+                                           int offset) {
         this(rowOffsets.length, columnOffsets.length, elements, 0, 0, 1, 1, rowOffsets, columnOffsets, offset);
     }
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @param rowOffsets
-     *            The row offsets of the cells that shall be visible.
-     * @param columnOffsets
-     *            The column offsets of the cells that shall be visible.
+     *
+     * @param rows          the number of rows the matrix shall have.
+     * @param columns       the number of columns the matrix shall have.
+     * @param elements      the cells.
+     * @param rowZero       the position of the first element.
+     * @param columnZero    the position of the first element.
+     * @param rowStride     the number of elements between two rows, i.e.
+     *                      <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride  the number of elements between two columns, i.e.
+     *                      <tt>index(i,j+1)-index(i,j)</tt>.
+     * @param rowOffsets    The row offsets of the cells that shall be visible.
+     * @param columnOffsets The column offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedSparseDoubleMatrix2D(int rows, int columns, AbstractLongDoubleMap elements, int rowZero,
-            int columnZero, int rowStride, int columnStride, int[] rowOffsets, int[] columnOffsets, int offset) {
+                                           int columnZero, int rowStride, int columnStride, int[] rowOffsets, int[] columnOffsets, int offset) {
         // be sure parameters are valid, we do not check...
         setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
 
@@ -134,18 +122,16 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>[row,column]</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      * @return the value at the specified coordinate.
      */
 
@@ -155,24 +141,22 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
         // return elements.get(index(row,column));
         // manually inlined:
         return elements.get((long) offset + (long) rowOffsets[rowZero + row * rowStride]
-                + (long) columnOffsets[columnZero + column * columnStride]);
+            + (long) columnOffsets[columnZero + column * columnStride]);
     }
 
     /**
      * Returns the position of the given coordinate within the (virtual or
      * non-virtual) internal 1-dimensional array.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      */
 
     public long index(int row, int column) {
         // return this.offset + super.index(row,column);
         // manually inlined:
         return (long) this.offset + (long) rowOffsets[rowZero + row * rowStride]
-                + (long) columnOffsets[columnZero + column * columnStride];
+            + (long) columnOffsets[columnZero + column * columnStride];
     }
 
     /**
@@ -184,11 +168,9 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
      * <tt>SparseDoubleMatrix2D</tt> the new matrix must also be of type
      * <tt>SparseDoubleMatrix2D</tt>, etc. In general, the new matrix should
      * have internal parametrization as similar as possible.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -203,9 +185,8 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
      * matrix must be of type <tt>DenseDoubleMatrix1D</tt>, if the receiver is
      * an instance of type <tt>SparseDoubleMatrix2D</tt> the new matrix must be
      * of type <tt>SparseDoubleMatrix1D</tt>, etc.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
+     *
+     * @param size the number of cells the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -216,20 +197,17 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Sets the matrix cell at coordinate <tt>[row,column]</tt> to the specified
      * value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param value  the value to be filled into the specified cell.
      */
 
     public void setQuick(int row, int column, double value) {
@@ -238,7 +216,7 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
         // int index = index(row,column);
         // manually inlined:
         long index = (long) offset + (long) rowOffsets[rowZero + row * rowStride]
-                + (long) columnOffsets[columnZero + column * columnStride];
+            + (long) columnOffsets[columnZero + column * columnStride];
 
         if (value == 0)
             this.elements.removeKey(index);
@@ -249,7 +227,7 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
     /**
      * Returns a vector obtained by stacking the columns of the matrix on top of
      * one another.
-     * 
+     *
      * @return
      */
 
@@ -282,12 +260,10 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
      * 1, 4</td>
      * </tr>
      * </table>
-     * 
-     * @param the
-     *            column to fix.
+     *
+     * @param the column to fix.
      * @return a new slice view.
-     * @throws IllegalArgumentException
-     *             if <tt>column < 0 || column >= columns()</tt>.
+     * @throws IllegalArgumentException if <tt>column < 0 || column >= columns()</tt>.
      * @see #viewRow(int)
      */
 
@@ -319,12 +295,10 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
      * 1, 2, 3</td>
      * </tr>
      * </table>
-     * 
-     * @param the
-     *            row to fix.
+     *
+     * @param the row to fix.
      * @return a new slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>row < 0 || row >= rows()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>row < 0 || row >= rows()</tt>.
      * @see #viewColumn(int)
      */
 
@@ -342,9 +316,8 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
 
@@ -356,9 +329,8 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
 
@@ -378,11 +350,9 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
      */
 
     protected boolean haveSharedCellsRaw(DoubleMatrix2D other) {
-        if (other instanceof SelectedSparseDoubleMatrix2D) {
-            SelectedSparseDoubleMatrix2D otherMatrix = (SelectedSparseDoubleMatrix2D) other;
+        if (other instanceof SelectedSparseDoubleMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseDoubleMatrix2D) {
-            SparseDoubleMatrix2D otherMatrix = (SparseDoubleMatrix2D) other;
+        } else if (other instanceof SparseDoubleMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -395,14 +365,11 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
      * type <tt>DenseDoubleMatrix1D</tt>, if the receiver is an instance of type
      * <tt>SparseDoubleMatrix2D</tt> the new matrix must be of type
      * <tt>SparseDoubleMatrix1D</tt>, etc.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
+     *
+     * @param size   the number of cells the matrix shall have.
+     * @param zero   the index of the first element.
+     * @param stride the number of indexes between any two elements, i.e.
+     *               <tt>index(i+1)-index(i)</tt>.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -414,13 +381,10 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Sets up a matrix with a given number of rows and columns.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>(double)columns*rows > Integer.MAX_VALUE</tt>.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>(double)columns*rows > Integer.MAX_VALUE</tt>.
      */
 
     protected void setUp(int rows, int columns) {
@@ -449,11 +413,9 @@ class SelectedSparseDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param rowOffsets
-     *            the offsets of the visible elements.
-     * @param columnOffsets
-     *            the offsets of the visible elements.
+     *
+     * @param rowOffsets    the offsets of the visible elements.
+     * @param columnOffsets the offsets of the visible elements.
      * @return a new view.
      */
 

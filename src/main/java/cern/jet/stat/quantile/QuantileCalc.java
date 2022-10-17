@@ -16,7 +16,7 @@ class QuantileCalc {
      * Efficiently computes the binomial coefficient, often also referred to as
      * "n over k" or "n choose k". The binomial coefficient is defined as
      * n!/((n-k)!*k!). Tries to avoid numeric overflows.
-     * 
+     *
      * @return the binomial coefficient.
      */
     public static double binomial(long n, long k) {
@@ -32,7 +32,7 @@ class QuantileCalc {
 
         double binomial = 1.0;
         long N = n - k + 1;
-        for (long i = k; i > 0;) {
+        for (long i = k; i > 0; ) {
             binomial *= ((double) N++) / (double) (i--);
         }
         return binomial;
@@ -51,36 +51,31 @@ class QuantileCalc {
      * Computes the number of buffers and number of values per buffer such that
      * quantiles can be determined with an approximation error no more than
      * epsilon with a certain probability.
-     * 
+     * <p>
      * Assumes that quantiles are to be computed over N values. The required
      * sampling rate is computed and stored in the first element of the provided
      * <tt>returnSamplingRate</tt> array, which, therefore must be at least of
      * length 1.
-     * 
-     * @param N
-     *            the number of values over which quantiles shall be computed
-     *            (e.g <tt>10^6</tt>).
-     * @param epsilon
-     *            the approximation error which is guaranteed not to be exceeded
-     *            (e.g. <tt>0.001</tt>) (<tt>0 &lt;= epsilon &lt;= 1</tt>). To
-     *            get exact result, set <tt>epsilon=0.0</tt>;
-     * @param delta
-     *            the probability that the approximation error is more than than
-     *            epsilon (e.g. <tt>0.0001</tt>) (<tt>0 &lt;= delta &lt;= 1</tt>
-     *            ). To avoid probabilistic answers, set <tt>delta=0.0</tt>.
-     * @param quantiles
-     *            the number of quantiles to be computed (e.g. <tt>100</tt>) (
-     *            <tt>quantiles &gt;= 1</tt>). If unknown in advance, set this
-     *            number large, e.g. <tt>quantiles &gt;= 10000</tt>.
-     * @param samplingRate
-     *            a <tt>double[1]</tt> where the sampling rate is to be filled
-     *            in.
+     *
+     * @param N            the number of values over which quantiles shall be computed
+     *                     (e.g <tt>10^6</tt>).
+     * @param epsilon      the approximation error which is guaranteed not to be exceeded
+     *                     (e.g. <tt>0.001</tt>) (<tt>0 &lt;= epsilon &lt;= 1</tt>). To
+     *                     get exact result, set <tt>epsilon=0.0</tt>;
+     * @param delta        the probability that the approximation error is more than than
+     *                     epsilon (e.g. <tt>0.0001</tt>) (<tt>0 &lt;= delta &lt;= 1</tt>
+     *                     ). To avoid probabilistic answers, set <tt>delta=0.0</tt>.
+     * @param quantiles    the number of quantiles to be computed (e.g. <tt>100</tt>) (
+     *                     <tt>quantiles &gt;= 1</tt>). If unknown in advance, set this
+     *                     number large, e.g. <tt>quantiles &gt;= 10000</tt>.
+     * @param samplingRate a <tt>double[1]</tt> where the sampling rate is to be filled
+     *                     in.
      * @return <tt>long[2]</tt> - <tt>long[0]</tt>=the number of buffers,
-     *         <tt>long[1]</tt>=the number of elements per buffer,
-     *         <tt>returnSamplingRate[0]</tt>=the required sampling rate.
+     * <tt>long[1]</tt>=the number of elements per buffer,
+     * <tt>returnSamplingRate[0]</tt>=the required sampling rate.
      */
     public static long[] known_N_compute_B_and_K(long N, double epsilon, double delta, int quantiles,
-            double[] returnSamplingRate) {
+                                                 double[] returnSamplingRate) {
         if (delta > 0.0) {
             return known_N_compute_B_and_K_slow(N, epsilon, delta, quantiles, returnSamplingRate);
         }
@@ -93,16 +88,14 @@ class QuantileCalc {
      * quantiles can be determined with a <b>guaranteed</b> approximation error
      * no more than epsilon. Assumes that quantiles are to be computed over N
      * values.
-     * 
+     *
+     * @param N       the anticipated number of values over which quantiles shall be
+     *                determined.
+     * @param epsilon the approximation error which is guaranteed not to be exceeded
+     *                (e.g. <tt>0.001</tt>) (<tt>0 &lt;= epsilon &lt;= 1</tt>). To
+     *                get exact result, set <tt>epsilon=0.0</tt>;
      * @return <tt>long[2]</tt> - <tt>long[0]</tt>=the number of buffers,
-     *         <tt>long[1]</tt>=the number of elements per buffer.
-     * @param N
-     *            the anticipated number of values over which quantiles shall be
-     *            determined.
-     * @param epsilon
-     *            the approximation error which is guaranteed not to be exceeded
-     *            (e.g. <tt>0.001</tt>) (<tt>0 &lt;= epsilon &lt;= 1</tt>). To
-     *            get exact result, set <tt>epsilon=0.0</tt>;
+     * <tt>long[1]</tt>=the number of elements per buffer.
      */
     protected static long[] known_N_compute_B_and_K_quick(long N, double epsilon) {
         if (epsilon <= 0.0) {
@@ -127,14 +120,14 @@ class QuantileCalc {
             int h = 3;
 
             while (h <= maxHeight && // skip heights until x<=0
-                    (h - 2) * ((double) Math.round(binomial(b + h - 2, h - 1)))
-                            - (Math.round(binomial(b + h - 3, h - 3))) + (Math.round(binomial(b + h - 3, h - 2))) - c > 0.0) {
+                (h - 2) * ((double) Math.round(binomial(b + h - 2, h - 1)))
+                    - (Math.round(binomial(b + h - 3, h - 3))) + (Math.round(binomial(b + h - 3, h - 2))) - c > 0.0) {
                 h++;
             }
             // from now on x is monotonically growing...
             while (h <= maxHeight && // skip heights until x>0
-                    (h - 2) * ((double) Math.round(binomial(b + h - 2, h - 1)))
-                            - (Math.round(binomial(b + h - 3, h - 3))) + (Math.round(binomial(b + h - 3, h - 2))) - c <= 0.0) {
+                (h - 2) * ((double) Math.round(binomial(b + h - 2, h - 1)))
+                    - (Math.round(binomial(b + h - 3, h - 3))) + (Math.round(binomial(b + h - 3, h - 2))) - c <= 0.0) {
                 h++;
             }
             h--; // go back to last height
@@ -142,8 +135,8 @@ class QuantileCalc {
             // was x>0 or did we loop without finding anything?
             int hMax;
             if (h >= maxHeight
-                    && (h - 2) * ((double) Math.round(binomial(b + h - 2, h - 1)))
-                            - (Math.round(binomial(b + h - 3, h - 3))) + (Math.round(binomial(b + h - 3, h - 2))) - c > 0.0) {
+                && (h - 2) * ((double) Math.round(binomial(b + h - 2, h - 1)))
+                - (Math.round(binomial(b + h - 3, h - 3))) + (Math.round(binomial(b + h - 3, h - 2))) - c > 0.0) {
                 hMax = Integer.MIN_VALUE;
             } else {
                 hMax = h;
@@ -203,31 +196,26 @@ class QuantileCalc {
      * computed over N values. The required sampling rate is computed and stored
      * in the first element of the provided <tt>returnSamplingRate</tt> array,
      * which, therefore must be at least of length 1.
-     * 
-     * @param N
-     *            the anticipated number of values over which quantiles shall be
-     *            computed (e.g 10^6).
-     * @param epsilon
-     *            the approximation error which is guaranteed not to be exceeded
-     *            (e.g. <tt>0.001</tt>) (<tt>0 &lt;= epsilon &lt;= 1</tt>). To
-     *            get exact result, set <tt>epsilon=0.0</tt>;
-     * @param delta
-     *            the probability that the approximation error is more than than
-     *            epsilon (e.g. <tt>0.0001</tt>) (<tt>0 &lt;= delta &lt;= 1</tt>
-     *            ). To avoid probabilistic answers, set <tt>delta=0.0</tt>.
-     * @param quantiles
-     *            the number of quantiles to be computed (e.g. <tt>100</tt>) (
-     *            <tt>quantiles &gt;= 1</tt>). If unknown in advance, set this
-     *            number large, e.g. <tt>quantiles &gt;= 10000</tt>.
-     * @param samplingRate
-     *            a <tt>double[1]</tt> where the sampling rate is to be filled
-     *            in.
+     *
+     * @param N            the anticipated number of values over which quantiles shall be
+     *                     computed (e.g 10^6).
+     * @param epsilon      the approximation error which is guaranteed not to be exceeded
+     *                     (e.g. <tt>0.001</tt>) (<tt>0 &lt;= epsilon &lt;= 1</tt>). To
+     *                     get exact result, set <tt>epsilon=0.0</tt>;
+     * @param delta        the probability that the approximation error is more than than
+     *                     epsilon (e.g. <tt>0.0001</tt>) (<tt>0 &lt;= delta &lt;= 1</tt>
+     *                     ). To avoid probabilistic answers, set <tt>delta=0.0</tt>.
+     * @param quantiles    the number of quantiles to be computed (e.g. <tt>100</tt>) (
+     *                     <tt>quantiles &gt;= 1</tt>). If unknown in advance, set this
+     *                     number large, e.g. <tt>quantiles &gt;= 10000</tt>.
+     * @param samplingRate a <tt>double[1]</tt> where the sampling rate is to be filled
+     *                     in.
      * @return <tt>long[2]</tt> - <tt>long[0]</tt>=the number of buffers,
-     *         <tt>long[1]</tt>=the number of elements per buffer,
-     *         <tt>returnSamplingRate[0]</tt>=the required sampling rate.
+     * <tt>long[1]</tt>=the number of elements per buffer,
+     * <tt>returnSamplingRate[0]</tt>=the required sampling rate.
      */
     protected static long[] known_N_compute_B_and_K_slow(long N, double epsilon, double delta, int quantiles,
-            double[] returnSamplingRate) {
+                                                         double[] returnSamplingRate) {
         // delta can be set to zero, i.e., all quantiles should be approximate
         // with probability 1
         if (epsilon <= 0.0) {
@@ -264,7 +252,7 @@ class QuantileCalc {
                 double binomial = binomial(b + h - 2, h - 1);
                 long tmp = ceiling(N_double / binomial);
                 if ((b * tmp < memory)
-                        && ((h - 2) * binomial - binomial(b + h - 3, h - 3) + binomial(b + h - 3, h - 2) <= c)) {
+                    && ((h - 2) * binomial - binomial(b + h - 3, h - 3) + binomial(b + h - 3, h - 2) <= c)) {
                     ret_k = tmp;
                     ret_b = b;
                     memory = ret_k * b;
@@ -272,7 +260,7 @@ class QuantileCalc {
                 }
                 if (delta > 0.0) {
                     double t = (h - 2) * binomial(b + h - 2, h - 1) - binomial(b + h - 3, h - 3)
-                            + binomial(b + h - 3, h - 2);
+                        + binomial(b + h - 3, h - 2);
                     double u = logarithm / epsilon;
                     double v = binomial(b + h - 2, h - 1);
                     double w = logarithm / (2.0 * epsilon * epsilon);
@@ -321,16 +309,16 @@ class QuantileCalc {
         else
             known_N = Boolean.parseBoolean(args[0]);
 
-        int[] quantiles = { 1, 1000 };
+        int[] quantiles = {1, 1000};
 
-        long[] sizes = { 100000, 1000000, 10000000, 1000000000 };
+        long[] sizes = {100000, 1000000, 10000000, 1000000000};
 
-        double[] deltas = { 0.0, 0.001, 0.0001, 0.00001 };
+        double[] deltas = {0.0, 0.001, 0.0001, 0.00001};
 
-        double[] epsilons = { 0.0, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0000001 };
+        double[] epsilons = {0.0, 0.1, 0.05, 0.01, 0.005, 0.001, 0.0000001};
 
         if (!known_N)
-            sizes = new long[] { 0 };
+            sizes = new long[]{0};
         System.out.println("\n\n");
         if (known_N)
             System.out.println("Computing b's and k's for KNOWN N");
@@ -378,22 +366,19 @@ class QuantileCalc {
      * Computes the number of buffers and number of values per buffer such that
      * quantiles can be determined with an approximation error no more than
      * epsilon with a certain probability.
-     * 
-     * @param epsilon
-     *            the approximation error which is guaranteed not to be exceeded
-     *            (e.g. <tt>0.001</tt>) (<tt>0 &lt;= epsilon &lt;= 1</tt>). To
-     *            get exact results, set <tt>epsilon=0.0</tt>;
-     * @param delta
-     *            the probability that the approximation error is more than than
-     *            epsilon (e.g. <tt>0.0001</tt>) (<tt>0 &lt;= delta &lt;= 1</tt>
-     *            ). To get exact results, set <tt>delta=0.0</tt>.
-     * @param quantiles
-     *            the number of quantiles to be computed (e.g. <tt>100</tt>) (
-     *            <tt>quantiles &gt;= 1</tt>). If unknown in advance, set this
-     *            number large, e.g. <tt>quantiles &gt;= 10000</tt>.
+     *
+     * @param epsilon   the approximation error which is guaranteed not to be exceeded
+     *                  (e.g. <tt>0.001</tt>) (<tt>0 &lt;= epsilon &lt;= 1</tt>). To
+     *                  get exact results, set <tt>epsilon=0.0</tt>;
+     * @param delta     the probability that the approximation error is more than than
+     *                  epsilon (e.g. <tt>0.0001</tt>) (<tt>0 &lt;= delta &lt;= 1</tt>
+     *                  ). To get exact results, set <tt>delta=0.0</tt>.
+     * @param quantiles the number of quantiles to be computed (e.g. <tt>100</tt>) (
+     *                  <tt>quantiles &gt;= 1</tt>). If unknown in advance, set this
+     *                  number large, e.g. <tt>quantiles &gt;= 10000</tt>.
      * @return <tt>long[3]</tt> - <tt>long[0]</tt>=the number of buffers,
-     *         <tt>long[1]</tt>=the number of elements per buffer,
-     *         <tt>long[2]</tt>=the tree height where sampling shall start.
+     * <tt>long[1]</tt>=the number of elements per buffer,
+     * <tt>long[2]</tt>=the tree height where sampling shall start.
      */
     public static long[] unknown_N_compute_B_and_K(double epsilon, double delta, int quantiles) {
         // delta can be set to zero, i.e., all quantiles should be approximate

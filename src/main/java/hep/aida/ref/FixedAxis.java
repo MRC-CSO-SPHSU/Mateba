@@ -29,7 +29,7 @@ public class FixedAxis implements IAxis {
      * @param max  Maximum for axis
      * @implNote For internal consistency we save only min and binWidth and always use these quantities for all
      * calculations. Due to rounding errors the return value from upperEdge is not necessarily exactly equal to max.
-     * @implSpec  Our internal definition of overflow/underflow differs from that of the outside world this.under = 0;
+     * @implSpec Our internal definition of overflow/underflow differs from that of the outside world this.under = 0;
      * this.over = bins+1;
      */
     public FixedAxis(final int bins, final double min, final double max) {

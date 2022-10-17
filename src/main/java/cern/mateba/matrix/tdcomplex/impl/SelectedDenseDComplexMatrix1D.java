@@ -34,7 +34,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * addressing overhead is 1 additional array index access per get/set.
  * <p>
  * Note that this implementation is not synchronized.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class SelectedDenseDComplexMatrix1D extends DComplexMatrix1D {
@@ -59,11 +59,9 @@ class SelectedDenseDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param elements
-     *            the cells.
-     * @param indexes
-     *            The indexes of the cells that shall be visible.
+     *
+     * @param elements the cells.
+     * @param indexes  The indexes of the cells that shall be visible.
      */
     protected SelectedDenseDComplexMatrix1D(double[] elements, int[] offsets) {
         this(offsets.length, elements, 0, 1, offsets, 0);
@@ -71,18 +69,13 @@ class SelectedDenseDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @param offsets
-     *            the offsets of the cells that shall be visible.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param zero     the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @param offsets  the offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedDenseDComplexMatrix1D(int size, double[] elements, int zero, int stride, int[] offsets, int offset) {
@@ -100,7 +93,7 @@ class SelectedDenseDComplexMatrix1D extends DComplexMatrix1D {
 
     public double[] getQuick(int index) {
         int idx = zero + index * stride;
-        return new double[] { elements[offset + offsets[idx]], elements[offset + offsets[idx] + 1] };
+        return new double[]{elements[offset + offsets[idx]], elements[offset + offsets[idx] + 1]};
     }
 
     public DoubleMatrix1D getRealPart() {
@@ -174,18 +167,15 @@ class SelectedDenseDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Returns <tt>true</tt> if both matrices share at least one identical cell.
-     * 
-     * @param other
-     *            matrix
+     *
+     * @param other matrix
      * @return <tt>true</tt> if both matrices share at least one identical cell.
      */
 
     protected boolean haveSharedCellsRaw(DComplexMatrix1D other) {
-        if (other instanceof SelectedDenseDComplexMatrix1D) {
-            SelectedDenseDComplexMatrix1D otherMatrix = (SelectedDenseDComplexMatrix1D) other;
+        if (other instanceof SelectedDenseDComplexMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseDComplexMatrix1D) {
-            DenseDComplexMatrix1D otherMatrix = (DenseDComplexMatrix1D) other;
+        } else if (other instanceof DenseDComplexMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;

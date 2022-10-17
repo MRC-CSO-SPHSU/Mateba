@@ -21,28 +21,28 @@ import java.io.Serial;
  * one pass and little main memory; computes quantiles over a sequence of
  * <tt>double</tt> elements. This algorithm requires at most two times the
  * memory of a corresponding approx. quantile finder knowing <tt>N</tt>.
- * 
+ *
  * <p>
  * Needs as input the following parameters:
  * <p>
  * <dt>1. <tt>quantiles</tt> - the number of quantiles to be computed.
  * <dt>2. <tt>epsilon</tt> - the allowed approximation error on quantiles. The
  * approximation guarantee of this algorithm is explicit.
- * 
+ *
  * <p>
  * It is also possible to couple the approximation algorithm with random
  * sampling to further reduce memory requirements. With sampling, the
  * approximation guarantees are explicit but probabilistic, i.e. they apply with
  * respect to a (user controlled) confidence parameter "delta".
- * 
+ *
  * <dt>3. <tt>delta</tt> - the probability allowed that the approximation error
  * fails to be smaller than epsilon. Set <tt>delta</tt> to zero for explicit non
  * probabilistic guarantees.
- * 
+ * <p>
  * You usually don't instantiate quantile finders by using the constructor.
  * Instead use the factory <tt>QuantileFinderFactor</tt> to do so. It will set
  * up the right parametrization for you.
- * 
+ *
  * <p>
  * After Gurmeet Singh Manku, Sridhar Rajagopalan and Bruce G. Lindsay, Random
  * Sampling Techniques for Space Efficient Online Computation of Order
@@ -65,18 +65,13 @@ class UnknownQuantileEstimator extends QuantileEstimator {
     /**
      * Constructs an approximate quantile finder with b buffers, each having k
      * elements.
-     * 
-     * @param b
-     *            the number of buffers
-     * @param k
-     *            the number of elements per buffer
-     * @param h
-     *            the tree height at which sampling shall start.
-     * @param precomputeEpsilon
-     *            the epsilon for which quantiles shall be precomputed; set this
-     *            value <=0.0 if nothing shall be precomputed.
-     * @param generator
-     *            a uniform random number generator.
+     *
+     * @param b                 the number of buffers
+     * @param k                 the number of elements per buffer
+     * @param h                 the tree height at which sampling shall start.
+     * @param precomputeEpsilon the epsilon for which quantiles shall be precomputed; set this
+     *                          value <=0.0 if nothing shall be precomputed.
+     * @param generator         a uniform random number generator.
      */
     public UnknownQuantileEstimator(int b, int k, int h, double precomputeEpsilon, RandomEngine generator) {
         this.sampler = new WeightedRandomSampler(1, generator);
@@ -118,7 +113,7 @@ class UnknownQuantileEstimator extends QuantileEstimator {
 
     /**
      * Returns a deep copy of the receiver.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
 
@@ -158,11 +153,10 @@ class UnknownQuantileEstimator extends QuantileEstimator {
     /**
      * Computes the specified quantile elements over the values previously
      * added.
-     * 
-     * @param phis
-     *            the quantiles for which elements are to be computed. Each phi
-     *            must be in the interval (0.0,1.0]. <tt>phis</tt> must be
-     *            sorted ascending.
+     *
+     * @param phis the quantiles for which elements are to be computed. Each phi
+     *             must be in the interval (0.0,1.0]. <tt>phis</tt> must be
+     *             sorted ascending.
      * @return the approximate quantile elements.
      */
 
@@ -181,7 +175,7 @@ class UnknownQuantileEstimator extends QuantileEstimator {
         // position closest to phi.
         phis = phis.clone();
         double e = precomputeEpsilon;
-        for (int index = phis.size(); --index >= 0;) {
+        for (int index = phis.size(); --index >= 0; ) {
             double phi = phis.get(index);
             int i = (int) Math.round(((2.0 * phi / e) - 1.0) / 2.0); // finds
             // closest
@@ -222,6 +216,6 @@ class UnknownQuantileEstimator extends QuantileEstimator {
         StringBuffer buf = new StringBuffer(super.toString());
         buf.setLength(buf.length() - 1);
         return buf + ", h=" + currentTreeHeight + ", hStartSampling=" + treeHeightStartingSampling
-                + ", precomputeEpsilon=" + precomputeEpsilon + ")";
+            + ", precomputeEpsilon=" + precomputeEpsilon + ")";
     }
 }

@@ -49,8 +49,8 @@ class Dinitialize {
     }
 
     /*////////////////////////////////////////////////////////////////////////////////////////
-    *  PLASMA initialization
-    */
+     *  PLASMA initialization
+     */
     protected static int plasma_Init(int M, int N, int NRHS) {
         int size_elems;
         int NB, IB, MT, NT, NTRHS;
@@ -148,7 +148,7 @@ class Dinitialize {
      */
     protected static int plasma_Finalize() {
         int status;
-        
+
         /* Check if initialized */
         if (!Dcommon.plasma_cntrl.initialized) {
             Dauxiliary.plasma_warning("plasma_finalize", "PLASMA not initialized");

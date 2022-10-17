@@ -17,7 +17,7 @@ import java.io.Serial;
 /**
  * 2-d matrix holding <tt>double</tt> elements; a view wrapping another 3-d
  * matrix and therefore delegating calls to it.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class DelegateDoubleMatrix2D extends DoubleMatrix2D {
@@ -38,13 +38,10 @@ class DelegateDoubleMatrix2D extends DoubleMatrix2D {
 
     /**
      * Constructs a matrix view with a given content, axis and index
-     * 
-     * @param newContent
-     *            the content of this view
-     * @param axis
-     *            the axis (0 to 2) this view is bound to
-     * @param index
-     *            the index this view is bound to
+     *
+     * @param newContent the content of this view
+     * @param axis       the axis (0 to 2) this view is bound to
+     * @param index      the index this view is bound to
      */
     public DelegateDoubleMatrix2D(DoubleMatrix3D newContent, int axis, int index) {
         switch (axis) {

@@ -28,12 +28,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * indexes are of the form <tt>[0..size()-1]</tt>. Any attempt to access an
  * element at a coordinate <tt>index&lt;0 || index&gt;=size()</tt> will throw an
  * <tt>IndexOutOfBoundsException</tt>.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
+ * @version 1.0, 09/24/99
  */
 public abstract class IntMatrix1D extends AbstractMatrix1D {
 
@@ -54,26 +52,24 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <tt>a(1) == f(get(0)), a(0)==Int.NaN</tt>.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      *   cern.jet.math.Functions F = cern.jet.math.Functions.functions;
-     *   matrix = 0 1 2 3 
-     * 
-     *   // Sum( x[i]*x[i] ) 
+     *   matrix = 0 1 2 3
+     *
+     *   // Sum( x[i]*x[i] )
      *   matrix.aggregate(F.plus,F.square);
      *   --&gt; 14
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell value.
-     * @param f
-     *            a function transforming the current cell value.
+     *
+     * @param aggr an aggregation function taking as first argument the current
+     *             aggregation and as second argument the transformed current
+     *             cell value.
+     * @param f    a function transforming the current cell value.
      * @return the aggregated measure.
      * @see cern.jet.math.tint.IntFunctions
      */
@@ -109,19 +105,14 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
     }
 
     /**
-     * 
      * Applies a function to all cells with a given indexes and aggregates the
      * results.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell value.
-     * @param f
-     *            a function transforming the current cell value.
-     * @param indexList
-     *            indexes.
-     * 
+     *
+     * @param aggr      an aggregation function taking as first argument the current
+     *                  aggregation and as second argument the transformed current
+     *                  cell value.
+     * @param f         a function transforming the current cell value.
+     * @param indexList indexes.
      * @return the aggregated measure.
      * @see cern.jet.math.tint.IntFunctions
      */
@@ -173,38 +164,35 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * are <tt>a(1) == f(get(0),other.get(0)), a(0)==Int.NaN</tt>.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      *   cern.jet.math.Functions F = cern.jet.math.Functions.functions;
-     *   x = 0 1 2 3 
-     *   y = 0 1 2 3 
-     * 
+     *   x = 0 1 2 3
+     *   y = 0 1 2 3
+     *
      *   // Sum( x[i]*y[i] )
      *   x.aggregate(y, F.plus, F.mult);
      *   --&gt; 14
-     * 
+     *
      *   // Sum( (x[i]+y[i])&circ;2 )
      *   x.aggregate(y, F.plus, F.chain(F.square,F.plus));
      *   --&gt; 56
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell values.
-     * @param f
-     *            a function transforming the current cell values.
+     *
+     * @param aggr an aggregation function taking as first argument the current
+     *             aggregation and as second argument the transformed current
+     *             cell values.
+     * @param f    a function transforming the current cell values.
      * @return the aggregated measure.
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      * @see cern.jet.math.tint.IntFunctions
      */
     public int aggregate(final IntMatrix1D other, final cern.mateba.function.tint.IntIntFunction aggr,
-            final cern.mateba.function.tint.IntIntFunction f) {
+                         final cern.mateba.function.tint.IntIntFunction f) {
         checkSize(other);
         if (size == 0)
             throw new IllegalArgumentException("size == 0");
@@ -242,21 +230,20 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <tt>[size()-1]</tt> to <tt>[0]</tt>).
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      *   // change each cell to its sine
-     *   matrix =   0.5      1.5      2.5       3.5 
+     *   matrix =   0.5      1.5      2.5       3.5
      *   matrix.assign(cern.jet.math.Functions.sin);
      *   --&gt;
      *   matrix ==  0.479426 0.997495 0.598472 -0.350783
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>.
-     * 
-     * @param f
-     *            a function object taking as argument the current cell's value.
+     *
+     * @param f a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tint.IntFunctions
      */
@@ -289,17 +276,14 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Assigns the result of a function to all cells that satisfy a condition.
-     * 
-     * @param cond
-     *            a condition.
-     * 
-     * @param f
-     *            a function object.
+     *
+     * @param cond a condition.
+     * @param f    a function object.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tint.IntFunctions
      */
     public IntMatrix1D assign(final cern.mateba.function.tint.IntProcedure cond,
-            final cern.mateba.function.tint.IntFunction f) {
+                              final cern.mateba.function.tint.IntFunction f) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size >= ConcurrencyUtils.getThreadsBeginN_1D())) {
             nthreads = Math.min(nthreads, size);
@@ -314,7 +298,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
                         int elem;
                         for (int i = firstIdx; i < lastIdx; i++) {
                             elem = getQuick(i);
-                            if (cond.apply(elem) == true) {
+                            if (cond.apply(elem)) {
                                 setQuick(i, f.apply(elem));
                             }
                         }
@@ -326,7 +310,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
             int elem;
             for (int i = 0; i < size; i++) {
                 elem = getQuick(i);
-                if (cond.apply(elem) == true) {
+                if (cond.apply(elem)) {
                     setQuick(i, f.apply(elem));
                 }
             }
@@ -336,14 +320,10 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Assigns a value to all cells that satisfy a condition.
-     * 
-     * @param cond
-     *            a condition.
-     * 
-     * @param value
-     *            a value.
+     *
+     * @param cond  a condition.
+     * @param value a value.
      * @return <tt>this</tt> (for convenience only).
-     * 
      */
     public IntMatrix1D assign(final cern.mateba.function.tint.IntProcedure cond, final int value) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -361,7 +341,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
                         int elem;
                         for (int i = firstIdx; i < lastIdx; i++) {
                             elem = getQuick(i);
-                            if (cond.apply(elem) == true) {
+                            if (cond.apply(elem)) {
                                 setQuick(i, value);
                             }
                         }
@@ -373,7 +353,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
             int elem;
             for (int i = 0; i < size; i++) {
                 elem = getQuick(i);
-                if (cond.apply(elem) == true) {
+                if (cond.apply(elem)) {
                     setQuick(i, value);
                 }
             }
@@ -383,9 +363,8 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Sets all cells to the state specified by <tt>value</tt>.
-     * 
-     * @param value
-     *            the value to be filled into the cells.
+     *
+     * @param value the value to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
      */
     public IntMatrix1D assign(final int value) {
@@ -422,17 +401,15 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>values.length != size()</tt>.
+     * @throws IllegalArgumentException if <tt>values.length != size()</tt>.
      */
     public IntMatrix1D assign(final int[] values) {
         if (values.length != size)
             throw new IllegalArgumentException("Must have same number of cells: length=" + values.length + "size()="
-                    + size());
+                + size());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size >= ConcurrencyUtils.getThreadsBeginN_1D())) {
             nthreads = Math.min(nthreads, size);
@@ -466,13 +443,11 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * same cells (as is the case if they are views derived from the same
      * matrix) and intersect in an ambiguous way, then replaces <i>as if</i>
      * using an intermediate auxiliary deep copy of <tt>other</tt>.
-     * 
-     * @param other
-     *            the source matrix to copy from (may be identical to the
-     *            receiver).
+     *
+     * @param other the source matrix to copy from (may be identical to the
+     *              receiver).
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
     public IntMatrix1D assign(IntMatrix1D other) {
         if (other == this)
@@ -520,7 +495,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <tt>x[i] = function(x[i],y[i])</tt>.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      *   // assign x[i] = x[i]&lt;sup&gt;y[i]&lt;/sup&gt;
      *   m1 = 0 1 2 3;
@@ -528,21 +503,18 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      *   m1.assign(m2, cern.jet.math.Functions.pow);
      *   --&gt;
      *   m1 == 1 1 16 729
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>.
-     * 
-     * @param y
-     *            the secondary matrix to operate on.
-     * @param function
-     *            a function object taking as first argument the current cell's
-     *            value of <tt>this</tt>, and as second argument the current
-     *            cell's value of <tt>y</tt>,
+     *
+     * @param y        the secondary matrix to operate on.
+     * @param function a function object taking as first argument the current cell's
+     *                 value of <tt>this</tt>, and as second argument the current
+     *                 cell's value of <tt>y</tt>,
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != y.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != y.size()</tt>.
      * @see cern.jet.math.tint.IntFunctions
      */
     public IntMatrix1D assign(final IntMatrix1D y, final cern.mateba.function.tint.IntIntFunction function) {
@@ -580,7 +552,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <tt>[size()-1]</tt> to <tt>[0]</tt>).
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      *   // assign x[i] = x[i]&lt;sup&gt;y[i]&lt;/sup&gt;
      *   m1 = 0 1 2 3;
@@ -588,34 +560,30 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      *   m1.assign(m2, cern.jet.math.Functions.pow);
      *   --&gt;
      *   m1 == 1 1 16 729
-     * 
-     *   // for non-standard functions there is no shortcut: 
+     *
+     *   // for non-standard functions there is no shortcut:
      *   m1.assign(m2,
      *      new IntIntFunction() {
      *         public int apply(int x, int y) { return Math.pow(x,y); }
      *      }
      *   );
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>.
-     * 
-     * @param y
-     *            the secondary matrix to operate on.
-     * @param function
-     *            a function object taking as first argument the current cell's
-     *            value of <tt>this</tt>, and as second argument the current
-     *            cell's value of <tt>y</tt>.
-     * @param nonZeroIndexes
-     *            list of indexes of non-zero values
+     *
+     * @param y              the secondary matrix to operate on.
+     * @param function       a function object taking as first argument the current cell's
+     *                       value of <tt>this</tt>, and as second argument the current
+     *                       cell's value of <tt>y</tt>.
+     * @param nonZeroIndexes list of indexes of non-zero values
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != y.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != y.size()</tt>.
      * @see cern.jet.math.tint.IntFunctions
      */
     public IntMatrix1D assign(IntMatrix1D y, cern.mateba.function.tint.IntIntFunction function,
-            cern.mateba.list.tint.IntArrayList nonZeroIndexes) {
+                              cern.mateba.list.tint.IntArrayList nonZeroIndexes) {
         checkSize(y);
         int[] nonZeroElements = nonZeroIndexes.elements();
 
@@ -623,7 +591,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
         if (function == cern.jet.math.tint.IntFunctions.mult) { // x[i] = x[i] *
             // y[i]
             int j = 0;
-            for (int index = nonZeroIndexes.size(); --index >= 0;) {
+            for (int index = nonZeroIndexes.size(); --index >= 0; ) {
                 int i = nonZeroElements[index];
                 for (; j < i; j++)
                     setQuick(j, 0); // x[i] = 0 for all zeros
@@ -636,17 +604,17 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
             if (multiplicator == 0) { // x[i] = x[i] + 0*y[i]
                 return this;
             } else if (multiplicator == 1) { // x[i] = x[i] + y[i]
-                for (int index = nonZeroIndexes.size(); --index >= 0;) {
+                for (int index = nonZeroIndexes.size(); --index >= 0; ) {
                     int i = nonZeroElements[index];
                     setQuick(i, getQuick(i) + y.getQuick(i));
                 }
             } else if (multiplicator == -1) { // x[i] = x[i] - y[i]
-                for (int index = nonZeroIndexes.size(); --index >= 0;) {
+                for (int index = nonZeroIndexes.size(); --index >= 0; ) {
                     int i = nonZeroElements[index];
                     setQuick(i, getQuick(i) - y.getQuick(i));
                 }
             } else { // the general case x[i] = x[i] + mult*y[i]
-                for (int index = nonZeroIndexes.size(); --index >= 0;) {
+                for (int index = nonZeroIndexes.size(); --index >= 0; ) {
                     int i = nonZeroElements[index];
                     setQuick(i, getQuick(i) + multiplicator * y.getQuick(i));
                 }
@@ -659,7 +627,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns the number of cells having non-zero values; ignores tolerance.
-     * 
+     *
      * @return the number of cells having non-zero values.
      */
     public int cardinality() {
@@ -726,7 +694,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <b>Note that the returned matrix is an independent deep copy.</b> The
      * returned matrix is not backed by this matrix, so changes in the returned
      * matrix are not reflected in this matrix, and vice-versa.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
     public IntMatrix1D copy() {
@@ -737,18 +705,17 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns the elements of this matrix.
-     * 
+     *
      * @return the elements
      */
     public abstract Object elements();
 
     /**
      * Returns whether all cells are equal to the given value.
-     * 
-     * @param value
-     *            the value to test against.
+     *
+     * @param value the value to test against.
      * @return <tt>true</tt> if all cells are equal to the given value,
-     *         <tt>false</tt> otherwise.
+     * <tt>false</tt> otherwise.
      */
     public boolean equals(int value) {
         return cern.mateba.matrix.tint.algo.IntProperty.DEFAULT.equals(this, value);
@@ -759,11 +726,10 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <code>true</code> if and only if the argument is not <code>null</code>
      * and is at least a <code>IntMatrix1D</code> object that has the same sizes
      * as the receiver and has exactly the same values at the same indexes.
-     * 
-     * @param obj
-     *            the object to compare with.
+     *
+     * @param obj the object to compare with.
      * @return <code>true</code> if the objects are the same; <code>false</code>
-     *         otherwise.
+     * otherwise.
      */
 
     public boolean equals(Object obj) {
@@ -779,12 +745,10 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>index</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
+     *
+     * @param index the index of the cell.
      * @return the value of the specified cell.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>index&lt;0 || index&gt;=size()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>index&lt;0 || index&gt;=size()</tt>.
      */
     public int get(int index) {
         if (index < 0 || index >= size)
@@ -805,11 +769,9 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * specified lists. Fills into the lists, starting at index 0. After this
      * call returns the specified lists all have a new size, the number of
      * non-zero values.
-     * 
-     * @param indexList
-     *            the list to be filled with indexes, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param indexList the list to be filled with indexes, can have any size.
+     * @param valueList the list to be filled with values, can have any size.
      */
     public void getNegativeValues(final IntArrayList indexList, final IntArrayList valueList) {
         indexList.clear();
@@ -850,21 +812,19 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * guaranteed to correspond to the same cell).
      * <p>
      * <b>Example:</b> <br>
-     * 
+     *
      * <pre>
      *   0, 0, 8, 0, 7
      *   --&gt;
      *   indexList  = (2,4)
      *   valueList  = (8,7)
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * In other words, <tt>get(2)==8, get(4)==7</tt>.
-     * 
-     * @param indexList
-     *            the list to be filled with indexes, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param indexList the list to be filled with indexes, can have any size.
+     * @param valueList the list to be filled with values, can have any size.
      */
     public void getNonZeros(final IntArrayList indexList, final IntArrayList valueList) {
         indexList.clear();
@@ -905,23 +865,20 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * guaranteed to correspond to the same cell).
      * <p>
      * <b>Example:</b> <br>
-     * 
+     *
      * <pre>
      *   0, 0, 8, 0, 7
      *   --&gt;
      *   indexList  = (2,4)
      *   valueList  = (8,7)
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * In other words, <tt>get(2)==8, get(4)==7</tt>.
-     * 
-     * @param indexList
-     *            the list to be filled with indexes, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
-     * @param maxCardinality
-     *            maximal cardinality
+     *
+     * @param indexList      the list to be filled with indexes, can have any size.
+     * @param valueList      the list to be filled with values, can have any size.
+     * @param maxCardinality maximal cardinality
      */
     public void getNonZeros(IntArrayList indexList, IntArrayList valueList, int maxCardinality) {
         boolean fillIndexList = indexList != null;
@@ -952,11 +909,9 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * specified lists. Fills into the lists, starting at index 0. After this
      * call returns the specified lists all have a new size, the number of
      * non-zero values.
-     * 
-     * @param indexList
-     *            the list to be filled with indexes, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param indexList the list to be filled with indexes, can have any size.
+     * @param valueList the list to be filled with values, can have any size.
      */
     public void getPositiveValues(final IntArrayList indexList, final IntArrayList valueList) {
         indexList.clear();
@@ -986,15 +941,14 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>index</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
+     *
+     * @param index the index of the cell.
      * @return the value of the specified cell.
      */
     public abstract int getQuick(int index);
@@ -1025,7 +979,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <tt>SparseIntMatrix1D</tt> the new matrix must also be of type
      * <tt>SparseIntMatrix1D</tt>, etc. In general, the new matrix should have
      * internal parametrization as similar as possible.
-     * 
+     *
      * @return a new empty matrix of the same dynamic type.
      */
     public IntMatrix1D like() {
@@ -1040,9 +994,8 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * type <tt>SparseIntMatrix1D</tt> the new matrix must also be of type
      * <tt>SparseIntMatrix1D</tt>, etc. In general, the new matrix should have
      * internal parametrization as similar as possible.
-     * 
-     * @param size
-     *            the number of cell the matrix shall have.
+     *
+     * @param size the number of cell the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
     public abstract IntMatrix1D like(int size);
@@ -1054,18 +1007,16 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * must be of type <tt>DenseIntMatrix2D</tt>, if the receiver is an instance
      * of type <tt>SparseIntMatrix1D</tt> the new matrix must be of type
      * <tt>SparseIntMatrix2D</tt>, etc.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
     public abstract IntMatrix2D like2D(int rows, int columns);
 
     /**
      * Return the maximum value of this matrix together with its location
-     * 
+     *
      * @return { maximum_value, location };
      */
     public int[] getMaxLocation() {
@@ -1092,7 +1043,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
                                 location = i;
                             }
                         }
-                        return new int[] { maxValue, location };
+                        return new int[]{maxValue, location};
                     }
                 });
             }
@@ -1101,11 +1052,11 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
                     results[j] = (int[]) futures[j].get();
                 }
                 maxValue = results[0][0];
-                location = (int) results[0][1];
+                location = results[0][1];
                 for (int j = 1; j < nthreads; j++) {
                     if (maxValue < results[j][0]) {
                         maxValue = results[j][0];
-                        location = (int) results[j][1];
+                        location = results[j][1];
                     }
                 }
             } catch (ExecutionException ex) {
@@ -1124,12 +1075,12 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
                 }
             }
         }
-        return new int[] { maxValue, location };
+        return new int[]{maxValue, location};
     }
 
     /**
      * Return the minimum value of this matrix together with its location
-     * 
+     *
      * @return { minimum_value, location };
      */
     public int[] getMinLocation() {
@@ -1156,7 +1107,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
                                 location = i;
                             }
                         }
-                        return new int[] { minValue, location };
+                        return new int[]{minValue, location};
                     }
                 });
             }
@@ -1165,11 +1116,11 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
                     results[j] = (int[]) futures[j].get();
                 }
                 minValue = results[0][0];
-                location = (int) results[0][1];
+                location = results[0][1];
                 for (int j = 1; j < nthreads; j++) {
                     if (minValue > results[j][0]) {
                         minValue = results[j][0];
-                        location = (int) results[j][1];
+                        location = results[j][1];
                     }
                 }
             } catch (ExecutionException ex) {
@@ -1188,17 +1139,15 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
                 }
             }
         }
-        return new int[] { minValue, location };
+        return new int[]{minValue, location};
     }
 
     /**
      * Returns new IntMatrix2D of size rows x columns whose elements are taken
      * column-wise from this matrix.
-     * 
-     * @param rows
-     *            number of rows
-     * @param columns
-     *            number of columns
+     *
+     * @param rows    number of rows
+     * @param columns number of columns
      * @return new 2D matrix with columns being the elements of this matrix.
      */
     public abstract IntMatrix2D reshape(int rows, int columns);
@@ -1206,24 +1155,19 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
     /**
      * Returns new IntMatrix3D of size slices x rows x columns, whose elements
      * are taken column-wise from this matrix.
-     * 
-     * @param rows
-     *            number of rows
-     * @param columns
-     *            number of columns
+     *
+     * @param rows    number of rows
+     * @param columns number of columns
      * @return new 2D matrix with columns being the elements of this matrix.
      */
     public abstract IntMatrix3D reshape(int slices, int rows, int columns);
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>index&lt;0 || index&gt;=size()</tt>.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell.
+     * @throws IndexOutOfBoundsException if <tt>index&lt;0 || index&gt;=size()</tt>.
      */
     public void set(int index, int value) {
         if (index < 0 || index >= size)
@@ -1233,23 +1177,21 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell.
      */
     public abstract void setQuick(int index, int value);
 
     /**
      * Sets the size of this matrix.
-     * 
+     *
      * @param size
      */
     public void setSize(int size) {
@@ -1258,9 +1200,8 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Swaps each element <tt>this[i]</tt> with <tt>other[i]</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
     public void swap(final IntMatrix1D other) {
         checkSize(other);
@@ -1298,7 +1239,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * reflected in the matrix, and vice-versa. The returned array
      * <tt>values</tt> has the form <br>
      * <tt>for (int i=0; i < size(); i++) values[i] = get(i);</tt>
-     * 
+     *
      * @return an array filled with the values of the cells.
      */
     public int[] toArray() {
@@ -1313,9 +1254,8 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * the matrix, and vice-versa. After this call returns the array
      * <tt>values</tt> has the form <br>
      * <tt>for (int i=0; i < size(); i++) values[i] = get(i);</tt>
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>values.length < size()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>values.length < size()</tt>.
      */
     public void toArray(final int[] values) {
         if (values.length < size)
@@ -1346,7 +1286,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns a string representation using default formatting.
-     * 
+     *
      * @see cern.mateba.matrix.tint.algo.IntFormatter
      */
 
@@ -1364,7 +1304,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <p>
      * Use {@link #copy()} to construct an independent deep copy rather than a
      * new view.
-     * 
+     *
      * @return a new view of the receiver.
      */
     protected IntMatrix1D view() {
@@ -1377,7 +1317,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <tt>size()-1</tt> is now index <tt>0</tt>. The returned view is backed by
      * this matrix, so changes in the returned view are reflected in this
      * matrix, and vice-versa.
-     * 
+     *
      * @return a new flip view.
      */
     public IntMatrix1D viewFlip() {
@@ -1387,7 +1327,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
     /**
      * Constructs and returns a new <i>sub-range view</i> that is a
      * <tt>width</tt> sub matrix starting at <tt>index</tt>.
-     * 
+     * <p>
      * Operations on the returned view can only be applied to the restricted
      * range. Any attempt to access coordinates not contained in the view will
      * throw an <tt>IndexOutOfBoundsException</tt>.
@@ -1402,15 +1342,11 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <tt>0 .. view.size()-1==width-1</tt>. As usual, any attempt to access a
      * cell at other coordinates will throw an
      * <tt>IndexOutOfBoundsException</tt>.
-     * 
-     * @param index
-     *            The index of the first cell.
-     * @param width
-     *            The width of the range.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>index<0 || width<0 || index+width>size()</tt>.
+     *
+     * @param index The index of the first cell.
+     * @param width The width of the range.
      * @return the new view.
-     * 
+     * @throws IndexOutOfBoundsException if <tt>index<0 || width<0 || index+width>size()</tt>.
      */
     public IntMatrix1D viewPart(int index, int width) {
         return (IntMatrix1D) (view().vPart(index, width));
@@ -1423,27 +1359,26 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * <tt>condition.apply(get(i))</tt> yields <tt>true</tt>.
      * <p>
      * <b>Example:</b> <br>
-     * 
+     *
      * <pre>
      *   // extract and view all cells with even value
-     *   matrix = 0 1 2 3 
-     *   matrix.viewSelection( 
+     *   matrix = 0 1 2 3
+     *   matrix.viewSelection(
      *      new IntProcedure() {
      *         public final boolean apply(int a) { return a % 2 == 0; }
      *      }
      *   );
      *   --&gt;
      *   matrix ==  0 2
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * For further examples, see the <a
      * href="package-summary.html#FunctionObjects">package doc</a>. The returned
      * view is backed by this matrix, so changes in the returned view are
      * reflected in this matrix, and vice-versa.
-     * 
-     * @param condition
-     *            The condition to be matched.
+     *
+     * @param condition The condition to be matched.
      * @return the new view.
      */
     public IntMatrix1D viewSelection(cern.mateba.function.tint.IntProcedure condition) {
@@ -1464,28 +1399,26 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * times and can be in arbitrary order.
      * <p>
      * <b>Example:</b> <br>
-     * 
+     *
      * <pre>
      *   this     = (0,0,8,0,7)
      *   indexes  = (0,2,4,2)
      *   --&gt;
      *   view     = (0,8,7,8)
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * Note that modifying <tt>indexes</tt> after this call has returned has no
      * effect on the view. The returned view is backed by this matrix, so
      * changes in the returned view are reflected in this matrix, and
      * vice-versa.
-     * 
-     * @param indexes
-     *            The indexes of the cells that shall be visible in the new
-     *            view. To indicate that <i>all</i> cells shall be visible,
-     *            simply set this parameter to <tt>null</tt>.
+     *
+     * @param indexes The indexes of the cells that shall be visible in the new
+     *                view. To indicate that <i>all</i> cells shall be visible,
+     *                simply set this parameter to <tt>null</tt>.
      * @return the new view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>!(0 <= indexes[i] < size())</tt> for any
-     *             <tt>i=0..indexes.length()-1</tt>.
+     * @throws IndexOutOfBoundsException if <tt>!(0 <= indexes[i] < size())</tt> for any
+     *                                   <tt>i=0..indexes.length()-1</tt>.
      */
     public IntMatrix1D viewSelection(int[] indexes) {
         // check for "all"
@@ -1505,9 +1438,8 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param offsets
-     *            the offsets of the visible elements.
+     *
+     * @param offsets the offsets of the visible elements.
      * @return a new view.
      */
     protected abstract IntMatrix1D viewSelectionLike(int[] offsets);
@@ -1519,7 +1451,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * {@link cern.mateba.matrix.tint.algo.IntSorting#sort(IntMatrix1D)}. For more
      * advanced sorting functionality, see
      * {@link cern.mateba.matrix.tint.algo.IntSorting}.
-     * 
+     *
      * @return a new sorted vector (matrix) view.
      */
     public IntMatrix1D viewSorted() {
@@ -1531,13 +1463,10 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * consisting of every i-th cell. More specifically, the view has size
      * <tt>this.size()/stride</tt> holding cells <tt>this.get(i*stride)</tt> for
      * all <tt>i = 0..size()/stride - 1</tt>.
-     * 
-     * @param stride
-     *            the step factor.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>stride <= 0</tt>.
+     *
+     * @param stride the step factor.
      * @return the new view.
-     * 
+     * @throws IndexOutOfBoundsException if <tt>stride <= 0</tt>.
      */
     public IntMatrix1D viewStrides(int stride) {
         return (IntMatrix1D) (view().vStrides(stride));
@@ -1547,9 +1476,8 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * Returns the dot product of two vectors x and y, which is
      * <tt>Sum(x[i]*y[i])</tt>. Where <tt>x == this</tt>. Operates on cells at
      * indexes <tt>0 .. Math.min(size(),y.size())</tt>.
-     * 
-     * @param y
-     *            the second vector.
+     *
+     * @param y the second vector.
      * @return the sum of products.
      */
     public int zDotProduct(IntMatrix1D y) {
@@ -1560,13 +1488,10 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
      * Returns the dot product of two vectors x and y, which is
      * <tt>Sum(x[i]*y[i])</tt>. Where <tt>x == this</tt>. Operates on cells at
      * indexes <tt>from .. Min(size(),y.size(),from+length)-1</tt>.
-     * 
-     * @param y
-     *            the second vector.
-     * @param from
-     *            the first index to be considered.
-     * @param length
-     *            the number of cells to be considered.
+     *
+     * @param y      the second vector.
+     * @param from   the first index to be considered.
+     * @param length the number of cells to be considered.
      * @return the sum of products; zero if <tt>from<0 || length<0</tt>.
      */
     public int zDotProduct(final IntMatrix1D y, final int from, int length) {
@@ -1628,11 +1553,9 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
     /**
      * Returns the dot product of two vectors x and y, which is
      * <tt>Sum(x[i]*y[i])</tt>. Where <tt>x == this</tt>.
-     * 
-     * @param y
-     *            the second vector.
-     * @param nonZeroIndexes
-     *            the indexes of cells in <tt>y</tt>having a non-zero value.
+     *
+     * @param y              the second vector.
+     * @param nonZeroIndexes the indexes of cells in <tt>y</tt>having a non-zero value.
      * @return the sum of products.
      */
     public int zDotProduct(IntMatrix1D y, int from, int length, IntArrayList nonZeroIndexes) {
@@ -1670,11 +1593,9 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
     /**
      * Returns the dot product of two vectors x and y, which is
      * <tt>Sum(x[i]*y[i])</tt>. Where <tt>x == this</tt>.
-     * 
-     * @param y
-     *            the second vector.
-     * @param nonZeroIndexes
-     *            the indexes of cells in <tt>y</tt>having a non-zero value.
+     *
+     * @param y              the second vector.
+     * @param nonZeroIndexes the indexes of cells in <tt>y</tt>having a non-zero value.
      * @return the sum of products.
      */
     protected int zDotProduct(IntMatrix1D y, IntArrayList nonZeroIndexes) {
@@ -1683,7 +1604,7 @@ public abstract class IntMatrix1D extends AbstractMatrix1D {
 
     /**
      * Returns the sum of all cells; <tt>Sum( x[i] )</tt>.
-     * 
+     *
      * @return the sum.
      */
     public int zSum() {

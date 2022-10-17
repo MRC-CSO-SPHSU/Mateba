@@ -10,7 +10,7 @@ package cern.mateba.map;
 
 /**
  * Provides various hash functions.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -24,7 +24,7 @@ public class HashFunctions {
 
     /**
      * Returns a hashcode for the specified value.
-     * 
+     *
      * @return a hash code value for the specified value.
      */
     public static int hash(char value) {
@@ -33,7 +33,7 @@ public class HashFunctions {
 
     /**
      * Returns a hashcode for the specified value.
-     * 
+     *
      * @return a hash code value for the specified value.
      */
     public static int hash(double value) {
@@ -47,7 +47,7 @@ public class HashFunctions {
 
     /**
      * Returns a hashcode for the specified value.
-     * 
+     *
      * @return a hash code value for the specified value.
      */
     public static int hash(float value) {
@@ -58,7 +58,7 @@ public class HashFunctions {
 
     /**
      * Returns a hashcode for the specified value.
-     * 
+     *
      * @return a hash code value for the specified value.
      */
     public static int hash(int value) {
@@ -69,14 +69,14 @@ public class HashFunctions {
         /*
          * value &= 0x7FFFFFFF; // make it >=0 int hashCode = 0; do hashCode =
          * 31*hashCode + value%10; while ((value /= 10) > 0);
-         * 
+         *
          * return 28629151*hashCode; // spread even further; h*31^5
          */
     }
 
     /**
      * Returns a hashcode for the specified value.
-     * 
+     *
      * @return a hash code value for the specified value.
      */
     public static int hash(long value) {
@@ -85,14 +85,14 @@ public class HashFunctions {
          * value &= 0x7FFFFFFFFFFFFFFFL; // make it >=0
          * (0x7FFFFFFFFFFFFFFFL==Long.MAX_VALUE) int hashCode = 0; do hashCode =
          * 31*hashCode + (int) (value%10); while ((value /= 10) > 0);
-         * 
+         *
          * return 28629151*hashCode; // spread even further; h*31^5
          */
     }
 
     /**
      * Returns a hashcode for the specified object.
-     * 
+     *
      * @return a hash code value for the specified object.
      */
     public static int hash(Object object) {
@@ -101,7 +101,7 @@ public class HashFunctions {
 
     /**
      * Returns a hashcode for the specified value.
-     * 
+     *
      * @return a hash code value for the specified value.
      */
     public static int hash(short value) {
@@ -110,7 +110,7 @@ public class HashFunctions {
 
     /**
      * Returns a hashcode for the specified value.
-     * 
+     *
      * @return a hash code value for the specified value.
      */
     public static int hash(boolean value) {
@@ -119,7 +119,7 @@ public class HashFunctions {
 
     /**
      * Returns a hashcode for the specified value.
-     * 
+     *
      * @return a hash code value for the specified value.
      */
     public static int hash(byte value) {

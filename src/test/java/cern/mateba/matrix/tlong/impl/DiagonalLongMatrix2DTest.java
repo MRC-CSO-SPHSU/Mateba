@@ -303,9 +303,9 @@ public class DiagonalLongMatrix2DTest extends LongMatrix2DTest {
 
     public void testToArray() {
         long[][] array = A.toArray();
-        assertTrue(NROWS == array.length);
+        assertEquals(NROWS, array.length);
         for (int r = 0; r < NROWS; r++) {
-            assertTrue(NCOLUMNS == array[r].length);
+            assertEquals(NCOLUMNS, array[r].length);
             for (int c = 0; c < NCOLUMNS; c++) {
                 assertEquals(array[r][c], A.getQuick(r, c));
             }
@@ -388,11 +388,7 @@ public class DiagonalLongMatrix2DTest extends LongMatrix2DTest {
             A.setQuick(NROWS / 2, NROWS / 2 + DINDEX, value);
             LongMatrix2D B = A.viewSelection(new LongMatrix1DProcedure() {
                 public boolean apply(LongMatrix1D element) {
-                    if (element.getQuick(NROWS / 4 + DINDEX) == value) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return element.getQuick(NROWS / 4 + DINDEX) == value;
                 }
             });
             assertEquals(1, B.rows());
@@ -403,11 +399,7 @@ public class DiagonalLongMatrix2DTest extends LongMatrix2DTest {
             A.setQuick(NROWS / 2 - DINDEX, NROWS / 2, value);
             LongMatrix2D B = A.viewSelection(new LongMatrix1DProcedure() {
                 public boolean apply(LongMatrix1D element) {
-                    if (element.getQuick(NROWS / 4) == value) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return element.getQuick(NROWS / 4) == value;
                 }
             });
             assertEquals(1, B.rows());
@@ -417,8 +409,8 @@ public class DiagonalLongMatrix2DTest extends LongMatrix2DTest {
     }
 
     public void testViewSelectionIntArrayIntArray() {
-        int[] rowIndexes = new int[] { NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2 };
-        int[] colIndexes = new int[] { NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2, NROWS - 1 };
+        int[] rowIndexes = new int[]{NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2};
+        int[] colIndexes = new int[]{NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2, NROWS - 1};
         LongMatrix2D B = A.viewSelection(rowIndexes, colIndexes);
         assertEquals(rowIndexes.length, B.rows());
         assertEquals(colIndexes.length, B.columns());

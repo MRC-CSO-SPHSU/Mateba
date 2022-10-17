@@ -39,7 +39,7 @@ import edu.emory.mathcs.jplasma.Barrier;
 import edu.emory.mathcs.jplasma.tdouble.Dglobal.Plasma_args;
 
 class DcoreControl implements Runnable {
-    private int my_core_id;
+    private final int my_core_id;
 
     protected DcoreControl(int core_id) {
         this.my_core_id = core_id;
@@ -67,50 +67,50 @@ class DcoreControl implements Runnable {
             Barrier.plasma_barrier(my_core_id, cores_num);
 
             switch (action) {
-            case Dglobal.PLASMA_ACT_DGEQRF:
-                Pdgeqrf.plasma_pDGEQRF(args.M, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE, args.IBNBSIZE,
+                case Dglobal.PLASMA_ACT_DGEQRF:
+                    Pdgeqrf.plasma_pDGEQRF(args.M, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE, args.IBNBSIZE,
                         args.IB, args.MT, args.NT, args.T, args.T_offset, args.INFO, cores_num, my_core_id);
-                break;
-            case Dglobal.PLASMA_ACT_DGELQF:
-                Pdgelqf.plasma_pDGELQF(args.M, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE, args.IBNBSIZE,
+                    break;
+                case Dglobal.PLASMA_ACT_DGELQF:
+                    Pdgelqf.plasma_pDGELQF(args.M, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE, args.IBNBSIZE,
                         args.IB, args.MT, args.NT, args.T, args.T_offset, args.INFO, cores_num, my_core_id);
-                break;
-            case Dglobal.PLASMA_ACT_DORMQR:
-                Pdormqr.plasma_pDORMQR(args.M, args.NRHS, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE,
+                    break;
+                case Dglobal.PLASMA_ACT_DORMQR:
+                    Pdormqr.plasma_pDORMQR(args.M, args.NRHS, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE,
                         args.IBNBSIZE, args.IB, args.MT, args.NTRHS, args.NT, args.T, args.T_offset, args.B,
                         args.B_offset, args.INFO, cores_num, my_core_id);
-                break;
-            case Dglobal.PLASMA_ACT_DTRSM:
-                Pdtrsm.plasma_pDTRSM(Dplasma.PlasmaLeft, args.uplo, args.trans, args.diag, args.N, args.NRHS, 1.0,
+                    break;
+                case Dglobal.PLASMA_ACT_DTRSM:
+                    Pdtrsm.plasma_pDTRSM(Dplasma.PlasmaLeft, args.uplo, args.trans, args.diag, args.N, args.NRHS, 1.0,
                         args.A, args.A_offset, args.NB, args.NBNBSIZE, args.NT, args.MT, args.B, args.B_offset,
                         args.MTB, args.NTRHS, cores_num, my_core_id);
-                break;
-            case Dglobal.PLASMA_ACT_DPOTRF:
-                Pdpotrf.plasma_pDPOTRF(args.uplo, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE, args.NT,
+                    break;
+                case Dglobal.PLASMA_ACT_DPOTRF:
+                    Pdpotrf.plasma_pDPOTRF(args.uplo, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE, args.NT,
                         args.INFO, cores_num, my_core_id);
-                break;
-            case Dglobal.PLASMA_ACT_DGETRF:
-                Pdgetrf.plasma_pDGETRF(args.M, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE, args.IBNBSIZE,
+                    break;
+                case Dglobal.PLASMA_ACT_DGETRF:
+                    Pdgetrf.plasma_pDGETRF(args.M, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE, args.IBNBSIZE,
                         args.IB, args.MT, args.NT, args.L, args.L_offset, args.IPIV, args.IPIV_offset, args.INFO,
                         cores_num, my_core_id);
-                break;
-            case Dglobal.PLASMA_ACT_DTRSMPL:
-                Pdtrsmpl.plasma_pDTRSMPL(args.M, args.NRHS, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE,
+                    break;
+                case Dglobal.PLASMA_ACT_DTRSMPL:
+                    Pdtrsmpl.plasma_pDTRSMPL(args.M, args.NRHS, args.N, args.A, args.A_offset, args.NB, args.NBNBSIZE,
                         args.IBNBSIZE, args.IB, args.MT, args.NTRHS, args.NT, args.L, args.L_offset, args.IPIV,
                         args.IPIV_offset, args.B, args.B_offset, args.INFO, cores_num, my_core_id);
-                break;
-            case Dglobal.PLASMA_ACT_F77_TO_BDL:
-                DbdlConvert.plasma_lapack_to_bdl(args.F77, args.F77_offset, args.A, args.A_offset, args.M, args.N,
+                    break;
+                case Dglobal.PLASMA_ACT_F77_TO_BDL:
+                    DbdlConvert.plasma_lapack_to_bdl(args.F77, args.F77_offset, args.A, args.A_offset, args.M, args.N,
                         args.LDA, args.NB, args.MT, args.NT, args.NBNBSIZE, cores_num, my_core_id);
-                break;
-            case Dglobal.PLASMA_ACT_BDL_TO_F77:
-                DbdlConvert.plasma_bdl_to_lapack(args.A, args.A_offset, args.F77, args.F77_offset, args.M, args.N,
+                    break;
+                case Dglobal.PLASMA_ACT_BDL_TO_F77:
+                    DbdlConvert.plasma_bdl_to_lapack(args.A, args.A_offset, args.F77, args.F77_offset, args.M, args.N,
                         args.LDA, args.NB, args.MT, args.NT, args.NBNBSIZE, cores_num, my_core_id);
-                break;
-            case Dglobal.PLASMA_ACT_FINALIZE:
-                return;
-            default:
-                return;
+                    break;
+                case Dglobal.PLASMA_ACT_FINALIZE:
+                    return;
+                default:
+                    return;
             }
             Barrier.plasma_barrier(my_core_id, cores_num);
         }

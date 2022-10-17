@@ -46,11 +46,11 @@ public abstract class DComplexMatrix1DTest extends TestCase {
         ConcurrencyUtils.setThreadsBeginN_1D(1);
 
         for (int i = 0; i < (int) A.size(); i++) {
-            A.setQuick(i, new double[] { Math.random(), Math.random() });
+            A.setQuick(i, new double[]{Math.random(), Math.random()});
         }
 
         for (int i = 0; i < (int) A.size(); i++) {
-            B.setQuick(i, new double[] { Math.random(), Math.random() });
+            B.setQuick(i, new double[]{Math.random(), Math.random()});
         }
     }
 
@@ -87,7 +87,7 @@ public abstract class DComplexMatrix1DTest extends TestCase {
 
     public void testAssignComplexMatrix1D() {
         A.assign(B);
-        assertTrue(A.size() == B.size());
+        assertEquals(A.size(), B.size());
         for (int i = 0; i < (int) A.size(); i++) {
             assertEquals(B.getQuick(i), A.getQuick(i), TOL);
         }
@@ -104,11 +104,7 @@ public abstract class DComplexMatrix1DTest extends TestCase {
     public void testAssignComplexProcedureComplexComplexFunction() {
         DComplexProcedure procedure = new DComplexProcedure() {
             public boolean apply(double[] element) {
-                if (DComplex.abs(element) > 0.1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return DComplex.abs(element) > 0.1;
             }
         };
         DComplexMatrix1D Acopy = A.copy();
@@ -125,15 +121,11 @@ public abstract class DComplexMatrix1DTest extends TestCase {
     public void testAssignComplexProcedureDoubleArray() {
         DComplexProcedure procedure = new DComplexProcedure() {
             public boolean apply(double[] element) {
-                if (DComplex.abs(element) > 0.1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return DComplex.abs(element) > 0.1;
             }
         };
         DComplexMatrix1D Acopy = A.copy();
-        double[] value = new double[] { -1, -1 };
+        double[] value = new double[]{-1, -1};
         A.assign(procedure, value);
         for (int i = 0; i < (int) A.size(); i++) {
             if (DComplex.abs(Acopy.getQuick(i)) > 0.1) {
@@ -207,11 +199,11 @@ public abstract class DComplexMatrix1DTest extends TestCase {
     }
 
     public void testEqualsDouble() {
-        double[] value = new double[] { 1, 2 };
+        double[] value = new double[]{1, 2};
         A.assign(value[0], value[1]);
         boolean eq = A.equals(value);
         assertTrue(eq);
-        eq = A.equals(new double[] { 2, 2 });
+        eq = A.equals(new double[]{2, 2});
         assertFalse(eq);
     }
 
@@ -321,11 +313,7 @@ public abstract class DComplexMatrix1DTest extends TestCase {
     public void testViewSelectionComplexProcedure() {
         DComplexMatrix1D B = A.viewSelection(new DComplexProcedure() {
             public boolean apply(double[] element) {
-                if (element[0] < element[1]) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return element[0] < element[1];
             }
         });
         for (int i = 0; i < B.size(); i++) {
@@ -337,8 +325,8 @@ public abstract class DComplexMatrix1DTest extends TestCase {
     }
 
     public void testViewSelectionIntArray() {
-        int[] indexes = new int[] { (int) A.size() / 6, (int) A.size() / 5, (int) A.size() / 4, (int) A.size() / 3,
-                (int) A.size() / 2 };
+        int[] indexes = new int[]{(int) A.size() / 6, (int) A.size() / 5, (int) A.size() / 4, (int) A.size() / 3,
+            (int) A.size() / 2};
         DComplexMatrix1D B = A.viewSelection(indexes);
         for (int i = 0; i < indexes.length; i++) {
             assertEquals(A.getQuick(indexes[i]), B.getQuick(i), TOL);

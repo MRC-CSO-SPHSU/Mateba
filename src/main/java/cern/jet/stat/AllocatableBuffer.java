@@ -29,9 +29,8 @@ public abstract class AllocatableBuffer implements Serializable, Cloneable {
 
     /**
      * This method was created in VisualAge.
-     * 
-     * @param k
-     *            int
+     *
+     * @param k int
      */
     public AllocatableBuffer(int k) {
         this.k = k;

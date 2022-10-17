@@ -90,11 +90,7 @@ public abstract class IntMatrix2DTest extends TestCase {
     public void testAggregateIntIntFunctionIntFunctionIntProcedure() {
         IntProcedure procedure = new IntProcedure() {
             public boolean apply(int element) {
-                if (Math.abs(element) > 0.2) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 0.2;
             }
         };
         int expected = 0;
@@ -165,7 +161,7 @@ public abstract class IntMatrix2DTest extends TestCase {
         }
         A.assign(expected);
         for (int r = 0; r < A.rows(); r++) {
-            assertTrue(A.columns() == expected[r].length);
+            assertEquals(A.columns(), expected[r].length);
             for (int c = 0; c < A.columns(); c++)
                 assertEquals(expected[r][c], A.getQuick(r, c));
         }
@@ -221,11 +217,7 @@ public abstract class IntMatrix2DTest extends TestCase {
     public void testAssignIntProcedureInt() {
         IntProcedure procedure = new IntProcedure() {
             public boolean apply(int element) {
-                if (Math.abs(element) > 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 1;
             }
         };
         IntMatrix2D Acopy = A.copy();
@@ -244,11 +236,7 @@ public abstract class IntMatrix2DTest extends TestCase {
     public void testAssignIntProcedureIntFunction() {
         IntProcedure procedure = new IntProcedure() {
             public boolean apply(int element) {
-                if (Math.abs(element) > 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 1;
             }
         };
         IntMatrix2D Acopy = A.copy();
@@ -313,8 +301,8 @@ public abstract class IntMatrix2DTest extends TestCase {
         A.setQuick(A.rows() / 2, A.columns() / 2, 1);
         int[] maxAndLoc = A.getMaxLocation();
         assertEquals(7, maxAndLoc[0]);
-        assertEquals(A.rows() / 3, (int) maxAndLoc[1]);
-        assertEquals(A.columns() / 3, (int) maxAndLoc[2]);
+        assertEquals(A.rows() / 3, maxAndLoc[1]);
+        assertEquals(A.columns() / 3, maxAndLoc[2]);
     }
 
     public void testMinLocation() {
@@ -323,8 +311,8 @@ public abstract class IntMatrix2DTest extends TestCase {
         A.setQuick(A.rows() / 2, A.columns() / 2, -1);
         int[] minAndLoc = A.getMinLocation();
         assertEquals(-7, minAndLoc[0]);
-        assertEquals(A.rows() / 3, (int) minAndLoc[1]);
-        assertEquals(A.columns() / 3, (int) minAndLoc[2]);
+        assertEquals(A.rows() / 3, minAndLoc[1]);
+        assertEquals(A.columns() / 3, minAndLoc[2]);
     }
 
     public void testGetNegativeValues() {
@@ -386,9 +374,9 @@ public abstract class IntMatrix2DTest extends TestCase {
 
     public void testToArray() {
         int[][] array = A.toArray();
-        assertTrue(A.rows() == array.length);
+        assertEquals(A.rows(), array.length);
         for (int r = 0; r < A.rows(); r++) {
-            assertTrue(A.columns() == array[r].length);
+            assertEquals(A.columns(), array[r].length);
             for (int c = 0; c < A.columns(); c++)
                 assertEquals(0, Math.abs(array[r][c] - A.getQuick(r, c)));
         }
@@ -469,11 +457,7 @@ public abstract class IntMatrix2DTest extends TestCase {
         A.setQuick(A.rows() / 2, 0, value);
         IntMatrix2D B = A.viewSelection(new IntMatrix1DProcedure() {
             public boolean apply(IntMatrix1D element) {
-                if (Math.abs(element.getQuick(0) - value) == 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element.getQuick(0) - value) == 0;
             }
         });
         assertEquals(2, B.rows());
@@ -483,9 +467,9 @@ public abstract class IntMatrix2DTest extends TestCase {
     }
 
     public void testViewSelectionIntArrayIntArray() {
-        int[] rowIndexes = new int[] { A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2 };
-        int[] colIndexes = new int[] { A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
-                A.columns() / 2, A.columns() - 1 };
+        int[] rowIndexes = new int[]{A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2};
+        int[] colIndexes = new int[]{A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
+            A.columns() / 2, A.columns() - 1};
         IntMatrix2D B = A.viewSelection(rowIndexes, colIndexes);
         assertEquals(rowIndexes.length, B.rows());
         assertEquals(colIndexes.length, B.columns());

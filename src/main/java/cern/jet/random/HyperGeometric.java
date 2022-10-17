@@ -16,7 +16,7 @@ import java.io.Serial;
 /**
  * HyperGeometric distribution; See the <A
  * HREF="http://library.advanced.org/10030/6atpdvah.htm"> math definition</A>
- * 
+ * <p>
  * The hypergeometric distribution with parameters <tt>N</tt>, <tt>n</tt> and
  * <tt>s</tt> is the probability distribution of the random variable X, whose
  * value is the number of successes in a sample of <tt>n</tt> items from a
@@ -42,7 +42,7 @@ import java.io.Serial;
  * H. Zechner (1994): Efficient sampling from continuous and discrete unimodal
  * distributions, Doctoral Dissertation, 156 pp., Technical University Graz,
  * Austria.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -84,7 +84,7 @@ public class HyperGeometric extends AbstractDiscreteDistribution {
 
     private static double fc_lnpk(int k, int N_Mn, int M, int n) {
         return (DoubleArithmetic.logFactorial(k) + DoubleArithmetic.logFactorial(M - k)
-                + DoubleArithmetic.logFactorial(n - k) + DoubleArithmetic.logFactorial(N_Mn + k));
+            + DoubleArithmetic.logFactorial(n - k) + DoubleArithmetic.logFactorial(N_Mn + k));
     }
 
     /**
@@ -114,10 +114,10 @@ public class HyperGeometric extends AbstractDiscreteDistribution {
 
             /* mode probability, using the external function flogfak(k) = ln(k!) */
             fm = Math.exp(DoubleArithmetic.logFactorial(N - M) - DoubleArithmetic.logFactorial(N_Mn + m)
-                    - DoubleArithmetic.logFactorial(n - m) + DoubleArithmetic.logFactorial(M)
-                    - DoubleArithmetic.logFactorial(M - m) - DoubleArithmetic.logFactorial(m)
-                    - DoubleArithmetic.logFactorial(N) + DoubleArithmetic.logFactorial(N - n)
-                    + DoubleArithmetic.logFactorial(n));
+                - DoubleArithmetic.logFactorial(n - m) + DoubleArithmetic.logFactorial(M)
+                - DoubleArithmetic.logFactorial(M - m) - DoubleArithmetic.logFactorial(m)
+                - DoubleArithmetic.logFactorial(N) + DoubleArithmetic.logFactorial(N - n)
+                + DoubleArithmetic.logFactorial(n));
 
             /* safety bound - guarantees at least 17 significant decimal digits */
             /* b = min(n, (long int)(nu + k*c')) */
@@ -126,7 +126,7 @@ public class HyperGeometric extends AbstractDiscreteDistribution {
                 b = n;
         }
 
-        for (;;) {
+        for (; ; ) {
             if ((U = randomGenerator.raw() - fm) <= 0.0)
                 return (m);
             c = d = fm;
@@ -222,7 +222,7 @@ public class HyperGeometric extends AbstractDiscreteDistribution {
             p6 = f5 / lr + p5; // expon. tail right
         }
 
-        for (;;) {
+        for (; ; ) {
             // generate uniform number U -- U(0, p6)
             // case distinction corresponding to U
             if ((U = randomGenerator.raw() * p6) < p2) { // centre left
@@ -368,10 +368,10 @@ public class HyperGeometric extends AbstractDiscreteDistribution {
 
         if ((n * M / N) < 10) {
             K = (n_le_Nhalf <= M_le_Nhalf) ? hmdu(N, M_le_Nhalf, n_le_Nhalf, randomGenerator) : hmdu(N, n_le_Nhalf,
-                    M_le_Nhalf, randomGenerator);
+                M_le_Nhalf, randomGenerator);
         } else {
             K = (n_le_Nhalf <= M_le_Nhalf) ? hprs(N, M_le_Nhalf, n_le_Nhalf, randomGenerator) : hprs(N, n_le_Nhalf,
-                    M_le_Nhalf, randomGenerator);
+                M_le_Nhalf, randomGenerator);
         }
 
         if (n <= Nhalf) {
@@ -386,7 +386,7 @@ public class HyperGeometric extends AbstractDiscreteDistribution {
      */
     public double pdf(int k) {
         return DoubleArithmetic.binomial(my_s, k) * DoubleArithmetic.binomial(my_N - my_s, my_n - k)
-                / DoubleArithmetic.binomial(my_N, my_n);
+            / DoubleArithmetic.binomial(my_N, my_n);
     }
 
     /**
@@ -418,9 +418,8 @@ public class HyperGeometric extends AbstractDiscreteDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

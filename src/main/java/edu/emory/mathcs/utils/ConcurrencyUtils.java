@@ -48,12 +48,12 @@ import cern.mateba.function.tobject.ObjectObjectFunction;
 
 /**
  * Concurrency utilities.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class ConcurrencyUtils {
     private static ExecutorService THREAD_POOL = Executors.newCachedThreadPool(new CustomThreadFactory(
-            new CustomExceptionHandler()));
+        new CustomExceptionHandler()));
 
     private static int NTHREADS = getNumberOfProcessors();
 
@@ -88,12 +88,12 @@ public class ConcurrencyUtils {
             t.setDaemon(true);
             return t;
         }
-    };
+    }
 
     /**
      * Causes the currently executing thread to sleep (temporarily cease
      * execution) for the specified number of milliseconds.
-     * 
+     *
      * @param millis
      */
     public static void sleep(long millis) {
@@ -114,10 +114,9 @@ public class ConcurrencyUtils {
     /**
      * Submits a value-returning task for execution and returns a Future
      * representing the pending results of the task.
-     * 
+     *
      * @param <T>
-     * @param task
-     *            task for execution
+     * @param task task for execution
      * @return a handle to the task submitted for execution
      */
     public static <T> Future<T> submit(Callable<T> task) {
@@ -130,9 +129,8 @@ public class ConcurrencyUtils {
     /**
      * Submits a Runnable task for execution and returns a Future representing
      * that task.
-     * 
-     * @param task
-     *            task for execution
+     *
+     * @param task task for execution
      * @return a handle to the task submitted for execution
      */
     public static Future<?> submit(Runnable task) {
@@ -144,7 +142,7 @@ public class ConcurrencyUtils {
 
     /**
      * Returns the number of available processors
-     * 
+     *
      * @return number of available processors
      */
     public static int getNumberOfProcessors() {
@@ -153,7 +151,7 @@ public class ConcurrencyUtils {
 
     /**
      * Returns the current number of threads.
-     * 
+     *
      * @return the current number of threads.
      */
     public static int getNumberOfThreads() {
@@ -162,9 +160,8 @@ public class ConcurrencyUtils {
 
     /**
      * Waits for all threads to complete computation.
-     * 
-     * @param futures
-     *            handles to running threads
+     *
+     * @param futures handles to running threads
      */
     public static void waitForCompletion(Future<?>[] futures) {
         int size = futures.length;
@@ -181,11 +178,9 @@ public class ConcurrencyUtils {
 
     /**
      * Waits for all threads to complete computation and aggregates the result.
-     * 
-     * @param futures
-     *            handles to running threads
-     * @param aggr
-     *            an aggregation function
+     *
+     * @param futures handles to running threads
+     * @param aggr    an aggregation function
      * @return the result of aggregation
      */
     public static double waitForCompletion(Future<?>[] futures, DoubleDoubleFunction aggr) {
@@ -210,11 +205,9 @@ public class ConcurrencyUtils {
 
     /**
      * Waits for all threads to complete computation and aggregates the result.
-     * 
-     * @param futures
-     *            handles to running threads
-     * @param aggr
-     *            an aggregation function
+     *
+     * @param futures handles to running threads
+     * @param aggr    an aggregation function
      * @return the result of aggregation
      */
     public static int waitForCompletion(Future<?>[] futures, IntIntFunction aggr) {
@@ -239,11 +232,9 @@ public class ConcurrencyUtils {
 
     /**
      * Waits for all threads to complete computation and aggregates the result.
-     * 
-     * @param futures
-     *            handles to running threads
-     * @param aggr
-     *            an aggregation function
+     *
+     * @param futures handles to running threads
+     * @param aggr    an aggregation function
      * @return the result of aggregation
      */
     public static long waitForCompletion(Future<?>[] futures, LongLongFunction aggr) {
@@ -268,11 +259,9 @@ public class ConcurrencyUtils {
 
     /**
      * Waits for all threads to complete computation and aggregates the result.
-     * 
-     * @param futures
-     *            handles to running threads
-     * @param aggr
-     *            an aggregation function
+     *
+     * @param futures handles to running threads
+     * @param aggr    an aggregation function
      * @return the result of aggregation
      */
     public static Object waitForCompletion(Future<?>[] futures, ObjectObjectFunction aggr) {
@@ -281,7 +270,7 @@ public class ConcurrencyUtils {
         Object a = null;
         try {
             for (int j = 0; j < size; j++) {
-                results[j] = (Integer) futures[j].get();
+                results[j] = futures[j].get();
             }
             a = results[0];
             for (int j = 1; j < size; j++) {
@@ -298,10 +287,8 @@ public class ConcurrencyUtils {
     /**
      * Waits for all threads to complete computation and aggregates the result.
      *
-     * @param futures
-     *            handles to running threads
-     * @param aggr
-     *            an aggregation function
+     * @param futures handles to running threads
+     * @param aggr    an aggregation function
      * @return the result of aggregation
      */
     public static double[] waitForCompletion(Future<?>[] futures, DComplexDComplexDComplexFunction aggr) {
@@ -326,7 +313,7 @@ public class ConcurrencyUtils {
 
     /**
      * Returns the minimal size of 1D data for which threads are used.
-     * 
+     *
      * @return the minimal size of 1D data for which threads are used
      */
     public static int getThreadsBeginN_1D() {
@@ -335,7 +322,7 @@ public class ConcurrencyUtils {
 
     /**
      * Returns the minimal size of 1D data for which two threads are used.
-     * 
+     *
      * @return the minimal size of 1D data for which two threads are used
      */
     public static int getThreadsBeginN_1D_FFT_2Threads() {
@@ -344,7 +331,7 @@ public class ConcurrencyUtils {
 
     /**
      * Returns the minimal size of 1D data for which four threads are used.
-     * 
+     *
      * @return the minimal size of 1D data for which four threads are used
      */
     public static int getThreadsBeginN_1D_FFT_4Threads() {
@@ -353,7 +340,7 @@ public class ConcurrencyUtils {
 
     /**
      * Returns the minimal size of 2D data for which threads are used.
-     * 
+     *
      * @return the minimal size of 2D data for which threads are used
      */
     public static int getThreadsBeginN_2D() {
@@ -362,7 +349,7 @@ public class ConcurrencyUtils {
 
     /**
      * Returns the minimal size of 3D data for which threads are used.
-     * 
+     *
      * @return the minimal size of 3D data for which threads are used
      */
     public static int getThreadsBeginN_3D() {
@@ -371,9 +358,8 @@ public class ConcurrencyUtils {
 
     /**
      * Sets the minimal size of 1D data for which two threads are used.
-     * 
-     * @param n
-     *            the minimal size of 1D data for which two threads are used
+     *
+     * @param n the minimal size of 1D data for which two threads are used
      */
     public static void setThreadsBeginN_1D_FFT_2Threads(int n) {
         if (n < 512) {
@@ -385,9 +371,8 @@ public class ConcurrencyUtils {
 
     /**
      * Sets the minimal size of 1D data for which four threads are used.
-     * 
-     * @param n
-     *            the minimal size of 1D data for which four threads are used
+     *
+     * @param n the minimal size of 1D data for which four threads are used
      */
     public static void setThreadsBeginN_1D_FFT_4Threads(int n) {
         if (n < 512) {
@@ -399,9 +384,8 @@ public class ConcurrencyUtils {
 
     /**
      * Sets the minimal size of 1D data for which threads are used.
-     * 
-     * @param n
-     *            the minimal size of 1D data for which threads are used
+     *
+     * @param n the minimal size of 1D data for which threads are used
      */
     public static void setThreadsBeginN_1D(int n) {
         THREADS_BEGIN_N_1D = n;
@@ -409,9 +393,8 @@ public class ConcurrencyUtils {
 
     /**
      * Sets the minimal size of 2D data for which threads are used.
-     * 
-     * @param n
-     *            the minimal size of 2D data for which threads are used
+     *
+     * @param n the minimal size of 2D data for which threads are used
      */
     public static void setThreadsBeginN_2D(int n) {
         THREADS_BEGIN_N_2D = n;
@@ -419,9 +402,8 @@ public class ConcurrencyUtils {
 
     /**
      * Sets the minimal size of 3D data for which threads are used.
-     * 
-     * @param n
-     *            the minimal size of 3D data for which threads are used
+     *
+     * @param n the minimal size of 3D data for which threads are used
      */
     public static void setThreadsBeginN_3D(int n) {
         THREADS_BEGIN_N_3D = n;
@@ -448,7 +430,7 @@ public class ConcurrencyUtils {
 
     /**
      * Sets the number of threads
-     * 
+     *
      * @param n
      */
     public static void setNumberOfThreads(int n) {
@@ -459,7 +441,7 @@ public class ConcurrencyUtils {
 
     /**
      * Returns the closest power of two greater than or equal to x.
-     * 
+     *
      * @param x
      * @return the closest power of two greater than or equal to x
      */
@@ -483,15 +465,15 @@ public class ConcurrencyUtils {
             throw new IllegalArgumentException("x must be greater or equal 1");
         int nextExp = nextExp2(x);
         int nextPow = nextExp + 1;
-        int extDim = (int) Math.round(Math.pow(2.0, (double) nextPow));
+        int extDim = (int) Math.round(Math.pow(2.0, nextPow));
         return extDim;
     }
 
     public static int nextExp2(int n) {
 
-        double e = Math.log((double) n) / Math.log(2.0);
+        double e = Math.log(n) / Math.log(2.0);
         int p = (int) Math.ceil(e);
-        double f = n / Math.pow(2.0, (double) p);
+        double f = n / Math.pow(2.0, p);
         if (f == 0.5) {
             p = p - 1;
         }
@@ -500,7 +482,7 @@ public class ConcurrencyUtils {
 
     /**
      * Returns the closest power of two less than or equal to x
-     * 
+     *
      * @param x
      * @return the closest power of two less then or equal to x
      */
@@ -512,7 +494,7 @@ public class ConcurrencyUtils {
 
     /**
      * Checks if n is a power-of-two number
-     * 
+     *
      * @param n
      * @return true if n is power of 2
      */

@@ -80,11 +80,7 @@ public abstract class DoubleMatrix3DTest extends TestCase {
     public void testAggregateDoubleDoubleFunctionDoubleFunctionDoubleProcedure() {
         DoubleProcedure procedure = new DoubleProcedure() {
             public boolean apply(double element) {
-                if (Math.abs(element) > 0.2) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 0.2;
             }
         };
         double expected = 0;
@@ -182,9 +178,9 @@ public abstract class DoubleMatrix3DTest extends TestCase {
         }
         A.assign(expected);
         for (int s = 0; s < A.slices(); s++) {
-            assertTrue(A.rows() == expected[s].length);
+            assertEquals(A.rows(), expected[s].length);
             for (int r = 0; r < A.rows(); r++) {
-                assertTrue(A.columns() == expected[s][r].length);
+                assertEquals(A.columns(), expected[s][r].length);
                 for (int c = 0; c < A.columns(); c++) {
                     assertEquals(expected[s][r][c], A.getQuick(s, r, c), TOL);
                 }
@@ -254,11 +250,7 @@ public abstract class DoubleMatrix3DTest extends TestCase {
     public void testAssignDoubleProcedureDouble() {
         DoubleProcedure procedure = new DoubleProcedure() {
             public boolean apply(double element) {
-                if (Math.abs(element) > 0.1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 0.1;
             }
         };
         DoubleMatrix3D Acopy = A.copy();
@@ -279,11 +271,7 @@ public abstract class DoubleMatrix3DTest extends TestCase {
     public void testAssignDoubleProcedureDoubleFunction() {
         DoubleProcedure procedure = new DoubleProcedure() {
             public boolean apply(double element) {
-                if (Math.abs(element) > 0.1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 0.1;
             }
         };
         DoubleMatrix3D Acopy = A.copy();
@@ -416,9 +404,9 @@ public abstract class DoubleMatrix3DTest extends TestCase {
     public void testToArray() {
         double[][][] array = A.toArray();
         for (int s = 0; s < A.slices(); s++) {
-            assertTrue(A.rows() == array[s].length);
+            assertEquals(A.rows(), array[s].length);
             for (int r = 0; r < A.rows(); r++) {
-                assertTrue(A.columns() == array[s][r].length);
+                assertEquals(A.columns(), array[s][r].length);
                 for (int c = 0; c < A.columns(); c++)
                     assertEquals(0, Math.abs(array[s][r][c] - A.getQuick(s, r, c)), TOL);
             }
@@ -476,12 +464,12 @@ public abstract class DoubleMatrix3DTest extends TestCase {
 
     public void testViewPart() {
         DoubleMatrix3D B = A.viewPart(A.slices() / 2, A.rows() / 2, A.columns() / 2, A.slices() / 3, A.rows() / 3, A
-                .columns() / 3);
+            .columns() / 3);
         for (int s = 0; s < A.slices() / 3; s++) {
             for (int r = 0; r < A.rows() / 3; r++) {
                 for (int c = 0; c < A.columns() / 3; c++) {
                     assertEquals(A.getQuick(A.slices() / 2 + s, A.rows() / 2 + r, A.columns() / 2 + c), B.getQuick(s,
-                            r, c), TOL);
+                        r, c), TOL);
                 }
             }
         }
@@ -516,11 +504,7 @@ public abstract class DoubleMatrix3DTest extends TestCase {
         A.setQuick(A.slices() / 2, A.rows() / 4, 0, value);
         DoubleMatrix3D B = A.viewSelection(new DoubleMatrix2DProcedure() {
             public boolean apply(DoubleMatrix2D element) {
-                if (Math.abs(element.getQuick(A.rows() / 4, 0) - value) <= TOL) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element.getQuick(A.rows() / 4, 0) - value) <= TOL;
 
             }
         });
@@ -531,10 +515,10 @@ public abstract class DoubleMatrix3DTest extends TestCase {
     }
 
     public void testViewSelectionIntArrayIntArrayIntArray() {
-        int[] sliceIndexes = new int[] { A.slices() / 2, A.slices() / 3 };
-        int[] rowIndexes = new int[] { A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2 };
-        int[] colIndexes = new int[] { A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
-                A.columns() / 2, A.columns() - 1 };
+        int[] sliceIndexes = new int[]{A.slices() / 2, A.slices() / 3};
+        int[] rowIndexes = new int[]{A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2};
+        int[] colIndexes = new int[]{A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
+            A.columns() / 2, A.columns() - 1};
         DoubleMatrix3D B = A.viewSelection(sliceIndexes, rowIndexes, colIndexes);
         assertEquals(sliceIndexes.length, B.slices());
         assertEquals(rowIndexes.length, B.rows());

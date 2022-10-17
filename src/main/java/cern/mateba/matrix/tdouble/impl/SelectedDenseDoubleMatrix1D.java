@@ -47,10 +47,8 @@ import java.io.Serial;
  * <p>
  * Depends on the parent view holding cells.
  * <p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  * @version 1.1, 08/22/2007
  */
@@ -75,11 +73,9 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param elements
-     *            the cells.
-     * @param indexes
-     *            The indexes of the cells that shall be visible.
+     *
+     * @param elements the cells.
+     * @param indexes  The indexes of the cells that shall be visible.
      */
     protected SelectedDenseDoubleMatrix1D(double[] elements, int[] offsets) {
         this(offsets.length, elements, 0, 1, offsets, 0);
@@ -87,18 +83,13 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @param offsets
-     *            the offsets of the cells that shall be visible.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param zero     the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @param offsets  the offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedDenseDoubleMatrix1D(int size, double[] elements, int zero, int stride, int[] offsets, int offset) {
@@ -116,15 +107,14 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>index</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
+     *
+     * @param index the index of the cell.
      * @return the value of the specified cell.
      */
 
@@ -139,9 +129,8 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
      * Returns the position of the element with the given relative rank within
      * the (virtual or non-virtual) internal 1-dimensional array. You may want
      * to override this method for performance.
-     * 
-     * @param rank
-     *            the rank of the element.
+     *
+     * @param rank the rank of the element.
      */
 
     public long index(int rank) {
@@ -158,9 +147,8 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
      * instance of type <tt>SparseDoubleMatrix1D</tt> the new matrix must also
      * be of type <tt>SparseDoubleMatrix1D</tt>, etc. In general, the new matrix
      * should have internal parametrization as similar as possible.
-     * 
-     * @param size
-     *            the number of cell the matrix shall have.
+     *
+     * @param size the number of cell the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -175,11 +163,9 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
      * matrix must be of type <tt>DenseDoubleMatrix2D</tt>, if the receiver is
      * an instance of type <tt>SparseDoubleMatrix1D</tt> the new matrix must be
      * of type <tt>SparseDoubleMatrix2D</tt>, etc.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -234,17 +220,15 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell.
      */
 
     public void setQuick(int index, double value) {
@@ -258,9 +242,8 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
 
@@ -273,11 +256,9 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
      */
 
     protected boolean haveSharedCellsRaw(DoubleMatrix1D other) {
-        if (other instanceof SelectedDenseDoubleMatrix1D) {
-            SelectedDenseDoubleMatrix1D otherMatrix = (SelectedDenseDoubleMatrix1D) other;
+        if (other instanceof SelectedDenseDoubleMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseDoubleMatrix1D) {
-            DenseDoubleMatrix1D otherMatrix = (DenseDoubleMatrix1D) other;
+        } else if (other instanceof DenseDoubleMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -285,9 +266,8 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Sets up a matrix with a given number of cells.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
+     *
+     * @param size the number of cells the matrix shall have.
      */
 
     protected void setUp(int size) {
@@ -298,9 +278,8 @@ class SelectedDenseDoubleMatrix1D extends DoubleMatrix1D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param offsets
-     *            the offsets of the visible elements.
+     *
+     * @param offsets the offsets of the visible elements.
      * @return a new view.
      */
 

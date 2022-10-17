@@ -45,7 +45,7 @@ class Pdgelqf {
      *  Parallel tile LQ factorization
      */
     protected static void plasma_pDGELQF(int M, int N, double[] A, int A_offset, int NB, int NBNBSIZE, int IBNBSIZE,
-            int IB, int MT, int NT, double[] T, int T_offset, intW INFO, int cores_num, int my_core_id) {
+                                         int IB, int MT, int NT, double[] T, int T_offset, intW INFO, int cores_num, int my_core_id) {
         double[] WORK = Dcommon.plasma_aux.WORK[my_core_id];
         double[] TAU = Dcommon.plasma_aux.TAU[my_core_id];
         int[] progress = Dcommon.plasma_aux.progress;
@@ -82,15 +82,15 @@ class Pdgelqf {
                     while (progress[(k) + MT * (k)] != k - 1)
                         Dcommon.delay();
                     DcoreBLAS.core_DGELQT(k == MT - 1 ? M - k * NB : NB, k == NT - 1 ? N - k * NB : NB, IB, A, A_offset
-                            + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, T, T_offset + IBNBSIZE * (k) + IBNBSIZE * MT
-                            * (k), IB, TAU, 0, WORK, 0);
+                        + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, T, T_offset + IBNBSIZE * (k) + IBNBSIZE * MT
+                        * (k), IB, TAU, 0, WORK, 0);
                     progress[(k) + MT * (k)] = k;
                 } else {
                     while (progress[(k) + MT * (n)] != k - 1)
                         Dcommon.delay();
                     DcoreBLAS.core_DTSLQT(k == MT - 1 ? M - k * NB : NB, n == NT - 1 ? N - n * NB : NB, IB, A, A_offset
-                            + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * MT
-                            * (n), NB, T, T_offset + IBNBSIZE * (k) + IBNBSIZE * MT * (n), IB, TAU, 0, WORK, 0);
+                        + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * MT
+                        * (n), NB, T, T_offset + IBNBSIZE * (k) + IBNBSIZE * MT * (n), IB, TAU, 0, WORK, 0);
                     progress[(k) + MT * (n)] = k;
                 }
             } else {
@@ -100,20 +100,20 @@ class Pdgelqf {
                     while (progress[(m) + MT * (k)] != k - 1)
                         Dcommon.delay();
                     DcoreBLAS.core_DLARFB(Dplasma.PlasmaRight, Dplasma.PlasmaNoTrans, Dplasma.PlasmaForward,
-                            Dplasma.PlasmaRowwise, m == MT - 1 ? M - m * NB : NB, k == NT - 1 ? N - k * NB : NB, NB,
-                            IB, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, T, T_offset + IBNBSIZE * (k)
-                                    + IBNBSIZE * MT * (k), IB, A, A_offset + NBNBSIZE * (m) + NBNBSIZE * MT * (k), NB,
-                            WORK, 0, NB);
+                        Dplasma.PlasmaRowwise, m == MT - 1 ? M - m * NB : NB, k == NT - 1 ? N - k * NB : NB, NB,
+                        IB, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, T, T_offset + IBNBSIZE * (k)
+                            + IBNBSIZE * MT * (k), IB, A, A_offset + NBNBSIZE * (m) + NBNBSIZE * MT * (k), NB,
+                        WORK, 0, NB);
                 } else {
                     while (progress[(k) + MT * (n)] != k)
                         Dcommon.delay();
                     while (progress[(m) + MT * (n)] != k - 1)
                         Dcommon.delay();
                     DcoreBLAS.core_DSSRFB(Dplasma.PlasmaRight, Dplasma.PlasmaRowwise, NB,
-                            n == NT - 1 ? N - n * NB : NB, m == MT - 1 ? M - m * NB : NB, IB, NB, A, A_offset
-                                    + NBNBSIZE * (m) + NBNBSIZE * MT * (k), NB, A, A_offset + NBNBSIZE * (m) + NBNBSIZE
-                                    * MT * (n), NB, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (n), NB, T, T_offset
-                                    + IBNBSIZE * (k) + IBNBSIZE * MT * (n), IB, WORK, 0);
+                        n == NT - 1 ? N - n * NB : NB, m == MT - 1 ? M - m * NB : NB, IB, NB, A, A_offset
+                            + NBNBSIZE * (m) + NBNBSIZE * MT * (k), NB, A, A_offset + NBNBSIZE * (m) + NBNBSIZE
+                            * MT * (n), NB, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (n), NB, T, T_offset
+                            + IBNBSIZE * (k) + IBNBSIZE * MT * (n), IB, WORK, 0);
                     progress[(m) + MT * (n)] = k;
                 }
             }

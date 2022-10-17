@@ -38,9 +38,8 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Example for solving a system of linear equations using QR factorization.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DgelsExample {
     public static void main(String[] args) {

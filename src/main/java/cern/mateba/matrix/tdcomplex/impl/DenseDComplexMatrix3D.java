@@ -38,7 +38,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * addressing. Setting/getting values in a loop slice-by-slice, row-by-row,
  * column-by-column is quicker than, for example, column-by-column, row-by-row,
  * slice-by-slice. Thus
- * 
+ *
  * <pre>
  * for (int slice = 0; slice &lt; slices; slice++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -48,9 +48,9 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
@@ -60,7 +60,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class DenseDComplexMatrix3D extends DComplexMatrix3D {
@@ -88,34 +88,28 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= slice &lt; values.length: values[slice].length != values[slice-1].length</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values[0].length: values[slice][row].length != values[slice][row-1].length</tt>
+     *                                  .
      */
     public DenseDComplexMatrix3D(double[][][] values) {
         this(values.length, (values.length == 0 ? 0 : values[0].length), (values.length == 0 ? 0
-                : values[0].length == 0 ? 0 : values[0][0].length / 2));
+            : values[0].length == 0 ? 0 : values[0][0].length / 2));
         assign(values);
     }
 
     /**
      * Constructs a matrix with the same size as <tt>realPart</tt> matrix and
      * fills the real part of this matrix with elements of <tt>realPart</tt>.
-     * 
-     * @param realPart
-     *            a real matrix whose elements become a real part of this matrix
-     * @throws IllegalArgumentException
-     *             if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param realPart a real matrix whose elements become a real part of this matrix
+     * @throws IllegalArgumentException if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public DenseDComplexMatrix3D(DoubleMatrix3D realPart) {
         this(realPart.slices(), realPart.rows(), realPart.columns());
@@ -125,17 +119,12 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
     /**
      * Constructs a matrix with a given number of slices, rows and columns. All
      * entries are initially <tt>0</tt>.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices  the number of slices the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public DenseDComplexMatrix3D(int slices, int rows, int columns) {
         setUp(slices, rows, columns, 0, 0, 0, rows * 2 * columns, 2 * columns, 2);
@@ -144,47 +133,33 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
 
     /**
      * Constructs a matrix with the given parameters.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param sliceZero
-     *            the position of the first element.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param sliceStride
-     *            the number of elements between two slices, i.e.
-     *            <tt>index(k+1,i,j)-index(k,i,j)</tt>.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(k,i+1,j)-index(k,i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(k,i,j+1)-index(k,i,j)</tt>.
-     * @param isNoView
-     *            if false then the view is constructed
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>slices<0 || rows<0 || columns<0</tt>.
+     *
+     * @param slices       the number of slices the matrix shall have.
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param elements     the cells.
+     * @param sliceZero    the position of the first element.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param sliceStride  the number of elements between two slices, i.e.
+     *                     <tt>index(k+1,i,j)-index(k,i,j)</tt>.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(k,i+1,j)-index(k,i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(k,i,j+1)-index(k,i,j)</tt>.
+     * @param isNoView     if false then the view is constructed
+     * @throws IllegalArgumentException if <tt>(double)slices*columns*rows > Integer.MAX_VALUE</tt>.
+     * @throws IllegalArgumentException if <tt>slices<0 || rows<0 || columns<0</tt>.
      */
     public DenseDComplexMatrix3D(int slices, int rows, int columns, double[] elements, int sliceZero, int rowZero,
-            int columnZero, int sliceStride, int rowStride, int columnStride, boolean isNoView) {
+                                 int columnZero, int sliceStride, int rowStride, int columnStride, boolean isNoView) {
         setUp(slices, rows, columns, sliceZero, rowZero, columnZero, sliceStride, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = isNoView;
     }
 
     public double[] aggregate(final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
-            final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
+                              final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
         double[] b = new double[2];
         if (size() == 0) {
             b[0] = Double.NaN;
@@ -205,13 +180,13 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
 
                     public double[] call() throws Exception {
                         int idx = zero + firstSlice * sliceStride;
-                        double[] a = f.apply(new double[] { elements[idx], elements[idx + 1] });
+                        double[] a = f.apply(new double[]{elements[idx], elements[idx + 1]});
                         int d = 1;
                         for (int s = firstSlice; s < lastSlice; s++) {
                             for (int r = 0; r < rows; r++) {
                                 for (int c = d; c < columns; c++) {
                                     idx = zero + s * sliceStride + r * rowStride + c * columnStride;
-                                    a = aggr.apply(a, f.apply(new double[] { elements[idx], elements[idx + 1] }));
+                                    a = aggr.apply(a, f.apply(new double[]{elements[idx], elements[idx + 1]}));
                                 }
                                 d = 0;
                             }
@@ -222,14 +197,14 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
-            a = f.apply(new double[] { elements[zero], elements[zero + 1] });
+            a = f.apply(new double[]{elements[zero], elements[zero + 1]});
             int d = 1; // first cell already done
             int idx;
             for (int s = 0; s < slices; s++) {
                 for (int r = 0; r < rows; r++) {
                     for (int c = d; c < columns; c++) {
                         idx = zero + s * sliceStride + r * rowStride + c * columnStride;
-                        a = aggr.apply(a, f.apply(new double[] { elements[idx], elements[idx + 1] }));
+                        a = aggr.apply(a, f.apply(new double[]{elements[idx], elements[idx + 1]}));
                     }
                     d = 0;
                 }
@@ -239,8 +214,8 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
     }
 
     public double[] aggregate(final DComplexMatrix3D other,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
+                              final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
+                              final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
         checkShape(other);
         double[] b = new double[2];
         if (size() == 0) {
@@ -269,17 +244,17 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                     public double[] call() throws Exception {
                         int idx = zero + firstSlice * sliceStride;
                         int idxOther = zeroOther + firstSlice * sliceStrideOther;
-                        double[] a = f.apply(new double[] { elements[idx], elements[idx + 1] }, new double[] {
-                                elemsOther[idxOther], elemsOther[idxOther + 1] });
+                        double[] a = f.apply(new double[]{elements[idx], elements[idx + 1]}, new double[]{
+                            elemsOther[idxOther], elemsOther[idxOther + 1]});
                         int d = 1;
                         for (int s = firstSlice; s < lastSlice; s++) {
                             for (int r = 0; r < rows; r++) {
                                 for (int c = d; c < columns; c++) {
                                     idx = zero + s * sliceStride + r * rowStride + c * columnStride;
                                     idxOther = zeroOther + s * sliceStrideOther + r * rowStrideOther + c
-                                            * colStrideOther;
-                                    a = aggr.apply(a, f.apply(new double[] { elements[idx], elements[idx + 1] },
-                                            new double[] { elemsOther[idxOther], elemsOther[idxOther + 1] }));
+                                        * colStrideOther;
+                                    a = aggr.apply(a, f.apply(new double[]{elements[idx], elements[idx + 1]},
+                                        new double[]{elemsOther[idxOther], elemsOther[idxOther + 1]}));
                                 }
                                 d = 0;
                             }
@@ -290,8 +265,8 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
-            a = f.apply(new double[] { elements[zero], elements[zero + 1] }, new double[] { elemsOther[zeroOther],
-                    elemsOther[zeroOther + 1] });
+            a = f.apply(new double[]{elements[zero], elements[zero + 1]}, new double[]{elemsOther[zeroOther],
+                elemsOther[zeroOther + 1]});
             int d = 1; // first cell already done
             int idx;
             int idxOther;
@@ -300,8 +275,8 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                     for (int c = d; c < columns; c++) {
                         idx = zero + s * sliceStride + r * rowStride + c * columnStride;
                         idxOther = zeroOther + s * sliceStrideOther + r * rowStrideOther + c * colStrideOther;
-                        a = aggr.apply(a, f.apply(new double[] { elements[idx], elements[idx + 1] }, new double[] {
-                                elemsOther[idxOther], elemsOther[idxOther + 1] }));
+                        a = aggr.apply(a, f.apply(new double[]{elements[idx], elements[idx + 1]}, new double[]{
+                            elemsOther[idxOther], elemsOther[idxOther + 1]}));
                     }
                     d = 0;
                 }
@@ -398,7 +373,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
     }
 
     public DComplexMatrix3D assign(final cern.mateba.function.tdcomplex.DComplexProcedure cond,
-            final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
+                                   final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
         final int zero = (int) index(0, 0, 0);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_3D())) {
@@ -419,7 +394,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                                 for (int c = 0; c < columns; c++) {
                                     elem[0] = elements[idx];
                                     elem[1] = elements[idx + 1];
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         elem = f.apply(elem);
                                         elements[idx] = elem[0];
                                         elements[idx + 1] = elem[1];
@@ -441,7 +416,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                     for (int c = 0; c < columns; c++) {
                         elem[0] = elements[idx];
                         elem[1] = elements[idx + 1];
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             elem = f.apply(elem);
                             elements[idx] = elem[0];
                             elements[idx + 1] = elem[1];
@@ -476,7 +451,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                                 for (int c = 0; c < columns; c++) {
                                     elem[0] = elements[idx];
                                     elem[1] = elements[idx + 1];
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         elements[idx] = value[0];
                                         elements[idx + 1] = value[1];
                                     }
@@ -497,7 +472,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                     for (int c = 0; c < columns; c++) {
                         elem[0] = elements[idx];
                         elem[1] = elements[idx + 1];
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             elements[idx] = value[0];
                             elements[idx + 1] = value[1];
                         }
@@ -589,11 +564,10 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
 
     public DComplexMatrix3D assign(DComplexMatrix3D source) {
         // overriden for performance only
-        if (!(source instanceof DenseDComplexMatrix3D)) {
+        if (!(source instanceof DenseDComplexMatrix3D other)) {
             super.assign(source);
             return this;
         }
-        DenseDComplexMatrix3D other = (DenseDComplexMatrix3D) source;
         if (other == this)
             return this;
         checkShape(other);
@@ -663,7 +637,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
     }
 
     public DComplexMatrix3D assign(final DComplexMatrix3D y,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
+                                   final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
         checkShape(y);
         final int zero = (int) index(0, 0, 0);
         final int zeroOther = (int) y.index(0, 0, 0);
@@ -841,7 +815,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
     }
 
     public DComplexMatrix3D assign(final double re, final double im) {
-        if (this.isNoView == false) {
+        if (!this.isNoView) {
             return super.assign(re, im);
         }
         final int zero = (int) index(0, 0, 0);
@@ -890,7 +864,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
     public DComplexMatrix3D assign(final double[] values) {
         if (values.length != slices * rows * 2 * columns)
             throw new IllegalArgumentException("Must have same length: length=" + values.length
-                    + "slices()*rows()*2*columns()=" + slices() * rows() * 2 * columns());
+                + "slices()*rows()*2*columns()=" + slices() * rows() * 2 * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             System.arraycopy(values, 0, elements, 0, values.length);
@@ -943,7 +917,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
     public DComplexMatrix3D assign(final double[][][] values) {
         if (values.length != slices)
             throw new IllegalArgumentException("Must have same number of slices: slices=" + values.length + "slices()="
-                    + slices());
+                + slices());
         final int length = 2 * columns;
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
@@ -961,14 +935,14 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                                 double[][] currentSlice = values[s];
                                 if (currentSlice.length != rows)
                                     throw new IllegalArgumentException(
-                                            "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                                    + "rows()=" + rows());
+                                        "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                            + "rows()=" + rows());
                                 for (int r = 0; r < rows; r++) {
                                     double[] currentRow = currentSlice[r];
                                     if (currentRow.length != length)
                                         throw new IllegalArgumentException(
-                                                "Must have same number of columns in every row: columns="
-                                                        + currentRow.length + "2 * columns()=" + length);
+                                            "Must have same number of columns in every row: columns="
+                                                + currentRow.length + "2 * columns()=" + length);
                                     System.arraycopy(currentRow, 0, elements, i, length);
                                     i += length;
                                 }
@@ -983,13 +957,13 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                     double[][] currentSlice = values[s];
                     if (currentSlice.length != rows)
                         throw new IllegalArgumentException("Must have same number of rows in every slice: rows="
-                                + currentSlice.length + "rows()=" + rows());
+                            + currentSlice.length + "rows()=" + rows());
                     for (int r = 0; r < rows; r++) {
                         double[] currentRow = currentSlice[r];
                         if (currentRow.length != length)
                             throw new IllegalArgumentException(
-                                    "Must have same number of columns in every row: columns=" + currentRow.length
-                                            + "2 * columns()=" + length);
+                                "Must have same number of columns in every row: columns=" + currentRow.length
+                                    + "2 * columns()=" + length);
                         System.arraycopy(currentRow, 0, elements, i, length);
                         i += length;
                     }
@@ -1012,15 +986,15 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                                 double[][] currentSlice = values[s];
                                 if (currentSlice.length != rows)
                                     throw new IllegalArgumentException(
-                                            "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                                    + "rows()=" + rows());
+                                        "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                            + "rows()=" + rows());
                                 for (int r = 0; r < rows; r++) {
                                     idx = zero + s * sliceStride + r * rowStride;
                                     double[] currentRow = currentSlice[r];
                                     if (currentRow.length != length)
                                         throw new IllegalArgumentException(
-                                                "Must have same number of columns in every row: columns="
-                                                        + currentRow.length + "2*columns()=" + length);
+                                            "Must have same number of columns in every row: columns="
+                                                + currentRow.length + "2*columns()=" + length);
                                     for (int c = 0; c < columns; c++) {
                                         elements[idx] = currentRow[2 * c];
                                         elements[idx + 1] = currentRow[2 * c + 1];
@@ -1039,14 +1013,14 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                     double[][] currentSlice = values[s];
                     if (currentSlice.length != rows)
                         throw new IllegalArgumentException("Must have same number of rows in every slice: rows="
-                                + currentSlice.length + "rows()=" + rows());
+                            + currentSlice.length + "rows()=" + rows());
                     for (int r = 0; r < rows; r++) {
                         idx = zero + s * sliceStride + r * rowStride;
                         double[] currentRow = currentSlice[r];
                         if (currentRow.length != length)
                             throw new IllegalArgumentException(
-                                    "Must have same number of columns in every row: columns=" + currentRow.length
-                                            + "2*columns()=" + length);
+                                "Must have same number of columns in every row: columns=" + currentRow.length
+                                    + "2*columns()=" + length);
                         for (int c = 0; c < columns; c++) {
                             elements[idx] = currentRow[2 * c];
                             elements[idx + 1] = currentRow[2 * c + 1];
@@ -1269,7 +1243,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
         if (fft3 == null) {
             fft3 = new DoubleFFT_3D(slices, rows, columns);
         }
-        if (isNoView == true) {
+        if (isNoView) {
             fft3.complexForward(elements);
         } else {
             DComplexMatrix3D copy = this.copy();
@@ -1337,7 +1311,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
     }
 
     public void getNonZeros(final IntArrayList sliceList, final IntArrayList rowList, final IntArrayList columnList,
-            final ArrayList<double[]> valueList) {
+                            final ArrayList<double[]> valueList) {
         sliceList.clear();
         rowList.clear();
         columnList.clear();
@@ -1367,7 +1341,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
 
     public double[] getQuick(int slice, int row, int column) {
         int idx = sliceZero + slice * sliceStride + rowZero + row * rowStride + columnZero + column * columnStride;
-        return new double[] { elements[idx], elements[idx + 1] };
+        return new double[]{elements[idx], elements[idx + 1]};
     }
 
     public DoubleMatrix3D getRealPart() {
@@ -1426,9 +1400,8 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
     /**
      * Computes the 2D inverse of the discrete Fourier transform (IDFT) of each
      * slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void ifft2Slices(final boolean scale) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1463,9 +1436,8 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
     /**
      * Computes the 3D inverse of the discrete Fourier transform (IDFT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void ifft3(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1473,7 +1445,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
         if (fft3 == null) {
             fft3 = new DoubleFFT_3D(slices, rows, columns);
         }
-        if (isNoView == true) {
+        if (isNoView) {
             fft3.complexInverse(elements, scale);
         } else {
             DComplexMatrix3D copy = this.copy();
@@ -1620,24 +1592,22 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
     }
 
     protected boolean haveSharedCellsRaw(DComplexMatrix3D other) {
-        if (other instanceof SelectedDenseDComplexMatrix3D) {
-            SelectedDenseDComplexMatrix3D otherMatrix = (SelectedDenseDComplexMatrix3D) other;
+        if (other instanceof SelectedDenseDComplexMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseDComplexMatrix3D) {
-            DenseDComplexMatrix3D otherMatrix = (DenseDComplexMatrix3D) other;
+        } else if (other instanceof DenseDComplexMatrix3D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
     }
 
     public long index(int slice, int row, int column) {
-        return sliceZero + slice * sliceStride + rowZero + row * rowStride + columnZero + column * columnStride;
+        return sliceZero + (long) slice * sliceStride + rowZero + (long) row * rowStride + columnZero + (long) column * columnStride;
     }
 
     protected DComplexMatrix2D like2D(int rows, int columns, int rowZero, int columnZero, int rowStride,
-            int columnStride) {
+                                      int columnStride) {
         return new DenseDComplexMatrix2D(rows, columns, this.elements, rowZero, columnZero, rowStride, columnStride,
-                false);
+            false);
     }
 
     protected DComplexMatrix3D viewSelectionLike(int[] sliceOffsets, int[] rowOffsets, int[] columnOffsets) {

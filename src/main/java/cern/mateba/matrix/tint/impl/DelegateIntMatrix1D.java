@@ -16,7 +16,7 @@ import java.io.Serial;
 /**
  * 1-d matrix holding <tt>int</tt> elements; either a view wrapping another 2-d
  * matrix and therefore delegating calls to it.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -46,15 +46,14 @@ class DelegateIntMatrix1D extends WrapperIntMatrix1D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>index</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
+     *
+     * @param index the index of the cell.
      * @return the value of the specified cell.
      */
 
@@ -70,9 +69,8 @@ class DelegateIntMatrix1D extends WrapperIntMatrix1D {
      * type <tt>SparseIntMatrix1D</tt> the new matrix must also be of type
      * <tt>SparseIntMatrix1D</tt>, etc. In general, the new matrix should have
      * internal parametrization as similar as possible.
-     * 
-     * @param size
-     *            the number of cell the matrix shall have.
+     *
+     * @param size the number of cell the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -87,11 +85,9 @@ class DelegateIntMatrix1D extends WrapperIntMatrix1D {
      * must be of type <tt>DenseIntMatrix2D</tt>, if the receiver is an instance
      * of type <tt>SparseIntMatrix1D</tt> the new matrix must be of type
      * <tt>SparseIntMatrix2D</tt>, etc.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -101,17 +97,15 @@ class DelegateIntMatrix1D extends WrapperIntMatrix1D {
 
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell.
      */
 
     public synchronized void setQuick(int index, int value) {

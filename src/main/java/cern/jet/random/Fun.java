@@ -10,12 +10,12 @@ package cern.jet.random;
 
 /**
  * Contains various mathematical helper methods.
- * 
+ *
  * <b>Implementation:</b> High performance implementation. <dt>This is a port of
  * <tt>gen_fun.cpp</tt> from the <A
  * HREF="http://www.cis.tu-graz.ac.at/stat/stadl/random.html">C-RAND /
  * WIN-RAND</A> library.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -44,13 +44,13 @@ class Fun {
         double my, c, prod = 0.0, diff, value;
         int i, j, nr_per;
 
-        final double b0[] = { -1.5787132, -0.6130827, 0.1735823, 1.4793411, 2.6667307, 4.9086836, 8.1355339, };
-        final double b05[] = { -1.9694802, -0.7642538, 0.0826017, 1.4276355, 2.6303682, 4.8857787, 8.1207968, };
-        final double b1[] = { -2.9807345, -1.1969943, -0.1843161, 1.2739241, 2.5218256, 4.8172216, 8.0765633, };
-        final double b2[] = { -5.9889676, -2.7145389, -1.1781269, 0.6782201, 2.0954009, 4.5452152, 7.9003173, };
-        final double b3[] = { -9.6803440, -4.8211925, -2.6533185, -0.2583337, 1.4091915, 4.0993448, 7.6088310, };
-        final double b5[] = { -18.1567152, -10.0939408, -6.5819139, -2.9371545, -0.6289005, 2.7270412, 6.6936799, };
-        final double b8[] = { -32.4910195, -19.6065943, -14.0347298, -8.3839439, -4.9679730, -0.3567823, 4.5589697, };
+        final double[] b0 = {-1.5787132, -0.6130827, 0.1735823, 1.4793411, 2.6667307, 4.9086836, 8.1355339,};
+        final double[] b05 = {-1.9694802, -0.7642538, 0.0826017, 1.4276355, 2.6303682, 4.8857787, 8.1207968,};
+        final double[] b1 = {-2.9807345, -1.1969943, -0.1843161, 1.2739241, 2.5218256, 4.8172216, 8.0765633,};
+        final double[] b2 = {-5.9889676, -2.7145389, -1.1781269, 0.6782201, 2.0954009, 4.5452152, 7.9003173,};
+        final double[] b3 = {-9.6803440, -4.8211925, -2.6533185, -0.2583337, 1.4091915, 4.0993448, 7.6088310,};
+        final double[] b5 = {-18.1567152, -10.0939408, -6.5819139, -2.9371545, -0.6289005, 2.7270412, 6.6936799,};
+        final double[] b8 = {-32.4910195, -19.6065943, -14.0347298, -8.3839439, -4.9679730, -0.3567823, 4.5589697,};
 
         if (lambda == 0.0) {
             if (beta == 0.1)
@@ -178,7 +178,7 @@ class Fun {
             value = 1.0;
             diff = 8.0;
             i = 1;
-            for (;;) { // while (!NULL) {
+            for (; ; ) { // while (!NULL) {
                 if ((factorial(i) * Math.pow((8.0 * beta), i)) > 1.0e250)
                     break;
                 if (i > 10)
@@ -203,7 +203,7 @@ class Fun {
                 return (erg);
             } else {
                 erg = -(lambda + 1.0) * Math.log(2.0) - (lambda - 0.5) * Math.log(lambda) + lambda + lambda
-                        * Math.log(beta) - 0.5 * Math.log(0.5 * pi);
+                    * Math.log(beta) - 0.5 * Math.log(0.5 * pi);
                 return (erg);
             }
         }
@@ -215,7 +215,7 @@ class Fun {
         if (beta < 1.57) {
             fx = (fkt2_value(lambda, beta, x)) * 0.01;
             y = 0.0;
-            for (;;) { // while (!NULL) {
+            for (; ; ) { // while (!NULL) {
                 y += 0.1;
                 if ((fkt2_value(lambda, beta, y)) < fx)
                     break;
@@ -224,7 +224,7 @@ class Fun {
             x1 = step;
             sum = (0.5 * (10.0 * step + fkt2_value(lambda, beta, x1))) * step;
             first_value = sum;
-            for (;;) { // while (!NULL) {
+            for (; ; ) { // while (!NULL) {
                 x = x1;
                 x1 += step;
                 new_value = (0.5 * (fkt2_value(lambda, beta, x) + fkt2_value(lambda, beta, x1))) * step;
@@ -283,20 +283,20 @@ class Fun {
             y = x / 3.75;
             y *= y;
             ans = 1.0
-                    + y
-                    * (3.5156229 + y
-                            * (3.0899424 + y * (1.2067492 + y * (0.2659732 + y * (0.360768e-1 + y * 0.45813e-2)))));
+                + y
+                * (3.5156229 + y
+                * (3.0899424 + y * (1.2067492 + y * (0.2659732 + y * (0.360768e-1 + y * 0.45813e-2)))));
         } else {
             y = 3.75 / ax;
             ans = (Math.exp(ax) / Math.sqrt(ax))
-                    * (0.39894228 + y
-                            * (0.1328592e-1 + y
-                                    * (0.225319e-2 + y
-                                            * (-0.157565e-2 + y
-                                                    * (0.916281e-2 + y
-                                                            * (-0.2057706e-1 + y
-                                                                    * (0.2635537e-1 + y
-                                                                            * (-0.1647633e-1 + y * 0.392377e-2))))))));
+                * (0.39894228 + y
+                * (0.1328592e-1 + y
+                * (0.225319e-2 + y
+                * (-0.157565e-2 + y
+                * (0.916281e-2 + y
+                * (-0.2057706e-1 + y
+                * (0.2635537e-1 + y
+                * (-0.1647633e-1 + y * 0.392377e-2))))))));
         }
         return ans;
     }
@@ -312,15 +312,15 @@ class Fun {
             y = x / 3.75;
             y *= y;
             ans = ax
-                    * (0.5 + y
-                            * (0.87890594 + y
-                                    * (0.51498869 + y
-                                            * (0.15084934 + y * (0.2658733e-1 + y * (0.301532e-2 + y * 0.32411e-3))))));
+                * (0.5 + y
+                * (0.87890594 + y
+                * (0.51498869 + y
+                * (0.15084934 + y * (0.2658733e-1 + y * (0.301532e-2 + y * 0.32411e-3))))));
         } else {
             y = 3.75 / ax;
             ans = 0.2282967e-1 + y * (-0.2895312e-1 + y * (0.1787654e-1 - y * 0.420059e-2));
             ans = 0.39894228 + y
-                    * (-0.3988024e-1 + y * (-0.362018e-2 + y * (0.163801e-2 + y * (-0.1031555e-1 + y * ans))));
+                * (-0.3988024e-1 + y * (-0.362018e-2 + y * (0.163801e-2 + y * (-0.1031555e-1 + y * ans))));
             ans *= (Math.exp(ax) / Math.sqrt(ax));
         }
         return x < 0.0 ? -ans : ans;
@@ -333,7 +333,7 @@ class Fun {
         return cern.jet.math.tdouble.DoubleArithmetic.longFactorial(n);
         /*
          * long i,prod;
-         * 
+         *
          * prod = 1; if (n != 0) { for (i = 2; i <= n; i++) prod *= i; } return
          * prod;
          */

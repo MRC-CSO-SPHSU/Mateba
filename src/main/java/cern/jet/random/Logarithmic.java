@@ -30,7 +30,7 @@ import java.io.Serial;
  * <p>
  * A.W. Kemp (1981): Efficient generation of logarithmically distributed
  * pseudo-random variables, Appl. Statist. 30, 249-253.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -156,9 +156,8 @@ public class Logarithmic extends AbstractContinousDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

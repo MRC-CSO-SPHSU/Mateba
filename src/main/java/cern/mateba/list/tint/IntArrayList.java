@@ -240,7 +240,7 @@ public class IntArrayList extends AbstractList implements IntBuffer1DConsumer {
      */
     @Override
     public void sortFromTo(final int from, final int to) {
-       val widthThreshold = 10000;
+        val widthThreshold = 10000;
 
         if (size == 0 || size == 1) return;
         checkRangeFromTo(from, to, size);
@@ -251,7 +251,7 @@ public class IntArrayList extends AbstractList implements IntBuffer1DConsumer {
         val theElements = elements;
         int elem;
         for (int i = from + 1; i <= to; ) {
-             elem = theElements[i++];
+            elem = theElements[i++];
             if (elem > max) max = elem;
             else if (elem < min) min = elem;
         }

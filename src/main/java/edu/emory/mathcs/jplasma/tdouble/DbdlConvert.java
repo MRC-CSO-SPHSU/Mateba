@@ -42,7 +42,7 @@ class DbdlConvert {
      *  Conversion from LAPACK F77 matrix layout to Block Data Layout
      */
     protected static void plasma_lapack_to_bdl(double[] Af77, int Af77_offset, double[] Abdl, int Abdl_offset, int M,
-            int N, int LDA, int NB, int MT, int NT, int NBNBSIZE, int cores_num, int my_core_id) {
+                                               int N, int LDA, int NB, int MT, int NT, int NBNBSIZE, int cores_num, int my_core_id) {
         int F77_offset;
         int BDL_offset;
         int x, y;
@@ -86,7 +86,7 @@ class DbdlConvert {
      *  Conversion from Block Data Layout to LAPACK F77 matrix layout
      */
     protected static void plasma_bdl_to_lapack(double[] Abdl, int Abdl_offset, double[] Af77, int Af77_offset, int M,
-            int N, int LDA, int NB, int MT, int NT, int NBNBSIZE, int cores_num, int my_core_id) {
+                                               int N, int LDA, int NB, int MT, int NT, int NBNBSIZE, int cores_num, int my_core_id) {
         int F77_offset;
         int BDL_offset;
         int x, y;

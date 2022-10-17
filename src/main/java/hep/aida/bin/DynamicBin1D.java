@@ -306,7 +306,7 @@ public class DynamicBin1D extends QuantileBin1D {
      */
     public synchronized void frequencies(final @NotNull DoubleArrayList distinctElements,
                                          final @NotNull IntArrayList frequencies) {
-       Descriptive.frequencies(sortedElements_unsafe(), distinctElements, frequencies);
+        Descriptive.frequencies(sortedElements_unsafe(), distinctElements, frequencies);
     }
 
     /**
@@ -792,7 +792,7 @@ public class DynamicBin1D extends QuantileBin1D {
     }
 
     /**
-     * @return  the sum of squares, which is {@code Sum(x[i] * x[i])}.
+     * @return the sum of squares, which is {@code Sum(x[i] * x[i])}.
      */
     public synchronized double sumOfSquares() {
         if (!isIncrementalStatValid) updateIncrementalStats();

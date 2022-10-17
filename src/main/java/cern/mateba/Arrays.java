@@ -33,7 +33,7 @@ public class Arrays {
      * array with increased capacity containing the same elements, ensuring that it can hold at least the number of
      * elements specified by the minimum capacity argument.
      *
-     * @param array an array to be checked.
+     * @param array       an array to be checked.
      * @param minCapacity the desired minimum capacity.
      * @throws IllegalArgumentException when {@code minCapacity < 1}
      */

@@ -122,7 +122,7 @@ public abstract class LongMatrix1DTest extends TestCase {
 
     public void testAssignLongMatrix1D() {
         A.assign(B);
-        assertTrue(A.size() == B.size());
+        assertEquals(A.size(), B.size());
         for (int i = 0; i < (int) A.size(); i++) {
             assertEquals(B.getQuick(i), A.getQuick(i));
         }
@@ -139,11 +139,7 @@ public abstract class LongMatrix1DTest extends TestCase {
     public void testAssignLongProcedureLong() {
         LongProcedure procedure = new LongProcedure() {
             public boolean apply(long element) {
-                if (Math.abs(element) > 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 1;
             }
         };
         LongMatrix1D Acopy = A.copy();
@@ -160,11 +156,7 @@ public abstract class LongMatrix1DTest extends TestCase {
     public void testAssignLongProcedureLongFunction() {
         LongProcedure procedure = new LongProcedure() {
             public boolean apply(long element) {
-                if (Math.abs(element) > 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 1;
             }
         };
         LongMatrix1D Acopy = A.copy();
@@ -269,7 +261,7 @@ public abstract class LongMatrix1DTest extends TestCase {
 
     public void testToArray() {
         long[] array = A.toArray();
-        assertTrue((int) A.size() == array.length);
+        assertEquals((int) A.size(), array.length);
         for (int i = 0; i < (int) A.size(); i++) {
             assertEquals(array[i], A.getQuick(i));
         }
@@ -350,7 +342,7 @@ public abstract class LongMatrix1DTest extends TestCase {
     }
 
     public void testViewSelectionIntArray() {
-        int[] indexes = new int[] { 5, 11, 22, 37, 101 };
+        int[] indexes = new int[]{5, 11, 22, 37, 101};
         LongMatrix1D b = A.viewSelection(indexes);
         for (int i = 0; i < indexes.length; i++) {
             assertEquals(A.getQuick(indexes[i]), b.getQuick(i));

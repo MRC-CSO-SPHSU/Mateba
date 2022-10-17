@@ -19,12 +19,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * Parallel implementation of the Basic Linear Algebra System for symmetric
  * multi processing boxes. In all cases, no or only marginal speedup is seen for
  * small problem sizes; they are detected and the sequential algorithm is used.
- * 
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 0.9, 16/04/2000
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 0.9, 16/04/2000
  */
 public class SmpDoubleBlas implements DoubleBlas {
 
@@ -36,7 +34,7 @@ public class SmpDoubleBlas implements DoubleBlas {
     }
 
     public void assign(DoubleMatrix2D A, DoubleMatrix2D B,
-            final cern.mateba.function.tdouble.DoubleDoubleFunction function) {
+                       final cern.mateba.function.tdouble.DoubleDoubleFunction function) {
         A.assign(B, function);
     }
 
@@ -65,12 +63,12 @@ public class SmpDoubleBlas implements DoubleBlas {
     }
 
     public void dgemm(final boolean transposeA, final boolean transposeB, final double alpha, final DoubleMatrix2D A,
-            final DoubleMatrix2D B, final double beta, final DoubleMatrix2D C) {
+                      final DoubleMatrix2D B, final double beta, final DoubleMatrix2D C) {
         A.zMult(B, C, alpha, beta, transposeA, transposeB);
     }
 
     public void dgemv(final boolean transposeA, final double alpha, DoubleMatrix2D A, final DoubleMatrix1D x,
-            final double beta, DoubleMatrix1D y) {
+                      final double beta, DoubleMatrix1D y) {
         A.zMult(x, y, alpha, beta, transposeA);
     }
 
@@ -98,7 +96,7 @@ public class SmpDoubleBlas implements DoubleBlas {
         y.assign(tmp, DoubleFunctions.minusMult(s));
     }
 
-    public void drotg(double a, double b, double rotvec[]) {
+    public void drotg(double a, double b, double[] rotvec) {
         double c, s, roe, scale, r, z, ra, rb;
 
         roe = b;
@@ -160,7 +158,7 @@ public class SmpDoubleBlas implements DoubleBlas {
     }
 
     public void dsymv(boolean isUpperTriangular, final double alpha, DoubleMatrix2D A, final DoubleMatrix1D x,
-            final double beta, final DoubleMatrix1D y) {
+                      final double beta, final DoubleMatrix1D y) {
         final DoubleMatrix2D A_loc;
         if (isUpperTriangular) {
             A_loc = A.viewDice();
@@ -171,7 +169,7 @@ public class SmpDoubleBlas implements DoubleBlas {
         int size = A_loc.rows();
         if (size != x.size() || size != y.size()) {
             throw new IllegalArgumentException(A_loc.toStringShort() + ", " + x.toStringShort() + ", "
-                    + y.toStringShort());
+                + y.toStringShort());
         }
         final DoubleMatrix1D tmp = x.like();
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -215,7 +213,7 @@ public class SmpDoubleBlas implements DoubleBlas {
     }
 
     public void dtrmv(boolean isUpperTriangular, final boolean transposeA, final boolean isUnitTriangular,
-            DoubleMatrix2D A, final DoubleMatrix1D x) {
+                      DoubleMatrix2D A, final DoubleMatrix1D x) {
         final DoubleMatrix2D A_loc;
         final boolean isUpperTriangular_loc;
         if (transposeA) {
@@ -300,11 +298,9 @@ public class SmpDoubleBlas implements DoubleBlas {
 
     /**
      * Implements the FORTRAN sign (not sin) function. See the code for details.
-     * 
-     * @param a
-     *            a
-     * @param b
-     *            b
+     *
+     * @param a a
+     * @param b b
      */
     private double sign(double a, double b) {
         if (b < 0.0) {

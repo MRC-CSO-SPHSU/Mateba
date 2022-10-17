@@ -19,7 +19,7 @@ import cern.mateba.matrix.tdouble.DoubleMatrix2D;
 /**
  * Selection view on sparse 2-d matrices holding <tt>complex</tt> elements. This
  * implementation uses ConcurrentHashMap
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 class SelectedSparseDComplexMatrix2D extends DComplexMatrix2D {
@@ -45,32 +45,23 @@ class SelectedSparseDComplexMatrix2D extends DComplexMatrix2D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @param rowOffsets
-     *            The row offsets of the cells that shall be visible.
-     * @param columnOffsets
-     *            The column offsets of the cells that shall be visible.
+     *
+     * @param rows          the number of rows the matrix shall have.
+     * @param columns       the number of columns the matrix shall have.
+     * @param elements      the cells.
+     * @param rowZero       the position of the first element.
+     * @param columnZero    the position of the first element.
+     * @param rowStride     the number of elements between two rows, i.e.
+     *                      <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride  the number of elements between two columns, i.e.
+     *                      <tt>index(i,j+1)-index(i,j)</tt>.
+     * @param rowOffsets    The row offsets of the cells that shall be visible.
+     * @param columnOffsets The column offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedSparseDComplexMatrix2D(int rows, int columns, ConcurrentHashMap<Long, double[]> elements,
-            int rowZero, int columnZero, int rowStride, int columnStride, int[] rowOffsets, int[] columnOffsets,
-            int offset) {
+                                             int rowZero, int columnZero, int rowStride, int columnStride, int[] rowOffsets, int[] columnOffsets,
+                                             int offset) {
         // be sure parameters are valid, we do not check...
         setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
 
@@ -84,17 +75,14 @@ class SelectedSparseDComplexMatrix2D extends DComplexMatrix2D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param elements
-     *            the cells.
-     * @param rowOffsets
-     *            The row offsets of the cells that shall be visible.
-     * @param columnOffsets
-     *            The column offsets of the cells that shall be visible.
+     *
+     * @param elements      the cells.
+     * @param rowOffsets    The row offsets of the cells that shall be visible.
+     * @param columnOffsets The column offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedSparseDComplexMatrix2D(ConcurrentHashMap<Long, double[]> elements, int[] rowOffsets,
-            int[] columnOffsets, int offset) {
+                                             int[] columnOffsets, int offset) {
         this(rowOffsets.length, columnOffsets.length, elements, 0, 0, 1, 1, rowOffsets, columnOffsets, offset);
     }
 
@@ -108,7 +96,7 @@ class SelectedSparseDComplexMatrix2D extends DComplexMatrix2D {
 
     public double[] getQuick(int row, int column) {
         return elements.get((long) offset + (long) rowOffsets[rowZero + row * rowStride]
-                + (long) columnOffsets[columnZero + column * columnStride]);
+            + (long) columnOffsets[columnZero + column * columnStride]);
     }
 
     public ConcurrentHashMap<Long, double[]> elements() {
@@ -127,11 +115,9 @@ class SelectedSparseDComplexMatrix2D extends DComplexMatrix2D {
      */
 
     protected boolean haveSharedCellsRaw(DComplexMatrix2D other) {
-        if (other instanceof SelectedSparseDComplexMatrix2D) {
-            SelectedSparseDComplexMatrix2D otherMatrix = (SelectedSparseDComplexMatrix2D) other;
+        if (other instanceof SelectedSparseDComplexMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseDComplexMatrix2D) {
-            SparseDComplexMatrix2D otherMatrix = (SparseDComplexMatrix2D) other;
+        } else if (other instanceof SparseDComplexMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -139,7 +125,7 @@ class SelectedSparseDComplexMatrix2D extends DComplexMatrix2D {
 
     public long index(int row, int column) {
         return (long) this.offset + (long) rowOffsets[rowZero + row * rowStride]
-                + (long) columnOffsets[columnZero + column * columnStride];
+            + (long) columnOffsets[columnZero + column * columnStride];
     }
 
     public DComplexMatrix2D like(int rows, int columns) {
@@ -158,7 +144,7 @@ class SelectedSparseDComplexMatrix2D extends DComplexMatrix2D {
 
     public void setQuick(int row, int column, double[] value) {
         long index = (long) offset + (long) rowOffsets[rowZero + row * rowStride]
-                + (long) columnOffsets[columnZero + column * columnStride];
+            + (long) columnOffsets[columnZero + column * columnStride];
 
         if (value[0] == 0 && value[1] == 0)
             this.elements.remove(index);
@@ -172,12 +158,12 @@ class SelectedSparseDComplexMatrix2D extends DComplexMatrix2D {
 
     public void setQuick(int row, int column, double re, double im) {
         long index = (long) offset + (long) rowOffsets[rowZero + row * rowStride]
-                + (long) columnOffsets[columnZero + column * columnStride];
+            + (long) columnOffsets[columnZero + column * columnStride];
 
         if (re == 0 && im == 0)
             this.elements.remove(index);
         else
-            this.elements.put(index, new double[] { re, im });
+            this.elements.put(index, new double[]{re, im});
 
     }
 
@@ -209,7 +195,7 @@ class SelectedSparseDComplexMatrix2D extends DComplexMatrix2D {
         int[] viewOffsets = this.rowOffsets;
         int viewOffset = this.offset + _columnOffset(_columnRank(column));
         return new SelectedSparseDComplexMatrix1D(viewSize, this.elements, viewZero, viewStride, viewOffsets,
-                viewOffset);
+            viewOffset);
     }
 
     public DComplexMatrix1D viewRow(int row) {
@@ -220,7 +206,7 @@ class SelectedSparseDComplexMatrix2D extends DComplexMatrix2D {
         int[] viewOffsets = this.columnOffsets;
         int viewOffset = this.offset + _rowOffset(_rowRank(row));
         return new SelectedSparseDComplexMatrix1D(viewSize, this.elements, viewZero, viewStride, viewOffsets,
-                viewOffset);
+            viewOffset);
     }
 
     protected DComplexMatrix2D viewSelectionLike(int[] rowOffsets, int[] columnOffsets) {

@@ -1,18 +1,18 @@
 /*
  * Copyright (C) 2003-2006 Bjørn-Ove Heimsund
- * 
+ *
  * This file is part of MTJ.
- * 
+ *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by the
  * Free Software Foundation; either version 2.1 of the License, or (at your
  * option) any later version.
- * 
+ *
  * This library is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
  * FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License
  * for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this library; if not, write to the Free Software Foundation,
  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -58,15 +58,11 @@ public class DefaultDoubleIterationMonitor extends AbstractDoubleIterationMonito
 
     /**
      * Constructor for DefaultIterationMonitor
-     * 
-     * @param maxIter
-     *            Maximum number of iterations
-     * @param rtol
-     *            Relative convergence tolerance (to initial residual)
-     * @param atol
-     *            Absolute convergence tolerance
-     * @param dtol
-     *            Relative divergence tolerance (to initial residual)
+     *
+     * @param maxIter Maximum number of iterations
+     * @param rtol    Relative convergence tolerance (to initial residual)
+     * @param atol    Absolute convergence tolerance
+     * @param dtol    Relative divergence tolerance (to initial residual)
      */
     public DefaultDoubleIterationMonitor(int maxIter, double rtol, double atol, double dtol) {
         this.maxIter = maxIter;
@@ -89,9 +85,8 @@ public class DefaultDoubleIterationMonitor extends AbstractDoubleIterationMonito
 
     /**
      * Sets maximum number of iterations to permit
-     * 
-     * @param maxIter
-     *            Maximum number of iterations
+     *
+     * @param maxIter Maximum number of iterations
      */
     public void setMaxIterations(int maxIter) {
         this.maxIter = maxIter;
@@ -106,9 +101,8 @@ public class DefaultDoubleIterationMonitor extends AbstractDoubleIterationMonito
 
     /**
      * Sets the relative convergence tolerance
-     * 
-     * @param rtol
-     *            relative convergence tolerance (to initial residual)
+     *
+     * @param rtol relative convergence tolerance (to initial residual)
      */
     public void setRelativeTolerance(double rtol) {
         this.rtol = rtol;
@@ -116,7 +110,7 @@ public class DefaultDoubleIterationMonitor extends AbstractDoubleIterationMonito
 
     /**
      * Returns the relative convergence tolerance
-     * 
+     *
      * @return relative convergence tolerance (to initial residual)
      */
     public double getRelativeTolerance() {
@@ -125,9 +119,8 @@ public class DefaultDoubleIterationMonitor extends AbstractDoubleIterationMonito
 
     /**
      * Sets the absolute convergence tolerance
-     * 
-     * @param atol
-     *            absolute convergence tolerance
+     *
+     * @param atol absolute convergence tolerance
      */
     public void setAbsoluteTolerance(double atol) {
         this.atol = atol;
@@ -135,7 +128,7 @@ public class DefaultDoubleIterationMonitor extends AbstractDoubleIterationMonito
 
     /**
      * Returns the absolute convergence tolerance
-     * 
+     *
      * @return absolute convergence tolerance
      */
     public double getAbsoluteTolerance() {
@@ -144,9 +137,8 @@ public class DefaultDoubleIterationMonitor extends AbstractDoubleIterationMonito
 
     /**
      * Sets the relative divergence tolerance
-     * 
-     * @param dtol
-     *            relative divergence tolerance (to initial residual)
+     *
+     * @param dtol relative divergence tolerance (to initial residual)
      */
     public void setDivergenceTolerance(double dtol) {
         this.dtol = dtol;
@@ -154,7 +146,7 @@ public class DefaultDoubleIterationMonitor extends AbstractDoubleIterationMonito
 
     /**
      * Returns the relative divergence tolerance
-     * 
+     *
      * @return relative divergence tolerance (to initial residual)
      */
     public double getDivergenceTolerance() {

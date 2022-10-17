@@ -27,12 +27,12 @@ import java.io.Serializable;
  * 10.0 --> Picks one random element from successive blocks of 10 elements each.
  * Etc. The subsequence is guaranteed to be <i>stable</i>, i.e. elements never
  * change position relative to each other.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 02/05/99
  */
 public class WeightedRandomSampler implements Serializable, Cloneable {
-    
+
     @Serial
     private static final long serialVersionUID = 492120411835913937L;
     // public class BlockedRandomSampler extends Object implements
@@ -64,12 +64,10 @@ public class WeightedRandomSampler implements Serializable, Cloneable {
      * second, ..., one from the last block. weight == 1.0 --> all elements are
      * consumed (sampled). 10.0 --> Consumes one random element from successive
      * blocks of 10 elements each. Etc.
-     * 
-     * @param weight
-     *            the weight.
-     * @param randomGenerator
-     *            a random number generator. Set this parameter to <tt>null</tt>
-     *            to use the default random number generator.
+     *
+     * @param weight          the weight.
+     * @param randomGenerator a random number generator. Set this parameter to <tt>null</tt>
+     *                        to use the default random number generator.
      */
     public WeightedRandomSampler(int weight, RandomEngine randomGenerator) {
         if (randomGenerator == null)
@@ -103,9 +101,9 @@ public class WeightedRandomSampler implements Serializable, Cloneable {
      * input is 5*2=10 elements long, then chooses 5 random elements from the 10
      * elements such that one is chosen from the first block, one from the
      * second, ..., one from the last block.
-     * 
+     *
      * @return <tt>true</tt> if the next element shall be sampled (picked),
-     *         <tt>false</tt> otherwise.
+     * <tt>false</tt> otherwise.
      */
     public boolean sampleNextElement() {
         if (skip > 0) { // reject
@@ -136,9 +134,8 @@ public class WeightedRandomSampler implements Serializable, Cloneable {
 
     /**
      * Not yet commented.
-     * 
-     * @param weight
-     *            int
+     *
+     * @param weight int
      */
     public void setWeight(int weight) {
         if (weight < 1)
@@ -171,11 +168,10 @@ public class WeightedRandomSampler implements Serializable, Cloneable {
      * input is 5*2=10 elements long, then chooses 5 random elements from the 10
      * elements such that one is chosen from the first block, one from the
      * second, ..., one from the last block.
-     * 
-     * @param acceptList
-     *            a bitvector which will be filled with <tt>true</tt> where
-     *            sampling shall occur and <tt>false</tt> where it shall not
-     *            occur.
+     *
+     * @param acceptList a bitvector which will be filled with <tt>true</tt> where
+     *                   sampling shall occur and <tt>false</tt> where it shall not
+     *                   occur.
      */
     private void xsampleNextElements(BooleanArrayList acceptList) {
         // manually inlined

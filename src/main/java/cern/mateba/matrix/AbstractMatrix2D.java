@@ -17,7 +17,7 @@ import java.io.Serial;
  * href="package-tree.html">tree view</a> to get the broad picture.
  * <p>
  * <b>Note that this implementation is not synchronized.</b>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -25,7 +25,9 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
 
     @Serial
     private static final long serialVersionUID = -9098296414826043829L;
-    /** the number of colums and rows this matrix (view) has */
+    /**
+     * the number of colums and rows this matrix (view) has
+     */
     protected int columns, rows;
 
     /**
@@ -40,7 +42,9 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
      */
     protected int columnStride;
 
-    /** the index of the first element */
+    /**
+     * the index of the first element
+     */
     protected int rowZero, columnZero;
 
     protected AbstractMatrix2D() {
@@ -50,9 +54,8 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
     protected int _columnOffset(int absRank) {
@@ -61,9 +64,8 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
 
     /**
      * Returns the absolute rank of the given relative rank.
-     * 
-     * @param rank
-     *            the relative rank of the element.
+     *
+     * @param rank the relative rank of the element.
      * @return the absolute rank of the element.
      */
     protected int _columnRank(int rank) {
@@ -74,9 +76,8 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
     protected int _rowOffset(int absRank) {
@@ -85,9 +86,8 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
 
     /**
      * Returns the absolute rank of the given relative rank.
-     * 
-     * @param rank
-     *            the relative rank of the element.
+     *
+     * @param rank the relative rank of the element.
      * @return the absolute rank of the element.
      */
     protected int _rowRank(int rank) {
@@ -97,22 +97,20 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
     /**
      * Checks whether the receiver contains the given box and throws an
      * exception, if necessary.
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column<0 || width<0 || column+width>columns() || row<0 || height<0 || row+height>rows()</tt>
+     *
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column<0 || width<0 || column+width>columns() || row<0 || height<0 || row+height>rows()</tt>
      */
     protected void checkBox(int row, int column, int height, int width) {
         if (column < 0 || width < 0 || column + width > columns || row < 0 || height < 0 || row + height > rows)
             throw new IndexOutOfBoundsException(toStringShort() + ", column:" + column + ", row:" + row + " ,width:"
-                    + width + ", height:" + height);
+                + width + ", height:" + height);
     }
 
     /**
      * Sanity check for operations requiring a column index to be within bounds.
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>column < 0 || column >= columns()</tt>.
+     *
+     * @throws IndexOutOfBoundsException if <tt>column < 0 || column >= columns()</tt>.
      */
     protected void checkColumn(int column) {
         if (column < 0 || column >= columns)
@@ -121,13 +119,12 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
 
     /**
      * Checks whether indexes are legal and throws an exception, if necessary.
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>! (0 <= indexes[i] < columns())</tt> for any
-     *             i=0..indexes.length()-1.
+     *
+     * @throws IndexOutOfBoundsException if <tt>! (0 <= indexes[i] < columns())</tt> for any
+     *                                   i=0..indexes.length()-1.
      */
     protected void checkColumnIndexes(int[] indexes) {
-        for (int i = indexes.length; --i >= 0;) {
+        for (int i = indexes.length; --i >= 0; ) {
             int index = indexes[i];
             if (index < 0 || index >= columns)
                 checkColumn(index);
@@ -136,9 +133,8 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
 
     /**
      * Sanity check for operations requiring a row index to be within bounds.
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>row < 0 || row >= rows()</tt>.
+     *
+     * @throws IndexOutOfBoundsException if <tt>row < 0 || row >= rows()</tt>.
      */
     protected void checkRow(int row) {
         if (row < 0 || row >= rows)
@@ -147,13 +143,12 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
 
     /**
      * Checks whether indexes are legal and throws an exception, if necessary.
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>! (0 <= indexes[i] < rows())</tt> for any
-     *             i=0..indexes.length()-1.
+     *
+     * @throws IndexOutOfBoundsException if <tt>! (0 <= indexes[i] < rows())</tt> for any
+     *                                   i=0..indexes.length()-1.
      */
     protected void checkRowIndexes(int[] indexes) {
-        for (int i = indexes.length; --i >= 0;) {
+        for (int i = indexes.length; --i >= 0; ) {
             int index = indexes[i];
             if (index < 0 || index >= rows)
                 checkRow(index);
@@ -163,29 +158,27 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
     /**
      * Sanity check for operations requiring two matrices with the same number
      * of columns and rows.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>columns() != B.columns() || rows() != B.rows()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>columns() != B.columns() || rows() != B.rows()</tt>.
      */
     public void checkShape(AbstractMatrix2D B) {
         if (columns != B.columns || rows != B.rows)
             throw new IllegalArgumentException("Incompatible dimensions: " + toStringShort() + " and "
-                    + B.toStringShort());
+                + B.toStringShort());
     }
 
     /**
      * Sanity check for operations requiring matrices with the same number of
      * columns and rows.
-     * 
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>columns() != B.columns() || rows() != B.rows() || columns() != C.columns() || rows() != C.rows()</tt>
-     *             .
+     *
+     * @throws IllegalArgumentException if
+     *                                  <tt>columns() != B.columns() || rows() != B.rows() || columns() != C.columns() || rows() != C.rows()</tt>
+     *                                  .
      */
     public void checkShape(AbstractMatrix2D B, AbstractMatrix2D C) {
         if (columns != B.columns || rows != B.rows || columns != C.columns || rows != C.rows)
             throw new IllegalArgumentException("Incompatible dimensions: " + toStringShort() + ", " + B.toStringShort()
-                    + ", " + C.toStringShort());
+                + ", " + C.toStringShort());
     }
 
     /**
@@ -205,11 +198,9 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
     /**
      * Returns the position of the given coordinate within the (virtual or
      * non-virtual) internal 1-dimensional array.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      */
     public long index(int row, int column) {
         return _rowOffset(_rowRank(row)) + _columnOffset(_columnRank(column));
@@ -231,15 +222,12 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
 
     /**
      * Sets up a matrix with a given number of rows and columns.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     protected void setUp(int rows, int columns) {
         setUp(rows, columns, 0, 0, columns, 1);
@@ -248,25 +236,18 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
     /**
      * Sets up a matrix with a given number of rows and columns and the given
      * strides.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             or flip's are illegal.
+     *
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(i,j+1)-index(i,j)</tt>.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  or flip's are illegal.
      */
     protected void setUp(int rows, int columns, int rowZero, int columnZero, int rowStride, int columnStride) {
         if (rows < 0 || columns < 0)
@@ -336,10 +317,9 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
 
     /**
      * Self modifying version of viewPart().
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>column<0 || width<0 || column+width>columns() || row<0 || height<0 || row+height>rows()</tt>
+     *
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>column<0 || width<0 || column+width>columns() || row<0 || height<0 || row+height>rows()</tt>
      */
     protected AbstractMatrix2D vPart(int row, int column, int height, int width) {
         checkBox(row, column, height, width);
@@ -365,9 +345,8 @@ public abstract class AbstractMatrix2D extends AbstractMatrix {
 
     /**
      * Self modifying version of viewStrides().
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if <tt>rowStride<=0 || columnStride<=0</tt>.
+     *
+     * @throws IndexOutOfBoundsException if <tt>rowStride<=0 || columnStride<=0</tt>.
      */
     protected AbstractMatrix2D vStrides(int rowStride, int columnStride) {
         if (rowStride <= 0 || columnStride <= 0)

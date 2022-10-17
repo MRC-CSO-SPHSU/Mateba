@@ -19,13 +19,13 @@ import java.io.Serial;
  * > math definition</A> and <A
  * HREF="http://www.statsoft.com/textbook/glosn.html#Normal Distribution">
  * animated definition</A>.
- * 
+ *
  * <pre>
- * 
+ *
  *  1                       2
- *  pdf(x) = ---------    exp( - (x-mean) / 2v ) 
+ *  pdf(x) = ---------    exp( - (x-mean) / 2v )
  *  sqrt(2pi*v)
- * 
+ *
  *  x
  *  -
  *  1        | |                 2
@@ -34,7 +34,7 @@ import java.io.Serial;
  *  -
  *  -inf.
  * </pre>
- * 
+ * <p>
  * where <tt>v = variance = standardDeviation^2</tt>.
  * <p>
  * Instance methods operate on a user supplied uniform random number generator;
@@ -46,7 +46,7 @@ import java.io.Serial;
  * Muller (1958): A note on the generation of random normal deviates, Annals
  * Math. Statist. 29, 610-611.
  * <p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -103,7 +103,6 @@ public class Normal extends AbstractContinousDistribution {
             cacheFilled = false;
             return cache;
         }
-        ;
 
         double x, y, r, z;
         do {
@@ -113,9 +112,9 @@ public class Normal extends AbstractContinousDistribution {
         } while (r >= 1.0);
 
         z = Math.sqrt(-2.0 * Math.log(r) / r);
-        if(this.mean == mean && this.standardDeviation == standardDeviation){
-                cache = mean + standardDeviation * x * z;
-                cacheFilled = true;
+        if (this.mean == mean && this.standardDeviation == standardDeviation) {
+            cache = mean + standardDeviation * x * z;
+            cacheFilled = true;
         }
         return mean + standardDeviation * y * z;
     }
@@ -171,9 +170,8 @@ public class Normal extends AbstractContinousDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

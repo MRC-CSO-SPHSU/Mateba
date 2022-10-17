@@ -43,7 +43,7 @@ import cern.mateba.matrix.tdouble.algo.DoubleProperty;
  * vector <tt>piv</tt> of length <tt>m</tt> so that <tt>A(piv,:) = L*U</tt>; If
  * <tt>m < n</tt>, then <tt>L</tt> is <tt>m x m</tt> and <tt>U</tt> is
  * <tt>m x n</tt>.
- * <P>
+ * <p>
  * The LU decomposition with pivoting always exists, even if the matrix is
  * singular, so the decompose methods will never fail. The primary use of the LU
  * decomposition is in the solution of square systems of simultaneous linear
@@ -56,21 +56,21 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
     /**
      * Array for internal storage of decomposition.
-     * 
+     *
      * @serial internal array storage.
      */
     protected DoubleMatrix2D LU;
 
     /**
      * pivot sign.
-     * 
+     *
      * @serial pivot sign.
      */
     protected int pivsign;
 
     /**
      * Internal storage of pivot vector.
-     * 
+     *
      * @serial pivot vector.
      */
     protected int[] piv;
@@ -106,9 +106,8 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
      * Upon return <tt>A</tt> is overridden with the result <tt>LU</tt>, such
      * that <tt>L*U = A</tt>. Uses a "left-looking", dot-product,
      * Crout/Doolittle algorithm.
-     * 
-     * @param A
-     *            any matrix.
+     *
+     * @param A any matrix.
      */
     public void decompose(DoubleMatrix2D A) {
         final int CUT_OFF = 10;
@@ -120,7 +119,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
         // setup pivot vector
         if (this.piv == null || this.piv.length != m)
             this.piv = new int[m];
-        for (int i = m; --i >= 0;)
+        for (int i = m; --i >= 0; )
             piv[i] = i;
         pivsign = 1;
 
@@ -213,11 +212,9 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
      * result <tt>LU</tt>, such that <tt>L*U = A</tt>. Currently supports
      * diagonal and tridiagonal matrices, all other cases fall through to
      * {@link #decompose(DoubleMatrix2D)}.
-     * 
-     * @param semiBandwidth
-     *            == 1 --> A is diagonal, == 2 --> A is tridiagonal.
-     * @param A
-     *            any matrix.
+     *
+     * @param semiBandwidth == 1 --> A is diagonal, == 2 --> A is tridiagonal.
+     * @param A             any matrix.
      */
     public void decompose(DoubleMatrix2D A, int semiBandwidth) {
         if (!algebra.property().isSquare(A) || semiBandwidth < 0 || semiBandwidth > 2) {
@@ -232,7 +229,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
         // setup pivot vector
         if (this.piv == null || this.piv.length != m)
             this.piv = new int[m];
-        for (int i = m; --i >= 0;)
+        for (int i = m; --i >= 0; )
             piv[i] = i;
         pivsign = 1;
 
@@ -259,10 +256,9 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
     /**
      * Returns the determinant, <tt>det(A)</tt>.
-     * 
-     * @exception IllegalArgumentException
-     *                if <tt>A.rows() != A.columns()</tt> (Matrix must be
-     *                square).
+     *
+     * @throws IllegalArgumentException if <tt>A.rows() != A.columns()</tt> (Matrix must be
+     *                                  square).
      */
     public double det() {
         int m = m();
@@ -282,7 +278,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
     /**
      * Returns pivot permutation vector as a one-dimensional double array
-     * 
+     *
      * @return (double) piv
      */
     protected double[] getDoublePivot() {
@@ -296,7 +292,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
     /**
      * Returns the lower triangular factor, <tt>L</tt>.
-     * 
+     *
      * @return <tt>L</tt>
      */
     public DoubleMatrix2D getL() {
@@ -306,7 +302,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
     /**
      * Returns a copy of the combined lower and upper triangular factor,
      * <tt>LU</tt>.
-     * 
+     *
      * @return <tt>LU</tt>
      */
     public DoubleMatrix2D getLU() {
@@ -315,7 +311,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
     /**
      * Returns the pivot permutation vector (not a copy of it).
-     * 
+     *
      * @return piv
      */
     public int[] getPivot() {
@@ -324,7 +320,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
     /**
      * Returns the upper triangular factor, <tt>U</tt>.
-     * 
+     *
      * @return <tt>U</tt>
      */
     public DoubleMatrix2D getU() {
@@ -333,9 +329,9 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
     /**
      * Returns whether the matrix is nonsingular (has an inverse).
-     * 
+     *
      * @return true if <tt>U</tt>, and hence <tt>A</tt>, is nonsingular; false
-     *         otherwise.
+     * otherwise.
      */
     public boolean isNonsingular() {
         return isNonSingular;
@@ -343,7 +339,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
     /**
      * Returns whether the matrix is nonsingular.
-     * 
+     *
      * @return true if <tt>matrix</tt> is nonsingular; false otherwise.
      */
     protected boolean isNonsingular(DoubleMatrix2D matrix) {
@@ -352,7 +348,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
         double epsilon = algebra.property().tolerance(); // consider
         // numerical
         // instability
-        for (int j = Math.min(n, m); --j >= 0;) {
+        for (int j = Math.min(n, m); --j >= 0; ) {
             // if (matrix.getQuick(j,j) == 0) return false;
             if (Math.abs(matrix.getQuick(j, j)) <= epsilon)
                 return false;
@@ -422,7 +418,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
      * 9, 9, 9</td>
      * </tr>
      * </table>
-     * 
+     *
      * @return <tt>A</tt> (for convenience only).
      * @see #triangulateUpper(DoubleMatrix2D)
      */
@@ -430,8 +426,8 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
         int rows = A.rows();
         int columns = A.columns();
         int min = Math.min(rows, columns);
-        for (int r = min; --r >= 0;) {
-            for (int c = min; --c >= 0;) {
+        for (int r = min; --r >= 0; ) {
+            for (int c = min; --c >= 0; ) {
                 if (r < c)
                     A.setQuick(r, c, 0);
                 else if (r == c)
@@ -445,14 +441,14 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
     }
 
     /**
-     * 
+     *
      */
     protected int m() {
         return LU.rows();
     }
 
     /**
-     * 
+     *
      */
     protected int n() {
         return LU.columns();
@@ -472,15 +468,11 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
      * Solves the system of equations <tt>A*X = B</tt> (in-place). Upon return
      * <tt>B</tt> is overridden with the result <tt>X</tt>, such that
      * <tt>L*U*X = B(piv)</tt>.
-     * 
-     * @param B
-     *            A vector with <tt>B.size() == A.rows()</tt>.
-     * @exception IllegalArgumentException
-     *                if </tt>B.size() != A.rows()</tt>.
-     * @exception IllegalArgumentException
-     *                if A is singular, that is, if <tt>!isNonsingular()</tt>.
-     * @exception IllegalArgumentException
-     *                if <tt>A.rows() < A.columns()</tt>.
+     *
+     * @param B A vector with <tt>B.size() == A.rows()</tt>.
+     * @throws IllegalArgumentException if </tt>B.size() != A.rows()</tt>.
+     * @throws IllegalArgumentException if A is singular, that is, if <tt>!isNonsingular()</tt>.
+     * @throws IllegalArgumentException if <tt>A.rows() < A.columns()</tt>.
      */
     public void solve(DoubleMatrix1D B) {
         algebra.property().checkRectangular(LU);
@@ -533,16 +525,12 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
      * Solves the system of equations <tt>A*X = B</tt> (in-place). Upon return
      * <tt>B</tt> is overridden with the result <tt>X</tt>, such that
      * <tt>L*U*X = B(piv,:)</tt>.
-     * 
-     * @param B
-     *            A matrix with as many rows as <tt>A</tt> and any number of
-     *            columns.
-     * @exception IllegalArgumentException
-     *                if </tt>B.rows() != A.rows()</tt>.
-     * @exception IllegalArgumentException
-     *                if A is singular, that is, if <tt>!isNonsingular()</tt>.
-     * @exception IllegalArgumentException
-     *                if <tt>A.rows() < A.columns()</tt>.
+     *
+     * @param B A matrix with as many rows as <tt>A</tt> and any number of
+     *          columns.
+     * @throws IllegalArgumentException if </tt>B.rows() != A.rows()</tt>.
+     * @throws IllegalArgumentException if A is singular, that is, if <tt>!isNonsingular()</tt>.
+     * @throws IllegalArgumentException if <tt>A.rows() < A.columns()</tt>.
      */
     public void solve(DoubleMatrix2D B) {
         final int CUT_OFF = 10;
@@ -651,18 +639,14 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
     /**
      * Solves <tt>A*X = B</tt>.
-     * 
-     * @param B
-     *            A matrix with as many rows as <tt>A</tt> and any number of
-     *            columns.
+     *
+     * @param B A matrix with as many rows as <tt>A</tt> and any number of
+     *          columns.
      * @return <tt>X</tt> so that <tt>L*U*X = B(piv,:)</tt>.
-     * @exception IllegalArgumentException
-     *                if </tt>B.rows() != A.rows()</tt>.
-     * @exception IllegalArgumentException
-     *                if A is singular, that is, if
-     *                <tt>!this.isNonsingular()</tt>.
-     * @exception IllegalArgumentException
-     *                if <tt>A.rows() < A.columns()</tt>.
+     * @throws IllegalArgumentException if </tt>B.rows() != A.rows()</tt>.
+     * @throws IllegalArgumentException if A is singular, that is, if
+     *                                  <tt>!this.isNonsingular()</tt>.
+     * @throws IllegalArgumentException if <tt>A.rows() < A.columns()</tt>.
      */
     private void solveOld(DoubleMatrix2D B) {
         algebra.property().checkRectangular(LU);
@@ -718,11 +702,11 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
     /**
      * Returns a String with (propertyName, propertyValue) pairs. Useful for
      * debugging or to quickly get the rough picture. For example,
-     * 
+     *
      * <pre>
      * 	 rank          : 3
      * 	 trace         : 0
-     * 
+     *
      * </pre>
      */
 
@@ -736,35 +720,35 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
         buf.append("isNonSingular = ");
         try {
-            buf.append(String.valueOf(this.isNonsingular()));
+            buf.append(this.isNonsingular());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\ndet = ");
         try {
-            buf.append(String.valueOf(this.det()));
+            buf.append(this.det());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\npivot = ");
         try {
-            buf.append(String.valueOf(new cern.mateba.list.tint.IntArrayList(this.getPivot())));
+            buf.append(new cern.mateba.list.tint.IntArrayList(this.getPivot()));
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\n\nL = ");
         try {
-            buf.append(String.valueOf(this.getL()));
+            buf.append(this.getL());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\n\nU = ");
         try {
-            buf.append(String.valueOf(this.getU()));
+            buf.append(this.getU());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
@@ -773,7 +757,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
         DoubleMatrix2D identity = cern.mateba.matrix.tdouble.DoubleFactory2D.dense.identity(LU.rows());
         try {
             this.solve(identity);
-            buf.append(String.valueOf(identity));
+            buf.append(identity);
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
@@ -783,7 +767,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
     /**
      * Modifies the matrix to be an upper triangular matrix.
-     * 
+     *
      * @return <tt>A</tt> (for convenience only).
      * @see #triangulateLower(DoubleMatrix2D)
      */
@@ -791,8 +775,8 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
         int rows = A.rows();
         int columns = A.columns();
         int min = Math.min(rows, columns);
-        for (int r = min; --r >= 0;) {
-            for (int c = min; --c >= 0;) {
+        for (int r = min; --r >= 0; ) {
+            for (int c = min; --c >= 0; ) {
                 if (r > c)
                     A.setQuick(r, c, 0);
             }
@@ -805,7 +789,7 @@ public class DenseDoubleLUDecompositionQuick implements java.io.Serializable {
 
     /**
      * Returns pivot permutation vector as a one-dimensional double array
-     * 
+     *
      * @return (double) piv
      */
     private double[] xgetDoublePivot() {

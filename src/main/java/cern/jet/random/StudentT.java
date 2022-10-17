@@ -40,13 +40,13 @@ import cern.jet.stat.Probability;
  * <p>
  * R.W. Bailey (1994): Polar generation of random variates with the
  * t-distribution, Mathematics of Computation 62, 779-781.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
 public class StudentT extends AbstractContinousDistribution {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1L;
 
@@ -59,11 +59,9 @@ public class StudentT extends AbstractContinousDistribution {
 
     /**
      * Constructs a StudentT distribution. Example: freedom=1.0.
-     * 
-     * @param freedom
-     *            degrees of freedom.
-     * @throws IllegalArgumentException
-     *             if <tt>freedom &lt;= 0.0</tt>.
+     *
+     * @param freedom degrees of freedom.
+     * @throws IllegalArgumentException if <tt>freedom &lt;= 0.0</tt>.
      */
     public StudentT(double freedom, RandomEngine randomGenerator) {
         setRandomGenerator(randomGenerator);
@@ -88,11 +86,9 @@ public class StudentT extends AbstractContinousDistribution {
     /**
      * Returns a random number from the distribution; bypasses the internal
      * state.
-     * 
-     * @param degreesOfFreedom
-     *            degrees of freedom.
-     * @throws IllegalArgumentException
-     *             if <tt>a &lt;= 0.0</tt>.
+     *
+     * @param degreesOfFreedom degrees of freedom.
+     * @throws IllegalArgumentException if <tt>a &lt;= 0.0</tt>.
      */
     public double nextDouble(double degreesOfFreedom) {
         /*
@@ -100,7 +96,7 @@ public class StudentT extends AbstractContinousDistribution {
          * adapted to the Student-t distribution. The two generated variates are
          * not independent and the expected no. of uniforms per variate is
          * 2.5464.
-         * 
+         *
          * REFERENCE : - R.W. Bailey (1994): Polar generation of random variates
          * with the t-distribution, Mathematics of Computation 62, 779-781.
          */
@@ -125,11 +121,9 @@ public class StudentT extends AbstractContinousDistribution {
 
     /**
      * Sets the distribution parameter.
-     * 
-     * @param freedom
-     *            degrees of freedom.
-     * @throws IllegalArgumentException
-     *             if <tt>freedom &lt;= 0.0</tt>.
+     *
+     * @param freedom degrees of freedom.
+     * @throws IllegalArgumentException if <tt>freedom &lt;= 0.0</tt>.
      */
     public void setState(double freedom) {
         if (freedom <= 0.0)
@@ -142,11 +136,9 @@ public class StudentT extends AbstractContinousDistribution {
 
     /**
      * Returns a random number from the distribution.
-     * 
-     * @param freedom
-     *            degrees of freedom.
-     * @throws IllegalArgumentException
-     *             if <tt>freedom &lt;= 0.0</tt>.
+     *
+     * @param freedom degrees of freedom.
+     * @throws IllegalArgumentException if <tt>freedom &lt;= 0.0</tt>.
      */
     public static double staticNextDouble(double freedom) {
         synchronized (shared) {
@@ -165,9 +157,8 @@ public class StudentT extends AbstractContinousDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

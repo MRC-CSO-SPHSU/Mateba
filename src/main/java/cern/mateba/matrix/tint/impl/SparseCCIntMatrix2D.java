@@ -47,7 +47,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * properly (i.e. upwards), each write is done much quicker:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  * // rather quick
  * matrix.assign(0);
@@ -57,7 +57,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *             matrix.setQuick(row, column, someValue);
  *     }
  * }
- * 
+ *
  * // poor
  * matrix.assign(0);
  * for (int column = columns; --column &gt;= 0;) {
@@ -67,7 +67,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * }
  * </pre>
- * 
+ *
  * </td>
  * </table>
  * If for whatever reasons you can't iterate properly, consider to create an
@@ -81,7 +81,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * quite efficient user-level matrix-vector multiplication could look like:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  * // Linear algebraic y = A * x
  * A.forEachNonZero(new cern.mateba.function.IntIntIntFunction() {
@@ -91,7 +91,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * });
  * </pre>
- * 
+ *
  * </td>
  * </table>
  * <p>
@@ -99,7 +99,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * look like:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  * // Elementwise A = A + alpha*B
  * B.forEachNonZero(new cern.mateba.function.IntIntIntFunction() {
@@ -109,16 +109,14 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *     }
  * });
  * </pre>
- * 
+ *
  * </td>
  * </table>
- * Method {@link #assign(IntMatrix2D,cern.mateba.function.tint.IntIntFunction)}
+ * Method {@link #assign(IntMatrix2D, cern.mateba.function.tint.IntIntFunction)}
  * does just that if you supply
  * {@link cern.jet.math.tint.IntFunctions#plusMultSecond} as argument.
- * 
- * 
+ *
  * @author Piotr Wendykier
- * 
  */
 public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
     @Serial
@@ -141,13 +139,11 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public SparseCCIntMatrix2D(int[][] values) {
         this(values.length, values[0].length);
@@ -157,30 +153,23 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>rows<0 || columns<0</tt> .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>rows<0 || columns<0</tt> .
      */
     public SparseCCIntMatrix2D(int rows, int columns) {
-        this(rows, columns, (int) Math.min(10l * rows, Integer.MAX_VALUE));
+        this(rows, columns, (int) Math.min(10L * rows, Integer.MAX_VALUE));
     }
 
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param nzmax
-     *            maximum number of nonzero elements
-     * @throws IllegalArgumentException
-     *             if <tt>rows<0 || columns<0</tt> .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @param nzmax   maximum number of nonzero elements
+     * @throws IllegalArgumentException if <tt>rows<0 || columns<0</tt> .
      */
     public SparseCCIntMatrix2D(int rows, int columns, int nzmax) {
         super(null);
@@ -198,24 +187,17 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
     /**
      * Constructs a matrix with indexes given in the coordinate format and a
      * single value.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowIndexes
-     *            row indexes
-     * @param columnIndexes
-     *            column indexes
-     * @param value
-     *            numerical value
-     * @param removeDuplicates
-     *            if true, then duplicates (if any) are removed
-     * @param sortRowIndexes
-     *            if true, then row indexes are sorted
+     *
+     * @param rows             the number of rows the matrix shall have.
+     * @param columns          the number of columns the matrix shall have.
+     * @param rowIndexes       row indexes
+     * @param columnIndexes    column indexes
+     * @param value            numerical value
+     * @param removeDuplicates if true, then duplicates (if any) are removed
+     * @param sortRowIndexes   if true, then row indexes are sorted
      */
     public SparseCCIntMatrix2D(int rows, int columns, int[] rowIndexes, int[] columnIndexes, int value,
-            boolean removeDuplicates, boolean sortRowIndexes) {
+                               boolean removeDuplicates, boolean sortRowIndexes) {
         super(null);
         try {
             setUp(rows, columns);
@@ -255,26 +237,18 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
     /**
      * Constructs a matrix with indexes and values given in the coordinate
      * format.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowIndexes
-     *            row indexes
-     * @param columnIndexes
-     *            column indexes
-     * @param values
-     *            numerical values
-     * @param removeDuplicates
-     *            if true, then duplicates (if any) are removed
-     * @param removeZeroes
-     *            if true, then zeroes (if any) are removed
-     * @param sortRowIndexes
-     *            if true, then row indexes are sorted
+     *
+     * @param rows             the number of rows the matrix shall have.
+     * @param columns          the number of columns the matrix shall have.
+     * @param rowIndexes       row indexes
+     * @param columnIndexes    column indexes
+     * @param values           numerical values
+     * @param removeDuplicates if true, then duplicates (if any) are removed
+     * @param removeZeroes     if true, then zeroes (if any) are removed
+     * @param sortRowIndexes   if true, then row indexes are sorted
      */
     public SparseCCIntMatrix2D(int rows, int columns, int[] rowIndexes, int[] columnIndexes, int[] values,
-            boolean removeDuplicates, boolean removeZeroes, boolean sortRowIndexes) {
+                               boolean removeDuplicates, boolean removeZeroes, boolean sortRowIndexes) {
         super(null);
         try {
             setUp(rows, columns);
@@ -353,8 +327,7 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
             return this; // nothing to do
         checkShape(source);
 
-        if (source instanceof SparseCCIntMatrix2D) {
-            SparseCCIntMatrix2D other = (SparseCCIntMatrix2D) source;
+        if (source instanceof SparseCCIntMatrix2D other) {
             System.arraycopy(other.getColumnPointers(), 0, columnPointers, 0, columns + 1);
             int nzmax = other.getRowIndexes().length;
             if (rowIndexes.length < nzmax) {
@@ -385,11 +358,16 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
     public IntMatrix2D assign(final IntMatrix2D y, cern.mateba.function.tint.IntIntFunction function) {
         checkShape(y);
 
-        if ((y instanceof SparseCCIntMatrix2D) && (function == cern.jet.math.tint.IntFunctions.plus)) { // x[i] = x[i] + y[i] 
-            SparseCCIntMatrix2D yy = (SparseCCIntMatrix2D) y;
+        if ((y instanceof SparseCCIntMatrix2D yy) && (function == cern.jet.math.tint.IntFunctions.plus)) { // x[i] = x[i] + y[i]
             int p, j, nz = 0, anz;
-            int Cp[], Ci[], Bp[], m, n, bnz, w[];
-            int x[], Cx[];
+            int[] Cp;
+            int[] Ci;
+            int[] Bp;
+            int m;
+            int n;
+            int bnz;
+            int[] w;
+            int[] x, Cx;
             m = rows;
             anz = columnPointers[columns];
             n = yy.columns;
@@ -445,9 +423,9 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
             final int[] rowIndexesA = rowIndexes;
             final int[] columnPointersA = columnPointers;
             final int[] valuesA = values;
-            for (int j = columns; --j >= 0;) {
+            for (int j = columns; --j >= 0; ) {
                 int low = columnPointersA[j];
-                for (int k = columnPointersA[j + 1]; --k >= low;) {
+                for (int k = columnPointersA[j + 1]; --k >= low; ) {
                     int i = rowIndexesA[k];
                     valuesA[k] *= y.getQuick(i, j);
                     if (valuesA[k] == 0)
@@ -462,9 +440,9 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
             final int[] columnPointersA = columnPointers;
             final int[] valuesA = values;
 
-            for (int j = columns; --j >= 0;) {
+            for (int j = columns; --j >= 0; ) {
                 int low = columnPointersA[j];
-                for (int k = columnPointersA[j + 1]; --k >= low;) {
+                for (int k = columnPointersA[j + 1]; --k >= low; ) {
                     int i = rowIndexesA[k];
                     valuesA[k] /= y.getQuick(i, j);
                     if (valuesA[k] == 0)
@@ -485,9 +463,9 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
         final int[] columnPointersA = columnPointers;
         final int[] valuesA = values;
 
-        for (int j = columns; --j >= 0;) {
+        for (int j = columns; --j >= 0; ) {
             int low = columnPointersA[j];
-            for (int k = columnPointersA[j + 1]; --k >= low;) {
+            for (int k = columnPointersA[j + 1]; --k >= low; ) {
                 int i = rowIndexesA[k];
                 int value = valuesA[k];
                 int r = function.apply(i, j, value);
@@ -499,7 +477,7 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
 
     /**
      * Returns column pointers
-     * 
+     *
      * @return column pointers
      */
     public int[] getColumnPointers() {
@@ -510,7 +488,7 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a dense form. This method creates a new object (not a view), so changes
      * in the returned matrix are NOT reflected in this matrix.
-     * 
+     *
      * @return this matrix in a dense form
      */
     public DenseIntMatrix2D getDense() {
@@ -537,7 +515,7 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
      * Returns a new matrix that has the same elements as this matrix, but is in
      * a row-compressed form. This method creates a new object (not a view), so
      * changes in the returned matrix are NOT reflected in this matrix.
-     * 
+     *
      * @return this matrix in a row-compressed form
      */
     public SparseRCIntMatrix2D getRowCompressed() {
@@ -552,7 +530,7 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
 
     /**
      * Returns row indexes;
-     * 
+     *
      * @return row indexes
      */
     public int[] getRowIndexes() {
@@ -563,12 +541,21 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
      * Returns a new matrix that is the transpose of this matrix. This method
      * creates a new object (not a view), so changes in the returned matrix are
      * NOT reflected in this matrix.
-     * 
+     *
      * @return the transpose of this matrix
      */
     public SparseCCIntMatrix2D getTranspose() {
-        int p, q, j, Cp[], Ci[], n, m, Ap[], Ai[], w[];
-        int Cx[], Ax[];
+        int p;
+        int q;
+        int j;
+        int[] Cp;
+        int[] Ci;
+        int n;
+        int m;
+        int[] Ap;
+        int[] Ai;
+        int[] w;
+        int[] Cx, Ax;
         m = rows;
         n = columns;
         Ap = columnPointers;
@@ -593,7 +580,7 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
 
     /**
      * Returns numerical values
-     * 
+     *
      * @return numerical values
      */
     public int[] getValues() {
@@ -602,7 +589,7 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
 
     /**
      * Returns true if row indexes are sorted, false otherwise
-     * 
+     *
      * @return true if row indexes are sorted, false otherwise
      */
     public boolean hasRowIndexesSorted() {
@@ -651,8 +638,17 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
      * Removes (sums) duplicate entries (if any}
      */
     public void removeDuplicates() {
-        int i, j, p, q, nz = 0, n, m, Ap[], Ai[], w[];
-        int Ax[];
+        int i;
+        int j;
+        int p;
+        int q;
+        int nz = 0;
+        int n;
+        int m;
+        int[] Ap;
+        int[] Ai;
+        int[] w;
+        int[] Ax;
         /* check inputs */
         m = rows;
         n = columns;
@@ -683,8 +679,13 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
      * Removes zero entries (if any)
      */
     public void removeZeroes() {
-        int j, p, nz = 0, n, Ap[], Ai[];
-        int Ax[];
+        int j;
+        int p;
+        int nz = 0;
+        int n;
+        int[] Ap;
+        int[] Ai;
+        int[] Ax;
         n = columns;
         Ap = columnPointers;
         Ai = rowIndexes;
@@ -709,12 +710,12 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(rows).append(" x ").append(columns).append(" sparse matrix, nnz = ").append(cardinality())
-                .append('\n');
+            .append('\n');
         for (int i = 0; i < columns; i++) {
             int high = columnPointers[i + 1];
             for (int j = columnPointers[i]; j < high; j++) {
                 builder.append('(').append(rowIndexes[j]).append(',').append(i).append(')').append('\t').append(
-                        values[j]).append('\n');
+                    values[j]).append('\n');
             }
         }
         return builder.toString();
@@ -728,21 +729,19 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
         if (z == null)
             z = new DenseIntMatrix1D(rowsA);
 
-        if (!(y instanceof DenseIntMatrix1D && z instanceof DenseIntMatrix1D)) {
+        if (!(y instanceof DenseIntMatrix1D yy && z instanceof DenseIntMatrix1D zz)) {
             return super.zMult(y, z, alpha, beta, transposeA);
         }
 
         if (columnsA != y.size() || rowsA > z.size())
             throw new IllegalArgumentException("Incompatible args: "
-                    + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
-                    + z.toStringShort());
+                + ((transposeA ? viewDice() : this).toStringShort()) + ", " + y.toStringShort() + ", "
+                + z.toStringShort());
 
-        DenseIntMatrix1D zz = (DenseIntMatrix1D) z;
         final int[] elementsZ = zz.elements;
         final int strideZ = zz.stride();
         final int zeroZ = (int) zz.index(0);
 
-        DenseIntMatrix1D yy = (DenseIntMatrix1D) y;
         final int[] elementsY = yy.elements;
         final int strideY = yy.stride();
         final int zeroY = (int) yy.index(0);
@@ -835,15 +834,15 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
                                 for (; k + 10 < high; k += 10) {
                                     int ind = k + 9;
                                     sum += valuesA[ind] * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                            * elementsY[zeroY + strideY * rowIndexes[ind--]];
+                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                        * elementsY[zeroY + strideY * rowIndexes[ind--]];
                                 }
                                 for (; k < high; k++) {
                                     sum += valuesA[k] * elementsY[rowIndexes[k]];
@@ -863,15 +862,15 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
                     for (; k + 10 < high; k += 10) {
                         int ind = k + 9;
                         sum += valuesA[ind] * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                * elementsY[zeroY + strideY * rowIndexes[ind--]];
+                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                            * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                            * elementsY[zeroY + strideY * rowIndexes[ind--]];
                     }
                     for (; k < high; k++) {
                         sum += valuesA[k] * elementsY[rowIndexes[k]];
@@ -885,7 +884,7 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
     }
 
     public IntMatrix2D zMult(IntMatrix2D B, IntMatrix2D C, final int alpha, int beta, final boolean transposeA,
-            boolean transposeB) {
+                             boolean transposeB) {
         int rowsA = rows;
         int columnsA = columns;
         if (transposeA) {
@@ -910,10 +909,10 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
 
         if (rowsB != columnsA)
             throw new IllegalArgumentException("Matrix2D inner dimensions must agree:" + toStringShort() + ", "
-                    + (transposeB ? B.viewDice() : B).toStringShort());
+                + (transposeB ? B.viewDice() : B).toStringShort());
         if (C.rows() != rowsA || C.columns() != p)
             throw new IllegalArgumentException("Incompatible result matrix: " + toStringShort() + ", "
-                    + (transposeB ? B.viewDice() : B).toStringShort() + ", " + C.toStringShort());
+                + (transposeB ? B.viewDice() : B).toStringShort() + ", " + C.toStringShort());
         if (this == C || B == C)
             throw new IllegalArgumentException("Matrices must not be identical");
 
@@ -921,7 +920,7 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
             C.assign(cern.jet.math.tint.IntFunctions.mult(beta));
         }
 
-        if ((B instanceof DenseIntMatrix2D) && (C instanceof DenseIntMatrix2D)) {
+        if ((B instanceof DenseIntMatrix2D) && (C instanceof DenseIntMatrix2D CC)) {
             SparseCCIntMatrix2D AA;
             if (transposeA) {
                 AA = getTranspose();
@@ -934,7 +933,6 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
             } else {
                 BB = (DenseIntMatrix2D) B;
             }
-            DenseIntMatrix2D CC = (DenseIntMatrix2D) C;
             int[] columnPointersA = AA.columnPointers;
             int[] rowIndexesA = AA.rowIndexes;
             int[] valuesA = AA.values;
@@ -963,20 +961,26 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
                 C.assign(cern.jet.math.tint.IntFunctions.mult(alpha));
             }
 
-        } else if ((B instanceof SparseCCIntMatrix2D) && (C instanceof SparseCCIntMatrix2D)) {
+        } else if ((B instanceof SparseCCIntMatrix2D BB) && (C instanceof SparseCCIntMatrix2D CC)) {
             SparseCCIntMatrix2D AA;
             if (transposeA) {
                 AA = getTranspose();
             } else {
                 AA = this;
             }
-            SparseCCIntMatrix2D BB = (SparseCCIntMatrix2D) B;
             if (transposeB) {
                 BB = BB.getTranspose();
             }
-            SparseCCIntMatrix2D CC = (SparseCCIntMatrix2D) C;
-            int j, nz = 0, Cp[], Ci[], Bp[], m, n, w[], Bi[];
-            int x[], Bx[], Cx[];
+            int j;
+            int nz = 0;
+            int[] Cp;
+            int[] Ci;
+            int[] Bp;
+            int m;
+            int n;
+            int[] w;
+            int[] Bi;
+            int[] x, Bx, Cx;
             m = rowsA;
             n = columnsB;
             Bp = BB.columnPointers;
@@ -1015,10 +1019,10 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
             }
             // cache views
             final IntMatrix1D[] Brows = new IntMatrix1D[columnsA];
-            for (int i = columnsA; --i >= 0;)
+            for (int i = columnsA; --i >= 0; )
                 Brows[i] = B.viewRow(i);
             final IntMatrix1D[] Crows = new IntMatrix1D[rowsA];
-            for (int i = rowsA; --i >= 0;)
+            for (int i = rowsA; --i >= 0; )
                 Crows[i] = C.viewRow(i);
 
             final cern.jet.math.tint.IntPlusMultSecond fun = cern.jet.math.tint.IntPlusMultSecond.plusMult(0);
@@ -1026,9 +1030,9 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
             final int[] rowIndexesA = rowIndexes;
             final int[] columnPointersA = columnPointers;
             final int[] valuesA = values;
-            for (int i = columns; --i >= 0;) {
+            for (int i = columns; --i >= 0; ) {
                 int low = columnPointersA[i];
-                for (int k = columnPointersA[i + 1]; --k >= low;) {
+                for (int k = columnPointersA[i + 1]; --k >= low; ) {
                     int j = rowIndexesA[k];
                     fun.multiplicator = valuesA[k] * alpha;
                     if (!transposeA)
@@ -1052,7 +1056,7 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
         valuesList.setSizeRaw(columnPointers[columns]);
         rowIndexesList.beforeInsert(index, row);
         valuesList.beforeInsert(index, value);
-        for (int i = columnPointers.length; --i > column;)
+        for (int i = columnPointers.length; --i > column; )
             columnPointers[i]++;
         rowIndexes = rowIndexesList.elements();
         values = valuesList.elements();
@@ -1063,7 +1067,7 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
         IntArrayList valuesList = new IntArrayList(values);
         rowIndexesList.remove(index);
         valuesList.remove(index);
-        for (int i = columnPointers.length; --i > column;)
+        for (int i = columnPointers.length; --i > column; )
             columnPointers[i]--;
         rowIndexes = rowIndexesList.elements();
         values = valuesList.elements();
@@ -1108,9 +1112,9 @@ public class SparseCCIntMatrix2D extends WrapperIntMatrix2D {
     }
 
     private int scatter(SparseCCIntMatrix2D A, int j, int beta, int[] w, int[] x, int mark, SparseCCIntMatrix2D C,
-            int nz) {
+                        int nz) {
         int i, p;
-        int Ap[], Ai[], Ci[];
+        int[] Ap, Ai, Ci;
         int[] Ax;
         Ap = A.columnPointers;
         Ai = A.rowIndexes;

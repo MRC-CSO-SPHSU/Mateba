@@ -45,8 +45,8 @@ class Pdgetrf {
      *  Parallel tile LU factorization
      */
     protected static void plasma_pDGETRF(int M, int N, double[] A, int A_offset, int NB, int NBNBSIZE, int IBNBSIZE,
-            int IB, int MT, int NT, double[] L, int L_offset, int[] IPIV, int IPIV_offset, intW INFO, int cores_num,
-            int my_core_id) {
+                                         int IB, int MT, int NT, double[] L, int L_offset, int[] IPIV, int IPIV_offset, intW INFO, int cores_num,
+                                         int my_core_id) {
         int[] progress = Dcommon.plasma_aux.progress;
         int k, m, n;
         int next_k;
@@ -81,8 +81,8 @@ class Pdgetrf {
                     while (progress[(k) + MT * (k)] != k - 1)
                         Dcommon.delay();
                     DcoreBLAS.core_DGETRF(k == MT - 1 ? M - k * NB : NB, k == NT - 1 ? N - k * NB : NB, IB, A, A_offset
-                            + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, L, L_offset + IBNBSIZE * (k) + IBNBSIZE * MT
-                            * (k), NB, IPIV, IPIV_offset + NB * (k) + NB * MT * (k), INFO);
+                        + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, L, L_offset + IBNBSIZE * (k) + IBNBSIZE * MT
+                        * (k), NB, IPIV, IPIV_offset + NB * (k) + NB * MT * (k), INFO);
                     if (INFO.val != 0)
                         INFO.val += NB * k;
                     progress[(k) + MT * (k)] = k;
@@ -90,9 +90,9 @@ class Pdgetrf {
                     while (progress[(m) + MT * (k)] != k - 1)
                         Dcommon.delay();
                     DcoreBLAS.core_DTSTRF(m == MT - 1 ? M - m * NB : NB, k == NT - 1 ? N - k * NB : NB, IB, NB, A,
-                            A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, A, A_offset + NBNBSIZE * (m)
-                                    + NBNBSIZE * MT * (k), NB, L, L_offset + IBNBSIZE * (m) + IBNBSIZE * MT * (k), IB,
-                            IPIV, IPIV_offset + NB * (m) + NB * MT * (k), INFO);
+                        A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (k), NB, A, A_offset + NBNBSIZE * (m)
+                            + NBNBSIZE * MT * (k), NB, L, L_offset + IBNBSIZE * (m) + IBNBSIZE * MT * (k), IB,
+                        IPIV, IPIV_offset + NB * (m) + NB * MT * (k), INFO);
                     if (INFO.val != 0)
                         INFO.val += NB * k;
                     progress[(m) + MT * (k)] = k;
@@ -104,18 +104,18 @@ class Pdgetrf {
                     while (progress[(k) + MT * (n)] != k - 1)
                         Dcommon.delay();
                     DcoreBLAS.core_DGESSM(k == MT - 1 ? M - k * NB : NB, n == NT - 1 ? N - n * NB : NB, NB, IB, IPIV,
-                            IPIV_offset + NB * (k) + NB * MT * (k), A, A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (k),
-                            NB, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (n), NB);
+                        IPIV_offset + NB * (k) + NB * MT * (k), A, A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (k),
+                        NB, A, A_offset + NBNBSIZE * (k) + NBNBSIZE * MT * (n), NB);
                 } else {
                     while (progress[(m) + MT * (k)] != k)
                         Dcommon.delay();
                     while (progress[(m) + MT * (n)] != k - 1)
                         Dcommon.delay();
                     DcoreBLAS.core_DSSSSM(NB, m == MT - 1 ? M - m * NB : NB, n == NT - 1 ? N - n * NB : NB, IB, NB,
-                            IPIV, IPIV_offset + NB * (m) + NB * MT * (k), L, L_offset + IBNBSIZE * (m) + IBNBSIZE * MT
-                                    * (k), IB, A, A_offset + NBNBSIZE * (m) + NBNBSIZE * MT * (k), NB, A, A_offset
-                                    + NBNBSIZE * (k) + NBNBSIZE * MT * (n), NB, A,
-                            NBNBSIZE * (m) + NBNBSIZE * MT * (n), NB);
+                        IPIV, IPIV_offset + NB * (m) + NB * MT * (k), L, L_offset + IBNBSIZE * (m) + IBNBSIZE * MT
+                            * (k), IB, A, A_offset + NBNBSIZE * (m) + NBNBSIZE * MT * (k), NB, A, A_offset
+                            + NBNBSIZE * (k) + NBNBSIZE * MT * (n), NB, A,
+                        NBNBSIZE * (m) + NBNBSIZE * MT * (n), NB);
                     progress[(m) + MT * (n)] = k;
                 }
             }

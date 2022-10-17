@@ -40,29 +40,28 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * Cells are internally addressed in column-major. Applications demanding utmost
  * speed can exploit this fact. Setting/getting values in a loop
  * column-by-column is quicker than row-by-row. Thus
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
  *         matrix.setQuick(row, column, someValue);
  *     }
  * }
- * 
+ *
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int row = 0; row &lt; rows; row++) {
  *     for (int column = 0; column &lt; columns; column++) {
  *         matrix.setQuick(row, column, someValue);
  *     }
  * }
- * 
+ *
  * </pre>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
 
@@ -77,13 +76,11 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public DenseColumnObjectMatrix2D(Object[][] values) {
         this(values.length, values.length == 0 ? 0 : values[0].length);
@@ -93,15 +90,12 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public DenseColumnObjectMatrix2D(int rows, int columns) {
         setUp(rows, columns, 0, 0, 1, rows);
@@ -110,32 +104,23 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
 
     /**
      * Constructs a matrix with the given parameters.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @param isView
-     *            if true then a matrix view is constructed
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             or flip's are illegal.
+     *
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param elements     the cells.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(i,j+1)-index(i,j)</tt>.
+     * @param isView       if true then a matrix view is constructed
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  or flip's are illegal.
      */
     public DenseColumnObjectMatrix2D(int rows, int columns, Object[] elements, int rowZero, int columnZero,
-            int rowStride, int columnStride, boolean isView) {
+                                     int rowStride, int columnStride, boolean isView) {
         setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = !isView;
@@ -159,9 +144,9 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                     public Object call() throws Exception {
                         Object a = f.apply(elements[zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride]);
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 a = aggr.apply(a, f.apply(elements[r * rowStride + cidx]));
                             }
                             d = 0;
@@ -174,9 +159,9 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
         } else {
             a = f.apply(elements[zero + (rows - 1) * rowStride + (columns - 1) * columnStride]);
             int d = 1;
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     a = aggr.apply(a, f.apply(elements[r * rowStride + cidx]));
                 }
                 d = 0;
@@ -203,15 +188,15 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                     public Object call() throws Exception {
                         Object elem = elements[zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride];
                         Object a = 0;
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             a = f.apply(elem);
                         }
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 elem = elements[r * rowStride + cidx];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     a = aggr.apply(a, f.apply(elem));
                                 }
                             }
@@ -224,15 +209,15 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             Object elem = elements[zero + (rows - 1) * rowStride + (columns - 1) * columnStride];
-            if (cond.apply(elem) == true) {
+            if (cond.apply(elem)) {
                 a = f.apply(elem);
             }
             int d = 1;
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     elem = elements[r * rowStride + cidx];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         a = aggr.apply(a, f.apply(elem));
                     }
                 }
@@ -243,7 +228,7 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
     }
 
     public Object aggregate(final ObjectObjectFunction aggr, final ObjectFunction f, final IntArrayList rowList,
-            final IntArrayList columnList) {
+                            final IntArrayList columnList) {
         if (size() == 0)
             throw new IllegalArgumentException("size() = 0");
         final int zero = (int) index(0, 0);
@@ -263,10 +248,10 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
 
                     public Object call() throws Exception {
                         Object a = f.apply(elements[zero + rowElements[firstIdx - 1] * rowStride
-                                + columnElements[firstIdx - 1] * columnStride]);
-                        for (int i = firstIdx - 1; --i >= lastIdx;) {
+                            + columnElements[firstIdx - 1] * columnStride]);
+                        for (int i = firstIdx - 1; --i >= lastIdx; ) {
                             a = aggr.apply(a, f.apply(elements[zero + rowElements[i] * rowStride + columnElements[i]
-                                    * columnStride]));
+                                * columnStride]));
                         }
                         return a;
                     }
@@ -275,9 +260,9 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             a = f.apply(elements[zero + rowElements[size - 1] * rowStride + columnElements[size - 1] * columnStride]);
-            for (int i = size - 1; --i >= 0;) {
+            for (int i = size - 1; --i >= 0; ) {
                 a = aggr.apply(a, f
-                        .apply(elements[zero + rowElements[i] * rowStride + columnElements[i] * columnStride]));
+                    .apply(elements[zero + rowElements[i] * rowStride + columnElements[i] * columnStride]));
             }
         }
         return a;
@@ -308,15 +293,15 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
 
                     public Object call() throws Exception {
                         Object a = f.apply(elements[zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride],
-                                otherElements[zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1)
-                                        * columnStrideOther]);
+                            otherElements[zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1)
+                                * columnStrideOther]);
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
                             int cidxOther = zeroOther + c * columnStrideOther;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 a = aggr.apply(a, f.apply(elements[r * rowStride + cidx], otherElements[r
-                                        * rowStrideOther + cidxOther]));
+                                    * rowStrideOther + cidxOther]));
                             }
                             d = 0;
                         }
@@ -328,13 +313,13 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
         } else {
             int d = 1;
             a = f.apply(elements[zero + (rows - 1) * rowStride + (columns - 1) * columnStride], otherElements[zeroOther
-                    + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther]);
-            for (int c = columns; --c >= 0;) {
+                + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther]);
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
                 int cidxOther = zeroOther + c * columnStrideOther;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     a = aggr.apply(a, f.apply(elements[r * rowStride + cidx], otherElements[r * rowStrideOther
-                            + cidxOther]));
+                        + cidxOther]));
                 }
                 d = 0;
             }
@@ -356,8 +341,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
 
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 elements[i] = function.apply(elements[i]);
                                 i -= rowStride;
                             }
@@ -369,8 +354,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     elements[i] = function.apply(elements[i]);
                     i -= rowStride;
                 }
@@ -395,10 +380,10 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                     public void run() {
                         Object elem;
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 elem = elements[i];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     elements[i] = function.apply(elem);
                                 }
                                 i -= rowStride;
@@ -412,10 +397,10 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
         } else {
             Object elem;
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     elem = elements[i];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         elements[i] = function.apply(elem);
                     }
                     i -= rowStride;
@@ -441,10 +426,10 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                     public void run() {
                         Object elem;
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 elem = elements[i];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     elements[i] = value;
                                 }
                                 i -= rowStride;
@@ -458,10 +443,10 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
         } else {
             Object elem;
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     elem = elements[i];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         elements[i] = value;
                     }
                     i -= rowStride;
@@ -485,8 +470,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 elements[i] = value;
                                 i -= rowStride;
                             }
@@ -498,8 +483,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     elements[i] = value;
                     i -= rowStride;
                 }
@@ -512,7 +497,7 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
     public ObjectMatrix2D assign(final Object[] values) {
         if (values.length != size())
             throw new IllegalArgumentException("Must have same length: length=" + values.length + " rows()*columns()="
-                    + rows() * columns());
+                + rows() * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             System.arraycopy(values, 0, this.elements, 0, values.length);
@@ -530,8 +515,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                         public void run() {
                             int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                             int idxOther = (rows - 1) + (firstColumn - 1) * rows;
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, r = rows; --r >= 0; ) {
                                     elements[i] = values[idxOther--];
                                     i -= rowStride;
                                 }
@@ -544,8 +529,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
             } else {
                 int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
                 int idxOther = values.length - 1;
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, r = rows; --r >= 0; ) {
                         elements[i] = values[idxOther--];
                         i -= rowStride;
                     }
@@ -559,7 +544,7 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
     public ObjectMatrix2D assign(final Object[][] values) {
         if (values.length != rows)
             throw new IllegalArgumentException("Must have same number of rows: rows=" + values.length + "columns()="
-                    + rows());
+                + rows());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         final int zero = (int) index(0, 0);
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
@@ -572,13 +557,13 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (firstRow - 1) * rowStride + (columns - 1) * columnStride;
-                        for (int r = firstRow; --r >= lastRow;) {
+                        for (int r = firstRow; --r >= lastRow; ) {
                             Object[] currentRow = values[r];
                             if (currentRow.length != columns)
                                 throw new IllegalArgumentException(
-                                        "Must have same number of columns in every row: column=" + currentRow.length
-                                                + "columns()=" + columns());
-                            for (int i = idx, c = columns; --c >= 0;) {
+                                    "Must have same number of columns in every row: column=" + currentRow.length
+                                        + "columns()=" + columns());
+                            for (int i = idx, c = columns; --c >= 0; ) {
                                 elements[i] = currentRow[c];
                                 i -= columnStride;
                             }
@@ -590,12 +575,12 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int r = rows; --r >= 0;) {
+            for (int r = rows; --r >= 0; ) {
                 Object[] currentRow = values[r];
                 if (currentRow.length != columns)
                     throw new IllegalArgumentException("Must have same number of columns in every row: column="
-                            + currentRow.length + "columns()=" + columns());
-                for (int i = idx, c = columns; --c >= 0;) {
+                        + currentRow.length + "columns()=" + columns());
+                for (int i = idx, c = columns; --c >= 0; ) {
                     elements[i] = currentRow[c];
                     i -= columnStride;
                 }
@@ -607,11 +592,10 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
 
     public ObjectMatrix2D assign(final ObjectMatrix2D source) {
         // overriden for performance only
-        if (!(source instanceof DenseColumnObjectMatrix2D)) {
+        if (!(source instanceof DenseColumnObjectMatrix2D other)) {
             super.assign(source);
             return this;
         }
-        DenseColumnObjectMatrix2D other = (DenseColumnObjectMatrix2D) source;
         if (other == this)
             return this; // nothing to do
         checkShape(other);
@@ -645,8 +629,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                         int idxOther = zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1) * columnStrideOther;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                 elements[i] = otherElements[j];
                                 i -= rowStride;
                                 j -= rowStrideOther;
@@ -661,8 +645,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             int idxOther = zeroOther + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                     elements[i] = otherElements[j];
                     i -= rowStride;
                     j -= rowStrideOther;
@@ -675,11 +659,10 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
     }
 
     public ObjectMatrix2D assign(final ObjectMatrix2D y, final ObjectObjectFunction function) {
-        if (!(y instanceof DenseColumnObjectMatrix2D)) {
+        if (!(y instanceof DenseColumnObjectMatrix2D other)) {
             super.assign(y, function);
             return this;
         }
-        DenseColumnObjectMatrix2D other = (DenseColumnObjectMatrix2D) y;
         checkShape(y);
         final Object[] otherElements = other.elements;
         final int zeroOther = (int) other.index(0, 0);
@@ -699,8 +682,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                         int idxOther = zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1) * columnStrideOther;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                 elements[i] = function.apply(elements[i], otherElements[j]);
                                 i -= rowStride;
                                 j -= rowStrideOther;
@@ -716,8 +699,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             int idxOther = zeroOther + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                     elements[i] = function.apply(elements[i], otherElements[j]);
                     i -= rowStride;
                     j -= rowStrideOther;
@@ -730,13 +713,12 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
     }
 
     public ObjectMatrix2D assign(final ObjectMatrix2D y, final ObjectObjectFunction function, IntArrayList rowList,
-            IntArrayList columnList) {
+                                 IntArrayList columnList) {
         checkShape(y);
-        if (!(y instanceof DenseColumnObjectMatrix2D)) {
+        if (!(y instanceof DenseColumnObjectMatrix2D other)) {
             super.assign(y, function);
             return this;
         }
-        DenseColumnObjectMatrix2D other = (DenseColumnObjectMatrix2D) y;
         final int size = rowList.size();
         final int[] rowElements = rowList.elements();
         final int[] columnElements = columnList.elements();
@@ -758,10 +740,10 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                     public void run() {
                         int idx;
                         int idxOther;
-                        for (int i = firstIdx; --i >= lastIdx;) {
+                        for (int i = firstIdx; --i >= lastIdx; ) {
                             idx = zero + rowElements[i] * rowStride + columnElements[i] * columnStride;
                             idxOther = zeroOther + rowElements[i] * rowStrideOther + columnElements[i]
-                                    * columnStrideOther;
+                                * columnStrideOther;
                             elements[idx] = function.apply(elements[idx], otherElements[idxOther]);
                         }
                     }
@@ -772,7 +754,7 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
         } else {
             int idx;
             int idxOther;
-            for (int i = size; --i >= 0;) {
+            for (int i = size; --i >= 0; ) {
                 idx = zero + rowElements[i] * rowStride + columnElements[i] * columnStride;
                 idxOther = zeroOther + rowElements[i] * rowStrideOther + columnElements[i] * columnStrideOther;
                 elements[idx] = function.apply(elements[idx], otherElements[idxOther]);
@@ -797,8 +779,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                     public Integer call() throws Exception {
                         int cardinality = 0;
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 if (elements[i] != null)
                                     cardinality++;
                                 i -= rowStride;
@@ -824,8 +806,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
             }
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     if (elements[i] != null)
                         cardinality++;
                     i -= rowStride;
@@ -853,8 +835,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 Object value = elements[i];
                                 if (value != null) {
                                     elements[i] = function.apply(r, c, value);
@@ -869,8 +851,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     Object value = elements[i];
                     if (value != null) {
                         elements[i] = function.apply(r, c, value);
@@ -888,7 +870,7 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
      * are addressed internally in row major. This method creates a new object
      * (not a view), so changes in the returned matrix are NOT reflected in this
      * matrix.
-     * 
+     *
      * @return this matrix with elements addressed internally in row major
      */
     public DenseObjectMatrix2D getRowMajor() {
@@ -911,8 +893,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                         int idxR = zeroR + (rows - 1) * rowStrideR + (firstColumn - 1) * columnStrideR;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, j = idxR, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, j = idxR, r = rows; --r >= 0; ) {
                                 elementsR[j] = elements[i];
                                 i -= rowStride;
                                 j -= rowStrideR;
@@ -927,8 +909,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             int idxR = zeroR + (rows - 1) * rowStrideR + (columns - 1) * columnStrideR;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, j = idxR, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, j = idxR, r = rows; --r >= 0; ) {
                     elementsR[j] = elements[i];
                     i -= rowStride;
                     j -= rowStrideR;
@@ -964,7 +946,7 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
     }
 
     public long index(int row, int column) {
-        return rowZero + row * rowStride + columnZero + column * columnStride;
+        return rowZero + (long) row * rowStride + columnZero + (long) column * columnStride;
     }
 
     public ObjectMatrix2D like(int rows, int columns) {
@@ -993,8 +975,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 values[r][c] = elements[i];
                                 i -= rowStride;
                             }
@@ -1006,8 +988,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     values[r][c] = elements[i];
                     i -= rowStride;
                 }
@@ -1020,7 +1002,7 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
     public ObjectMatrix1D vectorize() {
         final int size = (int) size();
         ObjectMatrix1D v = new DenseObjectMatrix1D(size);
-        if (isNoView == true) {
+        if (isNoView) {
             System.arraycopy(elements, 0, v.elements(), 0, size);
         } else {
             final int zero = (int) index(0, 0);
@@ -1041,8 +1023,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
                         public void run() {
                             int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                             int idxOther = zeroOther + (firstIdxOther - 1) * strideOther;
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, r = rows; --r >= 0; ) {
                                     elementsOther[idxOther] = elements[i];
                                     i -= rowStride;
                                     idxOther -= strideOther;
@@ -1056,8 +1038,8 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
             } else {
                 int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
                 int idxOther = zeroOther + size - 1;
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, r = rows; --r >= 0; ) {
                         elementsOther[idxOther] = elements[i];
                         i -= rowStride;
                         idxOther--;
@@ -1070,11 +1052,9 @@ public class DenseColumnObjectMatrix2D extends ObjectMatrix2D {
     }
 
     protected boolean haveSharedCellsRaw(ObjectMatrix2D other) {
-        if (other instanceof SelectedDenseColumnObjectMatrix2D) {
-            SelectedDenseColumnObjectMatrix2D otherMatrix = (SelectedDenseColumnObjectMatrix2D) other;
+        if (other instanceof SelectedDenseColumnObjectMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseColumnObjectMatrix2D) {
-            DenseColumnObjectMatrix2D otherMatrix = (DenseColumnObjectMatrix2D) other;
+        } else if (other instanceof DenseColumnObjectMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;

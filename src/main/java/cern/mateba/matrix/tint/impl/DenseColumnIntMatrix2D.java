@@ -43,29 +43,28 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * Cells are internally addressed in column-major. Applications demanding utmost
  * speed can exploit this fact. Setting/getting values in a loop
  * column-by-column is quicker than row-by-row. Thus
- * 
+ *
  * <pre>
  * for (int column = 0; column &lt; columns; column++) {
  *     for (int row = 0; row &lt; rows; row++) {
  *         matrix.setQuick(row, column, someValue);
  *     }
  * }
- * 
+ *
  * </pre>
- * 
+ * <p>
  * is quicker than
- * 
+ *
  * <pre>
  * for (int row = 0; row &lt; rows; row++) {
  *     for (int column = 0; column &lt; columns; column++) {
  *         matrix.setQuick(row, column, someValue);
  *     }
  * }
- * 
+ *
  * </pre>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DenseColumnIntMatrix2D extends IntMatrix2D {
 
@@ -80,13 +79,11 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public DenseColumnIntMatrix2D(int[][] values) {
         this(values.length, values.length == 0 ? 0 : values[0].length);
@@ -96,15 +93,12 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             .
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  .
      */
     public DenseColumnIntMatrix2D(int rows, int columns) {
         setUp(rows, columns, 0, 0, 1, rows);
@@ -113,32 +107,23 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
 
     /**
      * Constructs a matrix with the given parameters.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @param isView
-     *            if true then a matrix view is constructed
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
-     *             or flip's are illegal.
+     *
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param elements     the cells.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(i,j+1)-index(i,j)</tt>.
+     * @param isView       if true then a matrix view is constructed
+     * @throws IllegalArgumentException if
+     *                                  <tt>rows<0 || columns<0 || (double)columns*rows > Integer.MAX_VALUE</tt>
+     *                                  or flip's are illegal.
      */
     public DenseColumnIntMatrix2D(int rows, int columns, int[] elements, int rowZero, int columnZero, int rowStride,
-            int columnStride, boolean isView) {
+                                  int columnStride, boolean isView) {
         setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
         this.elements = elements;
         this.isNoView = !isView;
@@ -146,9 +131,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
 
     /**
      * Constructs a matrix from MatrixVectorReader.
-     * 
-     * @param reader
-     *            matrix reader
+     *
+     * @param reader matrix reader
      * @throws IOException
      */
     public DenseColumnIntMatrix2D(MatrixVectorReader reader) throws IOException {
@@ -209,9 +193,9 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     public Integer call() throws Exception {
                         int a = f.apply(elements[zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride]);
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 a = aggr.apply(a, f.apply(elements[r * rowStride + cidx]));
                             }
                             d = 0;
@@ -224,9 +208,9 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
         } else {
             a = f.apply(elements[zero + (rows - 1) * rowStride + (columns - 1) * columnStride]);
             int d = 1;
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     a = aggr.apply(a, f.apply(elements[r * rowStride + cidx]));
                 }
                 d = 0;
@@ -253,15 +237,15 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     public Integer call() throws Exception {
                         int elem = elements[zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride];
                         int a = 0;
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             a = f.apply(elem);
                         }
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 elem = elements[r * rowStride + cidx];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     a = aggr.apply(a, f.apply(elem));
                                 }
                             }
@@ -274,15 +258,15 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             int elem = elements[zero + (rows - 1) * rowStride + (columns - 1) * columnStride];
-            if (cond.apply(elem) == true) {
+            if (cond.apply(elem)) {
                 a = f.apply(elem);
             }
             int d = 1;
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     elem = elements[r * rowStride + cidx];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         a = aggr.apply(a, f.apply(elem));
                     }
                 }
@@ -293,7 +277,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
     }
 
     public int aggregate(final IntIntFunction aggr, final IntFunction f, final IntArrayList rowList,
-            final IntArrayList columnList) {
+                         final IntArrayList columnList) {
         if (size() == 0)
             throw new IllegalArgumentException("size() = 0");
         final int zero = (int) index(0, 0);
@@ -313,10 +297,10 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
 
                     public Integer call() throws Exception {
                         int a = f.apply(elements[zero + rowElements[firstIdx - 1] * rowStride
-                                + columnElements[firstIdx - 1] * columnStride]);
-                        for (int i = firstIdx - 1; --i >= lastIdx;) {
+                            + columnElements[firstIdx - 1] * columnStride]);
+                        for (int i = firstIdx - 1; --i >= lastIdx; ) {
                             a = aggr.apply(a, f.apply(elements[zero + rowElements[i] * rowStride + columnElements[i]
-                                    * columnStride]));
+                                * columnStride]));
                         }
                         return a;
                     }
@@ -325,9 +309,9 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
             a = f.apply(elements[zero + rowElements[size - 1] * rowStride + columnElements[size - 1] * columnStride]);
-            for (int i = size - 1; --i >= 0;) {
+            for (int i = size - 1; --i >= 0; ) {
                 a = aggr.apply(a, f
-                        .apply(elements[zero + rowElements[i] * rowStride + columnElements[i] * columnStride]));
+                    .apply(elements[zero + rowElements[i] * rowStride + columnElements[i] * columnStride]));
             }
         }
         return a;
@@ -358,15 +342,15 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
 
                     public Integer call() throws Exception {
                         int a = f.apply(elements[zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride],
-                                otherElements[zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1)
-                                        * columnStrideOther]);
+                            otherElements[zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1)
+                                * columnStrideOther]);
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
                             int cidxOther = zeroOther + c * columnStrideOther;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 a = aggr.apply(a, f.apply(elements[r * rowStride + cidx], otherElements[r
-                                        * rowStrideOther + cidxOther]));
+                                    * rowStrideOther + cidxOther]));
                             }
                             d = 0;
                         }
@@ -378,13 +362,13 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
         } else {
             int d = 1;
             a = f.apply(elements[zero + (rows - 1) * rowStride + (columns - 1) * columnStride], otherElements[zeroOther
-                    + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther]);
-            for (int c = columns; --c >= 0;) {
+                + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther]);
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
                 int cidxOther = zeroOther + c * columnStrideOther;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     a = aggr.apply(a, f.apply(elements[r * rowStride + cidx], otherElements[r * rowStrideOther
-                            + cidxOther]));
+                        + cidxOther]));
                 }
                 d = 0;
             }
@@ -416,16 +400,16 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                         // specialization for speed
                         if (function instanceof cern.jet.math.tint.IntMult) { // x[i] = mult*x[i]
                             int multiplicator = ((cern.jet.math.tint.IntMult) function).multiplicator;
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, r = rows; --r >= 0; ) {
                                     elements[i] *= multiplicator;
                                     i -= rowStride;
                                 }
                                 idx -= columnStride;
                             }
                         } else { // the general case x[i] = f(x[i])                            
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, r = rows; --r >= 0; ) {
                                     elements[i] = function.apply(elements[i]);
                                     i -= rowStride;
                                 }
@@ -440,16 +424,16 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             if (function instanceof cern.jet.math.tint.IntMult) { // x[i] = mult*x[i]
                 int multiplicator = ((cern.jet.math.tint.IntMult) function).multiplicator;
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, r = rows; --r >= 0; ) {
                         elements[i] *= multiplicator;
                         i -= rowStride;
                     }
                     idx -= columnStride;
                 }
             } else { // the general case x[i] = f(x[i])
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, r = rows; --r >= 0; ) {
                         elements[i] = function.apply(elements[i]);
                         i -= rowStride;
                     }
@@ -475,10 +459,10 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     public void run() {
                         int elem;
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 elem = elements[i];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     elements[i] = function.apply(elem);
                                 }
                                 i -= rowStride;
@@ -492,10 +476,10 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
         } else {
             int elem;
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     elem = elements[i];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         elements[i] = function.apply(elem);
                     }
                     i -= rowStride;
@@ -521,10 +505,10 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     public void run() {
                         int elem;
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 elem = elements[i];
-                                if (cond.apply(elem) == true) {
+                                if (cond.apply(elem)) {
                                     elements[i] = value;
                                 }
                                 i -= rowStride;
@@ -538,10 +522,10 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
         } else {
             int elem;
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     elem = elements[i];
-                    if (cond.apply(elem) == true) {
+                    if (cond.apply(elem)) {
                         elements[i] = value;
                     }
                     i -= rowStride;
@@ -565,8 +549,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 elements[i] = value;
                                 i -= rowStride;
                             }
@@ -578,8 +562,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     elements[i] = value;
                     i -= rowStride;
                 }
@@ -592,7 +576,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
     public IntMatrix2D assign(final int[] values) {
         if (values.length != size())
             throw new IllegalArgumentException("Must have same length: length=" + values.length + " rows()*columns()="
-                    + rows() * columns());
+                + rows() * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (this.isNoView) {
             System.arraycopy(values, 0, this.elements, 0, values.length);
@@ -610,8 +594,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                         public void run() {
                             int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                             int idxOther = (rows - 1) + (firstColumn - 1) * rows;
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, r = rows; --r >= 0; ) {
                                     elements[i] = values[idxOther--];
                                     i -= rowStride;
                                 }
@@ -624,8 +608,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             } else {
                 int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
                 int idxOther = values.length - 1;
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, r = rows; --r >= 0; ) {
                         elements[i] = values[idxOther--];
                         i -= rowStride;
                     }
@@ -639,7 +623,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
     public IntMatrix2D assign(final int[][] values) {
         if (values.length != rows)
             throw new IllegalArgumentException("Must have same number of rows: rows=" + values.length + "columns()="
-                    + rows());
+                + rows());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         final int zero = (int) index(0, 0);
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
@@ -652,13 +636,13 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (firstRow - 1) * rowStride + (columns - 1) * columnStride;
-                        for (int r = firstRow; --r >= lastRow;) {
+                        for (int r = firstRow; --r >= lastRow; ) {
                             int[] currentRow = values[r];
                             if (currentRow.length != columns)
                                 throw new IllegalArgumentException(
-                                        "Must have same number of columns in every row: column=" + currentRow.length
-                                                + "columns()=" + columns());
-                            for (int i = idx, c = columns; --c >= 0;) {
+                                    "Must have same number of columns in every row: column=" + currentRow.length
+                                        + "columns()=" + columns());
+                            for (int i = idx, c = columns; --c >= 0; ) {
                                 elements[i] = currentRow[c];
                                 i -= columnStride;
                             }
@@ -670,12 +654,12 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int r = rows; --r >= 0;) {
+            for (int r = rows; --r >= 0; ) {
                 int[] currentRow = values[r];
                 if (currentRow.length != columns)
                     throw new IllegalArgumentException("Must have same number of columns in every row: column="
-                            + currentRow.length + "columns()=" + columns());
-                for (int i = idx, c = columns; --c >= 0;) {
+                        + currentRow.length + "columns()=" + columns());
+                for (int i = idx, c = columns; --c >= 0; ) {
                     elements[i] = currentRow[c];
                     i -= columnStride;
                 }
@@ -687,11 +671,10 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
 
     public IntMatrix2D assign(final IntMatrix2D source) {
         // overriden for performance only
-        if (!(source instanceof DenseColumnIntMatrix2D)) {
+        if (!(source instanceof DenseColumnIntMatrix2D other)) {
             super.assign(source);
             return this;
         }
-        DenseColumnIntMatrix2D other = (DenseColumnIntMatrix2D) source;
         if (other == this)
             return this; // nothing to do
         checkShape(other);
@@ -725,8 +708,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                         int idxOther = zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1) * columnStrideOther;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                 elements[i] = otherElements[j];
                                 i -= rowStride;
                                 j -= rowStrideOther;
@@ -741,8 +724,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             int idxOther = zeroOther + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                     elements[i] = otherElements[j];
                     i -= rowStride;
                     j -= rowStrideOther;
@@ -767,11 +750,10 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                 return assign(y);
             }
         }
-        if (!(y instanceof DenseColumnIntMatrix2D)) {
+        if (!(y instanceof DenseColumnIntMatrix2D other)) {
             super.assign(y, function);
             return this;
         }
-        DenseColumnIntMatrix2D other = (DenseColumnIntMatrix2D) y;
         checkShape(y);
         final int[] otherElements = other.elements;
         final int zeroOther = (int) other.index(0, 0);
@@ -793,8 +775,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                         int idxOther = zeroOther + (rows - 1) * rowStrideOther + (firstColumn - 1) * columnStrideOther;
                         if (function == cern.jet.math.tint.IntFunctions.mult) {
                             // x[i] = x[i]*y[i]                            
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                     elements[i] *= otherElements[j];
                                     i -= rowStride;
                                     j -= rowStrideOther;
@@ -804,8 +786,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                             }
                         } else if (function == cern.jet.math.tint.IntFunctions.div) {
                             // x[i] = x[i] / y[i]
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                     elements[i] /= otherElements[j];
                                     i -= rowStride;
                                     j -= rowStrideOther;
@@ -817,8 +799,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                             int multiplicator = ((cern.jet.math.tint.IntPlusMultSecond) function).multiplicator;
                             if (multiplicator == 1) {
                                 // x[i] = x[i] + y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] += otherElements[j];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -828,8 +810,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                                 }
                             } else if (multiplicator == -1) {
                                 // x[i] = x[i] - y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] -= otherElements[j];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -839,8 +821,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                                 }
                             } else { // the general case
                                 // x[i] = x[i] + mult*y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] += multiplicator * otherElements[j];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -853,8 +835,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                             int multiplicator = ((cern.jet.math.tint.IntPlusMultFirst) function).multiplicator;
                             if (multiplicator == 1) {
                                 // x[i] = x[i] + y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] += otherElements[j];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -864,8 +846,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                                 }
                             } else if (multiplicator == -1) {
                                 // x[i] = -x[i] + y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] = otherElements[j] - elements[i];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -875,8 +857,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                                 }
                             } else { // the general case
                                 // x[i] = mult*x[i] + y[i]
-                                for (int c = firstColumn; --c >= lastColumn;) {
-                                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                                for (int c = firstColumn; --c >= lastColumn; ) {
+                                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                         elements[i] = multiplicator * elements[i] + otherElements[j];
                                         i -= rowStride;
                                         j -= rowStrideOther;
@@ -886,8 +868,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                                 }
                             }
                         } else { // the general case x[i] = f(x[i],y[i])
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                                     elements[i] = function.apply(elements[i], otherElements[j]);
                                     i -= rowStride;
                                     j -= rowStrideOther;
@@ -906,8 +888,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             int idxOther = zeroOther + (rows - 1) * rowStrideOther + (columns - 1) * columnStrideOther;
             if (function == cern.jet.math.tint.IntFunctions.mult) {
                 // x[i] = x[i]*y[i]                            
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                         elements[i] *= otherElements[j];
                         i -= rowStride;
                         j -= rowStrideOther;
@@ -917,8 +899,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                 }
             } else if (function == cern.jet.math.tint.IntFunctions.div) {
                 // x[i] = x[i] / y[i]
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                         elements[i] /= otherElements[j];
                         i -= rowStride;
                         j -= rowStrideOther;
@@ -930,8 +912,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                 int multiplicator = ((cern.jet.math.tint.IntPlusMultSecond) function).multiplicator;
                 if (multiplicator == 1) {
                     // x[i] = x[i] + y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] += otherElements[j];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -941,8 +923,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     }
                 } else if (multiplicator == -1) {
                     // x[i] = x[i] - y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] -= otherElements[j];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -952,8 +934,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     }
                 } else { // the general case
                     // x[i] = x[i] + mult*y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] += multiplicator * otherElements[j];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -966,8 +948,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                 int multiplicator = ((cern.jet.math.tint.IntPlusMultFirst) function).multiplicator;
                 if (multiplicator == 1) {
                     // x[i] = x[i] + y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] += otherElements[j];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -977,8 +959,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     }
                 } else if (multiplicator == -1) {
                     // x[i] = -x[i] + y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] = otherElements[j] - elements[i];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -988,8 +970,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     }
                 } else { // the general case
                     // x[i] = mult*x[i] + y[i]
-                    for (int c = columns; --c >= 0;) {
-                        for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                    for (int c = columns; --c >= 0; ) {
+                        for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                             elements[i] = multiplicator * elements[i] + otherElements[j];
                             i -= rowStride;
                             j -= rowStrideOther;
@@ -999,8 +981,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     }
                 }
             } else { // the general case x[i] = f(x[i],y[i])
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, j = idxOther, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, j = idxOther, r = rows; --r >= 0; ) {
                         elements[i] = function.apply(elements[i], otherElements[j]);
                         i -= rowStride;
                         j -= rowStrideOther;
@@ -1014,13 +996,12 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
     }
 
     public IntMatrix2D assign(final IntMatrix2D y, final IntIntFunction function, IntArrayList rowList,
-            IntArrayList columnList) {
+                              IntArrayList columnList) {
         checkShape(y);
-        if (!(y instanceof DenseColumnIntMatrix2D)) {
+        if (!(y instanceof DenseColumnIntMatrix2D other)) {
             super.assign(y, function);
             return this;
         }
-        DenseColumnIntMatrix2D other = (DenseColumnIntMatrix2D) y;
         final int size = rowList.size();
         final int[] rowElements = rowList.elements();
         final int[] columnElements = columnList.elements();
@@ -1042,10 +1023,10 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     public void run() {
                         int idx;
                         int idxOther;
-                        for (int i = firstIdx; --i >= lastIdx;) {
+                        for (int i = firstIdx; --i >= lastIdx; ) {
                             idx = zero + rowElements[i] * rowStride + columnElements[i] * columnStride;
                             idxOther = zeroOther + rowElements[i] * rowStrideOther + columnElements[i]
-                                    * columnStrideOther;
+                                * columnStrideOther;
                             elements[idx] = function.apply(elements[idx], otherElements[idxOther]);
                         }
                     }
@@ -1056,7 +1037,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
         } else {
             int idx;
             int idxOther;
-            for (int i = size; --i >= 0;) {
+            for (int i = size; --i >= 0; ) {
                 idx = zero + rowElements[i] * rowStride + columnElements[i] * columnStride;
                 idxOther = zeroOther + rowElements[i] * rowStrideOther + columnElements[i] * columnStrideOther;
                 elements[idx] = function.apply(elements[idx], otherElements[idxOther]);
@@ -1081,8 +1062,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     public Integer call() throws Exception {
                         int cardinality = 0;
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 if (elements[i] != 0)
                                     cardinality++;
                                 i -= rowStride;
@@ -1108,8 +1089,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             }
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     if (elements[i] != 0)
                         cardinality++;
                     i -= rowStride;
@@ -1137,8 +1118,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 int value = elements[i];
                                 if (value != 0) {
                                     elements[i] = function.apply(r, c, value);
@@ -1153,8 +1134,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     int value = elements[i];
                     if (value != 0) {
                         elements[i] = function.apply(r, c, value);
@@ -1172,7 +1153,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
      * are addressed internally in row major. This method creates a new object
      * (not a view), so changes in the returned matrix are NOT reflected in this
      * matrix.
-     * 
+     *
      * @return this matrix with elements addressed internally in row major
      */
     public DenseIntMatrix2D getRowMajor() {
@@ -1195,8 +1176,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                         int idxR = zeroR + (rows - 1) * rowStrideR + (firstColumn - 1) * columnStrideR;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, j = idxR, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, j = idxR, r = rows; --r >= 0; ) {
                                 elementsR[j] = elements[i];
                                 i -= rowStride;
                                 j -= rowStrideR;
@@ -1211,8 +1192,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
             int idxR = zeroR + (rows - 1) * rowStrideR + (columns - 1) * columnStrideR;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, j = idxR, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, j = idxR, r = rows; --r >= 0; ) {
                     elementsR[j] = elements[i];
                     i -= rowStride;
                     j -= rowStrideR;
@@ -1225,7 +1206,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
     }
 
     public void getNegativeValues(final IntArrayList rowList, final IntArrayList columnList,
-            final IntArrayList valueList) {
+                                  final IntArrayList valueList) {
         rowList.clear();
         columnList.clear();
         valueList.clear();
@@ -1264,7 +1245,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
     }
 
     public void getPositiveValues(final IntArrayList rowList, final IntArrayList columnList,
-            final IntArrayList valueList) {
+                                  final IntArrayList valueList) {
         rowList.clear();
         columnList.clear();
         valueList.clear();
@@ -1288,7 +1269,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
     }
 
     public long index(int row, int column) {
-        return rowZero + row * rowStride + columnZero + column * columnStride;
+        return rowZero + (long) row * rowStride + columnZero + (long) column * columnStride;
     }
 
     public IntMatrix2D like(int rows, int columns) {
@@ -1320,9 +1301,9 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                         int columnLocation = firstColumn - 1;
                         int elem;
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 elem = elements[r * rowStride + cidx];
                                 if (maxValue < elem) {
                                     maxValue = elem;
@@ -1332,7 +1313,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                             }
                             d = 0;
                         }
-                        return new int[] { maxValue, rowLocation, columnLocation };
+                        return new int[]{maxValue, rowLocation, columnLocation};
                     }
                 });
             }
@@ -1341,13 +1322,13 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     results[j] = (int[]) futures[j].get();
                 }
                 maxValue = results[0][0];
-                rowLocation = (int) results[0][1];
-                columnLocation = (int) results[0][2];
+                rowLocation = results[0][1];
+                columnLocation = results[0][2];
                 for (int j = 1; j < nthreads; j++) {
                     if (maxValue < results[j][0]) {
                         maxValue = results[j][0];
-                        rowLocation = (int) results[j][1];
-                        columnLocation = (int) results[j][2];
+                        rowLocation = results[j][1];
+                        columnLocation = results[j][2];
                     }
                 }
             } catch (ExecutionException ex) {
@@ -1361,9 +1342,9 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             columnLocation = columns - 1;
             int elem;
             int d = 1;
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     elem = elements[r * rowStride + cidx];
                     if (maxValue < elem) {
                         maxValue = elem;
@@ -1374,7 +1355,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                 d = 0;
             }
         }
-        return new int[] { maxValue, rowLocation, columnLocation };
+        return new int[]{maxValue, rowLocation, columnLocation};
     }
 
     public int[] getMinLocation() {
@@ -1398,9 +1379,9 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                         int columnLocation = firstColumn - 1;
                         int elem;
                         int d = 1;
-                        for (int c = firstColumn; --c >= lastColumn;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
                             int cidx = zero + c * columnStride;
-                            for (int r = rows - d; --r >= 0;) {
+                            for (int r = rows - d; --r >= 0; ) {
                                 elem = elements[r * rowStride + cidx];
                                 if (minValue > elem) {
                                     minValue = elem;
@@ -1410,7 +1391,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                             }
                             d = 0;
                         }
-                        return new int[] { minValue, rowLocation, columnLocation };
+                        return new int[]{minValue, rowLocation, columnLocation};
                     }
                 });
             }
@@ -1419,13 +1400,13 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     results[j] = (int[]) futures[j].get();
                 }
                 minValue = results[0][0];
-                rowLocation = (int) results[0][1];
-                columnLocation = (int) results[0][2];
+                rowLocation = results[0][1];
+                columnLocation = results[0][2];
                 for (int j = 1; j < nthreads; j++) {
                     if (minValue > results[j][0]) {
                         minValue = results[j][0];
-                        rowLocation = (int) results[j][1];
-                        columnLocation = (int) results[j][2];
+                        rowLocation = results[j][1];
+                        columnLocation = results[j][2];
                     }
                 }
             } catch (ExecutionException ex) {
@@ -1439,9 +1420,9 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             columnLocation = columns - 1;
             int elem;
             int d = 1;
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 int cidx = zero + c * columnStride;
-                for (int r = rows - d; --r >= 0;) {
+                for (int r = rows - d; --r >= 0; ) {
                     elem = elements[r * rowStride + cidx];
                     if (minValue > elem) {
                         minValue = elem;
@@ -1452,7 +1433,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                 d = 0;
             }
         }
-        return new int[] { minValue, rowLocation, columnLocation };
+        return new int[]{minValue, rowLocation, columnLocation};
     }
 
     public void setQuick(int row, int column, int value) {
@@ -1473,8 +1454,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
                     public void run() {
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 values[r][c] = elements[i];
                                 i -= rowStride;
                             }
@@ -1486,8 +1467,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     values[r][c] = elements[i];
                     i -= rowStride;
                 }
@@ -1500,7 +1481,7 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
     public IntMatrix1D vectorize() {
         final int size = (int) size();
         IntMatrix1D v = new DenseIntMatrix1D(size);
-        if (isNoView == true) {
+        if (isNoView) {
             System.arraycopy(elements, 0, v.elements(), 0, size);
         } else {
             final int zero = (int) index(0, 0);
@@ -1521,8 +1502,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                         public void run() {
                             int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
                             int idxOther = zeroOther + (firstIdxOther - 1) * strideOther;
-                            for (int c = firstColumn; --c >= lastColumn;) {
-                                for (int i = idx, r = rows; --r >= 0;) {
+                            for (int c = firstColumn; --c >= lastColumn; ) {
+                                for (int i = idx, r = rows; --r >= 0; ) {
                                     elementsOther[idxOther] = elements[i];
                                     i -= rowStride;
                                     idxOther -= strideOther;
@@ -1536,8 +1517,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             } else {
                 int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
                 int idxOther = zeroOther + size - 1;
-                for (int c = columns; --c >= 0;) {
-                    for (int i = idx, r = rows; --r >= 0;) {
+                for (int c = columns; --c >= 0; ) {
+                    for (int i = idx, r = rows; --r >= 0; ) {
                         elementsOther[idxOther] = elements[i];
                         i -= rowStride;
                         idxOther--;
@@ -1567,8 +1548,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
                     public Integer call() throws Exception {
                         int sum = 0;
                         int idx = zero + (rows - 1) * rowStride + (firstColumn - 1) * columnStride;
-                        for (int c = firstColumn; --c >= lastColumn;) {
-                            for (int i = idx, r = rows; --r >= 0;) {
+                        for (int c = firstColumn; --c >= lastColumn; ) {
+                            for (int i = idx, r = rows; --r >= 0; ) {
                                 sum += elements[i];
                                 i -= rowStride;
                             }
@@ -1589,8 +1570,8 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
             }
         } else {
             int idx = zero + (rows - 1) * rowStride + (columns - 1) * columnStride;
-            for (int c = columns; --c >= 0;) {
-                for (int i = idx, r = rows; --r >= 0;) {
+            for (int c = columns; --c >= 0; ) {
+                for (int i = idx, r = rows; --r >= 0; ) {
                     sum += elements[i];
                     i -= rowStride;
                 }
@@ -1601,11 +1582,9 @@ public class DenseColumnIntMatrix2D extends IntMatrix2D {
     }
 
     protected boolean haveSharedCellsRaw(IntMatrix2D other) {
-        if (other instanceof SelectedDenseColumnIntMatrix2D) {
-            SelectedDenseColumnIntMatrix2D otherMatrix = (SelectedDenseColumnIntMatrix2D) other;
+        if (other instanceof SelectedDenseColumnIntMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseColumnIntMatrix2D) {
-            DenseColumnIntMatrix2D otherMatrix = (DenseColumnIntMatrix2D) other;
+        } else if (other instanceof DenseColumnIntMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;

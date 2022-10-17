@@ -57,13 +57,13 @@ import java.io.Serial;
  * have no worse time complexity than its dense counterpart
  * {@link DenseObjectMatrix1D}. However, constant factors are considerably
  * larger.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
 public class SparseObjectMatrix1D extends ObjectMatrix1D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = 2825536925926697325L;
@@ -76,9 +76,8 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
      * Constructs a matrix with a copy of the given values. The values are
      * copied. So subsequent changes in <tt>values</tt> are not reflected in the
      * matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      */
     public SparseObjectMatrix1D(Object[] values) {
         this(values.length);
@@ -88,11 +87,9 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
     /**
      * Constructs a matrix with a given number of cells. All entries are
      * initially <tt>null</tt>.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size the number of cells the matrix shall have.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public SparseObjectMatrix1D(int size) {
         this(size, size / 1000, 0.2, 0.5);
@@ -102,23 +99,17 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
      * Constructs a matrix with a given number of parameters. All entries are
      * initially <tt>null</tt>. For details related to memory usage see
      * {@link cern.mateba.map.tobject.OpenLongObjectHashMap}.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param initialCapacity
-     *            the initial capacity of the hash map. If not known, set
-     *            <tt>initialCapacity=0</tt> or small.
-     * @param minLoadFactor
-     *            the minimum load factor of the hash map.
-     * @param maxLoadFactor
-     *            the maximum load factor of the hash map.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size            the number of cells the matrix shall have.
+     * @param initialCapacity the initial capacity of the hash map. If not known, set
+     *                        <tt>initialCapacity=0</tt> or small.
+     * @param minLoadFactor   the minimum load factor of the hash map.
+     * @param maxLoadFactor   the maximum load factor of the hash map.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>initialCapacity < 0 || (minLoadFactor < 0.0 || minLoadFactor >= 1.0) || (maxLoadFactor <= 0.0 || maxLoadFactor >= 1.0) || (minLoadFactor >= maxLoadFactor)</tt>
+     *                                  .
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public SparseObjectMatrix1D(int size, int initialCapacity, double minLoadFactor, double maxLoadFactor) {
         setUp(size);
@@ -127,18 +118,13 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Constructs a matrix view with a given number of parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param offset
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param offset   the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     protected SparseObjectMatrix1D(int size, AbstractLongObjectMap elements, int offset, int stride) {
         setUp(size, offset, stride);
@@ -159,7 +145,7 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Returns the elements of this matrix.
-     * 
+     *
      * @return the elements
      */
 
@@ -177,9 +163,8 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
      * Calling this method before tt>set()</tt>ing a large number of non-zero
      * values boosts performance, because the receiver will grow only once
      * instead of potentially many times and hash collisions get less probable.
-     * 
-     * @param minCapacity
-     *            the desired minimum number of non-zero cells.
+     *
+     * @param minCapacity the desired minimum number of non-zero cells.
      */
 
     public void ensureCapacity(int minCapacity) {
@@ -188,15 +173,14 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>index</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
+     *
+     * @param index the index of the cell.
      * @return the value of the specified cell.
      */
 
@@ -212,11 +196,9 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
      */
 
     protected boolean haveSharedCellsRaw(ObjectMatrix1D other) {
-        if (other instanceof SelectedSparseObjectMatrix1D) {
-            SelectedSparseObjectMatrix1D otherMatrix = (SelectedSparseObjectMatrix1D) other;
+        if (other instanceof SelectedSparseObjectMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseObjectMatrix1D) {
-            SparseObjectMatrix1D otherMatrix = (SparseObjectMatrix1D) other;
+        } else if (other instanceof SparseObjectMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -226,9 +208,8 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
      * Returns the position of the element with the given relative rank within
      * the (virtual or non-virtual) internal 1-dimensional array. You may want
      * to override this method for performance.
-     * 
-     * @param rank
-     *            the rank of the element.
+     *
+     * @param rank the rank of the element.
      */
 
     public long index(int rank) {
@@ -245,9 +226,8 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
      * instance of type <tt>SparseObjectMatrix1D</tt> the new matrix must also
      * be of type <tt>SparseObjectMatrix1D</tt>, etc. In general, the new matrix
      * should have internal parametrization as similar as possible.
-     * 
-     * @param size
-     *            the number of cell the matrix shall have.
+     *
+     * @param size the number of cell the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -262,11 +242,9 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
      * matrix must be of type <tt>DenseObjectMatrix2D</tt>, if the receiver is
      * an instance of type <tt>SparseObjectMatrix1D</tt> the new matrix must be
      * of type <tt>SparseObjectMatrix2D</tt>, etc.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -309,20 +287,18 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
         }
         return M;
     }
-    
+
     /**
      * Sets the matrix cell at coordinate <tt>index</tt> to the specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked): <tt>index&lt;0 || index&gt;=size()</tt>.
-     * 
-     * @param index
-     *            the index of the cell.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param index the index of the cell.
+     * @param value the value to be filled into the specified cell.
      */
 
     public synchronized void setQuick(int index, Object value) {
@@ -364,9 +340,8 @@ public class SparseObjectMatrix1D extends ObjectMatrix1D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param offsets
-     *            the offsets of the visible elements.
+     *
+     * @param offsets the offsets of the visible elements.
      * @return a new view.
      */
 

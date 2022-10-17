@@ -8,27 +8,26 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tobject.impl;
 
-import java.io.Serial;
-import java.util.concurrent.Future;
-
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.list.tobject.ObjectArrayList;
 import cern.mateba.matrix.tobject.ObjectMatrix1D;
 import cern.mateba.matrix.tobject.ObjectMatrix2D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
 
+import java.io.Serial;
+import java.util.concurrent.Future;
+
 /**
  * 2-d matrix holding <tt>Object</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 04/14/2000
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 04/14/2000
  */
 public class WrapperObjectMatrix2D extends ObjectMatrix2D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = -1262582589007628675L;
@@ -68,7 +67,7 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
             final Object[] elems = ((DiagonalObjectMatrix2D) content).elements;
             if (values.length != dlength)
                 throw new IllegalArgumentException("Must have same length: length=" + values.length + " dlength="
-                        + dlength);
+                    + dlength);
             int nthreads = ConcurrencyUtils.getNumberOfThreads();
             if ((nthreads > 1) && (dlength >= ConcurrencyUtils.getThreadsBeginN_2D())) {
                 nthreads = Math.min(nthreads, dlength);
@@ -104,7 +103,7 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
             final Object[] elems = ((DiagonalObjectMatrix2D) content).elements;
             if (values.length != dlength)
                 throw new IllegalArgumentException("Must have same length: length=" + values.length + " dlength="
-                        + dlength);
+                    + dlength);
             int nthreads = ConcurrencyUtils.getNumberOfThreads();
             if ((nthreads > 1) && (dlength >= ConcurrencyUtils.getThreadsBeginN_2D())) {
                 nthreads = Math.min(nthreads, dlength);
@@ -116,17 +115,14 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
                     futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                         public void run() {
-                            for (int i = firstIdx; i < lastIdx; i++) {
-                                elems[i] = values[i];
-                            }
+                            if (lastIdx - firstIdx >= 0)
+                                System.arraycopy(values, firstIdx, elems, firstIdx, lastIdx - firstIdx);
                         }
                     });
                 }
                 ConcurrencyUtils.waitForCompletion(futures);
             } else {
-                for (int i = 0; i < dlength; i++) {
-                    elems[i] = values[i];
-                }
+                System.arraycopy(values, 0, elems, 0, dlength);
             }
             return this;
         } else {
@@ -143,15 +139,13 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
     }
 
     public boolean equals(Object obj) {
-        if (content instanceof DiagonalObjectMatrix2D && obj instanceof DiagonalObjectMatrix2D) {
+        if (content instanceof DiagonalObjectMatrix2D A && obj instanceof DiagonalObjectMatrix2D B) {
             if (this == obj)
                 return true;
             if (!(this != null && obj != null))
                 return false;
-            DiagonalObjectMatrix2D A = (DiagonalObjectMatrix2D) content;
-            DiagonalObjectMatrix2D B = (DiagonalObjectMatrix2D) obj;
             if (A.columns() != B.columns() || A.rows() != B.rows() || A.diagonalIndex() != B.diagonalIndex()
-                    || A.diagonalLength() != B.diagonalLength())
+                || A.diagonalLength() != B.diagonalLength())
                 return false;
             Object[] AElements = A.elements();
             Object[] BElements = B.elements();
@@ -223,7 +217,7 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
             return this;
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -251,7 +245,7 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
     public ObjectMatrix2D viewDice() {
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -282,7 +276,7 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
         checkBox(row, column, height, width);
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -319,7 +313,7 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
             return this;
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -347,12 +341,12 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
         // check for "all"
         if (rowIndexes == null) {
             rowIndexes = new int[rows];
-            for (int i = rows; --i >= 0;)
+            for (int i = rows; --i >= 0; )
                 rowIndexes[i] = i;
         }
         if (columnIndexes == null) {
             columnIndexes = new int[columns];
-            for (int i = columns; --i >= 0;)
+            for (int i = columns; --i >= 0; )
                 columnIndexes[i] = i;
         }
 
@@ -363,7 +357,7 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
 
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -395,7 +389,7 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
             throw new IndexOutOfBoundsException("illegal stride");
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 

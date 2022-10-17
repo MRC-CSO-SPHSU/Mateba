@@ -22,17 +22,17 @@ import edu.emory.mathcs.csparsej.tdcomplex.DZcs_common.DZcss;
  * For a square matrix <tt>A</tt>, the LU decomposition is an unit lower
  * triangular matrix <tt>L</tt>, an upper triangular matrix <tt>U</tt>, and a
  * permutation vector <tt>piv</tt> so that <tt>A(piv,:) = L*U</tt>
- * <P>
+ * <p>
  * The LU decomposition with pivoting always exists, even if the matrix is
  * singular. The primary use of the LU decomposition is in the solution of
  * square systems of simultaneous linear equations. This will fail if
  * <tt>isNonsingular()</tt> returns false.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class SparseDComplexLUDecomposition {
-    private DZcss S;
-    private DZcsn N;
+    private final DZcss S;
+    private final DZcsn N;
     private DComplexMatrix2D L;
     private DComplexMatrix2D U;
     private boolean rcMatrix = false;
@@ -40,25 +40,20 @@ public class SparseDComplexLUDecomposition {
     /**
      * Row and column dimension (square matrix).
      */
-    private int n;
+    private final int n;
 
     /**
      * Constructs and returns a new LU Decomposition object; The decomposed
      * matrices can be retrieved via instance methods of the returned
      * decomposition object.
-     * 
-     * @param A
-     *            Square matrix
-     * @param order
-     *            ordering option (0 to 3); 0: natural ordering, 1: amd(A+A'),
-     *            2: amd(S'*S), 3: amd(A'*A)
-     * @param checkIfSingular
-     *            if true, then the singularity test (based on
-     *            Dulmage-Mendelsohn decomposition) is performed.
-     * @throws IllegalArgumentException
-     *             if <tt>A</tt> is not square or is not sparse.
-     * @throws IllegalArgumentException
-     *             if <tt>order</tt> is not in [0,3]
+     *
+     * @param A               Square matrix
+     * @param order           ordering option (0 to 3); 0: natural ordering, 1: amd(A+A'),
+     *                        2: amd(S'*S), 3: amd(A'*A)
+     * @param checkIfSingular if true, then the singularity test (based on
+     *                        Dulmage-Mendelsohn decomposition) is performed.
+     * @throws IllegalArgumentException if <tt>A</tt> is not square or is not sparse.
+     * @throws IllegalArgumentException if <tt>order</tt> is not in [0,3]
      */
     public SparseDComplexLUDecomposition(DComplexMatrix2D A, int order, boolean checkIfSingular) {
         DComplexProperty.DEFAULT.checkSquare(A);
@@ -94,11 +89,10 @@ public class SparseDComplexLUDecomposition {
 
     /**
      * Returns the determinant, <tt>det(A)</tt>.
-     * 
      */
     public double[] det() {
         if (!isNonsingular())
-            return new double[] {0, 0}; // avoid rounding errors
+            return new double[]{0, 0}; // avoid rounding errors
         int pivsign = 1;
         for (int i = 0; i < n; i++) {
             if (N.pinv[i] != i) {
@@ -111,7 +105,7 @@ public class SparseDComplexLUDecomposition {
                 U = ((SparseCCDComplexMatrix2D) U).getRowCompressed();
             }
         }
-        double[] det = new double[] {pivsign, 0};
+        double[] det = new double[]{pivsign, 0};
         for (int j = 0; j < n; j++) {
             det = DComplexFunctions.mult(det).apply(U.getQuick(j, j));
         }
@@ -120,7 +114,7 @@ public class SparseDComplexLUDecomposition {
 
     /**
      * Returns the lower triangular factor, <tt>L</tt>.
-     * 
+     *
      * @return <tt>L</tt>
      */
     public DComplexMatrix2D getL() {
@@ -135,7 +129,7 @@ public class SparseDComplexLUDecomposition {
 
     /**
      * Returns a copy of the pivot permutation vector.
-     * 
+     *
      * @return piv
      */
     public int[] getPivot() {
@@ -148,7 +142,7 @@ public class SparseDComplexLUDecomposition {
 
     /**
      * Returns the upper triangular factor, <tt>U</tt>.
-     * 
+     *
      * @return <tt>U</tt>
      */
     public DComplexMatrix2D getU() {
@@ -163,7 +157,7 @@ public class SparseDComplexLUDecomposition {
 
     /**
      * Returns a copy of the symbolic LU analysis object
-     * 
+     *
      * @return symbolic LU analysis
      */
     public DZcss getSymbolicAnalysis() {
@@ -181,9 +175,9 @@ public class SparseDComplexLUDecomposition {
 
     /**
      * Returns whether the matrix is nonsingular (has an inverse).
-     * 
+     *
      * @return true if <tt>U</tt>, and hence <tt>A</tt>, is nonsingular; false
-     *         otherwise.
+     * otherwise.
      */
     public boolean isNonsingular() {
         return isNonSingular;
@@ -192,11 +186,9 @@ public class SparseDComplexLUDecomposition {
     /**
      * Solves <tt>A*x = b</tt>(in-place). Upon return <tt>b</tt> is overridden
      * with the result <tt>x</tt>.
-     * 
-     * @param b
-     *            A vector with of size A.rows();
-     * @exception IllegalArgumentException
-     *                if <tt>b.size() != A.rows()</tt> or if A is singular.
+     *
+     * @param b A vector with of size A.rows();
+     * @throws IllegalArgumentException if <tt>b.size() != A.rows()</tt> or if A is singular.
      */
     public void solve(DComplexMatrix1D b) {
         if (b.size() != n) {

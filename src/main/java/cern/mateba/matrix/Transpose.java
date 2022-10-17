@@ -8,17 +8,23 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix;
 
-/** Transpose enumeration */
+/**
+ * Transpose enumeration
+ */
 public enum Transpose {
-    /** Do not transpose */
+    /**
+     * Do not transpose
+     */
     NoTranspose,
 
-    /** Transpose */
+    /**
+     * Transpose
+     */
     Transpose;
 
     /**
      * @return the netlib character version of this designation, for use with
-     *         F2J.
+     * F2J.
      */
     public String netlib() {
         if (this == NoTranspose)

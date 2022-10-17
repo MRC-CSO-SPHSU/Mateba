@@ -15,14 +15,11 @@ package cern.mateba.function.tdcomplex;
 public interface IntIntDComplexFunction {
     /**
      * Applies a function to three arguments.
-     * 
-     * @param first
-     *            first argument passed to the function.
-     * @param second
-     *            second argument passed to the function.
-     * @param third
-     *            third argument passed to the function.
+     *
+     * @param first  first argument passed to the function.
+     * @param second second argument passed to the function.
+     * @param third  third argument passed to the function.
      * @return the result of the function.
      */
-    abstract public double[] apply(int first, int second, double[] third);
+    double[] apply(int first, int second, double[] third);
 }

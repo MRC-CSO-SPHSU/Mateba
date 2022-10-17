@@ -29,7 +29,7 @@ import java.io.Serial;
  * <p>
  * J.H. Ahrens, U. Dieter (1974): Computer methods for sampling from gamma,
  * beta, Poisson and binomial distributions, Computing 12, 223--246.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -51,13 +51,10 @@ public class NegativeBinomial extends AbstractDiscreteDistribution {
 
     /**
      * Constructs a Negative Binomial distribution. Example: n=1, p=0.5.
-     * 
-     * @param n
-     *            the number of trials.
-     * @param p
-     *            the probability of success.
-     * @param randomGenerator
-     *            a uniform random number generator.
+     *
+     * @param n               the number of trials.
+     * @param p               the probability of success.
+     * @param randomGenerator a uniform random number generator.
      */
     public NegativeBinomial(int n, double p, RandomEngine randomGenerator) {
         setRandomGenerator(randomGenerator);
@@ -77,14 +74,14 @@ public class NegativeBinomial extends AbstractDiscreteDistribution {
      * Returns a deep copy of the receiver; the copy will produce identical
      * sequences. After this call has returned, the copy and the receiver have
      * equal but separate state.
-     * 
+     *
      * @return a copy of the receiver.
      */
 
     public NegativeBinomial clone() {
         NegativeBinomial copy = (NegativeBinomial) super.clone();
         if (this.poisson != null)
-            copy.poisson = (Poisson) this.poisson.clone();
+            copy.poisson = this.poisson.clone();
         copy.poisson.setRandomGenerator(copy.getRandomGenerator());
         if (this.gamma != null)
             copy.gamma = (Gamma) this.gamma.clone();
@@ -138,11 +135,9 @@ public class NegativeBinomial extends AbstractDiscreteDistribution {
 
     /**
      * Sets the parameters number of trials and the probability of success.
-     * 
-     * @param n
-     *            the number of trials
-     * @param p
-     *            the probability of success.
+     *
+     * @param n the number of trials
+     * @param p the probability of success.
      */
     public void setNandP(int n, double p) {
         this.n = n;
@@ -152,11 +147,9 @@ public class NegativeBinomial extends AbstractDiscreteDistribution {
     /**
      * Returns a random number from the distribution with the given parameters n
      * and p.
-     * 
-     * @param n
-     *            the number of trials
-     * @param p
-     *            the probability of success.
+     *
+     * @param n the number of trials
+     * @param p the probability of success.
      */
     public static int staticNextInt(int n, double p) {
         synchronized (shared) {
@@ -175,9 +168,8 @@ public class NegativeBinomial extends AbstractDiscreteDistribution {
     /**
      * Sets the uniform random number generated shared by all <b>static</b>
      * methods.
-     * 
-     * @param randomGenerator
-     *            the new uniform random number generator to be shared.
+     *
+     * @param randomGenerator the new uniform random number generator to be shared.
      */
     private static void xstaticSetRandomGenerator(RandomEngine randomGenerator) {
         synchronized (shared) {

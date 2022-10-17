@@ -53,7 +53,7 @@ class Dgels {
      *  - if M < N, B(M+1:N,1:NRHS) is not set to zero
      */
     protected static int plasma_DGELS(int trans, int M, int N, int NRHS, double[] A, int A_offset, int LDA, double[] T,
-            int T_offset, double[] B, int B_offset, int LDB) {
+                                      int T_offset, double[] B, int B_offset, int LDB) {
         int NB, MT, NT, NTRHS;
         int status;
         double[] Abdl;
@@ -197,9 +197,9 @@ class Dgels {
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
             Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
             DbdlConvert.plasma_lapack_to_bdl(Dcommon.plasma_args.F77, Dcommon.plasma_args.F77_offset,
-                    Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N,
-                    Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
-                    Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
+                Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N,
+                Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
+                Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
             /* Convert B from LAPACK to BDL */
@@ -228,9 +228,9 @@ class Dgels {
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
             Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
             DbdlConvert.plasma_lapack_to_bdl(Dcommon.plasma_args.F77, Dcommon.plasma_args.F77_offset,
-                    Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N,
-                    Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
-                    Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
+                Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.M, Dcommon.plasma_args.N,
+                Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT, Dcommon.plasma_args.NT,
+                Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
             /* Use QR factorization */
@@ -263,10 +263,10 @@ class Dgels {
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
             Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
             Pdgeqrf.plasma_pDGEQRF(Dcommon.plasma_args.M, Dcommon.plasma_args.N, Dcommon.plasma_args.A,
-                    Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB, Dcommon.plasma_args.NBNBSIZE,
-                    Dcommon.plasma_args.IBNBSIZE, Dcommon.plasma_args.IB, Dcommon.plasma_args.MT,
-                    Dcommon.plasma_args.NT, Dcommon.plasma_args.T, Dcommon.plasma_args.T_offset,
-                    Dcommon.plasma_args.INFO, Dcommon.plasma_cntrl.cores_num, 0);
+                Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB, Dcommon.plasma_args.NBNBSIZE,
+                Dcommon.plasma_args.IBNBSIZE, Dcommon.plasma_args.IB, Dcommon.plasma_args.MT,
+                Dcommon.plasma_args.NT, Dcommon.plasma_args.T, Dcommon.plasma_args.T_offset,
+                Dcommon.plasma_args.INFO, Dcommon.plasma_cntrl.cores_num, 0);
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
             /* Return T to the user */
@@ -305,11 +305,11 @@ class Dgels {
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
             Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
             Pdormqr.plasma_pDORMQR(Dcommon.plasma_args.M, Dcommon.plasma_args.NRHS, Dcommon.plasma_args.N,
-                    Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB,
-                    Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_args.IBNBSIZE, Dcommon.plasma_args.IB,
-                    Dcommon.plasma_args.MT, Dcommon.plasma_args.NTRHS, Dcommon.plasma_args.NT, Dcommon.plasma_args.T,
-                    Dcommon.plasma_args.T_offset, Dcommon.plasma_args.B, Dcommon.plasma_args.B_offset,
-                    Dcommon.plasma_args.INFO, Dcommon.plasma_cntrl.cores_num, 0);
+                Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB,
+                Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_args.IBNBSIZE, Dcommon.plasma_args.IB,
+                Dcommon.plasma_args.MT, Dcommon.plasma_args.NTRHS, Dcommon.plasma_args.NT, Dcommon.plasma_args.T,
+                Dcommon.plasma_args.T_offset, Dcommon.plasma_args.B, Dcommon.plasma_args.B_offset,
+                Dcommon.plasma_args.INFO, Dcommon.plasma_cntrl.cores_num, 0);
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
             /* Call parallel DTRSM */
@@ -344,11 +344,11 @@ class Dgels {
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
             Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
             Pdtrsm.plasma_pDTRSM(Dplasma.PlasmaLeft, Dcommon.plasma_args.uplo, Dcommon.plasma_args.trans,
-                    Dcommon.plasma_args.diag, Dcommon.plasma_args.N, Dcommon.plasma_args.NRHS, 1.0,
-                    Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB,
-                    Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_args.NT, Dcommon.plasma_args.MT,
-                    Dcommon.plasma_args.B, Dcommon.plasma_args.B_offset, Dcommon.plasma_args.MTB,
-                    Dcommon.plasma_args.NTRHS, Dcommon.plasma_cntrl.cores_num, 0);
+                Dcommon.plasma_args.diag, Dcommon.plasma_args.N, Dcommon.plasma_args.NRHS, 1.0,
+                Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB,
+                Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_args.NT, Dcommon.plasma_args.MT,
+                Dcommon.plasma_args.B, Dcommon.plasma_args.B_offset, Dcommon.plasma_args.MTB,
+                Dcommon.plasma_args.NTRHS, Dcommon.plasma_cntrl.cores_num, 0);
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
             /* Convert A from BDL to LAPACK */
@@ -377,9 +377,9 @@ class Dgels {
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
             Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
             DbdlConvert.plasma_bdl_to_lapack(Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset,
-                    Dcommon.plasma_args.F77, Dcommon.plasma_args.F77_offset, Dcommon.plasma_args.M,
-                    Dcommon.plasma_args.N, Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT,
-                    Dcommon.plasma_args.NT, Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
+                Dcommon.plasma_args.F77, Dcommon.plasma_args.F77_offset, Dcommon.plasma_args.M,
+                Dcommon.plasma_args.N, Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT,
+                Dcommon.plasma_args.NT, Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
             /* Convert B from BDL to LAPACK */
@@ -408,16 +408,16 @@ class Dgels {
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
             Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
             DbdlConvert.plasma_bdl_to_lapack(Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset,
-                    Dcommon.plasma_args.F77, Dcommon.plasma_args.F77_offset, Dcommon.plasma_args.M,
-                    Dcommon.plasma_args.N, Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT,
-                    Dcommon.plasma_args.NT, Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
+                Dcommon.plasma_args.F77, Dcommon.plasma_args.F77_offset, Dcommon.plasma_args.M,
+                Dcommon.plasma_args.N, Dcommon.plasma_args.LDA, Dcommon.plasma_args.NB, Dcommon.plasma_args.MT,
+                Dcommon.plasma_args.NT, Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_cntrl.cores_num, 0);
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
         } else {
             /* Convert arrays from LAPACK to BDL */
             DbdlConvert.plasma_lapack_to_bdl(A, A_offset, Abdl, Abdl_offset, M, N, LDA, Dcommon.plasma_cntrl.NB, MT,
-                    NT, Dcommon.plasma_cntrl.NBNBSIZE, 1, 0);
+                NT, Dcommon.plasma_cntrl.NBNBSIZE, 1, 0);
             DbdlConvert.plasma_lapack_to_bdl(B, B_offset, Bbdl, Bbdl_offset, N, NRHS, LDB, Dcommon.plasma_cntrl.NB, NT,
-                    NTRHS, Dcommon.plasma_cntrl.NBNBSIZE, 1, 0);
+                NTRHS, Dcommon.plasma_cntrl.NBNBSIZE, 1, 0);
 
             /* Use LQ factorization */
             /* Call parallel DGEQRF */
@@ -449,10 +449,10 @@ class Dgels {
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
             Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
             Pdgelqf.plasma_pDGELQF(Dcommon.plasma_args.M, Dcommon.plasma_args.N, Dcommon.plasma_args.A,
-                    Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB, Dcommon.plasma_args.NBNBSIZE,
-                    Dcommon.plasma_args.IBNBSIZE, Dcommon.plasma_args.IB, Dcommon.plasma_args.MT,
-                    Dcommon.plasma_args.NT, Dcommon.plasma_args.T, Dcommon.plasma_args.T_offset,
-                    Dcommon.plasma_args.INFO, Dcommon.plasma_cntrl.cores_num, 0);
+                Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB, Dcommon.plasma_args.NBNBSIZE,
+                Dcommon.plasma_args.IBNBSIZE, Dcommon.plasma_args.IB, Dcommon.plasma_args.MT,
+                Dcommon.plasma_args.NT, Dcommon.plasma_args.T, Dcommon.plasma_args.T_offset,
+                Dcommon.plasma_args.INFO, Dcommon.plasma_cntrl.cores_num, 0);
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
             /* Call parallel DTRSM */
@@ -487,11 +487,11 @@ class Dgels {
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
             Dcommon.plasma_cntrl.action = Dglobal.PLASMA_ACT_STAND_BY;
             Pdtrsm.plasma_pDTRSM(Dplasma.PlasmaLeft, Dcommon.plasma_args.uplo, Dcommon.plasma_args.trans,
-                    Dcommon.plasma_args.diag, Dcommon.plasma_args.N, Dcommon.plasma_args.NRHS, 1.0,
-                    Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB,
-                    Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_args.NT, Dcommon.plasma_args.MT,
-                    Dcommon.plasma_args.B, Dcommon.plasma_args.B_offset, Dcommon.plasma_args.MTB,
-                    Dcommon.plasma_args.NTRHS, Dcommon.plasma_cntrl.cores_num, 0);
+                Dcommon.plasma_args.diag, Dcommon.plasma_args.N, Dcommon.plasma_args.NRHS, 1.0,
+                Dcommon.plasma_args.A, Dcommon.plasma_args.A_offset, Dcommon.plasma_args.NB,
+                Dcommon.plasma_args.NBNBSIZE, Dcommon.plasma_args.NT, Dcommon.plasma_args.MT,
+                Dcommon.plasma_args.B, Dcommon.plasma_args.B_offset, Dcommon.plasma_args.MTB,
+                Dcommon.plasma_args.NTRHS, Dcommon.plasma_cntrl.cores_num, 0);
             Barrier.plasma_barrier(0, Dcommon.plasma_cntrl.cores_num);
 
             /* Here LAPACK sets B(M+1:N,1:NRHS) to zero
@@ -501,9 +501,9 @@ class Dgels {
 
             /* Convert arrays from BDL to LAPACK */
             DbdlConvert.plasma_bdl_to_lapack(Abdl, Abdl_offset, A, A_offset, M, N, LDA, Dcommon.plasma_cntrl.NB, MT,
-                    NT, Dcommon.plasma_cntrl.NBNBSIZE, 1, 0);
+                NT, Dcommon.plasma_cntrl.NBNBSIZE, 1, 0);
             DbdlConvert.plasma_bdl_to_lapack(Bbdl, Bbdl_offset, B, B_offset, N, NRHS, LDB, Dcommon.plasma_cntrl.NB, NT,
-                    NTRHS, Dcommon.plasma_cntrl.NBNBSIZE, 1, 0);
+                NTRHS, Dcommon.plasma_cntrl.NBNBSIZE, 1, 0);
         }
 
         return Dplasma.PLASMA_SUCCESS;

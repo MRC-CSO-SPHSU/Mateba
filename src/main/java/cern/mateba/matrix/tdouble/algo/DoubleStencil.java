@@ -21,7 +21,7 @@ import cern.mateba.matrix.tdouble.DoubleMatrix3DProcedure;
  * shall be terminated, and how many iterations shall pass between convergence
  * checks. Always does two iterations at a time for efficiency. These class is
  * for convencience and efficiency.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 01/02/2000
  */
@@ -36,28 +36,23 @@ public class DoubleStencil {
     /**
      * 27 point stencil operation. Applies a function to a moving
      * <tt>3 x 3 x 3</tt> window.
-     * 
-     * @param A
-     *            the matrix to operate on.
-     * @param function
-     *            the function to be applied to each window.
-     * @param maxIterations
-     *            the maximum number of times the stencil shall be applied to
-     *            the matrix. Should be a multiple of 2 because two iterations
-     *            are always done in one atomic step.
-     * @param hasConverged
-     *            Convergence condition; will return before maxIterations are
-     *            done when <tt>hasConverged.apply(A)==true</tt>. Set this
-     *            parameter to <tt>null</tt> to indicate that no convergence
-     *            checks shall be made.
-     * @param convergenceIterations
-     *            the number of iterations to pass between each convergence
-     *            check. (Since a convergence may be expensive, you may want to
-     *            do it only every 2,4 or 8 iterations.)
+     *
+     * @param A                     the matrix to operate on.
+     * @param function              the function to be applied to each window.
+     * @param maxIterations         the maximum number of times the stencil shall be applied to
+     *                              the matrix. Should be a multiple of 2 because two iterations
+     *                              are always done in one atomic step.
+     * @param hasConverged          Convergence condition; will return before maxIterations are
+     *                              done when <tt>hasConverged.apply(A)==true</tt>. Set this
+     *                              parameter to <tt>null</tt> to indicate that no convergence
+     *                              checks shall be made.
+     * @param convergenceIterations the number of iterations to pass between each convergence
+     *                              check. (Since a convergence may be expensive, you may want to
+     *                              do it only every 2,4 or 8 iterations.)
      * @return the number of iterations actually executed.
      */
     public static int stencil27(DoubleMatrix3D A, cern.mateba.function.tdouble.Double27Function function,
-            int maxIterations, DoubleMatrix3DProcedure hasConverged, int convergenceIterations) {
+                                int maxIterations, DoubleMatrix3DProcedure hasConverged, int convergenceIterations) {
         DoubleMatrix3D B = A.copy();
         if (convergenceIterations <= 1)
             convergenceIterations = 2;
@@ -80,28 +75,23 @@ public class DoubleStencil {
     /**
      * 9 point stencil operation. Applies a function to a moving <tt>3 x 3</tt>
      * window.
-     * 
-     * @param A
-     *            the matrix to operate on.
-     * @param function
-     *            the function to be applied to each window.
-     * @param maxIterations
-     *            the maximum number of times the stencil shall be applied to
-     *            the matrix. Should be a multiple of 2 because two iterations
-     *            are always done in one atomic step.
-     * @param hasConverged
-     *            Convergence condition; will return before maxIterations are
-     *            done when <tt>hasConverged.apply(A)==true</tt>. Set this
-     *            parameter to <tt>null</tt> to indicate that no convergence
-     *            checks shall be made.
-     * @param convergenceIterations
-     *            the number of iterations to pass between each convergence
-     *            check. (Since a convergence may be expensive, you may want to
-     *            do it only every 2,4 or 8 iterations.)
+     *
+     * @param A                     the matrix to operate on.
+     * @param function              the function to be applied to each window.
+     * @param maxIterations         the maximum number of times the stencil shall be applied to
+     *                              the matrix. Should be a multiple of 2 because two iterations
+     *                              are always done in one atomic step.
+     * @param hasConverged          Convergence condition; will return before maxIterations are
+     *                              done when <tt>hasConverged.apply(A)==true</tt>. Set this
+     *                              parameter to <tt>null</tt> to indicate that no convergence
+     *                              checks shall be made.
+     * @param convergenceIterations the number of iterations to pass between each convergence
+     *                              check. (Since a convergence may be expensive, you may want to
+     *                              do it only every 2,4 or 8 iterations.)
      * @return the number of iterations actually executed.
      */
     public static int stencil9(DoubleMatrix2D A, cern.mateba.function.tdouble.Double9Function function,
-            int maxIterations, DoubleMatrix2DProcedure hasConverged, int convergenceIterations) {
+                               int maxIterations, DoubleMatrix2DProcedure hasConverged, int convergenceIterations) {
         DoubleMatrix2D B = A.copy();
         if (convergenceIterations <= 1)
             convergenceIterations = 2;

@@ -34,30 +34,30 @@ import cern.jet.random.engine.MersenneTwister;
  * <b>Example:</b>
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  *  Reordering
- *  [A,B,C,D,E] with indexes [0,4,2,3,1] yields 
+ *  [A,B,C,D,E] with indexes [0,4,2,3,1] yields
  *  [A,E,C,D,B]
  *  In other words, in the reordered list, we first have the element at old index 0, then the one at old index 4, then the ones at old indexes 2,3,1.
  *  g[0]&lt;--g[0], g[1]&lt;--g[4], g[2]&lt;--g[2], g[3]&lt;--g[3], g[4]&lt;--g[1].
- * 
+ *
  *  Reordering
- *  [A,B,C,D,E] with indexes [0,4,1,2,3] yields 
+ *  [A,B,C,D,E] with indexes [0,4,1,2,3] yields
  *  [A,E,B,C,D]
  *  In other words g[0]&lt;--g[0], g[1]&lt;--g[4], g[2]&lt;--g[1], g[3]&lt;--g[2], g[4]&lt;--g[3].
  * </pre>
- * 
+ *
  * </td>
  * </table>
  * <p>
  * Here are some example swappers:
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  * // a swapper knows how to swap two indexes (a,b)
- * 
+ *
  * // reordering an array
  * Swapper swapper = new Swapper() {
  *     public void swap(int a, int b) {
@@ -68,7 +68,7 @@ import cern.jet.random.engine.MersenneTwister;
  *         array[b] = tmp;
  *     }
  * };
- * 
+ *
  * // reordering a list
  * Swapper swapper = new Swapper() {
  *     public void swap(int a, int b) {
@@ -78,14 +78,14 @@ import cern.jet.random.engine.MersenneTwister;
  *         list.set(b, tmp);
  *     }
  * };
- * 
+ *
  * // reordering the rows of a 2-d matrix (see {@link cern.mateba.matrix})
  * Swapper swapper = new Swapper() {
  *     public void swap(int a, int b) {
  *         matrix.viewRow(a).swap(matrix.viewRow(b));
  *     }
  * };
- * 
+ *
  * // reordering the columns of a 2-d matrix
  * Swapper swapper = new Swapper() {
  *     public void swap(int a, int b) {
@@ -93,15 +93,14 @@ import cern.jet.random.engine.MersenneTwister;
  *     }
  * };
  * </pre>
- * 
+ *
  * </td>
  * </table>
- * 
- * @see cern.mateba.Swapper
- * @see cern.mateba.GenericSorting
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 10-Oct-99
+ * @see cern.mateba.Swapper
+ * @see cern.mateba.GenericSorting
  */
 public class GenericPermuting {
     /**
@@ -133,7 +132,7 @@ public class GenericPermuting {
      * <tt>p</tt>.
      * <p>
      * <b>Examples:</b>
-     * 
+     *
      * <pre>
      * 	 http://www.hep.net/wwwmirrors/cernlib/CNASDOC/shortwrups_html3/node255.html
      * 	 // exactly lexicographically enumerated (ascending)
@@ -149,23 +148,20 @@ public class GenericPermuting {
      * 	 permutation(20! -2 ,20) --&gt; [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 1, 2, 0]
      * 	 permutation(20! -1 ,20) --&gt; [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 0, 1]
      * 	 permutation(20!    ,20) --&gt; [19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
-     * 	
+     *
      * &lt;br&gt;
      * 	 // not exactly enumerated, rather randomly shuffled
      * 	 permutation(1,21) --&gt; [18, 20, 11, 0, 15, 1, 19, 13, 3, 6, 16, 17, 9, 5, 12, 4, 7, 14, 8, 10, 2]
      * 	 permutation(2,21) --&gt; [1, 9, 4, 16, 14, 13, 11, 20, 10, 8, 18, 0, 15, 3, 17, 5, 12, 2, 6, 7, 19]
      * 	 permutation(3,21) --&gt; [12, 0, 19, 1, 20, 5, 8, 16, 6, 14, 2, 4, 3, 17, 11, 13, 9, 10, 15, 18, 7]
-     * 
+     *
      * </pre>
-     * 
-     * @param p
-     *            the lexicographical ordinal number of the permutation to be
-     *            computed.
-     * @param N
-     *            the length of the sequence to be generated.
+     *
+     * @param p the lexicographical ordinal number of the permutation to be
+     *          computed.
+     * @param N the length of the sequence to be generated.
      * @return the <tt>p</tt>-th permutation.
-     * @throws IllegalArgumentException
-     *             if <tt>p < 1 || N < 0 || p > N!</tt>.
+     * @throws IllegalArgumentException if <tt>p < 1 || N < 0 || p > N!</tt>.
      */
     public static int[] permutation(long p, int N) {
         if (p < 1)
@@ -178,7 +174,7 @@ public class GenericPermuting {
         if (N > 20) { // factorial(21) would overflow 64-bit long)
             // Simply make a list (0,1,..N-1) and randomize it, seeded with "p".
             // Note that this is perhaps not what you want...
-            for (int i = N; --i >= 0;)
+            for (int i = N; --i >= 0; )
                 permutation[i] = i;
             var gen = new Uniform(new MersenneTwister((int) p));
             for (int i = 0; i < N - 1; i++) {
@@ -214,7 +210,7 @@ public class GenericPermuting {
         if (N > 0)
             permutation[N - 1] = tmp[0];
 
-        for (int i = N; --i >= 0;)
+        for (int i = N; --i >= 0; )
             permutation[i] = permutation[i] - 1;
         return permutation;
     }
@@ -226,7 +222,7 @@ public class GenericPermuting {
      */
     public static void permute(int[] list, int[] indexes) {
         int[] copy = list.clone();
-        for (int i = list.length; --i >= 0;)
+        for (int i = list.length; --i >= 0; )
             list[i] = copy[indexes[i]];
     }
 
@@ -237,31 +233,28 @@ public class GenericPermuting {
      * elements around, in a way that avoids stumbling over its own feet.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * 	 Reordering
-     * 	 [A,B,C,D,E] with indexes [0,4,2,3,1] yields 
+     * 	 [A,B,C,D,E] with indexes [0,4,2,3,1] yields
      * 	 [A,E,C,D,B]
      * 	 In other words g[0]&lt;--g[0], g[1]&lt;--g[4], g[2]&lt;--g[2], g[3]&lt;--g[3], g[4]&lt;--g[1].
-     * 
+     *
      * 	 Reordering
-     * 	 [A,B,C,D,E] with indexes [0,4,1,2,3] yields 
+     * 	 [A,B,C,D,E] with indexes [0,4,1,2,3] yields
      * 	 [A,E,B,C,D]
      * 	 In other words g[0]&lt;--g[0], g[1]&lt;--g[4], g[2]&lt;--g[1], g[3]&lt;--g[2], g[4]&lt;--g[3].
-     * 
+     *
      * </pre>
-     * 
+     *
      * <p>
-     * 
+     *
+     * @param indexes the permutation indexes.
+     * @param swapper an object that knows how to swap two indexes a,b.
+     * @param work    the working storage, must satisfy
+     *                <tt>work.length >= indexes.length</tt>; set
+     *                <tt>work==null</tt> if you don't care about performance.
      * @deprecated
-     * @param indexes
-     *            the permutation indexes.
-     * @param swapper
-     *            an object that knows how to swap two indexes a,b.
-     * @param work
-     *            the working storage, must satisfy
-     *            <tt>work.length >= indexes.length</tt>; set
-     *            <tt>work==null</tt> if you don't care about performance.
      */
     @Deprecated
     public static void permute(int[] indexes, cern.mateba.Swapper swapper, int[] work) {
@@ -275,34 +268,30 @@ public class GenericPermuting {
      * in a way that avoids stumbling over its own feet.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * 	 Reordering
-     * 	 [A,B,C,D,E] with indexes [0,4,2,3,1] yields 
+     * 	 [A,B,C,D,E] with indexes [0,4,2,3,1] yields
      * 	 [A,E,C,D,B]
      * 	 In other words g[0]&lt;--g[0], g[1]&lt;--g[4], g[2]&lt;--g[2], g[3]&lt;--g[3], g[4]&lt;--g[1].
-     * 
+     *
      * 	 Reordering
-     * 	 [A,B,C,D,E] with indexes [0,4,1,2,3] yields 
+     * 	 [A,B,C,D,E] with indexes [0,4,1,2,3] yields
      * 	 [A,E,B,C,D]
      * 	 In other words g[0]&lt;--g[0], g[1]&lt;--g[4], g[2]&lt;--g[1], g[3]&lt;--g[2], g[4]&lt;--g[3].
-     * 
+     *
      * </pre>
-     * 
+     *
      * <p>
-     * 
-     * @param indexes
-     *            the permutation indexes.
-     * @param swapper
-     *            an object that knows how to swap two indexes a,b.
-     * @param work1
-     *            some working storage, must satisfy
-     *            <tt>work1.length >= indexes.length</tt>; set
-     *            <tt>work1==null</tt> if you don't care about performance.
-     * @param work2
-     *            some working storage, must satisfy
-     *            <tt>work2.length >= indexes.length</tt>; set
-     *            <tt>work2==null</tt> if you don't care about performance.
+     *
+     * @param indexes the permutation indexes.
+     * @param swapper an object that knows how to swap two indexes a,b.
+     * @param work1   some working storage, must satisfy
+     *                <tt>work1.length >= indexes.length</tt>; set
+     *                <tt>work1==null</tt> if you don't care about performance.
+     * @param work2   some working storage, must satisfy
+     *                <tt>work2.length >= indexes.length</tt>; set
+     *                <tt>work2==null</tt> if you don't care about performance.
      */
     public static void permute(int[] indexes, cern.mateba.Swapper swapper, int[] work1, int[] work2) {
         // "tracks" and "pos" keeps track of the current indexes of the elements
@@ -321,7 +310,7 @@ public class GenericPermuting {
             tracks = new int[s];
         if (pos == null || pos.length < s)
             pos = new int[s];
-        for (int i = s; --i >= 0;) {
+        for (int i = s; --i >= 0; ) {
             tracks[i] = i;
             pos[i] = i;
         }
@@ -348,7 +337,7 @@ public class GenericPermuting {
      */
     public static void permute(Object[] list, int[] indexes) {
         Object[] copy = list.clone();
-        for (int i = list.length; --i >= 0;)
+        for (int i = list.length; --i >= 0; )
             list[i] = copy[indexes[i]];
     }
 }

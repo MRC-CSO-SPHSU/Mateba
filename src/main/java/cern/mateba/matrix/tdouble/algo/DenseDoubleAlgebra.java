@@ -41,18 +41,17 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Linear algebraic matrix operations operating on dense matrices.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 09/24/99
  */
 public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * A default Algebra object; has {@link DoubleProperty#DEFAULT} attached for
      * tolerance. Allows ommiting to construct an Algebra object time and again.
-     * 
+     * <p>
      * Note that this Algebra object is immutable. Any attempt to assign a new
      * Property object to it (via method <tt>setProperty</tt>), or to alter the
      * tolerance of its property object (via
@@ -63,7 +62,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
     /**
      * A default Algebra object; has {@link DoubleProperty#ZERO} attached for
      * tolerance. Allows ommiting to construct an Algebra object time and again.
-     * 
+     * <p>
      * Note that this Algebra object is immutable. Any attempt to assign a new
      * Property object to it (via method <tt>setProperty</tt>), or to alter the
      * tolerance of its property object (via
@@ -98,9 +97,8 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Constructs a new instance with the given equality tolerance.
-     * 
-     * @param tolerance
-     *            the tolerance to be used for equality operations.
+     *
+     * @param tolerance the tolerance to be used for equality operations.
      */
     public DenseDoubleAlgebra(double tolerance) {
         setProperty(new DoubleProperty(tolerance));
@@ -116,7 +114,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
     /**
      * Returns a copy of the receiver. The attached property object is also
      * copied. Hence, the property object of the copy is mutable.
-     * 
+     *
      * @return a copy of the receiver.
      */
 
@@ -134,7 +132,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Returns the determinant of matrix <tt>A</tt>.
-     * 
+     *
      * @return the determinant.
      */
     public double det(DoubleMatrix2D A) {
@@ -170,7 +168,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      */
     public static cern.mateba.function.tdouble.DoubleDoubleFunction hypotFunction() {
         return new cern.mateba.function.tdouble.DoubleDoubleFunction() {
-            public final double apply(double a, double b) {
+            public double apply(double a, double b) {
                 return hypot(a, b);
             }
         };
@@ -178,15 +176,15 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Returns the inverse or pseudo-inverse of matrix <tt>A</tt>.
-     * 
+     *
      * @return a new independent matrix; inverse(matrix) if the matrix is
-     *         square, pseudoinverse otherwise.
+     * square, pseudoinverse otherwise.
      */
     public DoubleMatrix2D inverse(DoubleMatrix2D A) {
         if (property.isSquare(A) && property.isDiagonal(A)) {
             DoubleMatrix2D inv = A.copy();
             boolean isNonSingular = true;
-            for (int i = inv.rows(); --i >= 0;) {
+            for (int i = inv.rows(); --i >= 0; ) {
                 double v = inv.getQuick(i, i);
                 isNonSingular &= (v != 0);
                 inv.setQuick(i, i, 1 / v);
@@ -207,7 +205,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Computes the Kronecker product of two real matrices.
-     * 
+     *
      * @param x
      * @param y
      * @return the Kronecker product of two real matrices
@@ -245,7 +243,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Computes the Kronecker product of two real matrices.
-     * 
+     *
      * @param X
      * @param Y
      * @return the Kronecker product of two real matrices
@@ -255,7 +253,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
         final int columns_x = X.columns();
         final int rows_y = Y.rows();
         final int columns_y = Y.columns();
-        if ((X.getClass().getName().indexOf("Dense", 0) != -1 && Y.getClass().getName().indexOf("Dense", 0) != -1)) {//both are dense 
+        if ((X.getClass().getName().indexOf("Dense") != -1 && Y.getClass().getName().indexOf("Dense") != -1)) {//both are dense
             final DoubleMatrix2D C = new DenseDoubleMatrix2D(rows_x * rows_y, columns_x * columns_y);
             int nthreads = ConcurrencyUtils.getNumberOfThreads();
             if ((nthreads > 1) && (X.size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
@@ -271,7 +269,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
                             for (int r = firstRow; r < lastRow; r++) {
                                 for (int c = 0; c < columns_x; c++) {
                                     C.viewPart(r * rows_y, c * columns_y, rows_y, columns_y).assign(Y,
-                                            DoubleFunctions.multSecond(X.getQuick(r, c)));
+                                        DoubleFunctions.multSecond(X.getQuick(r, c)));
                                 }
                             }
                         }
@@ -283,7 +281,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
                 for (int r = 0; r < rows_x; r++) {
                     for (int c = 0; c < columns_x; c++) {
                         C.viewPart(r * rows_y, c * columns_y, rows_y, columns_y).assign(Y,
-                                DoubleFunctions.multSecond(X.getQuick(r, c)));
+                            DoubleFunctions.multSecond(X.getQuick(r, c)));
                     }
                 }
             }
@@ -323,12 +321,12 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
             DoubleMatrix2D sk = multOuter(sa, sb, null);
             if (X instanceof SparseCCDoubleMatrix2D || Y instanceof SparseCCDoubleMatrix2D) {
                 return new SparseCCDoubleMatrix2D(rows_x * rows_y, columns_x * columns_y, (int[]) ik.vectorize()
-                        .elements(), (int[]) jk.vectorize().elements(),
-                        (double[]) sk.viewDice().vectorize().elements(), false, false, false);
+                    .elements(), (int[]) jk.vectorize().elements(),
+                    (double[]) sk.viewDice().vectorize().elements(), false, false, false);
             } else {
                 return new SparseRCDoubleMatrix2D(rows_x * rows_y, columns_x * columns_y, (int[]) ik.vectorize()
-                        .elements(), (int[]) jk.vectorize().elements(),
-                        (double[]) sk.viewDice().vectorize().elements(), false, false, false);
+                    .elements(), (int[]) jk.vectorize().elements(),
+                    (double[]) sk.viewDice().vectorize().elements(), false, false, false);
             }
 
         }
@@ -338,15 +336,11 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * Inner product of two vectors; <tt>Sum(x[i] * y[i])</tt>. Also known as
      * dot product. <br>
      * Equivalent to <tt>x.zDotProduct(y)</tt>.
-     * 
-     * @param x
-     *            the first source vector.
-     * @param y
-     *            the second source matrix.
+     *
+     * @param x the first source vector.
+     * @param y the second source matrix.
      * @return the inner product.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>x.size() != y.size()</tt>.
+     * @throws IllegalArgumentException if <tt>x.size() != y.size()</tt>.
      */
     public double mult(DoubleMatrix1D x, DoubleMatrix1D y) {
         return x.zDotProduct(y);
@@ -355,15 +349,11 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
     /**
      * Linear algebraic matrix-vector multiplication; <tt>z = A * y</tt>.
      * <tt>z[i] = Sum(A[i,j] * y[j]), i=0..A.rows()-1, j=0..y.size()-1</tt>.
-     * 
-     * @param A
-     *            the source matrix.
-     * @param y
-     *            the source vector.
+     *
+     * @param A the source matrix.
+     * @param y the source vector.
      * @return <tt>z</tt>; a new vector with <tt>z.size()==A.rows()</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>A.columns() != y.size()</tt>.
+     * @throws IllegalArgumentException if <tt>A.columns() != y.size()</tt>.
      */
     public DoubleMatrix1D mult(DoubleMatrix2D A, DoubleMatrix1D y) {
         return A.zMult(y, null);
@@ -373,16 +363,12 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * Linear algebraic matrix-matrix multiplication; <tt>C = A x B</tt>.
      * <tt>C[i,j] = Sum(A[i,k] * B[k,j]), k=0..n-1</tt>. <br>
      * Matrix shapes: <tt>A(m x n), B(n x p), C(m x p)</tt>.
-     * 
-     * @param A
-     *            the first source matrix.
-     * @param B
-     *            the second source matrix.
+     *
+     * @param A the first source matrix.
+     * @param B the second source matrix.
      * @return <tt>C</tt>; a new matrix holding the results, with
-     *         <tt>C.rows()=A.rows(), C.columns()==B.columns()</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>B.rows() != A.columns()</tt>.
+     * <tt>C.rows()=A.rows(), C.columns()==B.columns()</tt>.
+     * @throws IllegalArgumentException if <tt>B.rows() != A.columns()</tt>.
      */
     public DoubleMatrix2D mult(DoubleMatrix2D A, DoubleMatrix2D B) {
         return A.zMult(B, null);
@@ -390,18 +376,14 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Outer product of two vectors; Sets <tt>A[i,j] = x[i] * y[j]</tt>.
-     * 
-     * @param x
-     *            the first source vector.
-     * @param y
-     *            the second source vector.
-     * @param A
-     *            the matrix to hold the results. Set this parameter to
-     *            <tt>null</tt> to indicate that a new result matrix shall be
-     *            constructed.
+     *
+     * @param x the first source vector.
+     * @param y the second source vector.
+     * @param A the matrix to hold the results. Set this parameter to
+     *          <tt>null</tt> to indicate that a new result matrix shall be
+     *          constructed.
      * @return A (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>A.rows() != x.size() || A.columns() != y.size()</tt>.
+     * @throws IllegalArgumentException if <tt>A.rows() != x.size() || A.columns() != y.size()</tt>.
      */
     public DoubleMatrix2D multOuter(final DoubleMatrix1D x, final DoubleMatrix1D y, DoubleMatrix2D A) {
         int rows = (int) x.size();
@@ -436,7 +418,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN();
         } else {
-            for (int r = rows; --r >= 0;) {
+            for (int r = rows; --r >= 0; ) {
                 AA.viewRow(r).assign(y);
             }
         }
@@ -461,7 +443,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
             ConcurrencyUtils.waitForCompletion(futures);
             ConcurrencyUtils.resetThreadsBeginN();
         } else {
-            for (int c = columns; --c >= 0;) {
+            for (int c = columns; --c >= 0; ) {
                 AA.viewColumn(c).assign(x, DoubleFunctions.mult);
             }
         }
@@ -484,7 +466,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      */
     public double norm1(DoubleMatrix2D A) {
         double max = 0;
-        for (int column = A.columns(); --column >= 0;) {
+        for (int column = A.columns(); --column >= 0; ) {
             max = Math.max(max, norm1(A.viewColumn(column)));
         }
         return max;
@@ -503,7 +485,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * <tt>X.vectorize()</tt>;
      */
     public double vectorNorm2(final DoubleMatrix2D X) {
-        if (X.isView() == true || !(X instanceof DenseDoubleMatrix2D)) {
+        if (X.isView() || !(X instanceof DenseDoubleMatrix2D)) {
             final int rows = X.rows();
             final int columns = X.columns();
             double sum = 0;
@@ -597,7 +579,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * <tt>X.vectorize()</tt>;
      */
     public double vectorNorm2(final DoubleMatrix3D X) {
-        if (X.isView() == true || !(X instanceof DenseDoubleMatrix3D)) {
+        if (X.isView() || !(X instanceof DenseDoubleMatrix3D)) {
             final int slices = X.slices();
             final int rows = X.rows();
             final int columns = X.columns();
@@ -693,32 +675,32 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     public double norm(DoubleMatrix2D A, Norm type) {
         switch (type) {
-        case Frobenius:
-            return DEFAULT.normF(A);
-        case Infinity:
-            return DEFAULT.normInfinity(A);
-        case One:
-            return DEFAULT.norm1(A);
-        case Two:
-            return DEFAULT.norm2(A);
-        default:
-            return 0;
+            case Frobenius:
+                return DEFAULT.normF(A);
+            case Infinity:
+                return DEFAULT.normInfinity(A);
+            case One:
+                return DEFAULT.norm1(A);
+            case Two:
+                return DEFAULT.norm2(A);
+            default:
+                return 0;
         }
 
     }
 
     public double norm(DoubleMatrix1D x, Norm type) {
         switch (type) {
-        case Frobenius:
-            return DEFAULT.normF(x);
-        case Infinity:
-            return DEFAULT.normInfinity(x);
-        case One:
-            return DEFAULT.norm1(x);
-        case Two:
-            return DEFAULT.norm2(x);
-        default:
-            return 0;
+            case Frobenius:
+                return DEFAULT.normF(x);
+            case Infinity:
+                return DEFAULT.normInfinity(x);
+            case One:
+                return DEFAULT.norm1(x);
+            case Two:
+                return DEFAULT.norm2(x);
+            default:
+                return 0;
         }
 
     }
@@ -767,7 +749,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      */
     public double normInfinity(DoubleMatrix2D A) {
         double max = 0;
-        for (int row = A.rows(); --row >= 0;) {
+        for (int row = A.rows(); --row >= 0; ) {
             max = Math.max(max, norm1(A.viewRow(row)));
         }
         return max;
@@ -779,33 +761,29 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * <tt>A[indexes[i]]</tt>.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * 	 Reordering
-     * 	 [A,B,C,D,E] with indexes [0,4,2,3,1] yields 
+     * 	 [A,B,C,D,E] with indexes [0,4,2,3,1] yields
      * 	 [A,E,C,D,B]
      * 	 In other words A[0]&lt;--A[0], A[1]&lt;--A[4], A[2]&lt;--A[2], A[3]&lt;--A[3], A[4]&lt;--A[1].
-     * 
+     *
      * 	 Reordering
-     * 	 [A,B,C,D,E] with indexes [0,4,1,2,3] yields 
+     * 	 [A,B,C,D,E] with indexes [0,4,1,2,3] yields
      * 	 [A,E,B,C,D]
      * 	 In other words A[0]&lt;--A[0], A[1]&lt;--A[4], A[2]&lt;--A[1], A[3]&lt;--A[2], A[4]&lt;--A[3].
-     * 
+     *
      * </pre>
-     * 
-     * @param A
-     *            the vector to permute.
-     * @param indexes
-     *            the permutation indexes, must satisfy
-     *            <tt>indexes.length==A.size() && indexes[i] >= 0 && indexes[i] < A.size()</tt>
-     *            ;
-     * @param work
-     *            the working storage, must satisfy
-     *            <tt>work.length >= A.size()</tt>; set <tt>work==null</tt> if
-     *            you don't care about performance.
+     *
+     * @param A       the vector to permute.
+     * @param indexes the permutation indexes, must satisfy
+     *                <tt>indexes.length==A.size() && indexes[i] >= 0 && indexes[i] < A.size()</tt>
+     *                ;
+     * @param work    the working storage, must satisfy
+     *                <tt>work.length >= A.size()</tt>; set <tt>work==null</tt> if
+     *                you don't care about performance.
      * @return the modified <tt>A</tt> (for convenience only).
-     * @throws IndexOutOfBoundsException
-     *             if <tt>indexes.length != A.size()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>indexes.length != A.size()</tt>.
      */
     public DoubleMatrix1D permute(DoubleMatrix1D A, int[] indexes, double[] work) {
         // check validity
@@ -818,7 +796,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
         } else {
             A.toArray(work);
         }
-        for (int i = size; --i >= 0;)
+        for (int i = size; --i >= 0; )
             A.setQuick(i, work[indexes[i]]);
         return A;
     }
@@ -826,12 +804,12 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
     /**
      * Constructs and returns a new row and column permuted <i>selection
      * view</i> of matrix <tt>A</tt>; equivalent to
-     * {@link DoubleMatrix2D#viewSelection(int[],int[])}. The returned matrix is
+     * {@link DoubleMatrix2D#viewSelection(int[], int[])}. The returned matrix is
      * backed by this matrix, so changes in the returned matrix are reflected in
      * this matrix, and vice-versa. Use idioms like
      * <tt>result = permute(...).copy()</tt> to generate an independent sub
      * matrix.
-     * 
+     *
      * @return the new permuted selection view.
      */
     public DoubleMatrix2D permute(DoubleMatrix2D A, int[] rowIndexes, int[] columnIndexes) {
@@ -843,20 +821,16 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * as specified; Useful for pivoting. Column <tt>A[i]</tt> will go into
      * column <tt>A[indexes[i]]</tt>. Equivalent to
      * <tt>permuteRows(transpose(A), indexes, work)</tt>.
-     * 
-     * @param A
-     *            the matrix to permute.
-     * @param indexes
-     *            the permutation indexes, must satisfy
-     *            <tt>indexes.length==A.columns() && indexes[i] >= 0 && indexes[i] < A.columns()</tt>
-     *            ;
-     * @param work
-     *            the working storage, must satisfy
-     *            <tt>work.length >= A.columns()</tt>; set <tt>work==null</tt>
-     *            if you don't care about performance.
+     *
+     * @param A       the matrix to permute.
+     * @param indexes the permutation indexes, must satisfy
+     *                <tt>indexes.length==A.columns() && indexes[i] >= 0 && indexes[i] < A.columns()</tt>
+     *                ;
+     * @param work    the working storage, must satisfy
+     *                <tt>work.length >= A.columns()</tt>; set <tt>work==null</tt>
+     *                if you don't care about performance.
      * @return the modified <tt>A</tt> (for convenience only).
-     * @throws IndexOutOfBoundsException
-     *             if <tt>indexes.length != A.columns()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>indexes.length != A.columns()</tt>.
      */
     public DoubleMatrix2D permuteColumns(DoubleMatrix2D A, int[] indexes, int[] work) {
         return permuteRows(A.viewDice(), indexes, work);
@@ -868,33 +842,29 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * <tt>A[indexes[i]]</tt>.
      * <p>
      * <b>Example:</b>
-     * 
+     *
      * <pre>
      * 	 Reordering
-     * 	 [A,B,C,D,E] with indexes [0,4,2,3,1] yields 
+     * 	 [A,B,C,D,E] with indexes [0,4,2,3,1] yields
      * 	 [A,E,C,D,B]
      * 	 In other words A[0]&lt;--A[0], A[1]&lt;--A[4], A[2]&lt;--A[2], A[3]&lt;--A[3], A[4]&lt;--A[1].
-     * 
+     *
      * 	 Reordering
-     * 	 [A,B,C,D,E] with indexes [0,4,1,2,3] yields 
+     * 	 [A,B,C,D,E] with indexes [0,4,1,2,3] yields
      * 	 [A,E,B,C,D]
      * 	 In other words A[0]&lt;--A[0], A[1]&lt;--A[4], A[2]&lt;--A[1], A[3]&lt;--A[2], A[4]&lt;--A[3].
-     * 
+     *
      * </pre>
-     * 
-     * @param A
-     *            the matrix to permute.
-     * @param indexes
-     *            the permutation indexes, must satisfy
-     *            <tt>indexes.length==A.rows() && indexes[i] >= 0 && indexes[i] < A.rows()</tt>
-     *            ;
-     * @param work
-     *            the working storage, must satisfy
-     *            <tt>work.length >= A.rows()</tt>; set <tt>work==null</tt> if
-     *            you don't care about performance.
+     *
+     * @param A       the matrix to permute.
+     * @param indexes the permutation indexes, must satisfy
+     *                <tt>indexes.length==A.rows() && indexes[i] >= 0 && indexes[i] < A.rows()</tt>
+     *                ;
+     * @param work    the working storage, must satisfy
+     *                <tt>work.length >= A.rows()</tt>; set <tt>work==null</tt> if
+     *                you don't care about performance.
      * @return the modified <tt>A</tt> (for convenience only).
-     * @throws IndexOutOfBoundsException
-     *             if <tt>indexes.length != A.rows()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>indexes.length != A.rows()</tt>.
      */
     public DoubleMatrix2D permuteRows(final DoubleMatrix2D A, int[] indexes, int[] work) {
         // check validity
@@ -905,7 +875,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
         int columns = A.columns();
         if (columns < size / 10) { // quicker
             double[] doubleWork = new double[size];
-            for (int j = A.columns(); --j >= 0;)
+            for (int j = A.columns(); --j >= 0; )
                 permute(A.viewColumn(j), indexes, doubleWork);
             return A;
         }
@@ -929,17 +899,13 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * <li><tt>p &lt;  0: B = pow(inverse(A),-p)</tt>.</li>
      * </ul>
      * Implementation: Based on logarithms of 2, memory usage minimized.
-     * 
-     * @param A
-     *            the source matrix; must be square; stays unaffected by this
-     *            operation.
-     * @param p
-     *            the exponent, can be any number.
+     *
+     * @param A the source matrix; must be square; stays unaffected by this
+     *          operation.
+     * @param p the exponent, can be any number.
      * @return <tt>B</tt>, a newly constructed result matrix;
-     *         storage-independent of <tt>A</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>!property().isSquare(A)</tt>.
+     * storage-independent of <tt>A</tt>.
+     * @throws IllegalArgumentException if <tt>!property().isSquare(A)</tt>.
      */
     public DoubleMatrix2D pow(DoubleMatrix2D A, int p) {
         // matrix multiplication based on log2 method: A*A*....*A is slow, ((A *
@@ -1009,7 +975,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Returns the property object attached to this Algebra, defining tolerance.
-     * 
+     *
      * @return the Property object.
      * @see #setProperty(DoubleProperty)
      */
@@ -1034,15 +1000,12 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Attaches the given property object to this Algebra, defining tolerance.
-     * 
-     * @param property
-     *            the Property object to be attached.
-     * @throws UnsupportedOperationException
-     *             if <tt>this==DEFAULT && property!=this.property()</tt> - The
-     *             DEFAULT Algebra object is immutable.
-     * @throws UnsupportedOperationException
-     *             if <tt>this==ZERO && property!=this.property()</tt> - The
-     *             ZERO Algebra object is immutable.
+     *
+     * @param property the Property object to be attached.
+     * @throws UnsupportedOperationException if <tt>this==DEFAULT && property!=this.property()</tt> - The
+     *                                       DEFAULT Algebra object is immutable.
+     * @throws UnsupportedOperationException if <tt>this==ZERO && property!=this.property()</tt> - The
+     *                                       ZERO Algebra object is immutable.
      * @see #property
      */
     public void setProperty(DoubleProperty property) {
@@ -1055,11 +1018,9 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Solves the upper triangular system U*x=b;
-     * 
-     * @param U
-     *            upper triangular matrix
-     * @param b
-     *            right-hand side
+     *
+     * @param U upper triangular matrix
+     * @param b right-hand side
      * @return x, a new independent matrix;
      */
     public DoubleMatrix1D backwardSolve(final DoubleMatrix2D U, final DoubleMatrix1D b) {
@@ -1076,11 +1037,9 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Solves the lower triangular system U*x=b;
-     * 
-     * @param L
-     *            lower triangular matrix
-     * @param b
-     *            right-hand side
+     *
+     * @param L lower triangular matrix
+     * @param b right-hand side
      * @return x, a new independent matrix;
      */
     public DoubleMatrix1D forwardSolve(final DoubleMatrix2D L, final DoubleMatrix1D b) {
@@ -1097,9 +1056,9 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Solves A*x = b.
-     * 
+     *
      * @return x; a new independent matrix; solution if A is square, least
-     *         squares solution otherwise.
+     * squares solution otherwise.
      */
     public DoubleMatrix1D solve(DoubleMatrix2D A, DoubleMatrix1D b) {
         if (A.rows() == A.columns()) {
@@ -1113,9 +1072,9 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Solves A*X = B.
-     * 
+     *
      * @return X; a new independent matrix; solution if A is square, least
-     *         squares solution otherwise.
+     * squares solution otherwise.
      */
     public DoubleMatrix2D solve(DoubleMatrix2D A, DoubleMatrix2D B) {
         if (A.rows() == A.columns()) {
@@ -1129,9 +1088,9 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Solves X*A = B, which is also A'*X' = B'.
-     * 
+     *
      * @return X; a new independent matrix; solution if A is square, least
-     *         squares solution otherwise.
+     * squares solution otherwise.
      */
     public DoubleMatrix2D solveTranspose(DoubleMatrix2D A, DoubleMatrix2D B) {
         return solve(transpose(A), transpose(B));
@@ -1139,28 +1098,23 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Copies the columns of the indicated rows into a new sub matrix.
-     * 
+     *
      * <tt>sub[0..rowIndexes.length-1,0..columnTo-columnFrom] = A[rowIndexes(:),columnFrom..columnTo]</tt>
      * ; The returned matrix is <i>not backed</i> by this matrix, so changes in
      * the returned matrix are <i>not reflected</i> in this matrix, and
      * vice-versa.
-     * 
-     * @param A
-     *            the source matrix to copy from.
-     * @param rowIndexes
-     *            the indexes of the rows to copy. May be unsorted.
-     * @param columnFrom
-     *            the index of the first column to copy (inclusive).
-     * @param columnTo
-     *            the index of the last column to copy (inclusive).
+     *
+     * @param A          the source matrix to copy from.
+     * @param rowIndexes the indexes of the rows to copy. May be unsorted.
+     * @param columnFrom the index of the first column to copy (inclusive).
+     * @param columnTo   the index of the last column to copy (inclusive).
      * @return a new sub matrix; with
-     *         <tt>sub.rows()==rowIndexes.length; sub.columns()==columnTo-columnFrom+1</tt>
-     *         .
-     * @throws IndexOutOfBoundsException
-     *             if
-     * 
-     *             <tt>columnFrom<0 || columnTo-columnFrom+1<0 || columnTo+1>matrix.columns() || for any row=rowIndexes[i]: row < 0 || row >= matrix.rows()</tt>
-     *             .
+     * <tt>sub.rows()==rowIndexes.length; sub.columns()==columnTo-columnFrom+1</tt>
+     * .
+     * @throws IndexOutOfBoundsException if
+     *
+     *                                   <tt>columnFrom<0 || columnTo-columnFrom+1<0 || columnTo+1>matrix.columns() || for any row=rowIndexes[i]: row < 0 || row >= matrix.rows()</tt>
+     *                                   .
      */
     public DoubleMatrix2D subMatrix(DoubleMatrix2D A, int[] rowIndexes, int columnFrom, int columnTo) {
         int width = columnTo - columnFrom + 1;
@@ -1168,7 +1122,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
         A = A.viewPart(0, columnFrom, rows, width);
         DoubleMatrix2D sub = A.like(rowIndexes.length, width);
 
-        for (int r = rowIndexes.length; --r >= 0;) {
+        for (int r = rowIndexes.length; --r >= 0; ) {
             int row = rowIndexes[r];
             if (row < 0 || row >= rows)
                 throw new IndexOutOfBoundsException("Illegal Index");
@@ -1179,28 +1133,23 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Copies the rows of the indicated columns into a new sub matrix.
-     * 
+     *
      * <tt>sub[0..rowTo-rowFrom,0..columnIndexes.length-1] = A[rowFrom..rowTo,columnIndexes(:)]</tt>
      * ; The returned matrix is <i>not backed</i> by this matrix, so changes in
      * the returned matrix are <i>not reflected</i> in this matrix, and
      * vice-versa.
-     * 
-     * @param A
-     *            the source matrix to copy from.
-     * @param rowFrom
-     *            the index of the first row to copy (inclusive).
-     * @param rowTo
-     *            the index of the last row to copy (inclusive).
-     * @param columnIndexes
-     *            the indexes of the columns to copy. May be unsorted.
+     *
+     * @param A             the source matrix to copy from.
+     * @param rowFrom       the index of the first row to copy (inclusive).
+     * @param rowTo         the index of the last row to copy (inclusive).
+     * @param columnIndexes the indexes of the columns to copy. May be unsorted.
      * @return a new sub matrix; with
-     *         <tt>sub.rows()==rowTo-rowFrom+1; sub.columns()==columnIndexes.length</tt>
-     *         .
-     * @throws IndexOutOfBoundsException
-     *             if
-     * 
-     *             <tt>rowFrom<0 || rowTo-rowFrom+1<0 || rowTo+1>matrix.rows() || for any col=columnIndexes[i]: col < 0 || col >= matrix.columns()</tt>
-     *             .
+     * <tt>sub.rows()==rowTo-rowFrom+1; sub.columns()==columnIndexes.length</tt>
+     * .
+     * @throws IndexOutOfBoundsException if
+     *
+     *                                   <tt>rowFrom<0 || rowTo-rowFrom+1<0 || rowTo+1>matrix.rows() || for any col=columnIndexes[i]: col < 0 || col >= matrix.columns()</tt>
+     *                                   .
      */
     public DoubleMatrix2D subMatrix(DoubleMatrix2D A, int rowFrom, int rowTo, int[] columnIndexes) {
         if (rowTo - rowFrom >= A.rows())
@@ -1210,7 +1159,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
         A = A.viewPart(rowFrom, 0, height, columns);
         DoubleMatrix2D sub = A.like(height, columnIndexes.length);
 
-        for (int c = columnIndexes.length; --c >= 0;) {
+        for (int c = columnIndexes.length; --c >= 0; ) {
             int column = columnIndexes[c];
             if (column < 0 || column >= columns)
                 throw new IndexOutOfBoundsException("Illegal Index");
@@ -1226,22 +1175,16 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * reflected in this matrix, and vice-versa. Use idioms like
      * <tt>result = subMatrix(...).copy()</tt> to generate an independent sub
      * matrix.
-     * 
-     * @param A
-     *            the source matrix.
-     * @param fromRow
-     *            The index of the first row (inclusive).
-     * @param toRow
-     *            The index of the last row (inclusive).
-     * @param fromColumn
-     *            The index of the first column (inclusive).
-     * @param toColumn
-     *            The index of the last column (inclusive).
+     *
+     * @param A          the source matrix.
+     * @param fromRow    The index of the first row (inclusive).
+     * @param toRow      The index of the last row (inclusive).
+     * @param fromColumn The index of the first column (inclusive).
+     * @param toColumn   The index of the last column (inclusive).
      * @return a new sub-range view.
-     * @throws IndexOutOfBoundsException
-     *             if
-     * 
-     *             <tt>fromColumn<0 || toColumn-fromColumn+1<0 || toColumn>=A.columns() || fromRow<0 || toRow-fromRow+1<0 || toRow>=A.rows()</tt>
+     * @throws IndexOutOfBoundsException if
+     *
+     *                                   <tt>fromColumn<0 || toColumn-fromColumn+1<0 || toColumn>=A.columns() || fromRow<0 || toRow-fromRow+1<0 || toRow>=A.rows()</tt>
      */
     public DoubleMatrix2D subMatrix(DoubleMatrix2D A, int fromRow, int toRow, int fromColumn, int toColumn) {
         return A.viewPart(fromRow, fromColumn, toRow - fromRow + 1, toColumn - fromColumn + 1);
@@ -1258,7 +1201,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
     /**
      * Returns a String with (propertyName, propertyValue) pairs. Useful for
      * debugging or to quickly get the rough picture. For example,
-     * 
+     *
      * <pre>
      * 	 cond          : 14.073264490042144
      * 	 det           : Illegal operation or error: Matrix must be square.
@@ -1268,7 +1211,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * 	 normInfinity  : 1.5406551198102534
      * 	 rank          : 3
      * 	 trace         : 0
-     * 
+     *
      * </pre>
      */
     public String toString(DoubleMatrix2D matrix) {
@@ -1378,13 +1321,13 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * Returns the results of <tt>toString(A)</tt> and additionally the results
      * of all sorts of decompositions applied to the given matrix. Useful for
      * debugging or to quickly get the rough picture. For example,
-     * 
+     *
      * <pre>
      * 	 A = 3 x 3 matrix
      * 	 249  66  68
      * 	 104 214 108
      * 	 144 146 293
-     * 
+     *
      * 	 cond         : 3.931600417472078
      * 	 det          : 9638870.0
      * 	 norm1        : 497.0
@@ -1393,7 +1336,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * 	 normInfinity : 583.0
      * 	 rank         : 3
      * 	 trace        : 756.0
-     * 
+     *
      * 	 density                      : 1.0
      * 	 isDiagonal                   : false
      * 	 isDiagonallyDominantByColumn : true
@@ -1420,66 +1363,66 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * 	 lowerBandwidth               : 2
      * 	 semiBandwidth                : 3
      * 	 upperBandwidth               : 2
-     * 
+     *
      * 	 -----------------------------------------------------------------------------
      * 	 LUDecompositionQuick(A) --&gt; isNonSingular(A), det(A), pivot, L, U, inverse(A)
      * 	 -----------------------------------------------------------------------------
      * 	 isNonSingular = true
      * 	 det = 9638870.0
      * 	 pivot = [0, 1, 2]
-     * 
+     *
      * 	 L = 3 x 3 matrix
      * 	 1        0       0
      * 	 0.417671 1       0
      * 	 0.578313 0.57839 1
-     * 
+     *
      * 	 U = 3 x 3 matrix
-     * 	 249  66         68       
+     * 	 249  66         68
      * 	 0 186.433735  79.598394
      * 	 0   0        207.635819
-     * 
+     *
      * 	 inverse(A) = 3 x 3 matrix
-     * 	 0.004869 -0.000976 -0.00077 
+     * 	 0.004869 -0.000976 -0.00077
      * 	 -0.001548  0.006553 -0.002056
      * 	 -0.001622 -0.002786  0.004816
-     * 
+     *
      * 	 -----------------------------------------------------------------
      * 	 QRDecomposition(A) --&gt; hasFullRank(A), H, Q, R, pseudo inverse(A)
      * 	 -----------------------------------------------------------------
      * 	 hasFullRank = true
-     * 
+     *
      * 	 H = 3 x 3 matrix
      * 	 1.814086 0        0
      * 	 0.34002  1.903675 0
      * 	 0.470797 0.428218 2
-     * 
+     *
      * 	 Q = 3 x 3 matrix
      * 	 -0.814086  0.508871  0.279845
-     * 	 -0.34002  -0.808296  0.48067 
+     * 	 -0.34002  -0.808296  0.48067
      * 	 -0.470797 -0.296154 -0.831049
-     * 
+     *
      * 	 R = 3 x 3 matrix
      * 	 -305.864349 -195.230337 -230.023539
      * 	 0        -182.628353  467.703164
-     * 	 0           0        -309.13388 
-     * 
+     * 	 0           0        -309.13388
+     *
      * 	 pseudo inverse(A) = 3 x 3 matrix
      * 	 0.006601  0.001998 -0.005912
      * 	 -0.005105  0.000444  0.008506
      * 	 -0.000905 -0.001555  0.002688
-     * 
+     *
      * 	 --------------------------------------------------------------------------
      * 	 CholeskyDecomposition(A) --&gt; isSymmetricPositiveDefinite(A), L, inverse(A)
      * 	 --------------------------------------------------------------------------
      * 	 isSymmetricPositiveDefinite = false
-     * 
+     *
      * 	 L = 3 x 3 matrix
-     * 	 15.779734  0         0       
-     * 	 6.590732 13.059948  0       
+     * 	 15.779734  0         0
+     * 	 6.590732 13.059948  0
      * 	 9.125629  6.573948 12.903724
-     * 
+     *
      * 	 inverse(A) = Illegal operation or error: Matrix is not symmetric positive definite.
-     * 
+     *
      * 	 ---------------------------------------------------------------------
      * 	 EigenvalueDecomposition(A) --&gt; D, V, realEigenvalues, imagEigenvalues
      * 	 ---------------------------------------------------------------------
@@ -1487,39 +1430,39 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * 	 462.796507 172.382058 120.821435
      * 	 imagEigenvalues = 1 x 3 matrix
      * 	 0 0 0
-     * 
+     *
      * 	 D = 3 x 3 matrix
-     * 	 462.796507   0          0       
-     * 	 0        172.382058   0       
+     * 	 462.796507   0          0
+     * 	 0        172.382058   0
      * 	 0          0        120.821435
-     * 
+     *
      * 	 V = 3 x 3 matrix
      * 	 -0.398877 -0.778282  0.094294
      * 	 -0.500327  0.217793 -0.806319
      * 	 -0.768485  0.66553   0.604862
-     * 
+     *
      * 	 ---------------------------------------------------------------------
      * 	 SingularValueDecomposition(A) --&gt; cond(A), rank(A), norm2(A), U, S, V
      * 	 ---------------------------------------------------------------------
      * 	 cond = 3.931600417472078
      * 	 rank = 3
      * 	 norm2 = 473.34508217011404
-     * 
+     *
      * 	 U = 3 x 3 matrix
      * 	 0.46657  -0.877519  0.110777
      * 	 0.50486   0.161382 -0.847982
-     * 	 0.726243  0.45157   0.51832 
-     * 
+     * 	 0.726243  0.45157   0.51832
+     *
      * 	 S = 3 x 3 matrix
-     * 	 473.345082   0          0       
-     * 	 0        169.137441   0       
+     * 	 473.345082   0          0
+     * 	 0        169.137441   0
      * 	 0          0        120.395013
-     * 
+     *
      * 	 V = 3 x 3 matrix
      * 	 0.577296 -0.808174  0.116546
      * 	 0.517308  0.251562 -0.817991
      * 	 0.631761  0.532513  0.563301
-     * 
+     *
      * </pre>
      */
     public String toVerboseString(DoubleMatrix2D matrix) {
@@ -1540,7 +1483,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
             buf.append("\n\n" + constructionException + " LUDecomposition: " + exc.getMessage());
         }
         if (lu != null)
-            buf.append("\n\n" + lu.toString());
+            buf.append("\n\n" + lu);
 
         DenseDoubleQRDecomposition qr = null;
         try {
@@ -1549,7 +1492,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
             buf.append("\n\n" + constructionException + " QRDecomposition: " + exc.getMessage());
         }
         if (qr != null)
-            buf.append("\n\n" + qr.toString());
+            buf.append("\n\n" + qr);
 
         DenseDoubleCholeskyDecomposition chol = null;
         try {
@@ -1558,7 +1501,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
             buf.append("\n\n" + constructionException + " CholeskyDecomposition: " + exc.getMessage());
         }
         if (chol != null)
-            buf.append("\n\n" + chol.toString());
+            buf.append("\n\n" + chol);
 
         DenseDoubleEigenvalueDecomposition eig = null;
         try {
@@ -1567,7 +1510,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
             buf.append("\n\n" + constructionException + " EigenvalueDecomposition: " + exc.getMessage());
         }
         if (eig != null)
-            buf.append("\n\n" + eig.toString());
+            buf.append("\n\n" + eig);
 
         DenseDoubleSingularValueDecomposition svd = null;
         try {
@@ -1576,7 +1519,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
             buf.append("\n\n" + constructionException + " SingularValueDecomposition: " + exc.getMessage());
         }
         if (svd != null)
-            buf.append("\n\n" + svd.toString());
+            buf.append("\n\n" + svd);
 
         return buf.toString();
     }
@@ -1587,7 +1530,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      */
     public double trace(DoubleMatrix2D A) {
         double sum = 0;
-        for (int i = Math.min(A.rows(), A.columns()); --i >= 0;) {
+        for (int i = Math.min(A.rows(), A.columns()); --i >= 0; ) {
             sum += A.getQuick(i, i);
         }
         return sum;
@@ -1619,7 +1562,7 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
      * 4, 5, 6</td>
      * </tr>
      * </table>
-     * 
+     *
      * @return a new transposed view.
      */
     public DoubleMatrix2D transpose(DoubleMatrix2D A) {
@@ -1628,15 +1571,14 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
 
     /**
      * Modifies the matrix to be a lower trapezoidal matrix.
-     * 
+     *
      * @return <tt>A</tt> (for convenience only).
-     * 
      */
     public DoubleMatrix2D trapezoidalLower(DoubleMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int r = rows; --r >= 0;) {
-            for (int c = columns; --c >= 0;) {
+        for (int r = rows; --r >= 0; ) {
+            for (int c = columns; --c >= 0; ) {
                 if (r < c)
                     A.setQuick(r, c, 0);
             }
@@ -1647,11 +1589,9 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
     /**
      * Outer product of two vectors; Returns a matrix with
      * <tt>A[i,j] = x[i] * y[j]</tt>.
-     * 
-     * @param x
-     *            the first source vector.
-     * @param y
-     *            the second source vector.
+     *
+     * @param x the first source vector.
+     * @param y the second source vector.
      * @return the outer product </tt>A</tt>.
      */
     public DoubleMatrix2D xmultOuter(DoubleMatrix1D x, DoubleMatrix1D y) {
@@ -1663,15 +1603,11 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
     /**
      * Linear algebraic matrix power;
      * <tt>B = A<sup>k</sup> <==> B = A*A*...*A</tt>.
-     * 
-     * @param A
-     *            the source matrix; must be square.
-     * @param k
-     *            the exponent, can be any number.
+     *
+     * @param A the source matrix; must be square.
+     * @param k the exponent, can be any number.
      * @return a new result matrix.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>!Testing.isSquare(A)</tt>.
+     * @throws IllegalArgumentException if <tt>!Testing.isSquare(A)</tt>.
      */
     public DoubleMatrix2D xpowSlow(DoubleMatrix2D A, int k) {
         // cern.mateba.Timer timer = new cern.mateba.Timer().start();

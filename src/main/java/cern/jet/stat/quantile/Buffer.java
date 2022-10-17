@@ -27,9 +27,8 @@ public class Buffer extends AllocatableBuffer {
 
     /**
      * This method was created in VisualAge.
-     * 
-     * @param k
-     *            int
+     *
+     * @param k int
      */
     public Buffer(int k) {
         super(k);
@@ -75,7 +74,7 @@ public class Buffer extends AllocatableBuffer {
 
     /**
      * Returns a deep copy of the receiver.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
 
@@ -125,10 +124,9 @@ public class Buffer extends AllocatableBuffer {
      * form {1,2,...size()}. If no element is <= element, then the rank is zero.
      * If the element lies in between two contained elements, then uses linear
      * interpolation.
-     * 
+     *
+     * @param element the element to search for
      * @return the rank of the element.
-     * @param element
-     *            the element to search for
      */
     public double rank(double element) {
         this.sort();
@@ -163,8 +161,8 @@ public class Buffer extends AllocatableBuffer {
      */
 
     public String toString() {
-        return "k=" + this.k + ", w=" + Long.toString(weight()) + ", l=" + Integer.toString(level()) + ", size="
-                + values.size();
+        return "k=" + this.k + ", w=" + Long.toString(weight()) + ", l=" + level() + ", size="
+            + values.size();
         // ", v=" + values.toString();
     }
 }

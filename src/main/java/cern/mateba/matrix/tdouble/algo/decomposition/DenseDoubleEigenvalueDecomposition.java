@@ -17,13 +17,13 @@ import cern.mateba.matrix.tdouble.algo.DoubleProperty;
 
 /**
  * Eigenvalues and eigenvectors of a real matrix <tt>A</tt>.
- * <P>
+ * <p>
  * If <tt>A</tt> is symmetric, then <tt>A = V*D*V'</tt> where the eigenvalue matrix
  * <tt>D</tt> is diagonal and the eigenvector matrix <tt>V</tt> is orthogonal.
  * I.e. <tt>A = V.mult(D.mult(transpose(V)))</tt> and
  * <tt>V.mult(transpose(V))</tt> equals the identity matrix.
- * 
- * <P>
+ *
+ * <p>
  * If <tt>A</tt> is not symmetric, then the eigenvalue matrix <tt>D</tt> is
  * block diagonal with the real eigenvalues in 1-by-1 blocks and any complex
  * eigenvalues, <tt>lambda + i*mu</tt>, in 2-by-2 blocks,
@@ -38,42 +38,43 @@ public class DenseDoubleEigenvalueDecomposition implements java.io.Serializable 
 
     /**
      * Row and column dimension (square matrix).
-     * 
+     *
      * @serial matrix dimension.
      */
-    private int n;
+    private final int n;
 
     /**
      * Symmetry flag.
-     * 
+     *
      * @serial internal symmetry flag.
      */
-    private boolean issymmetric;
+    private final boolean issymmetric;
 
     /**
      * Arrays for internal storage of eigenvalues.
-     * 
+     *
      * @serial internal storage of eigenvalues.
      */
-    private double[] d, e;
+    private final double[] d;
+    private final double[] e;
 
     /**
      * Array for internal storage of eigenvectors.
-     * 
+     *
      * @serial internal storage of eigenvectors.
      */
-    private double[][] V;
+    private final double[][] V;
 
     /**
      * Array for internal storage of nonsymmetric Hessenberg form.
-     * 
+     *
      * @serial internal storage of nonsymmetric Hessenberg form.
      */
     private double[][] H;
 
     /**
      * Working storage for nonsymmetric algorithm.
-     * 
+     *
      * @serial working storage for nonsymmetric algorithm.
      */
     private double[] ort;
@@ -87,11 +88,9 @@ public class DenseDoubleEigenvalueDecomposition implements java.io.Serializable 
      * decomposed matrices can be retrieved via instance methods of the returned
      * decomposition object. Checks for symmetry, then constructs the eigenvalue
      * decomposition.
-     * 
-     * @param A
-     *            A square matrix.
-     * @throws IllegalArgumentException
-     *             if <tt>A</tt> is not square.
+     *
+     * @param A A square matrix.
+     * @throws IllegalArgumentException if <tt>A</tt> is not square.
      */
     public DenseDoubleEigenvalueDecomposition(DoubleMatrix2D A) {
         DoubleProperty.DEFAULT.checkSquare(A);
@@ -151,7 +150,7 @@ public class DenseDoubleEigenvalueDecomposition implements java.io.Serializable 
 
     /**
      * Returns the block diagonal eigenvalue matrix, <tt>D</tt>.
-     * 
+     *
      * @return <tt>D</tt>
      */
     public DoubleMatrix2D getD() {
@@ -172,8 +171,8 @@ public class DenseDoubleEigenvalueDecomposition implements java.io.Serializable 
 
     /**
      * Returns the imaginary parts of the eigenvalues.
-     * 
-     * @return imag(diag(D))
+     *
+     * @return imag(diag ( D))
      */
     public DoubleMatrix1D getImagEigenvalues() {
         return DoubleFactory1D.dense.make(e);
@@ -181,8 +180,8 @@ public class DenseDoubleEigenvalueDecomposition implements java.io.Serializable 
 
     /**
      * Returns the real parts of the eigenvalues.
-     * 
-     * @return real(diag(D))
+     *
+     * @return real(diag ( D))
      */
     public DoubleMatrix1D getRealEigenvalues() {
         return DoubleFactory1D.dense.make(d);
@@ -190,7 +189,7 @@ public class DenseDoubleEigenvalueDecomposition implements java.io.Serializable 
 
     /**
      * Returns the eigenvector matrix, <tt>V</tt>
-     * 
+     *
      * @return <tt>V</tt>
      */
     public DoubleMatrix2D getV() {
@@ -392,7 +391,7 @@ public class DenseDoubleEigenvalueDecomposition implements java.io.Serializable 
                         break;
                     }
                     if (Math.abs(H[m][m - 1]) * (Math.abs(q) + Math.abs(r)) < eps
-                            * (Math.abs(p) * (Math.abs(H[m - 1][m - 1]) + Math.abs(z) + Math.abs(H[m + 1][m + 1])))) {
+                        * (Math.abs(p) * (Math.abs(H[m - 1][m - 1]) + Math.abs(z) + Math.abs(H[m + 1][m + 1])))) {
                         break;
                     }
                     m--;
@@ -618,9 +617,7 @@ public class DenseDoubleEigenvalueDecomposition implements java.io.Serializable 
 
         for (int i = 0; i < nn; i++) {
             if (i < low | i > high) {
-                for (int j = i; j < nn; j++) {
-                    V[i][j] = H[i][j];
-                }
+                if (nn - i >= 0) System.arraycopy(H[i], i, V[i], i, nn - i);
             }
         }
 
@@ -733,11 +730,11 @@ public class DenseDoubleEigenvalueDecomposition implements java.io.Serializable 
     /**
      * Returns a String with (propertyName, propertyValue) pairs. Useful for
      * debugging or to quickly get the rough picture. For example,
-     * 
+     *
      * <pre>
      * 	 rank          : 3
      * 	 trace         : 0
-     * 
+     *
      * </pre>
      */
 
@@ -751,28 +748,28 @@ public class DenseDoubleEigenvalueDecomposition implements java.io.Serializable 
 
         buf.append("realEigenvalues = ");
         try {
-            buf.append(String.valueOf(this.getRealEigenvalues()));
+            buf.append(this.getRealEigenvalues());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\nimagEigenvalues = ");
         try {
-            buf.append(String.valueOf(this.getImagEigenvalues()));
+            buf.append(this.getImagEigenvalues());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\n\nD = ");
         try {
-            buf.append(String.valueOf(this.getD()));
+            buf.append(this.getD());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\n\nV = ");
         try {
-            buf.append(String.valueOf(this.getV()));
+            buf.append(this.getV());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
@@ -910,9 +907,7 @@ public class DenseDoubleEigenvalueDecomposition implements java.io.Serializable 
         // Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
         // Fortran subroutine in EISPACK.
 
-        for (int j = 0; j < n; j++) {
-            d[j] = V[n - 1][j];
-        }
+        if (n >= 0) System.arraycopy(V[n - 1], 0, d, 0, n);
 
         // Householder reduction to tridiagonal form.
 

@@ -22,7 +22,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * href="package-summary.html">package summary</a> and javadoc <a
  * href="package-tree.html">tree view</a> to get the broad picture.
  * <p>
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
@@ -53,16 +53,13 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @param dindex
-     *            index of the diagonal.
-     * @throws IllegalArgumentException
-     *             if
-     * 
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length || index < -rows+1 || index > columns - 1</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @param dindex index of the diagonal.
+     * @throws IllegalArgumentException if
+     *
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length || index < -rows+1 || index > columns - 1</tt>
+     *                                  .
      */
     public DiagonalObjectMatrix2D(Object[][] values, int dindex) {
         this(values.length, values.length == 0 ? 0 : values[0].length, dindex);
@@ -72,15 +69,11 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
     /**
      * Constructs a matrix with a given number of rows and columns. All entries
      * are initially <tt>0</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param dindex
-     *            index of the diagonal.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0 (Object)size > Integer.MAX_VALUE</tt>.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @param dindex  index of the diagonal.
+     * @throws IllegalArgumentException if <tt>size<0 (Object)size > Integer.MAX_VALUE</tt>.
      */
     public DiagonalObjectMatrix2D(int rows, int columns, int dindex) {
         super(null);
@@ -124,14 +117,14 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
     }
 
     public ObjectMatrix2D assign(final cern.mateba.function.tobject.ObjectFunction function) {
-        for (int j = dlength; --j >= 0;) {
+        for (int j = dlength; --j >= 0; ) {
             elements[j] = function.apply(elements[j]);
         }
         return this;
     }
 
     public ObjectMatrix2D assign(Object value) {
-        for (int i = dlength; --i >= 0;)
+        for (int i = dlength; --i >= 0; )
             elements[i] = value;
         return this;
     }
@@ -150,15 +143,14 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
                 futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                     public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            elements[r] = values[r];
-                        }
+                        if (lastRow - firstRow >= 0)
+                            System.arraycopy(values, firstRow, elements, firstRow, lastRow - firstRow);
                     }
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
         } else {
-            for (int r = dlength; --r >= 0;) {
+            for (int r = dlength; --r >= 0; ) {
                 elements[r] = values[r];
             }
         }
@@ -168,7 +160,7 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
     public ObjectMatrix2D assign(final Object[][] values) {
         if (values.length != rows)
             throw new IllegalArgumentException("Must have same number of rows: rows=" + values.length + "rows()="
-                    + rows());
+                + rows());
         int r, c;
         if (dindex >= 0) {
             r = 0;
@@ -180,7 +172,7 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
         for (int i = 0; i < dlength; i++) {
             if (values[i].length != columns) {
                 throw new IllegalArgumentException("Must have same number of columns in every row: columns="
-                        + values[r].length + "columns()=" + columns());
+                    + values[r].length + "columns()=" + columns());
             }
             elements[i] = values[r++][c++];
         }
@@ -193,8 +185,7 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
             return this; // nothing to do
         checkShape(source);
 
-        if (source instanceof DiagonalObjectMatrix2D) {
-            DiagonalObjectMatrix2D other = (DiagonalObjectMatrix2D) source;
+        if (source instanceof DiagonalObjectMatrix2D other) {
             if ((dindex != other.dindex) || (dlength != other.dlength)) {
                 throw new IllegalArgumentException("source is DiagonalObjectMatrix2D with different diagonal stored.");
             }
@@ -208,8 +199,7 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
 
     public ObjectMatrix2D assign(final ObjectMatrix2D y, final cern.mateba.function.tobject.ObjectObjectFunction function) {
         checkShape(y);
-        if (y instanceof DiagonalObjectMatrix2D) {
-            DiagonalObjectMatrix2D other = (DiagonalObjectMatrix2D) y;
+        if (y instanceof DiagonalObjectMatrix2D other) {
             if ((dindex != other.dindex) || (dlength != other.dlength)) {
                 throw new IllegalArgumentException("y is DiagonalObjectMatrix2D with different diagonal stored.");
             }
@@ -238,7 +228,7 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
                 }
                 ConcurrencyUtils.waitForCompletion(futures);
             } else {
-                for (int j = dlength; --j >= 0;) {
+                for (int j = dlength; --j >= 0; ) {
                     elements[j] = function.apply(elements[j], otherElements[j]);
                 }
             }
@@ -297,8 +287,7 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
     }
 
     public boolean equals(Object obj) {
-        if (obj instanceof DiagonalObjectMatrix2D) {
-            DiagonalObjectMatrix2D other = (DiagonalObjectMatrix2D) obj;
+        if (obj instanceof DiagonalObjectMatrix2D other) {
             if (this == obj)
                 return true;
             if (!(this != null && obj != null))
@@ -325,7 +314,7 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
     }
 
     public ObjectMatrix2D forEachNonZero(final cern.mateba.function.tobject.IntIntObjectFunction function) {
-        for (int j = dlength; --j >= 0;) {
+        for (int j = dlength; --j >= 0; ) {
             Object value = elements[j];
             if (value != null) {
                 elements[j] = function.apply(j, j, value);
@@ -336,7 +325,7 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
 
     /**
      * Returns the length of the diagonal
-     * 
+     *
      * @return the length of the diagonal
      */
     public int diagonalLength() {
@@ -345,7 +334,7 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
 
     /**
      * Returns the index of the diagonal
-     * 
+     *
      * @return the index of the diagonal
      */
     public int diagonalIndex() {

@@ -38,12 +38,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * <tt>O(1)</tt> (i.e. constant time) for the basic operations <tt>get</tt>,
  * <tt>getQuick</tt>, <tt>set</tt>, <tt>setQuick</tt> and <tt>size</tt>,
  * <p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
+ * @version 1.0, 09/24/99
  */
 public class DenseIntMatrix1D extends IntMatrix1D {
 
@@ -58,9 +56,8 @@ public class DenseIntMatrix1D extends IntMatrix1D {
      * Constructs a matrix with a copy of the given values. The values are
      * copied. So subsequent changes in <tt>values</tt> are not reflected in the
      * matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      */
     public DenseIntMatrix1D(int[] values) {
         this(values.length);
@@ -70,11 +67,9 @@ public class DenseIntMatrix1D extends IntMatrix1D {
     /**
      * Constructs a matrix with a given number of cells. All entries are
      * initially <tt>0</tt>.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size the number of cells the matrix shall have.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public DenseIntMatrix1D(int size) {
         setUp(size);
@@ -83,20 +78,14 @@ public class DenseIntMatrix1D extends IntMatrix1D {
 
     /**
      * Constructs a matrix with the given parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @param isView
-     *            if true then a matrix view is constructed
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param zero     the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @param isView   if true then a matrix view is constructed
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public DenseIntMatrix1D(int size, int[] elements, int zero, int stride, boolean isView) {
         setUp(size, zero, stride);
@@ -185,7 +174,7 @@ public class DenseIntMatrix1D extends IntMatrix1D {
     }
 
     public int aggregate(final IntMatrix1D other, final cern.mateba.function.tint.IntIntFunction aggr,
-            final cern.mateba.function.tint.IntIntFunction f) {
+                         final cern.mateba.function.tint.IntIntFunction f) {
         if (!(other instanceof DenseIntMatrix1D)) {
             return super.aggregate(other, aggr, f);
         }
@@ -278,12 +267,12 @@ public class DenseIntMatrix1D extends IntMatrix1D {
             // specialization for speed
             if (function instanceof cern.jet.math.tint.IntMult) {
                 // x[i] = mult*x[i]
-                for (int k = size; --k >= 0;) {
+                for (int k = size; --k >= 0; ) {
                     elements[idx += stride] *= multiplicator;
                 }
             } else {
                 // the general case x[i] = f(x[i])
-                for (int k = size; --k >= 0;) {
+                for (int k = size; --k >= 0; ) {
                     elements[idx += stride] = function.apply(elements[idx]);
                 }
             }
@@ -292,7 +281,7 @@ public class DenseIntMatrix1D extends IntMatrix1D {
     }
 
     public IntMatrix1D assign(final cern.mateba.function.tint.IntProcedure cond,
-            final cern.mateba.function.tint.IntFunction function) {
+                              final cern.mateba.function.tint.IntFunction function) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size >= ConcurrencyUtils.getThreadsBeginN_1D())) {
             nthreads = Math.min(nthreads, size);
@@ -306,7 +295,7 @@ public class DenseIntMatrix1D extends IntMatrix1D {
                     public void run() {
                         int idx = zero + firstIdx * stride;
                         for (int i = firstIdx; i < lastIdx; i++) {
-                            if (cond.apply(elements[idx]) == true) {
+                            if (cond.apply(elements[idx])) {
                                 elements[idx] = function.apply(elements[idx]);
                             }
                             idx += stride;
@@ -318,7 +307,7 @@ public class DenseIntMatrix1D extends IntMatrix1D {
         } else {
             int idx = zero;
             for (int i = 0; i < size; i++) {
-                if (cond.apply(elements[idx]) == true) {
+                if (cond.apply(elements[idx])) {
                     elements[idx] = function.apply(elements[idx]);
                 }
                 idx += stride;
@@ -341,7 +330,7 @@ public class DenseIntMatrix1D extends IntMatrix1D {
                     public void run() {
                         int idx = zero + firstIdx * stride;
                         for (int i = firstIdx; i < lastIdx; i++) {
-                            if (cond.apply(elements[idx]) == true) {
+                            if (cond.apply(elements[idx])) {
                                 elements[idx] = value;
                             }
                             idx += stride;
@@ -353,7 +342,7 @@ public class DenseIntMatrix1D extends IntMatrix1D {
         } else {
             int idx = zero;
             for (int i = 0; i < size; i++) {
-                if (cond.apply(elements[idx]) == true) {
+                if (cond.apply(elements[idx])) {
                     elements[idx] = value;
                 }
                 idx += stride;
@@ -396,7 +385,7 @@ public class DenseIntMatrix1D extends IntMatrix1D {
     public IntMatrix1D assign(final int[] values) {
         if (values.length != size)
             throw new IllegalArgumentException("Must have same number of cells: length=" + values.length + "size()="
-                    + size());
+                + size());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (isNoView) {
             System.arraycopy(values, 0, this.elements, 0, values.length);
@@ -438,11 +427,10 @@ public class DenseIntMatrix1D extends IntMatrix1D {
 
     public IntMatrix1D assign(IntMatrix1D source) {
         // overriden for performance only
-        if (!(source instanceof DenseIntMatrix1D)) {
+        if (!(source instanceof DenseIntMatrix1D other)) {
             super.assign(source);
             return this;
         }
-        DenseIntMatrix1D other = (DenseIntMatrix1D) source;
         if (other == this)
             return this;
         checkSize(other);
@@ -574,7 +562,6 @@ public class DenseIntMatrix1D extends IntMatrix1D {
                             int multiplicator = ((cern.jet.math.tint.IntPlusMultSecond) function).multiplicator;
                             if (multiplicator == 0) {
                                 // x[i] = x[i] + 0*y[i]
-                                return;
                             } else if (multiplicator == 1) {
                                 // x[i] = x[i] + y[i]
                                 for (int k = firstIdx; k < lastIdx; k++) {
@@ -835,7 +822,7 @@ public class DenseIntMatrix1D extends IntMatrix1D {
                                 location = (idx - zero) / stride;
                             }
                         }
-                        return new int[] { maxValue, location };
+                        return new int[]{maxValue, location};
                     }
                 });
             }
@@ -844,11 +831,11 @@ public class DenseIntMatrix1D extends IntMatrix1D {
                     results[j] = (int[]) futures[j].get();
                 }
                 maxValue = results[0][0];
-                location = (int) results[0][1];
+                location = results[0][1];
                 for (int j = 1; j < nthreads; j++) {
                     if (maxValue < results[j][0]) {
                         maxValue = results[j][0];
-                        location = (int) results[j][1];
+                        location = results[j][1];
                     }
                 }
             } catch (ExecutionException ex) {
@@ -868,7 +855,7 @@ public class DenseIntMatrix1D extends IntMatrix1D {
                 }
             }
         }
-        return new int[] { maxValue, location };
+        return new int[]{maxValue, location};
     }
 
     public int[] getMinLocation() {
@@ -896,7 +883,7 @@ public class DenseIntMatrix1D extends IntMatrix1D {
                                 location = (idx - zero) / stride;
                             }
                         }
-                        return new int[] { minValue, location };
+                        return new int[]{minValue, location};
                     }
                 });
             }
@@ -905,11 +892,11 @@ public class DenseIntMatrix1D extends IntMatrix1D {
                     results[j] = (int[]) futures[j].get();
                 }
                 minValue = results[0][0];
-                location = (int) results[0][1];
+                location = results[0][1];
                 for (int j = 1; j < nthreads; j++) {
                     if (minValue > results[j][0]) {
                         minValue = results[j][0];
-                        location = (int) results[j][1];
+                        location = results[j][1];
                     }
                 }
             } catch (ExecutionException ex) {
@@ -929,7 +916,7 @@ public class DenseIntMatrix1D extends IntMatrix1D {
                 }
             }
         }
-        return new int[] { minValue, location };
+        return new int[]{minValue, location};
     }
 
     public int getQuick(int index) {
@@ -1112,10 +1099,9 @@ public class DenseIntMatrix1D extends IntMatrix1D {
     }
 
     public int zDotProduct(IntMatrix1D y) {
-        if (!(y instanceof DenseIntMatrix1D)) {
+        if (!(y instanceof DenseIntMatrix1D yy)) {
             return super.zDotProduct(y);
         }
-        DenseIntMatrix1D yy = (DenseIntMatrix1D) y;
         final int[] elemsOther = yy.elements;
         int zeroThis = (int) index(0);
         int zeroOther = (int) yy.index(0);
@@ -1144,13 +1130,13 @@ public class DenseIntMatrix1D extends IntMatrix1D {
                         idxOther -= strideOtherF;
                         int sum = 0;
                         int min = lastIdx - firstIdx;
-                        for (int k = min / 4; --k >= 0;) {
+                        for (int k = min / 4; --k >= 0; ) {
                             sum += elements[idx += stride] * elemsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elemsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elemsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elemsOther[idxOther += strideOtherF];
+                                + elements[idx += stride] * elemsOther[idxOther += strideOtherF]
+                                + elements[idx += stride] * elemsOther[idxOther += strideOtherF]
+                                + elements[idx += stride] * elemsOther[idxOther += strideOtherF];
                         }
-                        for (int k = min % 4; --k >= 0;) {
+                        for (int k = min % 4; --k >= 0; ) {
                             sum += elements[idx += stride] * elemsOther[idxOther += strideOtherF];
                         }
                         return sum;
@@ -1173,13 +1159,13 @@ public class DenseIntMatrix1D extends IntMatrix1D {
         } else {
             zeroThis -= stride;
             zeroOther -= strideOther;
-            for (int k = size / 4; --k >= 0;) {
+            for (int k = size / 4; --k >= 0; ) {
                 sum += elements[zeroThis += stride] * elemsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther];
+                    + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther]
+                    + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther]
+                    + elements[zeroThis += stride] * elemsOther[zeroOther += strideOther];
             }
-            for (int k = size % 4; --k >= 0;) {
+            for (int k = size % 4; --k >= 0; ) {
                 sum += elements[zeroThis += stride] * elemsOther[zeroOther += strideOther];
             }
         }
@@ -1187,10 +1173,9 @@ public class DenseIntMatrix1D extends IntMatrix1D {
     }
 
     public int zDotProduct(IntMatrix1D y, int from, int length) {
-        if (!(y instanceof DenseIntMatrix1D)) {
+        if (!(y instanceof DenseIntMatrix1D yy)) {
             return super.zDotProduct(y, from, length);
         }
-        DenseIntMatrix1D yy = (DenseIntMatrix1D) y;
 
         int tail = from + length;
         if (from < 0 || length < 0)
@@ -1226,13 +1211,13 @@ public class DenseIntMatrix1D extends IntMatrix1D {
                         idxOther -= strideOtherF;
                         int sum = 0;
                         int min = lastIdx - firstIdx;
-                        for (int k = min / 4; --k >= 0;) {
+                        for (int k = min / 4; --k >= 0; ) {
                             sum += elements[idx += stride] * elementsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
-                                    + elements[idx += stride] * elementsOther[idxOther += strideOtherF];
+                                + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
+                                + elements[idx += stride] * elementsOther[idxOther += strideOtherF]
+                                + elements[idx += stride] * elementsOther[idxOther += strideOtherF];
                         }
-                        for (int k = min % 4; --k >= 0;) {
+                        for (int k = min % 4; --k >= 0; ) {
                             sum += elements[idx += stride] * elementsOther[idxOther += strideOtherF];
                         }
                         return sum;
@@ -1256,13 +1241,13 @@ public class DenseIntMatrix1D extends IntMatrix1D {
             zeroThis -= stride;
             zeroOther -= strideOther;
             int min = tail - from;
-            for (int k = min / 4; --k >= 0;) {
+            for (int k = min / 4; --k >= 0; ) {
                 sum += elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
-                        + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther];
+                    + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
+                    + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther]
+                    + elements[zeroThis += stride] * elementsOther[zeroOther += strideOther];
             }
-            for (int k = min % 4; --k >= 0;) {
+            for (int k = min % 4; --k >= 0; ) {
                 sum += elements[zeroThis += stride] * elementsOther[zeroOther += strideOther];
             }
         }
@@ -1333,18 +1318,16 @@ public class DenseIntMatrix1D extends IntMatrix1D {
     }
 
     protected boolean haveSharedCellsRaw(IntMatrix1D other) {
-        if (other instanceof SelectedDenseIntMatrix1D) {
-            SelectedDenseIntMatrix1D otherMatrix = (SelectedDenseIntMatrix1D) other;
+        if (other instanceof SelectedDenseIntMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseIntMatrix1D) {
-            DenseIntMatrix1D otherMatrix = (DenseIntMatrix1D) other;
+        } else if (other instanceof DenseIntMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
     }
 
     public long index(int rank) {
-        return zero + rank * stride;
+        return zero + (long) rank * stride;
     }
 
     protected IntMatrix1D viewSelectionLike(int[] offsets) {

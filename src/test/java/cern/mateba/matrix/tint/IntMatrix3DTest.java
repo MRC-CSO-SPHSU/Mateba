@@ -81,11 +81,7 @@ public abstract class IntMatrix3DTest extends TestCase {
     public void testAggregateIntIntFunctionIntFunctionIntProcedure() {
         IntProcedure procedure = new IntProcedure() {
             public boolean apply(int element) {
-                if (Math.abs(element) > 0.2) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 0.2;
             }
         };
         int expected = 0;
@@ -183,9 +179,9 @@ public abstract class IntMatrix3DTest extends TestCase {
         }
         A.assign(expected);
         for (int s = 0; s < A.slices(); s++) {
-            assertTrue(A.rows() == expected[s].length);
+            assertEquals(A.rows(), expected[s].length);
             for (int r = 0; r < A.rows(); r++) {
-                assertTrue(A.columns() == expected[s][r].length);
+                assertEquals(A.columns(), expected[s][r].length);
                 for (int c = 0; c < A.columns(); c++) {
                     assertEquals(expected[s][r][c], A.getQuick(s, r, c));
                 }
@@ -255,11 +251,7 @@ public abstract class IntMatrix3DTest extends TestCase {
     public void testAssignIntProcedureInt() {
         IntProcedure procedure = new IntProcedure() {
             public boolean apply(int element) {
-                if (Math.abs(element) > 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 1;
             }
         };
         IntMatrix3D Acopy = A.copy();
@@ -280,11 +272,7 @@ public abstract class IntMatrix3DTest extends TestCase {
     public void testAssignIntProcedureIntFunction() {
         IntProcedure procedure = new IntProcedure() {
             public boolean apply(int element) {
-                if (Math.abs(element) > 1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 1;
             }
         };
         IntMatrix3D Acopy = A.copy();
@@ -338,9 +326,9 @@ public abstract class IntMatrix3DTest extends TestCase {
         A.setQuick(A.slices() / 3, A.rows() / 2, A.columns() / 2, 1);
         int[] maxAndLoc = A.getMaxLocation();
         assertEquals(7, maxAndLoc[0]);
-        assertEquals(A.slices() / 3, (int) maxAndLoc[1]);
-        assertEquals(A.rows() / 3, (int) maxAndLoc[2]);
-        assertEquals(A.columns() / 3, (int) maxAndLoc[3]);
+        assertEquals(A.slices() / 3, maxAndLoc[1]);
+        assertEquals(A.rows() / 3, maxAndLoc[2]);
+        assertEquals(A.columns() / 3, maxAndLoc[3]);
     }
 
     public void testMinLocation() {
@@ -349,9 +337,9 @@ public abstract class IntMatrix3DTest extends TestCase {
         A.setQuick(A.slices() / 3, A.rows() / 2, A.columns() / 2, -1);
         int[] minAndLoc = A.getMinLocation();
         assertEquals(-7, minAndLoc[0]);
-        assertEquals(A.slices() / 3, (int) minAndLoc[1]);
-        assertEquals(A.rows() / 3, (int) minAndLoc[2]);
-        assertEquals(A.columns() / 3, (int) minAndLoc[3]);
+        assertEquals(A.slices() / 3, minAndLoc[1]);
+        assertEquals(A.rows() / 3, minAndLoc[2]);
+        assertEquals(A.columns() / 3, minAndLoc[3]);
     }
 
     public void testGetNegativeValues() {
@@ -426,9 +414,9 @@ public abstract class IntMatrix3DTest extends TestCase {
     public void testToArray() {
         int[][][] array = A.toArray();
         for (int s = 0; s < A.slices(); s++) {
-            assertTrue(A.rows() == array[s].length);
+            assertEquals(A.rows(), array[s].length);
             for (int r = 0; r < A.rows(); r++) {
-                assertTrue(A.columns() == array[s][r].length);
+                assertEquals(A.columns(), array[s][r].length);
                 for (int c = 0; c < A.columns(); c++)
                     assertEquals(0, Math.abs(array[s][r][c] - A.getQuick(s, r, c)));
             }
@@ -486,12 +474,12 @@ public abstract class IntMatrix3DTest extends TestCase {
 
     public void testViewPart() {
         IntMatrix3D B = A.viewPart(A.slices() / 2, A.rows() / 2, A.columns() / 2, A.slices() / 3, A.rows() / 3, A
-                .columns() / 3);
+            .columns() / 3);
         for (int s = 0; s < A.slices() / 3; s++) {
             for (int r = 0; r < A.rows() / 3; r++) {
                 for (int c = 0; c < A.columns() / 3; c++) {
                     assertEquals(A.getQuick(A.slices() / 2 + s, A.rows() / 2 + r, A.columns() / 2 + c), B.getQuick(s,
-                            r, c));
+                        r, c));
                 }
             }
         }
@@ -526,11 +514,7 @@ public abstract class IntMatrix3DTest extends TestCase {
         A.setQuick(A.slices() / 2, A.rows() / 4, 0, value);
         IntMatrix3D B = A.viewSelection(new IntMatrix2DProcedure() {
             public boolean apply(IntMatrix2D element) {
-                if (Math.abs(element.getQuick(A.rows() / 4, 0) - value) == 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element.getQuick(A.rows() / 4, 0) - value) == 0;
 
             }
         });
@@ -541,10 +525,10 @@ public abstract class IntMatrix3DTest extends TestCase {
     }
 
     public void testViewSelectionIntArrayIntArrayIntArray() {
-        int[] sliceIndexes = new int[] { A.slices() / 2, A.slices() / 3 };
-        int[] rowIndexes = new int[] { A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2 };
-        int[] colIndexes = new int[] { A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
-                A.columns() / 2, A.columns() - 1 };
+        int[] sliceIndexes = new int[]{A.slices() / 2, A.slices() / 3};
+        int[] rowIndexes = new int[]{A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2};
+        int[] colIndexes = new int[]{A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
+            A.columns() / 2, A.columns() - 1};
         IntMatrix3D B = A.viewSelection(sliceIndexes, rowIndexes, colIndexes);
         assertEquals(sliceIndexes.length, B.slices());
         assertEquals(rowIndexes.length, B.rows());

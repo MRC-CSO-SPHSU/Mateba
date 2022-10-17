@@ -32,9 +32,8 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * represented by 2 double values in sequence, i.e. elements[zero + 2 * k *
  * stride] constitute real part and elements[zero + 2 * k * stride + 1]
  * constitute imaginary part (k=0,...,size()-1).
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DenseDComplexMatrix1D extends DComplexMatrix1D {
 
@@ -57,9 +56,8 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
      * matrix, and vice-versa. Due to the fact that complex data is represented
      * by 2 double values in sequence: the real and imaginary parts, the size of
      * new matrix will be equal to values.length / 2.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      */
     public DenseDComplexMatrix1D(double[] values) {
         this(values.length / 2);
@@ -70,11 +68,9 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
      * Constructs a complex matrix with the same size as <tt>realPart</tt>
      * matrix and fills the real part of this matrix with elements of
      * <tt>realPart</tt>.
-     * 
-     * @param realPart
-     *            a real matrix whose elements become a real part of this matrix
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param realPart a real matrix whose elements become a real part of this matrix
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public DenseDComplexMatrix1D(DoubleMatrix1D realPart) {
         this((int) realPart.size());
@@ -84,11 +80,9 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
     /**
      * Constructs a matrix with a given number of cells. All entries are
      * initially <tt>0</tt>.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size the number of cells the matrix shall have.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public DenseDComplexMatrix1D(int size) {
         setUp(size, 0, 2);
@@ -98,20 +92,14 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Constructs a matrix with the given parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @param isNoView
-     *            if false then the view is constructed
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param zero     the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @param isNoView if false then the view is constructed
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public DenseDComplexMatrix1D(int size, double[] elements, int zero, int stride, boolean isNoView) {
         setUp(size, zero, stride);
@@ -120,7 +108,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
     }
 
     public double[] aggregate(final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
-            final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
+                              final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
         double[] b = new double[2];
         if (size == 0) {
             b[0] = Double.NaN;
@@ -140,10 +128,10 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
 
                     public double[] call() throws Exception {
                         int idx = zero + firstIdx * stride;
-                        double[] a = f.apply(new double[] { elements[idx], elements[idx + 1] });
+                        double[] a = f.apply(new double[]{elements[idx], elements[idx + 1]});
                         for (int i = firstIdx + 1; i < lastIdx; i++) {
                             idx += stride;
-                            a = aggr.apply(a, f.apply(new double[] { elements[idx], elements[idx + 1] }));
+                            a = aggr.apply(a, f.apply(new double[]{elements[idx], elements[idx + 1]}));
                         }
                         return a;
                     }
@@ -151,19 +139,19 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
         } else {
-            a = f.apply(new double[] { elements[zero], elements[zero + 1] });
+            a = f.apply(new double[]{elements[zero], elements[zero + 1]});
             int idx = zero;
             for (int i = 1; i < size; i++) {
                 idx += stride;
-                a = aggr.apply(a, f.apply(new double[] { elements[idx], elements[idx + 1] }));
+                a = aggr.apply(a, f.apply(new double[]{elements[idx], elements[idx + 1]}));
             }
         }
         return a;
     }
 
     public double[] aggregate(final DComplexMatrix1D other,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
+                              final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
+                              final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
         if (!(other instanceof DenseDComplexMatrix1D)) {
             return super.aggregate(other, aggr, f);
         }
@@ -190,13 +178,13 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                     public double[] call() throws Exception {
                         int idx = zero + firstIdx * stride;
                         int idxOther = zeroOther + firstIdx * strideOther;
-                        double[] a = f.apply(new double[] { elements[idx], elements[idx + 1] }, new double[] {
-                                elemsOther[idxOther], elemsOther[idxOther + 1] });
+                        double[] a = f.apply(new double[]{elements[idx], elements[idx + 1]}, new double[]{
+                            elemsOther[idxOther], elemsOther[idxOther + 1]});
                         for (int i = firstIdx + 1; i < lastIdx; i++) {
                             idx += stride;
                             idxOther += strideOther;
-                            a = aggr.apply(a, f.apply(new double[] { elements[idx], elements[idx + 1] }, new double[] {
-                                    elemsOther[idxOther], elemsOther[idxOther + 1] }));
+                            a = aggr.apply(a, f.apply(new double[]{elements[idx], elements[idx + 1]}, new double[]{
+                                elemsOther[idxOther], elemsOther[idxOther + 1]}));
                         }
                         return a;
                     }
@@ -206,13 +194,13 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
         } else {
             int idx = zero;
             int idxOther = zeroOther;
-            a = f.apply(new double[] { elements[zero], elements[zero + 1] }, new double[] { elemsOther[zeroOther],
-                    elemsOther[zeroOther + 1] });
+            a = f.apply(new double[]{elements[zero], elements[zero + 1]}, new double[]{elemsOther[zeroOther],
+                elemsOther[zeroOther + 1]});
             for (int i = 1; i < size; i++) {
                 idx += stride;
                 idxOther += strideOther;
-                a = aggr.apply(a, f.apply(new double[] { elements[idx], elements[idx + 1] }, new double[] {
-                        elemsOther[idxOther], elemsOther[idxOther + 1] }));
+                a = aggr.apply(a, f.apply(new double[]{elements[idx], elements[idx + 1]}, new double[]{
+                    elemsOther[idxOther], elemsOther[idxOther + 1]}));
             }
         }
         return a;
@@ -243,7 +231,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                             for (int k = firstIdx; k < lastIdx; k++) {
                                 elements[idx] = elements[idx] * multiplicator[0] - elements[idx + 1] * multiplicator[1];
                                 elements[idx + 1] = elements[idx + 1] * multiplicator[0] + elements[idx]
-                                        * multiplicator[1];
+                                    * multiplicator[1];
                                 idx += stride;
                             }
                         } else {
@@ -285,7 +273,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
     }
 
     public DComplexMatrix1D assign(final cern.mateba.function.tdcomplex.DComplexProcedure cond,
-            final cern.mateba.function.tdcomplex.DComplexDComplexFunction function) {
+                                   final cern.mateba.function.tdcomplex.DComplexDComplexFunction function) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size >= ConcurrencyUtils.getThreadsBeginN_1D())) {
             nthreads = Math.min(nthreads, size);
@@ -302,7 +290,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                         for (int i = firstIdx; i < lastIdx; i++) {
                             elem[0] = elements[idx];
                             elem[1] = elements[idx + 1];
-                            if (cond.apply(elem) == true) {
+                            if (cond.apply(elem)) {
                                 elem = function.apply(elem);
                                 elements[idx] = elem[0];
                                 elements[idx + 1] = elem[1];
@@ -319,7 +307,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
             for (int i = 0; i < size; i++) {
                 elem[0] = elements[idx];
                 elem[1] = elements[idx + 1];
-                if (cond.apply(elem) == true) {
+                if (cond.apply(elem)) {
                     elem = function.apply(elem);
                     elements[idx] = elem[0];
                     elements[idx + 1] = elem[1];
@@ -346,7 +334,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                         for (int i = firstIdx; i < lastIdx; i++) {
                             elem[0] = elements[idx];
                             elem[1] = elements[idx + 1];
-                            if (cond.apply(elem) == true) {
+                            if (cond.apply(elem)) {
                                 elements[idx] = value[0];
                                 elements[idx + 1] = value[1];
                             }
@@ -362,7 +350,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
             for (int i = 0; i < size; i++) {
                 elem[0] = elements[idx];
                 elem[1] = elements[idx + 1];
-                if (cond.apply(elem) == true) {
+                if (cond.apply(elem)) {
                     elements[idx] = value[0];
                     elements[idx + 1] = value[1];
                 }
@@ -451,10 +439,9 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
     }
 
     public DComplexMatrix1D assign(DComplexMatrix1D source) {
-        if (!(source instanceof DenseDComplexMatrix1D)) {
+        if (!(source instanceof DenseDComplexMatrix1D other)) {
             return super.assign(source);
         }
-        DenseDComplexMatrix1D other = (DenseDComplexMatrix1D) source;
         if (other == this)
             return this;
         checkSize(other);
@@ -512,7 +499,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
     }
 
     public DComplexMatrix1D assign(DComplexMatrix1D y,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
+                                   final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
         if (!(y instanceof DenseDComplexMatrix1D)) {
             return super.assign(y, function);
         }
@@ -573,9 +560,9 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                             double[] tmp = new double[2];
                             for (int k = firstIdx; k < lastIdx; k++) {
                                 tmp[0] = elements[idx] * elemsOther[idxOther] - elements[idx + 1]
-                                        * elemsOther[idxOther + 1];
+                                    * elemsOther[idxOther + 1];
                                 tmp[1] = elements[idx + 1] * elemsOther[idxOther] + elements[idx]
-                                        * elemsOther[idxOther + 1];
+                                    * elemsOther[idxOther + 1];
                                 elements[idx] = tmp[0];
                                 elements[idx + 1] = tmp[1];
                                 idx += stride;
@@ -585,9 +572,9 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                             double[] tmp = new double[2];
                             for (int k = firstIdx; k < lastIdx; k++) {
                                 tmp[0] = elements[idx] * elemsOther[idxOther] + elements[idx + 1]
-                                        * elemsOther[idxOther + 1];
+                                    * elemsOther[idxOther + 1];
                                 tmp[1] = -elements[idx + 1] * elemsOther[idxOther] + elements[idx]
-                                        * elemsOther[idxOther + 1];
+                                    * elemsOther[idxOther + 1];
                                 elements[idx] = tmp[0];
                                 elements[idx + 1] = tmp[1];
                                 idx += stride;
@@ -597,9 +584,9 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                             double[] tmp = new double[2];
                             for (int k = firstIdx; k < lastIdx; k++) {
                                 tmp[0] = elements[idx] * elemsOther[idxOther] + elements[idx + 1]
-                                        * elemsOther[idxOther + 1];
+                                    * elemsOther[idxOther + 1];
                                 tmp[1] = elements[idx + 1] * elemsOther[idxOther] - elements[idx]
-                                        * elemsOther[idxOther + 1];
+                                    * elemsOther[idxOther + 1];
                                 elements[idx] = tmp[0];
                                 elements[idx + 1] = tmp[1];
                                 idx += stride;
@@ -918,7 +905,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
 
     public double[] getQuick(int index) {
         int idx = zero + index * stride;
-        return new double[] { elements[idx], elements[idx + 1] };
+        return new double[]{elements[idx], elements[idx + 1]};
     }
 
     public DoubleMatrix1D getRealPart() {
@@ -963,9 +950,8 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
      * Computes the inverse of the discrete Fourier transform (IDFT) of this
      * matrix. Throws IllegalArgumentException if the size of this matrix is not
      * a power of 2 number.
-     * 
-     * @param scale
-     *            if true, then scaling is performed.
+     *
+     * @param scale if true, then scaling is performed.
      */
     public void ifft(boolean scale) {
         int oldNthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -1181,7 +1167,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
     public double[] zDotProduct(final DComplexMatrix1D y, final int from, int length) {
         int size = (int) size();
         if (from < 0 || length <= 0)
-            return new double[] { 0, 0 };
+            return new double[]{0, 0};
 
         int tail = from + length;
         if (size < tail)
@@ -1213,9 +1199,9 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                         int idxOther = zeroOther + firstIdx * strideOther;
                         for (int k = firstIdx; k < lastIdx; k++) {
                             sum[0] += elements[idx] * elemsOther[idxOther] + elements[idx + 1]
-                                    * elemsOther[idxOther + 1];
+                                * elemsOther[idxOther + 1];
                             sum[1] += elements[idx + 1] * elemsOther[idxOther] - elements[idx]
-                                    * elemsOther[idxOther + 1];
+                                * elemsOther[idxOther + 1];
                             idx += stride;
                             idxOther += strideOther;
                         }
@@ -1314,18 +1300,16 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
     }
 
     protected boolean haveSharedCellsRaw(DComplexMatrix1D other) {
-        if (other instanceof SelectedDenseDComplexMatrix1D) {
-            SelectedDenseDComplexMatrix1D otherMatrix = (SelectedDenseDComplexMatrix1D) other;
+        if (other instanceof SelectedDenseDComplexMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseDComplexMatrix1D) {
-            DenseDComplexMatrix1D otherMatrix = (DenseDComplexMatrix1D) other;
+        } else if (other instanceof DenseDComplexMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
     }
 
     public long index(int rank) {
-        return zero + rank * stride;
+        return zero + (long) rank * stride;
     }
 
     protected DComplexMatrix1D viewSelectionLike(int[] offsets) {

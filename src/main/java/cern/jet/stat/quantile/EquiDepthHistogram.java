@@ -33,7 +33,7 @@ import java.io.Serializable;
  * .</li>
  * <li>(In particular: <tt>l[0]=min(v)=v[0]</tt> and
  * <tt>l[s-1]=max(v)=v[s-1]</tt>.)</li>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.0, 09/24/99
  */
@@ -55,11 +55,9 @@ public class EquiDepthHistogram implements Serializable, Cloneable {
     /**
      * Returns the bin index of the given element. In other words, returns a
      * handle to the range the element falls into.
-     * 
-     * @param element
-     *            the element to search for.
-     * @throws java.lang.IllegalArgumentException
-     *             if the element is not contained in any bin.
+     *
+     * @param element the element to search for.
+     * @throws java.lang.IllegalArgumentException if the element is not contained in any bin.
      */
     public int binOfElement(double element) {
         int index = java.util.Arrays.binarySearch(binBoundaries, element);
@@ -89,9 +87,8 @@ public class EquiDepthHistogram implements Serializable, Cloneable {
 
     /**
      * Returns the end of the range associated with the given bin.
-     * 
-     * @throws ArrayIndexOutOfBoundsException
-     *             if <tt>binIndex &lt; 0 || binIndex &gt;= bins()</tt>.
+     *
+     * @throws ArrayIndexOutOfBoundsException if <tt>binIndex &lt; 0 || binIndex &gt;= bins()</tt>.
      */
     public double endOfBin(int binIndex) {
         return binBoundaries[binIndex + 1];
@@ -100,11 +97,9 @@ public class EquiDepthHistogram implements Serializable, Cloneable {
     /**
      * Returns the percentage of elements in the range (from,to]. Does linear
      * interpolation.
-     * 
-     * @param from
-     *            the start point (exclusive).
-     * @param to
-     *            the end point (inclusive).
+     *
+     * @param from the start point (exclusive).
+     * @param to   the end point (inclusive).
      * @return a number in the closed interval <tt>[0.0,1.0]</tt>.
      */
     public double percentFromTo(double from, double to) {
@@ -114,9 +109,8 @@ public class EquiDepthHistogram implements Serializable, Cloneable {
     /**
      * Returns how many percent of the elements contained in the receiver are
      * <tt>&lt;= element</tt>. Does linear interpolation.
-     * 
-     * @param element
-     *            the element to search for.
+     *
+     * @param element the element to search for.
      * @return a number in the closed interval <tt>[0.0,1.0]</tt>.
      */
     public double phi(double element) {
@@ -151,9 +145,8 @@ public class EquiDepthHistogram implements Serializable, Cloneable {
 
     /**
      * Returns the start of the range associated with the given bin.
-     * 
-     * @throws ArrayIndexOutOfBoundsException
-     *             if <tt>binIndex &lt; 0 || binIndex &gt;= bins()</tt>.
+     *
+     * @throws ArrayIndexOutOfBoundsException if <tt>binIndex &lt; 0 || binIndex &gt;= bins()</tt>.
      */
     public double startOfBin(int binIndex) {
         return binBoundaries[binIndex];
@@ -163,7 +156,7 @@ public class EquiDepthHistogram implements Serializable, Cloneable {
      * Not yet commented.
      */
     public static void test(double element) {
-        double[] quantileElements = { 50.0, 100.0, 200.0, 300.0, 1400.0, 1500.0, 1600.0, 1700.0, 1800.0, 1900.0, 2000.0 };
+        double[] quantileElements = {50.0, 100.0, 200.0, 300.0, 1400.0, 1500.0, 1600.0, 1700.0, 1800.0, 1900.0, 2000.0};
         EquiDepthHistogram histo = new EquiDepthHistogram(quantileElements);
         System.out.println("elem=" + element + ", phi=" + histo.phi(element));
     }

@@ -41,9 +41,8 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * A barrier used for threads synchronization. This class is not a part of
  * user's API.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class Barrier {
 
@@ -76,7 +75,7 @@ public class Barrier {
                 masterLock.unlock();
             }
         } else {
-           masterLock.lock();
+            masterLock.lock();
             try {
                 workersLatch.countDown();
                 masterCondition.await();

@@ -16,21 +16,19 @@ import cern.mateba.matrix.tdouble.impl.DiagonalDoubleMatrix2D;
 import com.github.fommil.netlib.LAPACK;
 
 /**
- * 
  * For an <tt>m x n</tt> matrix <tt>A</tt>, the singular value decomposition is
  * an <tt>m x m</tt> orthogonal matrix <tt>U</tt>, an <tt>m x n</tt> diagonal
  * matrix <tt>S</tt>, and an <tt>n x n</tt> orthogonal matrix <tt>V</tt> so that
  * <tt>A = U*S*V'</tt>.
- * <P>
+ * <p>
  * The singular values, <tt>sigma[k] = S[k][k]</tt>, are ordered so that
  * <tt>sigma[0] >= sigma[1] >= ... >= sigma[min(m-1,n-1)]</tt>.
- * <P>
- * 
+ * <p>
+ * <p>
  * This implementation uses the divide-and-conquer algorithm (dgesdd) from
  * LAPACK.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DenseDoubleSingularValueDecomposition {
 
@@ -44,19 +42,19 @@ public class DenseDoubleSingularValueDecomposition {
 
     private double[] elementsVt;
 
-    private double[] elementsS;
+    private final double[] elementsS;
 
-    private org.netlib.util.intW info;
+    private final org.netlib.util.intW info;
 
-    private int m;
+    private final int m;
 
-    private int n;
+    private final int n;
 
-    private int mn;
+    private final int mn;
 
-    private boolean wantWholeUV;
+    private final boolean wantWholeUV;
 
-    private boolean wantUV;
+    private final boolean wantUV;
 
     private boolean columnMatrix = false;
 
@@ -64,17 +62,13 @@ public class DenseDoubleSingularValueDecomposition {
      * Constructs and returns a new singular value decomposition object; The
      * decomposed matrices can be retrieved via instance methods of the returned
      * decomposition object.
-     * 
-     * @param A
-     *            rectangular matrix
-     * 
-     * @param wantUV
-     *            if true then all matrices (U, S, V') are computed; otherwise
-     *            only S is computed
-     * @param wantWholeUV
-     *            if true then all m columns of U and all n rows of V' are
-     *            computed; otherwise only the first min(m,n) columns of U and
-     *            the first min(m,n) rows of V' are computed
+     *
+     * @param A           rectangular matrix
+     * @param wantUV      if true then all matrices (U, S, V') are computed; otherwise
+     *                    only S is computed
+     * @param wantWholeUV if true then all m columns of U and all n rows of V' are
+     *                    computed; otherwise only the first min(m,n) columns of U and
+     *                    the first min(m,n) rows of V' are computed
      */
     public DenseDoubleSingularValueDecomposition(DoubleMatrix2D A, boolean wantUV, boolean wantWholeUV) {
         DoubleProperty.DEFAULT.checkDense(A);
@@ -103,14 +97,14 @@ public class DenseDoubleSingularValueDecomposition {
                 lwork = 3 * mn * mn + Math.max(maxmn, 4 * mn * mn + 4 * mn) + maxmn;
                 work = new double[lwork];
                 LAPACK.getInstance().dgesdd("A", m, n, elementsA, m, elementsS, elementsU, m, elementsVt, n, work,
-                        lwork, iwork, info);
+                    lwork, iwork, info);
             } else { // JOBZ='S'
                 elementsU = new double[m * mn];
                 elementsVt = new double[mn * n];
                 lwork = 3 * mn * mn + Math.max(maxmn, 4 * mn * mn + 4 * mn) + maxmn;
                 work = new double[lwork];
                 LAPACK.getInstance().dgesdd("S", m, n, elementsA, m, elementsS, elementsU, m, elementsVt, mn, work,
-                        lwork, iwork, info);
+                    lwork, iwork, info);
             }
         } else {// JOBZ='N'
             lwork = 3 * mn + Math.max(maxmn, 6 * mn) + maxmn;
@@ -131,12 +125,12 @@ public class DenseDoubleSingularValueDecomposition {
 
     /**
      * Returns the diagonal matrix of singular values.
-     * 
+     *
      * @return S
      */
     public DoubleMatrix2D getS() {
         if (S == null) {
-            if (wantWholeUV == false) {
+            if (!wantWholeUV) {
                 S = new DiagonalDoubleMatrix2D(mn, mn, 0);
             } else {
                 S = new DiagonalDoubleMatrix2D(m, n, 0);
@@ -151,7 +145,7 @@ public class DenseDoubleSingularValueDecomposition {
     /**
      * Returns the diagonal of <tt>S</tt>, which is a one-dimensional array of
      * singular values
-     * 
+     *
      * @return diagonal of <tt>S</tt>.
      */
     public double[] getSingularValues() {
@@ -160,15 +154,15 @@ public class DenseDoubleSingularValueDecomposition {
 
     /**
      * Returns the left singular vectors <tt>U</tt>.
-     * 
+     *
      * @return <tt>U</tt>
      */
     public DoubleMatrix2D getU() {
-        if (wantUV == false) {
+        if (!wantUV) {
             throw new IllegalAccessError("Matrix U was not computed");
         } else {
             if (U == null) {
-                if (wantWholeUV == false) {
+                if (!wantWholeUV) {
                     if (columnMatrix) {
                         U = new DenseColumnDoubleMatrix2D(m, mn).assign(elementsU);
                     } else {
@@ -188,15 +182,15 @@ public class DenseDoubleSingularValueDecomposition {
 
     /**
      * Returns the right singular vectors <tt>V</tt>.
-     * 
+     *
      * @return <tt>V</tt>
      */
     public DoubleMatrix2D getV() {
-        if (wantUV == false) {
+        if (!wantUV) {
             throw new IllegalAccessError("Matrix V was not computed");
         } else {
             if (V == null) {
-                if (wantWholeUV == false) {
+                if (!wantWholeUV) {
                     if (columnMatrix) {
                         V = new DenseColumnDoubleMatrix2D(mn, n).assign(elementsVt).viewDice();
                     } else {
@@ -216,10 +210,10 @@ public class DenseDoubleSingularValueDecomposition {
 
     /**
      * Returns the output flag
-     * 
+     *
      * @return 0: successful exit<br>
-     *         < 0: if INFO = -i, the i-th argument had an illegal value<br>
-     *         > 0: process did not converge.
+     * < 0: if INFO = -i, the i-th argument had an illegal value<br>
+     * > 0: process did not converge.
      */
     public org.netlib.util.intW getInfo() {
         return info;
@@ -251,11 +245,11 @@ public class DenseDoubleSingularValueDecomposition {
     /**
      * Returns a String with (propertyName, propertyValue) pairs. Useful for
      * debugging or to quickly get the rough picture. For example,
-     * 
+     *
      * <pre>
      * 	 rank          : 3
      * 	 trace         : 0
-     * 
+     *
      * </pre>
      */
 
@@ -269,42 +263,42 @@ public class DenseDoubleSingularValueDecomposition {
 
         buf.append("cond = ");
         try {
-            buf.append(String.valueOf(this.cond()));
+            buf.append(this.cond());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\nrank = ");
         try {
-            buf.append(String.valueOf(this.rank()));
+            buf.append(this.rank());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\nnorm2 = ");
         try {
-            buf.append(String.valueOf(this.norm2()));
+            buf.append(this.norm2());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\n\nU = ");
         try {
-            buf.append(String.valueOf(this.getU()));
+            buf.append(this.getU());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\n\nS = ");
         try {
-            buf.append(String.valueOf(this.getS()));
+            buf.append(this.getS());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }
 
         buf.append("\n\nV = ");
         try {
-            buf.append(String.valueOf(this.getV()));
+            buf.append(this.getV());
         } catch (IllegalArgumentException exc) {
             buf.append(unknown + exc.getMessage());
         }

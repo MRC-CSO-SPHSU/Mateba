@@ -53,19 +53,19 @@ public abstract class DComplexMatrix2DTest extends TestCase {
         ConcurrencyUtils.setThreadsBeginN_2D(1);
         for (int r = 0; r < A.rows(); r++) {
             for (int c = 0; c < A.columns(); c++) {
-                A.setQuick(r, c, new double[] { Math.random(), Math.random() });
+                A.setQuick(r, c, new double[]{Math.random(), Math.random()});
             }
         }
 
         for (int r = 0; r < B.rows(); r++) {
             for (int c = 0; c < B.columns(); c++) {
-                B.setQuick(r, c, new double[] { Math.random(), Math.random() });
+                B.setQuick(r, c, new double[]{Math.random(), Math.random()});
             }
         }
 
         for (int r = 0; r < Bt.rows(); r++) {
             for (int c = 0; c < Bt.columns(); c++) {
-                Bt.setQuick(r, c, new double[] { Math.random(), Math.random() });
+                Bt.setQuick(r, c, new double[]{Math.random(), Math.random()});
             }
         }
     }
@@ -131,11 +131,7 @@ public abstract class DComplexMatrix2DTest extends TestCase {
         DComplexMatrix2D Acopy = A.copy();
         A.assign(new DComplexProcedure() {
             public boolean apply(double[] element) {
-                if (DComplex.abs(element) > 3) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return DComplex.abs(element) > 3;
             }
         }, DComplexFunctions.tan);
         for (int r = 0; r < A.rows(); r++) {
@@ -151,14 +147,10 @@ public abstract class DComplexMatrix2DTest extends TestCase {
 
     public void testAssignComplexProcedureDoubleArray() {
         DComplexMatrix2D Acopy = A.copy();
-        double[] value = new double[] { Math.random(), Math.random() };
+        double[] value = new double[]{Math.random(), Math.random()};
         A.assign(new DComplexProcedure() {
             public boolean apply(double[] element) {
-                if (DComplex.abs(element) > 3) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return DComplex.abs(element) > 3;
             }
         }, value);
         for (int r = 0; r < A.rows(); r++) {
@@ -220,7 +212,7 @@ public abstract class DComplexMatrix2DTest extends TestCase {
     }
 
     public void testAssignDoubleDouble() {
-        double[] value = new double[] { Math.random(), Math.random() };
+        double[] value = new double[]{Math.random(), Math.random()};
         A.assign(value[0], value[1]);
         for (int r = 0; r < A.rows(); r++) {
             for (int c = 0; c < A.columns(); c++) {
@@ -277,19 +269,19 @@ public abstract class DComplexMatrix2DTest extends TestCase {
     }
 
     public void testEqualsDoubleArray() {
-        double[] value = new double[] { Math.random(), Math.random() };
+        double[] value = new double[]{Math.random(), Math.random()};
         A.assign(value[0], value[1]);
         boolean eq = A.equals(value);
-        assertEquals(true, eq);
-        eq = A.equals(new double[] { value[0] + 1, value[1] + 1 });
-        assertEquals(false, eq);
+        assertTrue(eq);
+        eq = A.equals(new double[]{value[0] + 1, value[1] + 1});
+        assertFalse(eq);
     }
 
     public void testEqualsObject() {
         boolean eq = A.equals(A);
-        assertEquals(true, eq);
+        assertTrue(eq);
         eq = A.equals(B);
-        assertEquals(false, eq);
+        assertFalse(eq);
     }
 
     public void testForEachNonZero() {
@@ -431,7 +423,7 @@ public abstract class DComplexMatrix2DTest extends TestCase {
     }
 
     public void testViewSelectionComplexMatrix1DProcedure() {
-        final double[] value = new double[] { Math.random(), Math.random() };
+        final double[] value = new double[]{Math.random(), Math.random()};
         A.setQuick(A.rows() / 3, 0, value);
         A.setQuick(A.rows() / 2, 0, value);
         DComplexMatrix2D B = A.viewSelection(new DComplexMatrix1DProcedure() {
@@ -446,9 +438,9 @@ public abstract class DComplexMatrix2DTest extends TestCase {
     }
 
     public void testViewSelectionIntArrayIntArray() {
-        int[] rowIndexes = new int[] { A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2 };
-        int[] colIndexes = new int[] { A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
-                A.columns() / 2, A.columns() - 1 };
+        int[] rowIndexes = new int[]{A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2};
+        int[] colIndexes = new int[]{A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
+            A.columns() / 2, A.columns() - 1};
         DComplexMatrix2D B = A.viewSelection(rowIndexes, colIndexes);
         assertEquals(rowIndexes.length, B.rows());
         assertEquals(colIndexes.length, B.columns());
@@ -473,10 +465,10 @@ public abstract class DComplexMatrix2DTest extends TestCase {
     public void testZMultDComplexMatrix1DDComplexMatrix1DDComplexDComplexBoolean() {
         DComplexMatrix1D y = new DenseDComplexMatrix1D(A.columns());
         for (int i = 0; i < y.size(); i++) {
-            y.setQuick(i, new double[] { Math.random(), Math.random() });
+            y.setQuick(i, new double[]{Math.random(), Math.random()});
         }
-        double[] alpha = new double[] { 3, 2 };
-        double[] beta = new double[] { 5, 4 };
+        double[] alpha = new double[]{3, 2};
+        double[] beta = new double[]{5, 4};
         DComplexMatrix1D z = null;
         z = A.zMult(y, z, alpha, beta, false);
         double[] expected = new double[2 * A.rows()];
@@ -501,7 +493,7 @@ public abstract class DComplexMatrix2DTest extends TestCase {
         //transpose
         y = new DenseDComplexMatrix1D(A.rows());
         for (int i = 0; i < y.size(); i++) {
-            y.setQuick(i, new double[] { Math.random(), Math.random() });
+            y.setQuick(i, new double[]{Math.random(), Math.random()});
         }
         z = null;
         z = A.zMult(y, z, alpha, beta, true);
@@ -525,8 +517,8 @@ public abstract class DComplexMatrix2DTest extends TestCase {
     }
 
     public void testZMultDoubleMatrix2DDoubleMatrix2DDoubleDoubleBooleanBoolean() {
-        double[] alpha = new double[] { 3, 2 };
-        double[] beta = new double[] { 5, 4 };
+        double[] alpha = new double[]{3, 2};
+        double[] beta = new double[]{5, 4};
         double[] tmp = new double[2];
         DComplexMatrix2D C = null;
         C = A.zMult(Bt, C, alpha, beta, false, false);
@@ -609,7 +601,7 @@ public abstract class DComplexMatrix2DTest extends TestCase {
                 double[] s = new double[2];
                 for (int k = 0; k < A.rows(); k++) {
                     s = DComplex.plus(s, DComplex.mult(DComplex.conj(A.getQuick(k, i)), DComplex
-                            .conj(Bt.getQuick(j, k))));
+                        .conj(Bt.getQuick(j, k))));
                 }
                 tmp[0] = expected[i][2 * j];
                 tmp[1] = expected[i][2 * j + 1];

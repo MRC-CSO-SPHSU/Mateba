@@ -22,7 +22,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 /**
  * Sparse hashed 1-d matrix (aka <i>vector</i>) holding <tt>complex</tt>
  * elements. This implementation uses ConcurrentHashMap
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class SparseDComplexMatrix1D extends DComplexMatrix1D {
@@ -38,9 +38,8 @@ public class SparseDComplexMatrix1D extends DComplexMatrix1D {
      * Constructs a matrix with a copy of the given values. The values are
      * copied. So subsequent changes in <tt>values</tt> are not reflected in the
      * matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
+     *
+     * @param values The values to be filled into the new matrix.
      */
     public SparseDComplexMatrix1D(double[] values) {
         this(values.length);
@@ -49,11 +48,9 @@ public class SparseDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Constructs a matrix with a given number of cells.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size the number of cells the matrix shall have.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     public SparseDComplexMatrix1D(int size) {
         setUp(size);
@@ -62,18 +59,13 @@ public class SparseDComplexMatrix1D extends DComplexMatrix1D {
 
     /**
      * Constructs a matrix view with a given number of parameters.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param offset
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>size<0</tt>.
+     *
+     * @param size     the number of cells the matrix shall have.
+     * @param elements the cells.
+     * @param offset   the index of the first element.
+     * @param stride   the number of indexes between any two elements, i.e.
+     *                 <tt>index(i+1)-index(i)</tt>.
+     * @throws IllegalArgumentException if <tt>size<0</tt>.
      */
     protected SparseDComplexMatrix1D(int size, ConcurrentHashMap<Long, double[]> elements, int offset, int stride) {
         setUp(size, offset, stride);
@@ -100,7 +92,7 @@ public class SparseDComplexMatrix1D extends DComplexMatrix1D {
     public synchronized double[] getQuick(int index) {
         double[] elem = elements.get((long) zero + (long) index * (long) stride);
         if (elem != null) {
-            return new double[] { elem[0], elem[1] };
+            return new double[]{elem[0], elem[1]};
         } else {
             return new double[2];
         }
@@ -115,11 +107,9 @@ public class SparseDComplexMatrix1D extends DComplexMatrix1D {
      */
 
     protected boolean haveSharedCellsRaw(DComplexMatrix1D other) {
-        if (other instanceof SelectedSparseDComplexMatrix1D) {
-            SelectedSparseDComplexMatrix1D otherMatrix = (SelectedSparseDComplexMatrix1D) other;
+        if (other instanceof SelectedSparseDComplexMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof SparseDComplexMatrix1D) {
-            SparseDComplexMatrix1D otherMatrix = (SparseDComplexMatrix1D) other;
+        } else if (other instanceof SparseDComplexMatrix1D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -240,7 +230,7 @@ public class SparseDComplexMatrix1D extends DComplexMatrix1D {
         if (re == 0 && im == 0)
             this.elements.remove(i);
         else
-            this.elements.put(i, new double[] { re, im });
+            this.elements.put(i, new double[]{re, im});
     }
 
     protected DComplexMatrix1D viewSelectionLike(int[] offsets) {

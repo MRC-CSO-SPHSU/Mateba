@@ -27,15 +27,14 @@ import java.io.Serial;
  * <p>
  * <tt>O(1)</tt> (i.e. constant time) for the basic operations <tt>get</tt>,
  * <tt>getQuick</tt>, <tt>set</tt>, <tt>setQuick</tt> and <tt>size</tt>.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DenseLargeIntMatrix3D extends WrapperIntMatrix3D {
 
     @Serial
     private static final long serialVersionUID = -1929672935924638581L;
-    private int[][][] elements;
+    private final int[][][] elements;
 
     public DenseLargeIntMatrix3D(int slices, int rows, int columns) {
         super(null);

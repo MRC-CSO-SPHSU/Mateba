@@ -37,15 +37,15 @@ import java.io.Serializable;
  * </tr>
  * <tr align="left" valign="top">
  * <td><i> Appending rows and columns </i></td>
- * <td>Use methods {@link #appendColumns(DoubleMatrix2D,DoubleMatrix2D)
- * appendColumns}, {@link #appendColumns(DoubleMatrix2D,DoubleMatrix2D)
- * appendRows} and {@link #repeat(DoubleMatrix2D,int,int) repeat} to append rows
+ * <td>Use methods {@link #appendColumns(DoubleMatrix2D, DoubleMatrix2D)
+ * appendColumns}, {@link #appendColumns(DoubleMatrix2D, DoubleMatrix2D)
+ * appendRows} and {@link #repeat(DoubleMatrix2D, int, int) repeat} to append rows
  * and columns.</td>
  * </tr>
  * <tr align="left" valign="top">
  * <td><i> General block matrices </i></td>
  * <td>Use methods {@link #compose(DoubleMatrix2D[][]) compose} and
- * {@link #decompose(DoubleMatrix2D[][],DoubleMatrix2D) decompose} to work with
+ * {@link #decompose(DoubleMatrix2D[][], DoubleMatrix2D) decompose} to work with
  * general block matrices.</td>
  * </tr>
  * <tr align="left" valign="top">
@@ -57,13 +57,13 @@ import java.io.Serializable;
  * <tr align="left" valign="top">
  * <td><i> Diagonal block matrices </i></td>
  * <td>Use method
- * {@link #composeDiagonal(DoubleMatrix2D,DoubleMatrix2D,DoubleMatrix2D)
+ * {@link #composeDiagonal(DoubleMatrix2D, DoubleMatrix2D, DoubleMatrix2D)
  * composeDiagonal} to work with diagonal block matrices.</td>
  * </tr>
  * <tr align="left" valign="top">
  * <td><i>Random</i></td>
- * <td>Use methods {@link #random(int,int) random} and
- * {@link #sample(int,int,double,double) sample} to construct random matrices.</td>
+ * <td>Use methods {@link #random(int, int) random} and
+ * {@link #sample(int, int, double, double) sample} to construct random matrices.</td>
  * </tr>
  * </table>
  * <p>
@@ -75,7 +75,7 @@ import java.io.Serializable;
  * </p>
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  *  DoubleFactory2D F = DoubleFactory2D.dense;
  *  F.make(4,4);
@@ -83,14 +83,13 @@ import java.io.Serializable;
  *  F.random(4,4);
  *  ...
  * </pre>
- * 
+ *
  * </td>
  * </table>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 09/24/99
  */
 public class DoubleFactory2D implements Serializable, Cloneable {
 
@@ -107,13 +106,12 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * Checks whether the given array is rectangular, that is, whether all rows
      * have the same number of columns.
-     * 
-     * @throws IllegalArgumentException
-     *             if the array is not rectangular.
+     *
+     * @throws IllegalArgumentException if the array is not rectangular.
      */
     protected static void checkRectangularShape(double[][] array) {
         int columns = -1;
-        for (int row = array.length; --row >= 0;) {
+        for (int row = array.length; --row >= 0; ) {
             if (array[row] != null) {
                 if (columns == -1)
                     columns = array[row].length;
@@ -126,13 +124,12 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * Checks whether the given array is rectangular, that is, whether all rows
      * have the same number of columns.
-     * 
-     * @throws IllegalArgumentException
-     *             if the array is not rectangular.
+     *
+     * @throws IllegalArgumentException if the array is not rectangular.
      */
     protected static void checkRectangularShape(DoubleMatrix2D[][] array) {
         int columns = -1;
-        for (int row = array.length; --row >= 0;) {
+        for (int row = array.length; --row >= 0; ) {
             if (array[row] != null) {
                 if (columns == -1)
                     columns = array[row].length;
@@ -152,17 +149,17 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * C = A||b; Constructs a new matrix which is the column-wise concatenation
      * of two other matrices.
-     * 
+     *
      * <pre>
      *   0 1 2
      *   3 4 5
      *   appendColumn
-     *   6 
-     *   8 
+     *   6
+     *   8
      *   --&gt;
-     *   0 1 2 6 
+     *   0 1 2 6
      *   3 4 5 8
-     * 
+     *
      * </pre>
      */
     public DoubleMatrix2D appendColumn(DoubleMatrix2D A, DoubleMatrix1D b) {
@@ -185,7 +182,7 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * C = A||B; Constructs a new matrix which is the column-wise concatenation
      * of two other matrices.
-     * 
+     *
      * <pre>
      * 	 0 1 2
      * 	 3 4 5
@@ -193,9 +190,9 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      * 	 6 7
      * 	 8 9
      * 	 --&gt;
-     * 	 0 1 2 6 7 
+     * 	 0 1 2 6 7
      * 	 3 4 5 8 9
-     * 
+     *
      * </pre>
      */
     public DoubleMatrix2D appendColumns(DoubleMatrix2D A, DoubleMatrix2D B) {
@@ -218,19 +215,19 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * C = A||b; Constructs a new matrix which is the row-wise concatenation of
      * two other matrices.
-     * 
+     *
      * <pre>
-     *   0 1 
-     *   2 3 
+     *   0 1
+     *   2 3
      *   4 5
      *   appendRow
      *   6 7
      *   --&gt;
-     *   0 1 
-     *   2 3 
+     *   0 1
+     *   2 3
      *   4 5
      *   6 7
-     * 
+     *
      * </pre>
      */
     public DoubleMatrix2D appendRow(DoubleMatrix2D A, DoubleMatrix1D b) {
@@ -253,21 +250,21 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * C = A||B; Constructs a new matrix which is the row-wise concatenation of
      * two other matrices.
-     * 
+     *
      * <pre>
-     * 	 0 1 
-     * 	 2 3 
+     * 	 0 1
+     * 	 2 3
      * 	 4 5
      * 	 appendRows
      * 	 6 7
      * 	 8 9
      * 	 --&gt;
-     * 	 0 1 
-     * 	 2 3 
+     * 	 0 1
+     * 	 2 3
      * 	 4 5
      * 	 6 7
      * 	 8 9
-     * 
+     *
      * </pre>
      */
     public DoubleMatrix2D appendRows(DoubleMatrix2D A, DoubleMatrix2D B) {
@@ -290,16 +287,16 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * Constructs a matrix with cells having ascending values. For debugging
      * purposes. Example:
-     * 
+     *
      * <pre>
-     * 	 0 1 2 
+     * 	 0 1 2
      * 	 3 4 5
-     * 
+     *
      * </pre>
      */
     public DoubleMatrix2D ascending(int rows, int columns) {
         return descending(rows, columns).assign(
-                DoubleFunctions.chain(DoubleFunctions.neg, DoubleFunctions.minus(columns * rows)));
+            DoubleFunctions.chain(DoubleFunctions.neg, DoubleFunctions.minus(columns * rows)));
     }
 
     /**
@@ -319,82 +316,81 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      * </tr>
      * <tr align="left" valign="top">
      * <td>
-     * 
+     *
      * <pre>
      * DoubleMatrix2D[][] parts1 = { { null, make(2, 2, 1), null }, { make(4, 4, 2), null, make(4, 3, 3) },
      *         { null, make(2, 2, 4), null } };
      * System.out.println(compose(parts1));
      * </pre>
-     * 
+     *
      * </td>
      * <td><tt>8&nbsp;x&nbsp;9&nbsp;matrix<br>
-     0&nbsp;0&nbsp;0&nbsp;0&nbsp;1&nbsp;1&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0&nbsp;1&nbsp;1&nbsp;0&nbsp;0&nbsp;0<br>
-     2&nbsp;2&nbsp;2&nbsp;2&nbsp;0&nbsp;0&nbsp;3&nbsp;3&nbsp;3<br>
-     2&nbsp;2&nbsp;2&nbsp;2&nbsp;0&nbsp;0&nbsp;3&nbsp;3&nbsp;3<br>
-     2&nbsp;2&nbsp;2&nbsp;2&nbsp;0&nbsp;0&nbsp;3&nbsp;3&nbsp;3<br>
-     2&nbsp;2&nbsp;2&nbsp;2&nbsp;0&nbsp;0&nbsp;3&nbsp;3&nbsp;3<br>
-     0&nbsp;0&nbsp;0&nbsp;0&nbsp;4&nbsp;4&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0&nbsp;4&nbsp;4&nbsp;0&nbsp;0&nbsp;0</tt></td>
+     * 0&nbsp;0&nbsp;0&nbsp;0&nbsp;1&nbsp;1&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0&nbsp;1&nbsp;1&nbsp;0&nbsp;0&nbsp;0<br>
+     * 2&nbsp;2&nbsp;2&nbsp;2&nbsp;0&nbsp;0&nbsp;3&nbsp;3&nbsp;3<br>
+     * 2&nbsp;2&nbsp;2&nbsp;2&nbsp;0&nbsp;0&nbsp;3&nbsp;3&nbsp;3<br>
+     * 2&nbsp;2&nbsp;2&nbsp;2&nbsp;0&nbsp;0&nbsp;3&nbsp;3&nbsp;3<br>
+     * 2&nbsp;2&nbsp;2&nbsp;2&nbsp;0&nbsp;0&nbsp;3&nbsp;3&nbsp;3<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0&nbsp;4&nbsp;4&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0&nbsp;4&nbsp;4&nbsp;0&nbsp;0&nbsp;0</tt></td>
      * </tr>
      * <tr align="left" valign="top">
      * <td>
-     * 
+     *
      * <pre>
      * DoubleMatrix2D[][] parts3 = { { identity(3), null, }, { null, identity(3).viewColumnFlip() },
      *         { identity(3).viewRowFlip(), null } };
      * System.out.println(&quot;\n&quot; + make(parts3));
      * </pre>
-     * 
+     *
      * </td>
      * <td><tt>9&nbsp;x&nbsp;6&nbsp;matrix<br>
-     1&nbsp;0&nbsp;0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;1&nbsp;0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;1&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0&nbsp;0&nbsp;1<br>
-     0&nbsp;0&nbsp;0&nbsp;0&nbsp;1&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;1&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;1&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;1&nbsp;0&nbsp;0&nbsp;0&nbsp;0<br>
-     1&nbsp;0&nbsp;0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
+     * 1&nbsp;0&nbsp;0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;1&nbsp;0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;1&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0&nbsp;0&nbsp;1<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0&nbsp;1&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;1&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;1&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;1&nbsp;0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 1&nbsp;0&nbsp;0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
      * </tr>
      * <tr align="left" valign="top">
      * <td>
-     * 
+     *
      * <pre>
      * DoubleMatrix2D A = ascending(2, 2);
      * DoubleMatrix2D B = descending(2, 2);
      * DoubleMatrix2D _ = null;
-     * 
+     *
      * DoubleMatrix2D[][] parts4 = { { A, _, A, _ }, { _, A, _, B } };
      * System.out.println(&quot;\n&quot; + make(parts4));
      * </pre>
-     * 
+     *
      * </td>
      * <td><tt>4&nbsp;x&nbsp;8&nbsp;matrix<br>
-     1&nbsp;2&nbsp;0&nbsp;0&nbsp;1&nbsp;2&nbsp;0&nbsp;0<br>
-     3&nbsp;4&nbsp;0&nbsp;0&nbsp;3&nbsp;4&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;1&nbsp;2&nbsp;0&nbsp;0&nbsp;3&nbsp;2<br>
-     0&nbsp;0&nbsp;3&nbsp;4&nbsp;0&nbsp;0&nbsp;1&nbsp;0 </tt></td>
+     * 1&nbsp;2&nbsp;0&nbsp;0&nbsp;1&nbsp;2&nbsp;0&nbsp;0<br>
+     * 3&nbsp;4&nbsp;0&nbsp;0&nbsp;3&nbsp;4&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;1&nbsp;2&nbsp;0&nbsp;0&nbsp;3&nbsp;2<br>
+     * 0&nbsp;0&nbsp;3&nbsp;4&nbsp;0&nbsp;0&nbsp;1&nbsp;0 </tt></td>
      * </tr>
      * <tr align="left" valign="top">
      * <td>
-     * 
+     *
      * <pre>
      * DoubleMatrix2D[][] parts2 = { { null, make(2, 2, 1), null }, { make(4, 4, 2), null, make(4, 3, 3) },
      *         { null, make(2, 3, 4), null } };
      * System.out.println(&quot;\n&quot; + Factory2D.make(parts2));
      * </pre>
-     * 
+     *
      * </td>
      * <td><tt>IllegalArgumentException<br>
-     A[0,1].columns != A[2,1].columns<br>
-     (2 != 3)</tt></td>
+     * A[0,1].columns != A[2,1].columns<br>
+     * (2 != 3)</tt></td>
      * </tr>
      * </table>
-     * 
-     * @throws IllegalArgumentException
-     *             subject to the conditions outlined above.
+     *
+     * @throws IllegalArgumentException subject to the conditions outlined above.
      */
     public DoubleMatrix2D compose(DoubleMatrix2D[][] parts) {
         checkRectangularShape(parts);
@@ -409,9 +405,9 @@ public class DoubleFactory2D implements Serializable, Cloneable {
 
         // determine maximum column width of each column
         int[] maxWidths = new int[columns];
-        for (int column = columns; --column >= 0;) {
+        for (int column = columns; --column >= 0; ) {
             int maxWidth = 0;
-            for (int row = rows; --row >= 0;) {
+            for (int row = rows; --row >= 0; ) {
                 DoubleMatrix2D part = parts[row][column];
                 if (part != null) {
                     int width = part.columns();
@@ -425,9 +421,9 @@ public class DoubleFactory2D implements Serializable, Cloneable {
 
         // determine row height of each row
         int[] maxHeights = new int[rows];
-        for (int row = rows; --row >= 0;) {
+        for (int row = rows; --row >= 0; ) {
             int maxHeight = 0;
-            for (int column = columns; --column >= 0;) {
+            for (int column = columns; --column >= 0; ) {
                 DoubleMatrix2D part = parts[row][column];
                 if (part != null) {
                     int height = part.rows();
@@ -441,10 +437,10 @@ public class DoubleFactory2D implements Serializable, Cloneable {
 
         // shape of result
         int resultRows = 0;
-        for (int row = rows; --row >= 0;)
+        for (int row = rows; --row >= 0; )
             resultRows += maxHeights[row];
         int resultCols = 0;
-        for (int column = columns; --column >= 0;)
+        for (int column = columns; --column >= 0; )
             resultCols += maxWidths[column];
 
         DoubleMatrix2D matrix = make(resultRows, resultCols);
@@ -469,20 +465,18 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * Constructs a bidiagonal block matrix from the given parts. The
      * concatenation has the form
-     * 
+     *
      * <pre>
      *   A 0 0
      *   0 B 0
      *   0 0 C
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * from the given parts. Cells are copied.
-     * 
-     * @param A
-     *            bidiagonal matrix
-     * @param B
-     *            bidiagonal matrix
+     *
+     * @param A bidiagonal matrix
+     * @param B bidiagonal matrix
      * @return bidiagonal matrix
      */
     public DoubleMatrix2D composeBidiagonal(DoubleMatrix2D A, DoubleMatrix2D B) {
@@ -499,16 +493,16 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * Constructs a diagonal block matrix from the given parts (the <i>direct
      * sum</i> of two matrices). That is the concatenation
-     * 
+     *
      * <pre>
      * 	 A 0
      * 	 0 B
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * (The direct sum has <tt>A.rows()+B.rows()</tt> rows and
      * <tt>A.columns()+B.columns()</tt> columns). Cells are copied.
-     * 
+     *
      * @return a new matrix which is the direct sum.
      */
     public DoubleMatrix2D composeDiagonal(DoubleMatrix2D A, DoubleMatrix2D B) {
@@ -525,14 +519,14 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * Constructs a diagonal block matrix from the given parts. The
      * concatenation has the form
-     * 
+     *
      * <pre>
      * 	 A 0 0
      * 	 0 B 0
      * 	 0 0 C
-     * 
+     *
      * </pre>
-     * 
+     * <p>
      * from the given parts. Cells are copied.
      */
     public DoubleMatrix2D composeDiagonal(DoubleMatrix2D A, DoubleMatrix2D B, DoubleMatrix2D C) {
@@ -562,68 +556,67 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      * </tr>
      * <tr align="left" valign="top">
      * <td>
-     * 
+     *
      * <pre>
      * 	 DoubleMatrix2D matrix = ... ;
      * 	 DoubleMatrix2D _ = null;
      * 	 DoubleMatrix2D A,B,C,D;
      * 	 A = make(2,2); B = make (4,4);
      * 	 C = make(4,3); D = make (2,2);
-     * 	 DoubleMatrix2D[][] parts = 
-     * 	 {
-     * 	    { _, A, _ },
-     * 	    { B, _, C },
-     * 	    { _, D, _ }
-     * 	 };
+     * 	 DoubleMatrix2D[][] parts =
+     *     {
+     *        { _, A, _ },
+     *        { B, _, C },
+     *        { _, D, _ }
+     *     };
      * 	 decompose(parts,matrix);
      * 	 System.out.println(&quot;\nA = &quot;+A);
      * 	 System.out.println(&quot;\nB = &quot;+B);
      * 	 System.out.println(&quot;\nC = &quot;+C);
      * 	 System.out.println(&quot;\nD = &quot;+D);
-     * 
+     *
      * </pre>
-     * 
+     *
      * </td>
      * <td><tt>8&nbsp;x&nbsp;9&nbsp;matrix<br>
-     9&nbsp;9&nbsp;9&nbsp;9&nbsp;1&nbsp;1&nbsp;9&nbsp;9&nbsp;9<br>
-     9&nbsp;9&nbsp;9&nbsp;9&nbsp;1&nbsp;1&nbsp;9&nbsp;9&nbsp;9<br>
-     2&nbsp;2&nbsp;2&nbsp;2&nbsp;9&nbsp;9&nbsp;3&nbsp;3&nbsp;3<br>
-     2&nbsp;2&nbsp;2&nbsp;2&nbsp;9&nbsp;9&nbsp;3&nbsp;3&nbsp;3<br>
-     2&nbsp;2&nbsp;2&nbsp;2&nbsp;9&nbsp;9&nbsp;3&nbsp;3&nbsp;3<br>
-     2&nbsp;2&nbsp;2&nbsp;2&nbsp;9&nbsp;9&nbsp;3&nbsp;3&nbsp;3<br>
-     9&nbsp;9&nbsp;9&nbsp;9&nbsp;4&nbsp;4&nbsp;9&nbsp;9&nbsp;9<br>
-     9&nbsp;9&nbsp;9&nbsp;9&nbsp;4&nbsp;4&nbsp;9&nbsp;9&nbsp;9</tt></td>
+     * 9&nbsp;9&nbsp;9&nbsp;9&nbsp;1&nbsp;1&nbsp;9&nbsp;9&nbsp;9<br>
+     * 9&nbsp;9&nbsp;9&nbsp;9&nbsp;1&nbsp;1&nbsp;9&nbsp;9&nbsp;9<br>
+     * 2&nbsp;2&nbsp;2&nbsp;2&nbsp;9&nbsp;9&nbsp;3&nbsp;3&nbsp;3<br>
+     * 2&nbsp;2&nbsp;2&nbsp;2&nbsp;9&nbsp;9&nbsp;3&nbsp;3&nbsp;3<br>
+     * 2&nbsp;2&nbsp;2&nbsp;2&nbsp;9&nbsp;9&nbsp;3&nbsp;3&nbsp;3<br>
+     * 2&nbsp;2&nbsp;2&nbsp;2&nbsp;9&nbsp;9&nbsp;3&nbsp;3&nbsp;3<br>
+     * 9&nbsp;9&nbsp;9&nbsp;9&nbsp;4&nbsp;4&nbsp;9&nbsp;9&nbsp;9<br>
+     * 9&nbsp;9&nbsp;9&nbsp;9&nbsp;4&nbsp;4&nbsp;9&nbsp;9&nbsp;9</tt></td>
      * <td>
      * <p>
      * <tt>A = 2&nbsp;x&nbsp;2&nbsp;matrix<br>
-     1&nbsp;1<br>
-     1&nbsp;1</tt>
+     * 1&nbsp;1<br>
+     * 1&nbsp;1</tt>
      * </p>
      * <p>
      * <tt>B = 4&nbsp;x&nbsp;4&nbsp;matrix<br>
-     2&nbsp;2&nbsp;2&nbsp;2<br>
-     2&nbsp;2&nbsp;2&nbsp;2<br>
-     2&nbsp;2&nbsp;2&nbsp;2<br>
-     2&nbsp;2&nbsp;2&nbsp;2</tt>
+     * 2&nbsp;2&nbsp;2&nbsp;2<br>
+     * 2&nbsp;2&nbsp;2&nbsp;2<br>
+     * 2&nbsp;2&nbsp;2&nbsp;2<br>
+     * 2&nbsp;2&nbsp;2&nbsp;2</tt>
      * </p>
      * <p>
      * <tt>C = 4&nbsp;x&nbsp;3&nbsp;matrix<br>
-     3&nbsp;3&nbsp;3<br>
-     3&nbsp;3&nbsp;3<br>
-     </tt><tt>3&nbsp;3&nbsp;3<br>
-     </tt><tt>3&nbsp;3&nbsp;3</tt>
+     * 3&nbsp;3&nbsp;3<br>
+     * 3&nbsp;3&nbsp;3<br>
+     * </tt><tt>3&nbsp;3&nbsp;3<br>
+     * </tt><tt>3&nbsp;3&nbsp;3</tt>
      * </p>
      * <p>
      * <tt>D = 2&nbsp;x&nbsp;2&nbsp;matrix<br>
-     4&nbsp;4<br>
-     4&nbsp;4</tt>
+     * 4&nbsp;4<br>
+     * 4&nbsp;4</tt>
      * </p>
      * </td>
      * </tr>
      * </table>
-     * 
-     * @throws IllegalArgumentException
-     *             subject to the conditions outlined above.
+     *
+     * @throws IllegalArgumentException subject to the conditions outlined above.
      */
     public void decompose(DoubleMatrix2D[][] parts, DoubleMatrix2D matrix) {
         checkRectangularShape(parts);
@@ -636,9 +629,9 @@ public class DoubleFactory2D implements Serializable, Cloneable {
 
         // determine maximum column width of each column
         int[] maxWidths = new int[columns];
-        for (int column = columns; --column >= 0;) {
+        for (int column = columns; --column >= 0; ) {
             int maxWidth = 0;
-            for (int row = rows; --row >= 0;) {
+            for (int row = rows; --row >= 0; ) {
                 DoubleMatrix2D part = parts[row][column];
                 if (part != null) {
                     int width = part.columns();
@@ -652,9 +645,9 @@ public class DoubleFactory2D implements Serializable, Cloneable {
 
         // determine row height of each row
         int[] maxHeights = new int[rows];
-        for (int row = rows; --row >= 0;) {
+        for (int row = rows; --row >= 0; ) {
             int maxHeight = 0;
-            for (int column = columns; --column >= 0;) {
+            for (int column = columns; --column >= 0; ) {
                 DoubleMatrix2D part = parts[row][column];
                 if (part != null) {
                     int height = part.rows();
@@ -668,10 +661,10 @@ public class DoubleFactory2D implements Serializable, Cloneable {
 
         // shape of result parts
         int resultRows = 0;
-        for (int row = rows; --row >= 0;)
+        for (int row = rows; --row >= 0; )
             resultRows += maxHeights[row];
         int resultCols = 0;
-        for (int column = columns; --column >= 0;)
+        for (int column = columns; --column >= 0; )
             resultCols += maxWidths[column];
 
         if (matrix.rows() < resultRows || matrix.columns() < resultCols)
@@ -698,8 +691,8 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      */
     public void demo1() {
         System.out.println("\n\n");
-        DoubleMatrix2D[][] parts1 = { { null, make(2, 2, 1), null }, { make(4, 4, 2), null, make(4, 3, 3) },
-                { null, make(2, 2, 4), null } };
+        DoubleMatrix2D[][] parts1 = {{null, make(2, 2, 1), null}, {make(4, 4, 2), null, make(4, 3, 3)},
+            {null, make(2, 2, 4), null}};
         System.out.println("\n" + compose(parts1));
         // System.out.println("\n"+cern.mateba.matrixpattern.Converting.toHTML(make(parts1).toString()));
 
@@ -709,15 +702,15 @@ public class DoubleFactory2D implements Serializable, Cloneable {
          * System.out.println("\n"+make(parts2));
          */
 
-        DoubleMatrix2D[][] parts3 = { { identity(3), null, }, { null, identity(3).viewColumnFlip() },
-                { identity(3).viewRowFlip(), null } };
+        DoubleMatrix2D[][] parts3 = {{identity(3), null,}, {null, identity(3).viewColumnFlip()},
+            {identity(3).viewRowFlip(), null}};
         System.out.println("\n" + compose(parts3));
         // System.out.println("\n"+cern.mateba.matrixpattern.Converting.toHTML(make(parts3).toString()));
 
         DoubleMatrix2D A = ascending(2, 2);
         DoubleMatrix2D B = descending(2, 2);
 
-        DoubleMatrix2D[][] parts4 = { { A, null, A, null }, { null, A, null, B } };
+        DoubleMatrix2D[][] parts4 = {{A, null, A, null}, {null, A, null, B}};
         System.out.println("\n" + compose(parts4));
         // System.out.println("\n"+cern.mateba.matrixpattern.Converting.toHTML(make(parts4).toString()));
 
@@ -735,7 +728,7 @@ public class DoubleFactory2D implements Serializable, Cloneable {
         B = make(4, 4, 2);
         C = make(4, 3, 3);
         D = make(2, 2, 4);
-        DoubleMatrix2D[][] parts1 = { { null, A, null }, { B, null, C }, { null, D, null } };
+        DoubleMatrix2D[][] parts1 = {{null, A, null}, {B, null, C}, {null, D, null}};
         matrix = compose(parts1);
         System.out.println("\n" + matrix);
 
@@ -761,10 +754,10 @@ public class DoubleFactory2D implements Serializable, Cloneable {
          * identity(3).viewColumnFlip() }, { identity(3).viewRowFlip(), null } };
          * System.out.println("\n"+make(parts3));
          * //System.out.println("\n"+cern.mateba.matrixpattern.Converting.toHTML(make(parts3).toString()));
-         * 
+         *
          * DoubleMatrix2D A = ascending(2,2); DoubleMatrix2D B =
          * descending(2,2); DoubleMatrix2D _ = null;
-         * 
+         *
          * DoubleMatrix2D[][] parts4 = { { A, _, A, _ }, { _, A, _, B } };
          * System.out.println("\n"+make(parts4));
          * //System.out.println("\n"+cern.mateba.matrixpattern.Converting.toHTML(make(parts4).toString()));
@@ -774,18 +767,18 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * Constructs a matrix with cells having descending values. For debugging
      * purposes. Example:
-     * 
+     *
      * <pre>
-     * 	 5 4 3 
+     * 	 5 4 3
      * 	 2 1 0
-     * 
+     *
      * </pre>
      */
     public DoubleMatrix2D descending(int rows, int columns) {
         DoubleMatrix2D matrix = make(rows, columns);
         int v = 0;
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 matrix.setQuick(row, column, v++);
             }
         }
@@ -796,15 +789,15 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      * Constructs a new diagonal matrix whose diagonal elements are the elements
      * of <tt>vector</tt>. Cells values are copied. The new matrix is not a
      * view. Example:
-     * 
+     *
      * <pre>
      * 	 5 4 3 --&gt;
      * 	 5 0 0
      * 	 0 4 0
      * 	 0 0 3
-     * 
+     *
      * </pre>
-     * 
+     *
      * @return a new matrix.
      */
     public DoubleMatrix2D diagonal(double[] vector) {
@@ -820,21 +813,21 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      * Constructs a new diagonal matrix whose diagonal elements are the elements
      * of <tt>vector</tt>. Cells values are copied. The new matrix is not a
      * view. Example:
-     * 
+     *
      * <pre>
      * 	 5 4 3 --&gt;
      * 	 5 0 0
      * 	 0 4 0
      * 	 0 0 3
-     * 
+     *
      * </pre>
-     * 
+     *
      * @return a new matrix.
      */
     public DoubleMatrix2D diagonal(DoubleMatrix1D vector) {
         int size = (int) vector.size();
         DoubleMatrix2D diag = make(size, size);
-        for (int i = size; --i >= 0;) {
+        for (int i = size; --i >= 0; ) {
             diag.setQuick(i, i, vector.getQuick(i));
         }
         return diag;
@@ -843,23 +836,22 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * Constructs a new vector consisting of the diagonal elements of <tt>A</tt>
      * . Cells values are copied. The new vector is not a view. Example:
-     * 
+     *
      * <pre>
      * 	 5 0 0 9
      * 	 0 4 0 9
      * 	 0 0 3 9
      * 	 --&gt; 5 4 3
-     * 
+     *
      * </pre>
-     * 
-     * @param A
-     *            the matrix, need not be square.
+     *
+     * @param A the matrix, need not be square.
      * @return a new vector.
      */
     public DoubleMatrix1D diagonal(DoubleMatrix2D A) {
         int min = Math.min(A.rows(), A.columns());
         DoubleMatrix1D diag = make1D(min);
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             diag.setQuick(i, A.getQuick(i, i));
         }
         return diag;
@@ -871,7 +863,7 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      */
     public DoubleMatrix2D identity(int rowsAndColumns) {
         DoubleMatrix2D matrix = make(rowsAndColumns, rowsAndColumns);
-        for (int i = rowsAndColumns; --i >= 0;) {
+        for (int i = rowsAndColumns; --i >= 0; ) {
             matrix.setQuick(i, i, 1);
         }
         return matrix;
@@ -882,17 +874,14 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      * Fortran. Has the form
      * <tt>matrix.get(row,column) == values[row + column*rows]</tt>. The values
      * are copied.
-     * 
-     * @param values
-     *            One-dimensional array of doubles, packed by columns (ala
-     *            Fortran).
-     * @param rows
-     *            the number of rows.
-     * @exception IllegalArgumentException
-     *                <tt>values.length</tt> must be a multiple of <tt>rows</tt>
-     *                .
+     *
+     * @param values One-dimensional array of doubles, packed by columns (ala
+     *               Fortran).
+     * @param rows   the number of rows.
+     * @throws IllegalArgumentException <tt>values.length</tt> must be a multiple of <tt>rows</tt>
+     *                                  .
      */
-    public DoubleMatrix2D make(double values[], int rows) {
+    public DoubleMatrix2D make(double[] values, int rows) {
         int columns = (rows != 0 ? values.length / rows : 0);
         if (rows * columns != values.length)
             throw new IllegalArgumentException("Array length must be a multiple of m.");
@@ -913,13 +902,11 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            The values to be filled into the new matrix.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
-     *             .
+     *
+     * @param values The values to be filled into the new matrix.
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 1 &lt;= row &lt; values.length: values[row].length != values[row-1].length</tt>
+     *                                  .
      */
     public DoubleMatrix2D make(double[][] values) {
         if (this == sparse)
@@ -961,7 +948,7 @@ public class DoubleFactory2D implements Serializable, Cloneable {
     /**
      * C = A||A||..||A; Constructs a new matrix which is duplicated both along
      * the row and column dimension. Example:
-     * 
+     *
      * <pre>
      * 	 0 1
      * 	 2 3
@@ -970,15 +957,15 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      * 	 2 3 2 3 2 3
      * 	 0 1 0 1 0 1
      * 	 2 3 2 3 2 3
-     * 
+     *
      * </pre>
      */
     public DoubleMatrix2D repeat(DoubleMatrix2D A, int rowRepeat, int columnRepeat) {
         int r = A.rows();
         int c = A.columns();
         DoubleMatrix2D matrix = make(r * rowRepeat, c * columnRepeat);
-        for (int i = rowRepeat; --i >= 0;) {
-            for (int j = columnRepeat; --j >= 0;) {
+        for (int i = rowRepeat; --i >= 0; ) {
+            for (int j = columnRepeat; --j >= 0; ) {
                 matrix.viewPart(r * i, c * j, r, c).assign(A);
             }
         }
@@ -992,9 +979,8 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      * zero. Note that this is not the same as setting each cell with
      * probability <tt>nonZeroFraction</tt> to <tt>value</tt>. Note: The random
      * seed is a constant.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
      * @see cern.jet.random.sampling.RandomSampler
      */
     public DoubleMatrix2D sample(DoubleMatrix2D matrix, double value, double nonZeroFraction) {
@@ -1034,9 +1020,8 @@ public class DoubleFactory2D implements Serializable, Cloneable {
      * zero. Note that this is not the same as setting each cell with
      * probability <tt>nonZeroFraction</tt> to <tt>value</tt>. Note: The random
      * seed is a constant.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>nonZeroFraction < 0 || nonZeroFraction > 1</tt>.
      * @see cern.jet.random.sampling.RandomSampler
      */
     public DoubleMatrix2D sample(int rows, int columns, double value, double nonZeroFraction) {

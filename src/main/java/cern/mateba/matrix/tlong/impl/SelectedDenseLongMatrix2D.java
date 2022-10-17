@@ -48,16 +48,14 @@ import java.io.Serial;
  * <p>
  * Depends on the parent view holding cells.
  * <p>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 09/24/99
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  * @version 1.1, 08/22/2007
  */
 class SelectedDenseLongMatrix2D extends LongMatrix2D {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = -5025099228448386160L;
@@ -81,13 +79,10 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param elements
-     *            the cells.
-     * @param rowOffsets
-     *            The row offsets of the cells that shall be visible.
-     * @param columnOffsets
-     *            The column offsets of the cells that shall be visible.
+     *
+     * @param elements      the cells.
+     * @param rowOffsets    The row offsets of the cells that shall be visible.
+     * @param columnOffsets The column offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedDenseLongMatrix2D(long[] elements, int[] rowOffsets, int[] columnOffsets, int offset) {
@@ -96,31 +91,22 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
 
     /**
      * Constructs a matrix view with the given parameters.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param elements
-     *            the cells.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
-     * @param rowOffsets
-     *            The row offsets of the cells that shall be visible.
-     * @param columnOffsets
-     *            The column offsets of the cells that shall be visible.
+     *
+     * @param rows          the number of rows the matrix shall have.
+     * @param columns       the number of columns the matrix shall have.
+     * @param elements      the cells.
+     * @param rowZero       the position of the first element.
+     * @param columnZero    the position of the first element.
+     * @param rowStride     the number of elements between two rows, i.e.
+     *                      <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride  the number of elements between two columns, i.e.
+     *                      <tt>index(i,j+1)-index(i,j)</tt>.
+     * @param rowOffsets    The row offsets of the cells that shall be visible.
+     * @param columnOffsets The column offsets of the cells that shall be visible.
      * @param offset
      */
     protected SelectedDenseLongMatrix2D(int rows, int columns, long[] elements, int rowZero, int columnZero,
-            int rowStride, int columnStride, int[] rowOffsets, int[] columnOffsets, int offset) {
+                                        int rowStride, int columnStride, int[] rowOffsets, int[] columnOffsets, int offset) {
         // be sure parameters are valid, we do not check...
         setUp(rows, columns, rowZero, columnZero, rowStride, columnStride);
 
@@ -138,18 +124,16 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>[row,column]</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      * @return the value at the specified coordinate.
      */
 
@@ -159,17 +143,15 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
         // return elements[index(row,column)];
         // manually inlined:
         return elements[offset + rowOffsets[rowZero + row * rowStride]
-                + columnOffsets[columnZero + column * columnStride]];
+            + columnOffsets[columnZero + column * columnStride]];
     }
 
     /**
      * Returns the position of the given coordinate within the (virtual or
      * non-virtual) internal 1-dimensional array.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      */
 
     public long index(int row, int column) {
@@ -187,11 +169,9 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
      * <tt>SparseLongMatrix2D</tt> the new matrix must also be of type
      * <tt>SparseLongMatrix2D</tt>, etc. In general, the new matrix should have
      * internal parametrization as similar as possible.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
 
@@ -206,9 +186,8 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
      * must be of type <tt>DenseLongMatrix1D</tt>, if the receiver is an
      * instance of type <tt>SparseLongMatrix2D</tt> the new matrix must be of
      * type <tt>SparseLongMatrix1D</tt>, etc.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
+     *
+     * @param size the number of cells the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -219,20 +198,17 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
     /**
      * Sets the matrix cell at coordinate <tt>[row,column]</tt> to the specified
      * value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>0 &lt;= column &lt; columns() && 0 &lt;= row &lt; rows()</tt>.
-     * 
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param value  the value to be filled into the specified cell.
      */
 
     public void setQuick(int row, int column, long value) {
@@ -246,7 +222,7 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
     /**
      * Returns a vector obtained by stacking the columns of the matrix on top of
      * one another.
-     * 
+     *
      * @return
      */
     public LongMatrix1D vectorize() {
@@ -278,12 +254,10 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
      * 1, 4</td>
      * </tr>
      * </table>
-     * 
-     * @param the
-     *            column to fix.
+     *
+     * @param the column to fix.
      * @return a new slice view.
-     * @throws IllegalArgumentException
-     *             if <tt>column < 0 || column >= columns()</tt>.
+     * @throws IllegalArgumentException if <tt>column < 0 || column >= columns()</tt>.
      * @see #viewRow(int)
      */
 
@@ -315,12 +289,10 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
      * 1, 2, 3</td>
      * </tr>
      * </table>
-     * 
-     * @param the
-     *            row to fix.
+     *
+     * @param the row to fix.
      * @return a new slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>row < 0 || row >= rows()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>row < 0 || row >= rows()</tt>.
      * @see #viewColumn(int)
      */
 
@@ -338,9 +310,8 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
 
@@ -352,9 +323,8 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
      * Returns the position of the given absolute rank within the (virtual or
      * non-virtual) internal 1-dimensional array. Default implementation.
      * Override, if necessary.
-     * 
-     * @param rank
-     *            the absolute rank of the element.
+     *
+     * @param rank the absolute rank of the element.
      * @return the position.
      */
 
@@ -374,11 +344,9 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
      */
 
     protected boolean haveSharedCellsRaw(LongMatrix2D other) {
-        if (other instanceof SelectedDenseLongMatrix2D) {
-            SelectedDenseLongMatrix2D otherMatrix = (SelectedDenseLongMatrix2D) other;
+        if (other instanceof SelectedDenseLongMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
-        } else if (other instanceof DenseLongMatrix2D) {
-            DenseLongMatrix2D otherMatrix = (DenseLongMatrix2D) other;
+        } else if (other instanceof DenseLongMatrix2D otherMatrix) {
             return this.elements == otherMatrix.elements;
         }
         return false;
@@ -391,14 +359,11 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
      * type <tt>DenseLongMatrix1D</tt>, if the receiver is an instance of type
      * <tt>SparseLongMatrix2D</tt> the new matrix must be of type
      * <tt>SparseLongMatrix1D</tt>, etc.
-     * 
-     * @param size
-     *            the number of cells the matrix shall have.
-     * @param zero
-     *            the index of the first element.
-     * @param stride
-     *            the number of indexes between any two elements, i.e.
-     *            <tt>index(i+1)-index(i)</tt>.
+     *
+     * @param size   the number of cells the matrix shall have.
+     * @param zero   the index of the first element.
+     * @param stride the number of indexes between any two elements, i.e.
+     *               <tt>index(i+1)-index(i)</tt>.
      * @return a new matrix of the corresponding dynamic type.
      */
 
@@ -410,13 +375,10 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
 
     /**
      * Sets up a matrix with a given number of rows and columns.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @throws IllegalArgumentException
-     *             if <tt>(int)columns*rows > Long.MAX_VALUE</tt>.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
+     * @throws IllegalArgumentException if <tt>(int)columns*rows > Long.MAX_VALUE</tt>.
      */
 
     protected void setUp(int rows, int columns) {
@@ -445,11 +407,9 @@ class SelectedDenseLongMatrix2D extends LongMatrix2D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param rowOffsets
-     *            the offsets of the visible elements.
-     * @param columnOffsets
-     *            the offsets of the visible elements.
+     *
+     * @param rowOffsets    the offsets of the visible elements.
+     * @param columnOffsets the offsets of the visible elements.
      * @return a new view.
      */
 

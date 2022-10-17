@@ -8,6 +8,7 @@ package cern.mateba.matrix.tobject.algo;
  CERN makes no representations about the suitability of this software for any purpose. 
  It is provided "as is" without expressed or implied warranty.
  */
+
 import cern.mateba.matrix.AbstractFormatter;
 import cern.mateba.matrix.AbstractMatrix1D;
 import cern.mateba.matrix.AbstractMatrix2D;
@@ -23,13 +24,13 @@ import java.io.Serial;
  * using {@link Object#toString()}. For examples see
  * {@link cern.mateba.matrix.tdouble.algo.DoubleFormatter doublealgo.Formatter}
  * which is just the same except that it operates on doubles.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
  * @version 1.1, 11/22/99
  */
 public class ObjectFormatter extends AbstractFormatter {
     /**
-     * 
+     *
      */
     @Serial
     private static final long serialVersionUID = 4880855117806511073L;
@@ -43,9 +44,8 @@ public class ObjectFormatter extends AbstractFormatter {
 
     /**
      * Constructs and returns a matrix formatter.
-     * 
-     * @param alignment
-     *            the given alignment used to align a column.
+     *
+     * @param alignment the given alignment used to align a column.
      */
     public ObjectFormatter(String alignment) {
         setAlignment(alignment);
@@ -82,7 +82,7 @@ public class ObjectFormatter extends AbstractFormatter {
      */
     protected String[][] format(ObjectMatrix2D matrix) {
         String[][] strings = new String[matrix.rows()][matrix.columns()];
-        for (int row = matrix.rows(); --row >= 0;)
+        for (int row = matrix.rows(); --row >= 0; )
             strings[row] = formatRow(matrix.viewRow(row));
         return strings;
     }
@@ -90,9 +90,8 @@ public class ObjectFormatter extends AbstractFormatter {
     /**
      * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal
      * Java statement.
-     * 
-     * @param matrix
-     *            the matrix to format.
+     *
+     * @param matrix the matrix to format.
      */
     public String toSourceCode(ObjectMatrix1D matrix) {
         ObjectFormatter copy = (ObjectFormatter) this.clone();
@@ -106,9 +105,8 @@ public class ObjectFormatter extends AbstractFormatter {
     /**
      * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal
      * Java statement.
-     * 
-     * @param matrix
-     *            the matrix to format.
+     *
+     * @param matrix the matrix to format.
      */
     public String toSourceCode(ObjectMatrix2D matrix) {
         ObjectFormatter copy = (ObjectFormatter) this.clone();
@@ -124,9 +122,8 @@ public class ObjectFormatter extends AbstractFormatter {
     /**
      * Returns a string <tt>s</tt> such that <tt>Object[] m = s</tt> is a legal
      * Java statement.
-     * 
-     * @param matrix
-     *            the matrix to format.
+     *
+     * @param matrix the matrix to format.
      */
     public String toSourceCode(ObjectMatrix3D matrix) {
         ObjectFormatter copy = (ObjectFormatter) this.clone();
@@ -143,9 +140,8 @@ public class ObjectFormatter extends AbstractFormatter {
 
     /**
      * Returns a string representation of the given matrix.
-     * 
-     * @param matrix
-     *            the matrix to convert.
+     *
+     * @param matrix the matrix to convert.
      */
 
     protected String toString(AbstractMatrix2D matrix) {
@@ -154,9 +150,8 @@ public class ObjectFormatter extends AbstractFormatter {
 
     /**
      * Returns a string representation of the given matrix.
-     * 
-     * @param matrix
-     *            the matrix to convert.
+     *
+     * @param matrix the matrix to convert.
      */
     public String toString(ObjectMatrix1D matrix) {
         ObjectMatrix2D easy = matrix.like2D(1, (int) matrix.size());
@@ -166,9 +161,8 @@ public class ObjectFormatter extends AbstractFormatter {
 
     /**
      * Returns a string representation of the given matrix.
-     * 
-     * @param matrix
-     *            the matrix to convert.
+     *
+     * @param matrix the matrix to convert.
      */
     public String toString(ObjectMatrix2D matrix) {
         return super.toString(matrix);
@@ -176,9 +170,8 @@ public class ObjectFormatter extends AbstractFormatter {
 
     /**
      * Returns a string representation of the given matrix.
-     * 
-     * @param matrix
-     *            the matrix to convert.
+     *
+     * @param matrix the matrix to convert.
      */
     public String toString(ObjectMatrix3D matrix) {
         StringBuffer buf = new StringBuffer();
@@ -200,23 +193,17 @@ public class ObjectFormatter extends AbstractFormatter {
      * rows and columns labeled. Pass <tt>null</tt> to one or more parameters to
      * indicate that the corresponding decoration element shall not appear in
      * the string converted matrix.
-     * 
-     * @param matrix
-     *            The matrix to format.
-     * @param rowNames
-     *            The headers of all rows (to be put to the left of the matrix).
-     * @param columnNames
-     *            The headers of all columns (to be put to above the matrix).
-     * @param rowAxisName
-     *            The label of the y-axis.
-     * @param columnAxisName
-     *            The label of the x-axis.
-     * @param title
-     *            The overall title of the matrix to be formatted.
+     *
+     * @param matrix         The matrix to format.
+     * @param rowNames       The headers of all rows (to be put to the left of the matrix).
+     * @param columnNames    The headers of all columns (to be put to above the matrix).
+     * @param rowAxisName    The label of the y-axis.
+     * @param columnAxisName The label of the x-axis.
+     * @param title          The overall title of the matrix to be formatted.
      * @return the matrix converted to a string.
      */
     public String toTitleString(ObjectMatrix2D matrix, String[] rowNames, String[] columnNames, String rowAxisName,
-            String columnAxisName, String title) {
+                                String columnAxisName, String title) {
         if (matrix.size() == 0)
             return "Empty matrix";
         String oldFormat = this.format;
@@ -249,7 +236,7 @@ public class ObjectFormatter extends AbstractFormatter {
         // insert row axis name in leading column
         if (rowAxisName != null) {
             String[] rowAxisStrings = new String[rowAxisName.length()];
-            for (int i = rowAxisName.length(); --i >= 0;)
+            for (int i = rowAxisName.length(); --i >= 0; )
                 rowAxisStrings[i] = rowAxisName.substring(i, i + 1);
             titleMatrix.viewColumn(0).viewPart(r, rowAxisName.length()).assign(rowAxisStrings);
         }
@@ -303,27 +290,19 @@ public class ObjectFormatter extends AbstractFormatter {
      * rows and columns labeled. Pass <tt>null</tt> to one or more parameters to
      * indicate that the corresponding decoration element shall not appear in
      * the string converted matrix.
-     * 
-     * @param matrix
-     *            The matrix to format.
-     * @param sliceNames
-     *            The headers of all slices (to be put above each slice).
-     * @param rowNames
-     *            The headers of all rows (to be put to the left of the matrix).
-     * @param columnNames
-     *            The headers of all columns (to be put to above the matrix).
-     * @param sliceAxisName
-     *            The label of the z-axis (to be put above each slice).
-     * @param rowAxisName
-     *            The label of the y-axis.
-     * @param columnAxisName
-     *            The label of the x-axis.
-     * @param title
-     *            The overall title of the matrix to be formatted.
+     *
+     * @param matrix         The matrix to format.
+     * @param sliceNames     The headers of all slices (to be put above each slice).
+     * @param rowNames       The headers of all rows (to be put to the left of the matrix).
+     * @param columnNames    The headers of all columns (to be put to above the matrix).
+     * @param sliceAxisName  The label of the z-axis (to be put above each slice).
+     * @param rowAxisName    The label of the y-axis.
+     * @param columnAxisName The label of the x-axis.
+     * @param title          The overall title of the matrix to be formatted.
      * @return the matrix converted to a string.
      */
     public String toTitleString(ObjectMatrix3D matrix, String[] sliceNames, String[] rowNames, String[] columnNames,
-            String sliceAxisName, String rowAxisName, String columnAxisName, String title) {
+                                String sliceAxisName, String rowAxisName, String columnAxisName, String title) {
         if (matrix.size() == 0)
             return "Empty matrix";
         StringBuffer buf = new StringBuffer();
@@ -331,7 +310,7 @@ public class ObjectFormatter extends AbstractFormatter {
             if (i != 0)
                 buf.append(sliceSeparator);
             buf.append(toTitleString(matrix.viewSlice(i), rowNames, columnNames, rowAxisName, columnAxisName, title
-                    + "\n" + sliceAxisName + "=" + sliceNames[i]));
+                + "\n" + sliceAxisName + "=" + sliceNames[i]));
         }
         return buf.toString();
     }

@@ -73,7 +73,7 @@ public class DoubleArrayList extends AbstractList implements DoubleBuffer1DConsu
 
     /**
      * Searches the receiver for the specified value using the binary search algorithm. The receiver
-     * <strong>must</strong> be sorted (as by the sort method) prior to making this call. If it is not sorted, 
+     * <strong>must</strong> be sorted (as by the sort method) prior to making this call. If it is not sorted,
      * the results are undefined: in particular, the call may enter an infinite loop. If the receiver contains multiple
      * elements equal to the specified object, there is no guarantee which instance will be found.
      *
@@ -309,7 +309,7 @@ public class DoubleArrayList extends AbstractList implements DoubleBuffer1DConsu
      * Applies a procedure to each element of the receiver, if any. Starts at index 0, moving rightwards.
      *
      * @param procedure the procedure to be applied. Stops iteration if the procedure returns {@code false}, otherwise
-     *                 continues.
+     *                  continues.
      * @return {@code false} if the procedure stopped before all elements where iterated over, {@code true} otherwise.
      */
     public boolean forEach(final @NotNull DoubleProcedure procedure) {
@@ -366,7 +366,7 @@ public class DoubleArrayList extends AbstractList implements DoubleBuffer1DConsu
      * @return the index of the last occurrence of the element in the receiver; returns {@code -1} if the element is not
      * found.
      */
-    public int lastIndexOfFromTo(final double element, final int from,  final int to) {
+    public int lastIndexOfFromTo(final double element, final int from, final int to) {
         checkRangeFromTo(from, to, size());
         for (int i = to; i >= from; i--) if (element == getQuick(i)) return i;
         return -1;

@@ -19,11 +19,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 /**
  * 2-d matrix holding <tt>int</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 04/14/2000
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.0, 04/14/2000
  */
 public class WrapperIntMatrix2D extends IntMatrix2D {
     @Serial
@@ -64,7 +63,7 @@ public class WrapperIntMatrix2D extends IntMatrix2D {
             final int[] elems = ((DiagonalIntMatrix2D) content).elements;
             if (values.length != dlength)
                 throw new IllegalArgumentException("Must have same length: length=" + values.length + " dlength="
-                        + dlength);
+                    + dlength);
             int nthreads = ConcurrencyUtils.getNumberOfThreads();
             if ((nthreads > 1) && (dlength >= ConcurrencyUtils.getThreadsBeginN_2D())) {
                 nthreads = Math.min(nthreads, dlength);
@@ -76,17 +75,14 @@ public class WrapperIntMatrix2D extends IntMatrix2D {
                     futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                         public void run() {
-                            for (int i = firstIdx; i < lastIdx; i++) {
-                                elems[i] = values[i];
-                            }
+                            if (lastIdx - firstIdx >= 0)
+                                System.arraycopy(values, firstIdx, elems, firstIdx, lastIdx - firstIdx);
                         }
                     });
                 }
                 ConcurrencyUtils.waitForCompletion(futures);
             } else {
-                for (int i = 0; i < dlength; i++) {
-                    elems[i] = values[i];
-                }
+                System.arraycopy(values, 0, elems, 0, dlength);
             }
             return this;
         } else {
@@ -119,15 +115,13 @@ public class WrapperIntMatrix2D extends IntMatrix2D {
     }
 
     public boolean equals(Object obj) {
-        if (content instanceof DiagonalIntMatrix2D && obj instanceof DiagonalIntMatrix2D) {
+        if (content instanceof DiagonalIntMatrix2D A && obj instanceof DiagonalIntMatrix2D B) {
             if (this == obj)
                 return true;
             if (!(this != null && obj != null))
                 return false;
-            DiagonalIntMatrix2D A = (DiagonalIntMatrix2D) content;
-            DiagonalIntMatrix2D B = (DiagonalIntMatrix2D) obj;
             if (A.columns() != B.columns() || A.rows() != B.rows() || A.diagonalIndex() != B.diagonalIndex()
-                    || A.diagonalLength() != B.diagonalLength())
+                || A.diagonalLength() != B.diagonalLength())
                 return false;
             int[] AElements = A.elements();
             int[] BElements = B.elements();
@@ -200,7 +194,7 @@ public class WrapperIntMatrix2D extends IntMatrix2D {
             return this;
         WrapperIntMatrix2D view = new WrapperIntMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -228,7 +222,7 @@ public class WrapperIntMatrix2D extends IntMatrix2D {
     public IntMatrix2D viewDice() {
         WrapperIntMatrix2D view = new WrapperIntMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -259,7 +253,7 @@ public class WrapperIntMatrix2D extends IntMatrix2D {
         checkBox(row, column, height, width);
         WrapperIntMatrix2D view = new WrapperIntMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -296,7 +290,7 @@ public class WrapperIntMatrix2D extends IntMatrix2D {
             return this;
         WrapperIntMatrix2D view = new WrapperIntMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -324,12 +318,12 @@ public class WrapperIntMatrix2D extends IntMatrix2D {
         // check for "all"
         if (rowIndexes == null) {
             rowIndexes = new int[rows];
-            for (int i = rows; --i >= 0;)
+            for (int i = rows; --i >= 0; )
                 rowIndexes[i] = i;
         }
         if (columnIndexes == null) {
             columnIndexes = new int[columns];
-            for (int i = columns; --i >= 0;)
+            for (int i = columns; --i >= 0; )
                 columnIndexes[i] = i;
         }
 
@@ -340,7 +334,7 @@ public class WrapperIntMatrix2D extends IntMatrix2D {
 
         WrapperIntMatrix2D view = new WrapperIntMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -372,7 +366,7 @@ public class WrapperIntMatrix2D extends IntMatrix2D {
             throw new IndexOutOfBoundsException("illegal stride");
         WrapperIntMatrix2D view = new WrapperIntMatrix2D(this) {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 

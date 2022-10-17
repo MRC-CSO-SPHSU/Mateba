@@ -87,7 +87,7 @@ public class TestDenseDoubleCholeskyDecomposition {
 
             testCholesky(A1, A2, B1, B2);
         }
-        System.out.println("All finished");       
+        System.out.println("All finished");
         System.exit(0);
 
     }
@@ -102,11 +102,11 @@ public class TestDenseDoubleCholeskyDecomposition {
         cf.solve(X);
         System.out.print("\n");
         System.out.print("------ DoubleCholeskyFactorization tests-------  \n");
-        System.out.print(String.format("            Size of the Matrix %d by %d\n", N, N));
+        System.out.printf("            Size of the Matrix %d by %d\n", N, N);
         System.out.print("\n");
         System.out.print(" The matrix A is randomly generated for each test.\n");
         System.out.print("============\n");
-        System.out.print(String.format(" The relative machine precision (eps) is to be %e \n", eps));
+        System.out.printf(" The relative machine precision (eps) is to be %e \n", eps);
         System.out.print(" Computational tests pass if scaled residuals are less than 10.\n");
 
         /* Check the factorization and the solution */
@@ -174,7 +174,7 @@ public class TestDenseDoubleCholeskyDecomposition {
 
         System.out.print("============\n");
         System.out.print("Checking the Cholesky Factorization \n");
-        System.out.print(String.format("-- ||L'L-A||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps)));
+        System.out.printf("-- ||L'L-A||_oo/(||A||_oo.N.eps) = %e \n", Rnorm / (Anorm * N * eps));
 
         if (Rnorm / (Anorm * N * eps) > 10.0) {
             System.out.print("-- Factorization is suspicious ! \n");
@@ -187,7 +187,7 @@ public class TestDenseDoubleCholeskyDecomposition {
     }
 
     /*------------------------------------------------------------------------
-     *  Check the accuracy of the solution of the linear system 
+     *  Check the accuracy of the solution of the linear system
      */
 
     private static int checkSolution(DoubleMatrix2D A1, DoubleMatrix2D B1, DoubleMatrix2D B2, double eps) {
@@ -233,13 +233,13 @@ public class TestDenseDoubleCholeskyDecomposition {
         Bnorm = org.netlib.lapack.Dlange.dlange(norm, N, NRHS, B1elems, 0, LDB, work, 0);
 
         org.netlib.blas.Dgemm.dgemm("N", "N", N, NRHS, N, alpha, A1elems, 0, LDA, B2elems, 0, LDB, beta, B1elems, 0,
-                LDB);
+            LDB);
         Rnorm = org.netlib.lapack.Dlange.dlange(norm, N, NRHS, B1elems, 0, LDB, work, 0);
 
         System.out.print("============\n");
         System.out.print("Checking the Residual of the solution \n");
-        System.out.print(String.format("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
-                / ((Anorm * Xnorm + Bnorm) * N * eps)));
+        System.out.printf("-- ||Ax-B||_oo/((||A||_oo||x||_oo+||B||_oo).N.eps) = %e \n", Rnorm
+            / ((Anorm * Xnorm + Bnorm) * N * eps));
 
         if (Rnorm / ((Anorm * Xnorm + Bnorm) * N * eps) > 10.0) {
             System.out.print("-- The solution is suspicious ! \n");

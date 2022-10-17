@@ -93,11 +93,7 @@ public abstract class DoubleMatrix2DTest extends TestCase {
     public void testAggregateDoubleDoubleFunctionDoubleFunctionDoubleProcedure() {
         DoubleProcedure procedure = new DoubleProcedure() {
             public boolean apply(double element) {
-                if (Math.abs(element) > 0.2) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 0.2;
             }
         };
         double expected = 0;
@@ -165,7 +161,7 @@ public abstract class DoubleMatrix2DTest extends TestCase {
         }
         A.assign(expected);
         for (int r = 0; r < A.rows(); r++) {
-            assertTrue(A.columns() == expected[r].length);
+            assertEquals(A.columns(), expected[r].length);
             for (int c = 0; c < A.columns(); c++)
                 assertEquals(expected[r][c], A.getQuick(r, c), TOL);
         }
@@ -221,11 +217,7 @@ public abstract class DoubleMatrix2DTest extends TestCase {
     public void testAssignDoubleProcedureDouble() {
         DoubleProcedure procedure = new DoubleProcedure() {
             public boolean apply(double element) {
-                if (Math.abs(element) > 0.1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 0.1;
             }
         };
         DoubleMatrix2D Acopy = A.copy();
@@ -244,11 +236,7 @@ public abstract class DoubleMatrix2DTest extends TestCase {
     public void testAssignDoubleProcedureDoubleFunction() {
         DoubleProcedure procedure = new DoubleProcedure() {
             public boolean apply(double element) {
-                if (Math.abs(element) > 0.1) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element) > 0.1;
             }
         };
         DoubleMatrix2D Acopy = A.copy();
@@ -379,9 +367,9 @@ public abstract class DoubleMatrix2DTest extends TestCase {
 
     public void testToArray() {
         double[][] array = A.toArray();
-        assertTrue(A.rows() == array.length);
+        assertEquals(A.rows(), array.length);
         for (int r = 0; r < A.rows(); r++) {
-            assertTrue(A.columns() == array[r].length);
+            assertEquals(A.columns(), array[r].length);
             for (int c = 0; c < A.columns(); c++)
                 assertEquals(0, Math.abs(array[r][c] - A.getQuick(r, c)), TOL);
         }
@@ -462,11 +450,7 @@ public abstract class DoubleMatrix2DTest extends TestCase {
         A.setQuick(A.rows() / 2, 0, value);
         DoubleMatrix2D B = A.viewSelection(new DoubleMatrix1DProcedure() {
             public boolean apply(DoubleMatrix1D element) {
-                if (Math.abs(element.getQuick(0) - value) < TOL) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return Math.abs(element.getQuick(0) - value) < TOL;
             }
         });
         assertEquals(2, B.rows());
@@ -476,9 +460,9 @@ public abstract class DoubleMatrix2DTest extends TestCase {
     }
 
     public void testViewSelectionIntArrayIntArray() {
-        int[] rowIndexes = new int[] { A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2 };
-        int[] colIndexes = new int[] { A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
-                A.columns() / 2, A.columns() - 1 };
+        int[] rowIndexes = new int[]{A.rows() / 6, A.rows() / 5, A.rows() / 4, A.rows() / 3, A.rows() / 2};
+        int[] colIndexes = new int[]{A.columns() / 6, A.columns() / 5, A.columns() / 4, A.columns() / 3,
+            A.columns() / 2, A.columns() - 1};
         DoubleMatrix2D B = A.viewSelection(rowIndexes, colIndexes);
         assertEquals(rowIndexes.length, B.rows());
         assertEquals(colIndexes.length, B.columns());

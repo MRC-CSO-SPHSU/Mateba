@@ -26,11 +26,9 @@ public class HyBRDoubleIterationMonitor extends AbstractDoubleIterationMonitor {
 
     /**
      * Constructor for HyBRDoubleIterationMonitor
-     * 
-     * @param maxIter
-     *            Maximum number of iterations
-     * @param dtol
-     *            Relative divergence tolerance (to initial residual)
+     *
+     * @param maxIter Maximum number of iterations
+     * @param dtol    Relative divergence tolerance (to initial residual)
      */
     public HyBRDoubleIterationMonitor(int maxIter, double dtol) {
         this.maxIter = maxIter;
@@ -63,7 +61,7 @@ public class HyBRDoubleIterationMonitor extends AbstractDoubleIterationMonitor {
         if (initR != -1.0) {
             if (r > dtol * initR)
                 throw new IterativeSolverDoubleNotConvergedException(DoubleNotConvergedException.Reason.Divergence,
-                        this);
+                    this);
         }
         if (iter >= (maxIter + 1))
             throw new IterativeSolverDoubleNotConvergedException(DoubleNotConvergedException.Reason.Iterations, this);
@@ -88,9 +86,8 @@ public class HyBRDoubleIterationMonitor extends AbstractDoubleIterationMonitor {
 
     /**
      * Sets the relative divergence tolerance
-     * 
-     * @param dtol
-     *            relative divergence tolerance (to initial residual)
+     *
+     * @param dtol relative divergence tolerance (to initial residual)
      */
     public void setDivergenceTolerance(double dtol) {
         this.dtol = dtol;
@@ -98,7 +95,7 @@ public class HyBRDoubleIterationMonitor extends AbstractDoubleIterationMonitor {
 
     /**
      * Returns the relative divergence tolerance
-     * 
+     *
      * @return relative divergence tolerance (to initial residual)
      */
     public double getDivergenceTolerance() {
@@ -107,7 +104,7 @@ public class HyBRDoubleIterationMonitor extends AbstractDoubleIterationMonitor {
 
     /**
      * Returns the regularization parameter
-     * 
+     *
      * @return regularization parameter
      */
     public double getRegularizationParameter() {
@@ -116,9 +113,8 @@ public class HyBRDoubleIterationMonitor extends AbstractDoubleIterationMonitor {
 
     /**
      * Sets the regularization parameter
-     * 
-     * @param regularizationParameter
-     *            regularization parameter
+     *
+     * @param regularizationParameter regularization parameter
      */
     public void setRegularizationParameter(double regularizationParameter) {
         this.regularizationParameter = regularizationParameter;
@@ -126,9 +122,8 @@ public class HyBRDoubleIterationMonitor extends AbstractDoubleIterationMonitor {
 
     /**
      * Sets the stopping condition
-     * 
-     * @param stoppingCondition
-     *            stopping condition
+     *
+     * @param stoppingCondition stopping condition
      */
     public void setStoppingCondition(HyBRStoppingCondition stoppingCondition) {
         this.stoppingCondition = stoppingCondition;
@@ -136,7 +131,7 @@ public class HyBRDoubleIterationMonitor extends AbstractDoubleIterationMonitor {
 
     /**
      * Returns the stopping condition
-     * 
+     *
      * @return stopping condition
      */
     public HyBRStoppingCondition getStoppingCondition() {

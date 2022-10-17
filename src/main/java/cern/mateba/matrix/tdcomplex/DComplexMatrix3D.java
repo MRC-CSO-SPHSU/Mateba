@@ -32,10 +32,8 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * will throw an <tt>IndexOutOfBoundsException</tt>.
  * <p>
  * <b>Note</b> that this implementation is not synchronized.
- * 
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
@@ -51,18 +49,16 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Applies a function to each cell and aggregates the results.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell value.
-     * @param f
-     *            a function transforming the current cell value.
+     *
+     * @param aggr an aggregation function taking as first argument the current
+     *             aggregation and as second argument the transformed current
+     *             cell value.
+     * @param f    a function transforming the current cell value.
      * @return the aggregated measure.
      * @see cern.jet.math.tdouble.DoubleFunctions
      */
     public double[] aggregate(final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
-            final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
+                              final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
         double[] b = new double[2];
         if (size() == 0) {
             b[0] = Double.NaN;
@@ -114,22 +110,19 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
     /**
      * Applies a function to each corresponding cell of two matrices and
      * aggregates the results.
-     * 
-     * @param aggr
-     *            an aggregation function taking as first argument the current
-     *            aggregation and as second argument the transformed current
-     *            cell values.
-     * @param f
-     *            a function transforming the current cell values.
+     *
+     * @param aggr an aggregation function taking as first argument the current
+     *             aggregation and as second argument the transformed current
+     *             cell values.
+     * @param f    a function transforming the current cell values.
      * @return the aggregated measure.
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>slices() != other.slices() || rows() != other.rows() || columns() != other.columns()</tt>
+     * @throws IllegalArgumentException if
+     *                                  <tt>slices() != other.slices() || rows() != other.rows() || columns() != other.columns()</tt>
      * @see cern.jet.math.tdouble.DoubleFunctions
      */
     public double[] aggregate(final DComplexMatrix3D other,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
+                              final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
+                              final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
         checkShape(other);
         double[] b = new double[2];
         if (size() == 0) {
@@ -181,9 +174,8 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Assigns the result of a function to each cell.
-     * 
-     * @param function
-     *            a function object taking as argument the current cell's value.
+     *
+     * @param function a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
@@ -225,9 +217,8 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
     /**
      * Assigns the result of a function to the real part of the receiver. The
      * imaginary part of the receiver is reset to zero.
-     * 
-     * @param function
-     *            a function object taking as argument the current cell's value.
+     *
+     * @param function a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
@@ -272,17 +263,14 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Assigns the result of a function to all cells that satisfy a condition.
-     * 
-     * @param cond
-     *            a condition.
-     * 
-     * @param f
-     *            a function object.
+     *
+     * @param cond a condition.
+     * @param f    a function object.
      * @return <tt>this</tt> (for convenience only).
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix3D assign(final cern.mateba.function.tdcomplex.DComplexProcedure cond,
-            final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
+                                   final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_3D())) {
             nthreads = Math.min(nthreads, slices);
@@ -299,7 +287,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
                             for (int r = 0; r < rows; r++) {
                                 for (int c = 0; c < columns; c++) {
                                     elem = getQuick(s, r, c);
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         setQuick(s, r, c, f.apply(elem));
                                     }
                                 }
@@ -315,7 +303,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
                 for (int r = 0; r < rows; r++) {
                     for (int c = 0; c < columns; c++) {
                         elem = getQuick(s, r, c);
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             setQuick(s, r, c, f.apply(elem));
                         }
                     }
@@ -327,14 +315,10 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Assigns a value to all cells that satisfy a condition.
-     * 
-     * @param cond
-     *            a condition.
-     * 
-     * @param value
-     *            a value (re=value[0], im=value[1]).
+     *
+     * @param cond  a condition.
+     * @param value a value (re=value[0], im=value[1]).
      * @return <tt>this</tt> (for convenience only).
-     * 
      */
     public DComplexMatrix3D assign(final cern.mateba.function.tdcomplex.DComplexProcedure cond, final double[] value) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -353,7 +337,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
                             for (int r = 0; r < rows; r++) {
                                 for (int c = 0; c < columns; c++) {
                                     elem = getQuick(s, r, c);
-                                    if (cond.apply(elem) == true) {
+                                    if (cond.apply(elem)) {
                                         setQuick(s, r, c, value);
                                     }
                                 }
@@ -369,7 +353,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
                 for (int r = 0; r < rows; r++) {
                     for (int c = 0; c < columns; c++) {
                         elem = getQuick(s, r, c);
-                        if (cond.apply(elem) == true) {
+                        if (cond.apply(elem)) {
                             setQuick(s, r, c, value);
                         }
                     }
@@ -386,14 +370,12 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * are views derived from the same matrix) and intersect in an ambiguous
      * way, then replaces <i>as if</i> using an intermediate auxiliary deep copy
      * of <tt>other</tt>.
-     * 
-     * @param other
-     *            the source matrix to copy from (may be identical to the
-     *            receiver).
+     *
+     * @param other the source matrix to copy from (may be identical to the
+     *              receiver).
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>slices() != other.slices() || rows() != other.rows() || columns() != other.columns()</tt>
+     * @throws IllegalArgumentException if
+     *                                  <tt>slices() != other.slices() || rows() != other.rows() || columns() != other.columns()</tt>
      */
     public DComplexMatrix3D assign(DComplexMatrix3D other) {
         if (other == this)
@@ -440,21 +422,18 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Assigns the result of a function to each cell.
-     * 
-     * @param y
-     *            the secondary matrix to operate on.
-     * @param function
-     *            a function object taking as first argument the current cell's
-     *            value of <tt>this</tt>, and as second argument the current
-     *            cell's value of <tt>y</tt>,
+     *
+     * @param y        the secondary matrix to operate on.
+     * @param function a function object taking as first argument the current cell's
+     *                 value of <tt>this</tt>, and as second argument the current
+     *                 cell's value of <tt>y</tt>,
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>slices() != other.slices() || rows() != other.rows() || columns() != other.columns()</tt>
+     * @throws IllegalArgumentException if
+     *                                  <tt>slices() != other.slices() || rows() != other.rows() || columns() != other.columns()</tt>
      * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix3D assign(final DComplexMatrix3D y,
-            final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
+                                   final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
         checkShape(y);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_3D())) {
@@ -492,12 +471,9 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Sets all cells to the state specified by <tt>re</tt> and <tt>im</tt>.
-     * 
-     * @param re
-     *            the real part of the value to be filled into the cells.
-     * @param im
-     *            the imagiary part of the value to be filled into the cells.
-     * 
+     *
+     * @param re the real part of the value to be filled into the cells.
+     * @param im the imagiary part of the value to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
      */
     public DComplexMatrix3D assign(final double re, final double im) {
@@ -538,23 +514,21 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
     /**
      * Sets all cells to the state specified by <tt>values</tt>. <tt>values</tt>
      * is required to have the form
-     * <tt>re = values[slice*silceStride+row*rowStride+2*column], 
+     * <tt>re = values[slice*silceStride+row*rowStride+2*column],
      * im = values[slice*silceStride+row*rowStride+2*column+1]</tt> and have
      * exactly the same number of slices, rows and columns as the receiver.
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>values.length != slices()*rows()*2*columns()
+     * @throws IllegalArgumentException if <tt>values.length != slices()*rows()*2*columns()
      */
     public DComplexMatrix3D assign(final double[] values) {
         if (values.length != slices * rows * 2 * columns)
             throw new IllegalArgumentException("Must have same length: length=" + values.length
-                    + "slices()*rows()*2*columns()=" + slices() * rows() * 2 * columns());
+                + "slices()*rows()*2*columns()=" + slices() * rows() * 2 * columns());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (slices * rows * columns >= ConcurrencyUtils.getThreadsBeginN_3D())) {
             nthreads = Math.min(nthreads, slices);
@@ -602,23 +576,20 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
-     * @param values
-     *            the values to be filled into the cells.
+     *
+     * @param values the values to be filled into the cells.
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>values.length != slices() || for any 0 &lt;= slice &lt; slices(): values[slice].length != rows()</tt>
-     *             .
-     * @throws IllegalArgumentException
-     *             if
-     *             <tt>for any 0 &lt;= column &lt; columns(): values[slice][row].length != 2*columns()</tt>
-     *             .
+     * @throws IllegalArgumentException if
+     *                                  <tt>values.length != slices() || for any 0 &lt;= slice &lt; slices(): values[slice].length != rows()</tt>
+     *                                  .
+     * @throws IllegalArgumentException if
+     *                                  <tt>for any 0 &lt;= column &lt; columns(): values[slice][row].length != 2*columns()</tt>
+     *                                  .
      */
     public DComplexMatrix3D assign(final double[][][] values) {
         if (values.length != slices)
             throw new IllegalArgumentException("Must have same number of slices: slices=" + values.length + "slices()="
-                    + slices());
+                + slices());
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (slices * rows * columns >= ConcurrencyUtils.getThreadsBeginN_3D())) {
             nthreads = Math.min(nthreads, slices);
@@ -633,14 +604,14 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
                             double[][] currentSlice = values[s];
                             if (currentSlice.length != rows)
                                 throw new IllegalArgumentException(
-                                        "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                                + "rows()=" + rows());
+                                    "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                        + "rows()=" + rows());
                             for (int r = 0; r < rows; r++) {
                                 double[] currentRow = currentSlice[r];
                                 if (currentRow.length != 2 * columns)
                                     throw new IllegalArgumentException(
-                                            "Must have same number of columns in every row: columns="
-                                                    + currentRow.length + "2*columns()=" + 2 * columns());
+                                        "Must have same number of columns in every row: columns="
+                                            + currentRow.length + "2*columns()=" + 2 * columns());
                                 for (int c = 0; c < columns; c++) {
                                     setQuick(s, r, c, currentRow[2 * c], currentRow[2 * c + 1]);
                                 }
@@ -656,12 +627,12 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
                 double[][] currentSlice = values[s];
                 if (currentSlice.length != rows)
                     throw new IllegalArgumentException("Must have same number of rows in every slice: rows="
-                            + currentSlice.length + "rows()=" + rows());
+                        + currentSlice.length + "rows()=" + rows());
                 for (int r = 0; r < rows; r++) {
                     double[] currentRow = currentSlice[r];
                     if (currentRow.length != 2 * columns)
                         throw new IllegalArgumentException("Must have same number of columns in every row: columns="
-                                + currentRow.length + "2*columns()=" + 2 * columns());
+                            + currentRow.length + "2*columns()=" + 2 * columns());
                     for (int c = 0; c < columns; c++) {
                         setQuick(s, r, c, currentRow[2 * c], currentRow[2 * c + 1]);
                     }
@@ -675,12 +646,10 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * Replaces imaginary part of the receiver with the values of another real
      * matrix. The real part of the receiver remains unchanged. Both matrices
      * must have the same size.
-     * 
-     * @param other
-     *            the source matrix to copy from
+     *
+     * @param other the source matrix to copy from
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
     public DComplexMatrix3D assignImaginary(final DoubleMatrix3D other) {
         checkShape(other);
@@ -725,12 +694,10 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * Replaces real part of the receiver with the values of another real
      * matrix. The imaginary part of the receiver remains unchanged. Both
      * matrices must have the same size.
-     * 
-     * @param other
-     *            the source matrix to copy from
+     *
+     * @param other the source matrix to copy from
      * @return <tt>this</tt> (for convenience only).
-     * @throws IllegalArgumentException
-     *             if <tt>size() != other.size()</tt>.
+     * @throws IllegalArgumentException if <tt>size() != other.size()</tt>.
      */
     public DComplexMatrix3D assignReal(final DoubleMatrix3D other) {
         checkShape(other);
@@ -773,7 +740,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Returns the number of cells having non-zero values; ignores tolerance.
-     * 
+     *
      * @return the number of cells having non-zero values.
      */
     public int cardinality() {
@@ -838,7 +805,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * <b>Note that the returned matrix is an independent deep copy.</b> The
      * returned matrix is not backed by this matrix, so changes in the returned
      * matrix are not reflected in this matrix, and vice-versa.
-     * 
+     *
      * @return a deep copy of the receiver.
      */
     public DComplexMatrix3D copy() {
@@ -847,11 +814,10 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Returns whether all cells are equal to the given value.
-     * 
-     * @param value
-     *            the value to test against.
+     *
+     * @param value the value to test against.
      * @return <tt>true</tt> if all cells are equal to the given value,
-     *         <tt>false</tt> otherwise.
+     * <tt>false</tt> otherwise.
      */
     public boolean equals(double[] value) {
         return cern.mateba.matrix.tdcomplex.algo.DComplexProperty.DEFAULT.equals(this, value);
@@ -863,11 +829,10 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * and is at least a <code>DoubleMatrix3D</code> object that has the same
      * number of slices, rows and columns as the receiver and has exactly the
      * same values at the same coordinates.
-     * 
-     * @param obj
-     *            the object to compare with.
+     *
+     * @param obj the object to compare with.
      * @return <code>true</code> if the objects are the same; <code>false</code>
-     *         otherwise.
+     * otherwise.
      */
 
     public boolean equals(Object obj) {
@@ -883,18 +848,14 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>[slice,row,column]</tt>.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      * @return the value of the specified cell.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>slice&lt;0 || slice&gt;=slices() || row&lt;0 || row&gt;=rows() || column&lt;0 || column&gt;=column()</tt>
-     *             .
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>slice&lt;0 || slice&gt;=slices() || row&lt;0 || row&gt;=rows() || column&lt;0 || column&gt;=column()</tt>
+     *                                   .
      */
     public double[] get(int slice, int row, int column) {
         if (slice < 0 || slice >= slices || row < 0 || row >= rows || column < 0 || column >= columns)
@@ -904,14 +865,14 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Returns the elements of this matrix.
-     * 
+     *
      * @return the elements
      */
     public abstract Object elements();
 
     /**
      * Returns the imaginary part of this matrix
-     * 
+     *
      * @return the imaginary part
      */
     public abstract DoubleMatrix3D getImaginaryPart();
@@ -928,18 +889,14 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * . However, subclasses are free to us any other order, even an order that
      * may change over time as cell values are changed. (Of course, result lists
      * indexes are guaranteed to correspond to the same cell).
-     * 
-     * @param sliceList
-     *            the list to be filled with slice indexes, can have any size.
-     * @param rowList
-     *            the list to be filled with row indexes, can have any size.
-     * @param columnList
-     *            the list to be filled with column indexes, can have any size.
-     * @param valueList
-     *            the list to be filled with values, can have any size.
+     *
+     * @param sliceList  the list to be filled with slice indexes, can have any size.
+     * @param rowList    the list to be filled with row indexes, can have any size.
+     * @param columnList the list to be filled with column indexes, can have any size.
+     * @param valueList  the list to be filled with values, can have any size.
      */
     public void getNonZeros(final IntArrayList sliceList, final IntArrayList rowList, final IntArrayList columnList,
-            final ArrayList<double[]> valueList) {
+                            final ArrayList<double[]> valueList) {
         sliceList.clear();
         rowList.clear();
         columnList.clear();
@@ -963,27 +920,24 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Returns the matrix cell value at coordinate <tt>[slice,row,column]</tt>.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may return invalid objects
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>slice&lt;0 || slice&gt;=slices() || row&lt;0 || row&gt;=rows() || column&lt;0 || column&gt;=column()</tt>.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
      * @return the value at the specified coordinate.
      */
     public abstract double[] getQuick(int slice, int row, int column);
 
     /**
      * Returns the real part of this matrix
-     * 
+     *
      * @return the real part
      */
     public abstract DoubleMatrix3D getRealPart();
@@ -995,7 +949,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * <tt>DenseComplexMatrix3D</tt> the new matrix must also be of type
      * <tt>DenseComplexMatrix3D</tt>. In general, the new matrix should have
      * internal parametrization as similar as possible.
-     * 
+     *
      * @return a new empty matrix of the same dynamic type.
      */
     public DComplexMatrix3D like() {
@@ -1009,13 +963,10 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * <tt>DenseComplexMatrix3D</tt> the new matrix must also be of type
      * <tt>DenseComplexMatrix3D</tt>. In general, the new matrix should have
      * internal parametrization as similar as possible.
-     * 
-     * @param slices
-     *            the number of slices the matrix shall have.
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param slices  the number of slices the matrix shall have.
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new empty matrix of the same dynamic type.
      */
     public abstract DComplexMatrix3D like(int slices, int rows, int columns);
@@ -1023,19 +974,14 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
     /**
      * Sets the matrix cell at coordinate <tt>[slice,row,column]</tt> to the
      * specified value.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param value
-     *            the value to be filled into the specified cell.
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>row&lt;0 || row&gt;=rows() || slice&lt;0 || slice&gt;=slices() || column&lt;0 || column&gt;=column()</tt>
-     *             .
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param value  the value to be filled into the specified cell.
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>row&lt;0 || row&gt;=rows() || slice&lt;0 || slice&gt;=slices() || column&lt;0 || column&gt;=column()</tt>
+     *                                   .
      */
     public void set(int slice, int row, int column, double[] value) {
         if (slice < 0 || slice >= slices || row < 0 || row >= rows || column < 0 || column >= columns)
@@ -1046,25 +992,18 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
     /**
      * Sets the matrix cell at coordinate <tt>[slice,row,column]</tt> to the
      * specified value.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate. the index of the
-     *            column-coordinate.
-     * @param re
-     *            the real part of the value to be filled into the specified
-     *            cell.
-     * @param im
-     *            the imaginary part of the value to be filled into the
-     *            specified cell.
-     * 
-     * @throws IndexOutOfBoundsException
-     *             if
-     *             <tt>row&lt;0 || row&gt;=rows() || slice&lt;0 || slice&gt;=slices() || column&lt;0 || column&gt;=column()</tt>
-     *             .
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate. the index of the
+     *               column-coordinate.
+     * @param re     the real part of the value to be filled into the specified
+     *               cell.
+     * @param im     the imaginary part of the value to be filled into the
+     *               specified cell.
+     * @throws IndexOutOfBoundsException if
+     *                                   <tt>row&lt;0 || row&gt;=rows() || slice&lt;0 || slice&gt;=slices() || column&lt;0 || column&gt;=column()</tt>
+     *                                   .
      */
     public void set(int slice, int row, int column, double re, double im) {
         if (slice < 0 || slice >= slices || row < 0 || row >= rows || column < 0 || column >= columns)
@@ -1075,49 +1014,39 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
     /**
      * Sets the matrix cell at coordinate <tt>[slice,row,column]</tt> to the
      * specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>slice&lt;0 || slice&gt;=slices() || row&lt;0 || row&gt;=rows() || column&lt;0 || column&gt;=column()</tt>.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param re
-     *            the real part of the value to be filled into the specified
-     *            cell.
-     * @param im
-     *            the imaginary part of the value to be filled into the
-     *            specified cell.
-     * 
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param re     the real part of the value to be filled into the specified
+     *               cell.
+     * @param im     the imaginary part of the value to be filled into the
+     *               specified cell.
      */
     public abstract void setQuick(int slice, int row, int column, double re, double im);
 
     /**
      * Sets the matrix cell at coordinate <tt>[slice,row,column]</tt> to the
      * specified value.
-     * 
+     *
      * <p>
      * Provided with invalid parameters this method may access illegal indexes
      * without throwing any exception. <b>You should only use this method when
      * you are absolutely sure that the coordinate is within bounds.</b>
      * Precondition (unchecked):
      * <tt>slice&lt;0 || slice&gt;=slices() || row&lt;0 || row&gt;=rows() || column&lt;0 || column&gt;=column()</tt>.
-     * 
-     * @param slice
-     *            the index of the slice-coordinate.
-     * @param row
-     *            the index of the row-coordinate.
-     * @param column
-     *            the index of the column-coordinate.
-     * @param value
-     *            the value to be filled into the specified cell.
+     *
+     * @param slice  the index of the slice-coordinate.
+     * @param row    the index of the row-coordinate.
+     * @param column the index of the column-coordinate.
+     * @param value  the value to be filled into the specified cell.
      */
     public abstract void setQuick(int slice, int row, int column, double[] value);
 
@@ -1129,7 +1058,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * <p>
      * The values are copied. So subsequent changes in <tt>values</tt> are not
      * reflected in the matrix, and vice-versa.
-     * 
+     *
      * @return an array filled with the values of the cells.
      */
     public double[][][] toArray() {
@@ -1179,7 +1108,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Returns a string representation using default formatting ("%.4f").
-     * 
+     *
      * @return a string representation of the matrix.
      */
 
@@ -1189,14 +1118,13 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Returns a string representation using using given <tt>format</tt>
-     * 
+     *
      * @param format
      * @return a string representation of the matrix.
-     * 
      */
     public String toString(String format) {
         StringBuffer sb = new StringBuffer(String.format("ComplexMatrix3D: %d slices, %d rows, %d columns\n\n", slices,
-                rows, columns));
+            rows, columns));
         double[] elem = new double[2];
         for (int s = 0; s < slices; s++) {
             sb.append(String.format("(:,:,%d)=\n", s));
@@ -1226,9 +1154,9 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
     /**
      * Returns a vector obtained by stacking the columns of each slice of the
      * matrix on top of one another.
-     * 
+     *
      * @return a vector obtained by stacking the columns of each slice of the
-     *         matrix on top of one another.
+     * matrix on top of one another.
      */
     public abstract DComplexMatrix1D vectorize();
 
@@ -1244,12 +1172,10 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * slice view (methods <tt>viewColumn</tt>, <tt>viewRow</tt>) on the
      * intermediate 2-dimensional view. To obtain 1-dimensional views on
      * subranges, apply both steps.
-     * 
-     * @param column
-     *            the index of the column to fix.
+     *
+     * @param column the index of the column to fix.
      * @return a new 2-dimensional slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>column < 0 || column >= columns()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>column < 0 || column >= columns()</tt>.
      * @see #viewSlice(int)
      * @see #viewRow(int)
      */
@@ -1272,7 +1198,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * what used to be column <tt>columns()-1</tt> is now column <tt>0</tt>. The
      * returned view is backed by this matrix, so changes in the returned view
      * are reflected in this matrix, and vice-versa.
-     * 
+     *
      * @return a new flip view.
      * @see #viewSliceFlip()
      * @see #viewRowFlip()
@@ -1287,16 +1213,12 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * exchanged; what used to be one axis is now another, in all desired
      * permutations. The returned view is backed by this matrix, so changes in
      * the returned view are reflected in this matrix, and vice-versa.
-     * 
-     * @param axis0
-     *            the axis that shall become axis 0 (legal values 0..2).
-     * @param axis1
-     *            the axis that shall become axis 1 (legal values 0..2).
-     * @param axis2
-     *            the axis that shall become axis 2 (legal values 0..2).
+     *
+     * @param axis0 the axis that shall become axis 0 (legal values 0..2).
+     * @param axis1 the axis that shall become axis 1 (legal values 0..2).
+     * @param axis2 the axis that shall become axis 2 (legal values 0..2).
      * @return a new dice view.
-     * @throws IllegalArgumentException
-     *             if some of the parameters are equal or not in range 0..2.
+     * @throws IllegalArgumentException if some of the parameters are equal or not in range 0..2.
      */
     public DComplexMatrix3D viewDice(int axis0, int axis1, int axis2) {
         return (DComplexMatrix3D) (view().vDice(axis0, axis1, axis2));
@@ -1309,25 +1231,17 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * <tt>view().part(slice,row,column,depth,height,width)</tt>; Provided for
      * convenience only. The returned view is backed by this matrix, so changes
      * in the returned view are reflected in this matrix, and vice-versa.
-     * 
-     * @param slice
-     *            The index of the slice-coordinate.
-     * @param row
-     *            The index of the row-coordinate.
-     * @param column
-     *            The index of the column-coordinate.
-     * @param depth
-     *            The depth of the box.
-     * @param height
-     *            The height of the box.
-     * @param width
-     *            The width of the box.
-     * @throws IndexOutOfBoundsException
-     *             if
-     * 
-     *             <tt>slice<0 || depth<0 || slice+depth>slices() || row<0 || height<0 || row+height>rows() || column<0 || width<0 || column+width>columns()</tt>
+     *
+     * @param slice  The index of the slice-coordinate.
+     * @param row    The index of the row-coordinate.
+     * @param column The index of the column-coordinate.
+     * @param depth  The depth of the box.
+     * @param height The height of the box.
+     * @param width  The width of the box.
      * @return the new view.
-     * 
+     * @throws IndexOutOfBoundsException if
+     *
+     *                                   <tt>slice<0 || depth<0 || slice+depth>slices() || row<0 || height<0 || row+height>rows() || column<0 || width<0 || column+width>columns()</tt>
      */
     public DComplexMatrix3D viewPart(int slice, int row, int column, int depth, int height, int width) {
         return (DComplexMatrix3D) (view().vPart(slice, row, column, depth, height, width));
@@ -1345,12 +1259,10 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * slice view (methods <tt>viewColumn</tt>, <tt>viewRow</tt>) on the
      * intermediate 2-dimensional view. To obtain 1-dimensional views on
      * subranges, apply both steps.
-     * 
-     * @param row
-     *            the index of the row to fix.
+     *
+     * @param row the index of the row to fix.
      * @return a new 2-dimensional slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>row < 0 || row >= row()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>row < 0 || row >= row()</tt>.
      * @see #viewSlice(int)
      * @see #viewColumn(int)
      */
@@ -1373,7 +1285,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * be row <tt>rows()-1</tt> is now row <tt>0</tt>. The returned view is
      * backed by this matrix, so changes in the returned view are reflected in
      * this matrix, and vice-versa.
-     * 
+     *
      * @return a new flip view.
      * @see #viewSliceFlip()
      * @see #viewColumnFlip()
@@ -1390,9 +1302,8 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * rows or columns, use a dice view. The returned view is backed by this
      * matrix, so changes in the returned view are reflected in this matrix, and
      * vice-versa.
-     * 
-     * @param condition
-     *            The condition to be matched.
+     *
+     * @param condition The condition to be matched.
      * @return the new view.
      */
     public DComplexMatrix3D viewSelection(DComplexMatrix2DProcedure condition) {
@@ -1410,7 +1321,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
     /**
      * Constructs and returns a new <i>selection view</i> that is a matrix
      * holding the indicated cells. There holds
-     * 
+     *
      * <tt>view.slices() == sliceIndexes.length, view.rows() == rowIndexes.length, view.columns() == columnIndexes.length</tt>
      * and
      * <tt>view.get(k,i,j) == this.get(sliceIndexes[k],rowIndexes[i],columnIndexes[j])</tt>
@@ -1420,45 +1331,39 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * no effect on the view. The returned view is backed by this matrix, so
      * changes in the returned view are reflected in this matrix, and
      * vice-versa.
-     * 
-     * @param sliceIndexes
-     *            The slices of the cells that shall be visible in the new view.
-     *            To indicate that <i>all</i> slices shall be visible, simply
-     *            set this parameter to <tt>null</tt>.
-     * @param rowIndexes
-     *            The rows of the cells that shall be visible in the new view.
-     *            To indicate that <i>all</i> rows shall be visible, simply set
-     *            this parameter to <tt>null</tt>.
-     * @param columnIndexes
-     *            The columns of the cells that shall be visible in the new
-     *            view. To indicate that <i>all</i> columns shall be visible,
-     *            simply set this parameter to <tt>null</tt>.
+     *
+     * @param sliceIndexes  The slices of the cells that shall be visible in the new view.
+     *                      To indicate that <i>all</i> slices shall be visible, simply
+     *                      set this parameter to <tt>null</tt>.
+     * @param rowIndexes    The rows of the cells that shall be visible in the new view.
+     *                      To indicate that <i>all</i> rows shall be visible, simply set
+     *                      this parameter to <tt>null</tt>.
+     * @param columnIndexes The columns of the cells that shall be visible in the new
+     *                      view. To indicate that <i>all</i> columns shall be visible,
+     *                      simply set this parameter to <tt>null</tt>.
      * @return the new view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>!(0 <= sliceIndexes[i] < slices())</tt> for any
-     *             <tt>i=0..sliceIndexes.length()-1</tt>.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>!(0 <= rowIndexes[i] < rows())</tt> for any
-     *             <tt>i=0..rowIndexes.length()-1</tt>.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>!(0 <= columnIndexes[i] < columns())</tt> for any
-     *             <tt>i=0..columnIndexes.length()-1</tt>.
+     * @throws IndexOutOfBoundsException if <tt>!(0 <= sliceIndexes[i] < slices())</tt> for any
+     *                                   <tt>i=0..sliceIndexes.length()-1</tt>.
+     * @throws IndexOutOfBoundsException if <tt>!(0 <= rowIndexes[i] < rows())</tt> for any
+     *                                   <tt>i=0..rowIndexes.length()-1</tt>.
+     * @throws IndexOutOfBoundsException if <tt>!(0 <= columnIndexes[i] < columns())</tt> for any
+     *                                   <tt>i=0..columnIndexes.length()-1</tt>.
      */
     public DComplexMatrix3D viewSelection(int[] sliceIndexes, int[] rowIndexes, int[] columnIndexes) {
         // check for "all"
         if (sliceIndexes == null) {
             sliceIndexes = new int[slices];
-            for (int i = slices; --i >= 0;)
+            for (int i = slices; --i >= 0; )
                 sliceIndexes[i] = i;
         }
         if (rowIndexes == null) {
             rowIndexes = new int[rows];
-            for (int i = rows; --i >= 0;)
+            for (int i = rows; --i >= 0; )
                 rowIndexes[i] = i;
         }
         if (columnIndexes == null) {
             columnIndexes = new int[columns];
-            for (int i = columns; --i >= 0;)
+            for (int i = columns; --i >= 0; )
                 columnIndexes[i] = i;
         }
 
@@ -1494,12 +1399,10 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * slice view (methods <tt>viewColumn</tt>, <tt>viewRow</tt>) on the
      * intermediate 2-dimensional view. To obtain 1-dimensional views on
      * subranges, apply both steps.
-     * 
-     * @param slice
-     *            the index of the slice to fix.
+     *
+     * @param slice the index of the slice to fix.
      * @return a new 2-dimensional slice view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>slice < 0 || slice >= slices()</tt>.
+     * @throws IndexOutOfBoundsException if <tt>slice < 0 || slice >= slices()</tt>.
      * @see #viewRow(int)
      * @see #viewColumn(int)
      */
@@ -1522,7 +1425,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * used to be slice <tt>slices()-1</tt> is now slice <tt>0</tt>. The
      * returned view is backed by this matrix, so changes in the returned view
      * are reflected in this matrix, and vice-versa.
-     * 
+     *
      * @return a new flip view.
      * @see #viewRowFlip()
      * @see #viewColumnFlip()
@@ -1538,21 +1441,17 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * <tt>this.rows()/rowStride</tt> rows and
      * <tt>this.columns()/columnStride</tt> columns holding cells
      * <tt>this.get(k*sliceStride,i*rowStride,j*columnStride)</tt> for all
-     * 
+     *
      * <tt>k = 0..slices()/sliceStride - 1, i = 0..rows()/rowStride - 1, j = 0..columns()/columnStride - 1</tt>
      * . The returned view is backed by this matrix, so changes in the returned
      * view are reflected in this matrix, and vice-versa.
-     * 
-     * @param sliceStride
-     *            the slice step factor.
-     * @param rowStride
-     *            the row step factor.
-     * @param columnStride
-     *            the column step factor.
+     *
+     * @param sliceStride  the slice step factor.
+     * @param rowStride    the row step factor.
+     * @param columnStride the column step factor.
      * @return a new view.
-     * @throws IndexOutOfBoundsException
-     *             if <tt>sliceStride<=0 || rowStride<=0 || columnStride<=0</tt>
-     *             .
+     * @throws IndexOutOfBoundsException if <tt>sliceStride<=0 || rowStride<=0 || columnStride<=0</tt>
+     *                                   .
      */
     public DComplexMatrix3D viewStrides(int sliceStride, int rowStride, int columnStride) {
         return (DComplexMatrix3D) (view().vStrides(sliceStride, rowStride, columnStride));
@@ -1560,20 +1459,20 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Returns the sum of all cells; <tt>Sum( x[i,j,k] )</tt>.
-     * 
+     *
      * @return the sum.
      */
     public double[] zSum() {
         if (size() == 0)
             return new double[2];
         return aggregate(cern.jet.math.tcomplex.DComplexFunctions.plus,
-                cern.jet.math.tcomplex.DComplexFunctions.identity);
+            cern.jet.math.tcomplex.DComplexFunctions.identity);
     }
 
     /**
      * Returns the content of this matrix if it is a wrapper; or <tt>this</tt>
      * otherwise. Override this method in wrappers.
-     * 
+     *
      * @return this
      */
     protected DComplexMatrix3D getContent() {
@@ -1582,9 +1481,8 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Returns <tt>true</tt> if both matrices share at least one identical cell.
-     * 
-     * @param other
-     *            matrix
+     *
+     * @param other matrix
      * @return <tt>true</tt> if both matrices share at least one identical cell.
      */
     protected boolean haveSharedCells(DComplexMatrix3D other) {
@@ -1597,9 +1495,8 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Always returns false
-     * 
-     * @param other
-     *            matrix
+     *
+     * @param other matrix
      * @return false
      */
     protected boolean haveSharedCellsRaw(DComplexMatrix3D other) {
@@ -1611,25 +1508,19 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * type</i>, sharing the same cells. For example, if the receiver is an
      * instance of type <tt>DenseComplexMatrix3D</tt> the new matrix must also
      * be of type <tt>DenseComplexMatrix2D</tt>.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
-     * @param rowZero
-     *            the position of the first element.
-     * @param columnZero
-     *            the position of the first element.
-     * @param rowStride
-     *            the number of elements between two rows, i.e.
-     *            <tt>index(i+1,j)-index(i,j)</tt>.
-     * @param columnStride
-     *            the number of elements between two columns, i.e.
-     *            <tt>index(i,j+1)-index(i,j)</tt>.
+     *
+     * @param rows         the number of rows the matrix shall have.
+     * @param columns      the number of columns the matrix shall have.
+     * @param rowZero      the position of the first element.
+     * @param columnZero   the position of the first element.
+     * @param rowStride    the number of elements between two rows, i.e.
+     *                     <tt>index(i+1,j)-index(i,j)</tt>.
+     * @param columnStride the number of elements between two columns, i.e.
+     *                     <tt>index(i,j+1)-index(i,j)</tt>.
      * @return a new matrix of the corresponding dynamic type.
      */
     protected abstract DComplexMatrix2D like2D(int rows, int columns, int rowZero, int columnZero, int rowStride,
-            int columnStride);
+                                               int columnStride);
 
     /**
      * Constructs and returns a new view equal to the receiver. The view is a
@@ -1641,7 +1532,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * <p>
      * Use {@link #copy()} if you want to construct an independent deep copy
      * rather than a new view.
-     * 
+     *
      * @return a new view of the receiver.
      */
     protected DComplexMatrix3D view() {
@@ -1650,13 +1541,10 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
 
     /**
      * Construct and returns a new selection view.
-     * 
-     * @param sliceOffsets
-     *            the offsets of the visible elements.
-     * @param rowOffsets
-     *            the offsets of the visible elements.
-     * @param columnOffsets
-     *            the offsets of the visible elements.
+     *
+     * @param sliceOffsets  the offsets of the visible elements.
+     * @param rowOffsets    the offsets of the visible elements.
+     * @param columnOffsets the offsets of the visible elements.
      * @return a new view.
      */
     protected abstract DComplexMatrix3D viewSelectionLike(int[] sliceOffsets, int[] rowOffsets, int[] columnOffsets);
@@ -1668,11 +1556,9 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * be of type <tt>DenseDComplexMatrix2D</tt>, if the receiver is an instance
      * of type <tt>SparseDComplexMatrix3D</tt> the new matrix must also be of
      * type <tt>SparseDComplexMatrix2D</tt>, etc.
-     * 
-     * @param rows
-     *            the number of rows the matrix shall have.
-     * @param columns
-     *            the number of columns the matrix shall have.
+     *
+     * @param rows    the number of rows the matrix shall have.
+     * @param columns the number of columns the matrix shall have.
      * @return a new matrix of the corresponding dynamic type.
      */
     public abstract DComplexMatrix2D like2D(int rows, int columns);

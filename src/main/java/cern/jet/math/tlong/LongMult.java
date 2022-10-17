@@ -28,14 +28,14 @@ public final class LongMult implements cern.mateba.function.tlong.LongFunction {
     /**
      * Insert the method's description here. Creation date: (8/10/99 19:12:09)
      */
-    protected LongMult(final long multiplicator) {
+    private LongMult(final long multiplicator) {
         this.multiplicator = multiplicator;
     }
 
     /**
      * Returns the result of the function evaluation.
      */
-    public final long apply(long a) {
+    public long apply(long a) {
         return a * multiplicator;
     }
 

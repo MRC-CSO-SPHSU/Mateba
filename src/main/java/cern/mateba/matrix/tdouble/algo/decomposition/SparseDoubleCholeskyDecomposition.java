@@ -28,34 +28,30 @@ import edu.emory.mathcs.csparsej.tdouble.Dcs_common.Dcss;
  * decomposition is a lower triangular matrix <tt>L</tt> so that <tt>A = L*L'</tt>; If
  * the matrix is not symmetric positive definite, the IllegalArgumentException
  * is thrown.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class SparseDoubleCholeskyDecomposition {
-    private Dcss S;
-    private Dcsn N;
+    private final Dcss S;
+    private final Dcsn N;
     private DoubleMatrix2D L;
     private boolean rcMatrix = false;
 
     /**
      * Row and column dimension (square matrix).
      */
-    private int n;
+    private final int n;
 
     /**
      * Constructs and returns a new Cholesky decomposition object for a sparse
      * symmetric and positive definite matrix; The decomposed matrices can be
      * retrieved via instance methods of the returned decomposition object.
-     * 
-     * @param A
-     *            Square, symmetric positive definite matrix .
-     * @param order
-     *            ordering option (0 or 1); 0: natural ordering, 1: amd(A+A')
-     * @throws IllegalArgumentException
-     *             if <tt>A</tt> is not square or is not sparse or is not a
-     *             symmetric positive definite.
-     * @throws IllegalArgumentException
-     *             if <tt>order != 0 || order != 1</tt>
+     *
+     * @param A     Square, symmetric positive definite matrix .
+     * @param order ordering option (0 or 1); 0: natural ordering, 1: amd(A+A')
+     * @throws IllegalArgumentException if <tt>A</tt> is not square or is not sparse or is not a
+     *                                  symmetric positive definite.
+     * @throws IllegalArgumentException if <tt>order != 0 || order != 1</tt>
      */
     public SparseDoubleCholeskyDecomposition(DoubleMatrix2D A, int order) {
         DoubleProperty.DEFAULT.checkSquare(A);
@@ -83,7 +79,7 @@ public class SparseDoubleCholeskyDecomposition {
 
     /**
      * Returns the triangular factor, <tt>L</tt>.
-     * 
+     *
      * @return <tt>L</tt>
      */
     public DoubleMatrix2D getL() {
@@ -97,9 +93,8 @@ public class SparseDoubleCholeskyDecomposition {
     }
 
     /**
-     * 
      * Returns the triangular factor, <tt>L'</tt>.
-     * 
+     *
      * @return <tt>L'</tt>
      */
     public DoubleMatrix2D getLtranspose() {
@@ -118,7 +113,7 @@ public class SparseDoubleCholeskyDecomposition {
 
     /**
      * Returns a copy of the symbolic Cholesky analysis object
-     * 
+     *
      * @return symbolic Cholesky analysis
      */
     public Dcss getSymbolicAnalysis() {
@@ -137,11 +132,9 @@ public class SparseDoubleCholeskyDecomposition {
     /**
      * Solves <tt>A*x = b</tt>(in-place). Upon return <tt>b</tt> is overridden
      * with the result <tt>x</tt>.
-     * 
-     * @param b
-     *            A vector with of size A.rows();
-     * @exception IllegalArgumentException
-     *                if <tt>b.size() != A.rows()</tt>.
+     *
+     * @param b A vector with of size A.rows();
+     * @throws IllegalArgumentException if <tt>b.size() != A.rows()</tt>.
      */
     public void solve(DoubleMatrix1D b) {
         if (b.size() != n) {

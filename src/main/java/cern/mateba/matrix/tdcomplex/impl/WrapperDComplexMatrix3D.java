@@ -21,8 +21,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 /**
  * 3-d matrix holding <tt>complex</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
- * 
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class WrapperDComplexMatrix3D extends DComplexMatrix3D {
@@ -50,7 +49,7 @@ public class WrapperDComplexMatrix3D extends DComplexMatrix3D {
      */
     public void fft2Slices() {
         if (content instanceof DenseLargeDComplexMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDComplexMatrix3D) content).fft2Slices();
             } else {
                 DenseLargeDComplexMatrix3D copy = (DenseLargeDComplexMatrix3D) copy();
@@ -67,7 +66,7 @@ public class WrapperDComplexMatrix3D extends DComplexMatrix3D {
      */
     public void fft3() {
         if (content instanceof DenseLargeDComplexMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDComplexMatrix3D) content).fft3();
             } else {
                 DenseLargeDComplexMatrix3D copy = (DenseLargeDComplexMatrix3D) copy();
@@ -82,13 +81,12 @@ public class WrapperDComplexMatrix3D extends DComplexMatrix3D {
     /**
      * Computes the 2D inverse of the discrete Fourier transform (IDFT) of each
      * slice of this matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void ifft2Slices(final boolean scale) {
         if (content instanceof DenseLargeDComplexMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDComplexMatrix3D) content).ifft2Slices(scale);
             } else {
                 DenseLargeDComplexMatrix3D copy = (DenseLargeDComplexMatrix3D) copy();
@@ -103,13 +101,12 @@ public class WrapperDComplexMatrix3D extends DComplexMatrix3D {
     /**
      * Computes the 3D inverse of the discrete Fourier transform (IDFT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
+     *
+     * @param scale if true then scaling is performed
      */
     public void ifft3(boolean scale) {
         if (content instanceof DenseLargeDComplexMatrix3D) {
-            if (this.isNoView == true) {
+            if (this.isNoView) {
                 ((DenseLargeDComplexMatrix3D) content).ifft3(scale);
             } else {
                 DenseLargeDComplexMatrix3D copy = (DenseLargeDComplexMatrix3D) copy();
@@ -227,7 +224,7 @@ public class WrapperDComplexMatrix3D extends DComplexMatrix3D {
     public DComplexMatrix3D viewDice(int axis0, int axis1, int axis2) {
         int d = 3;
         if (axis0 < 0 || axis0 >= d || axis1 < 0 || axis1 >= d || axis2 < 0 || axis2 >= d || axis0 == axis1
-                || axis0 == axis2 || axis1 == axis2) {
+            || axis0 == axis2 || axis1 == axis2) {
             throw new IllegalArgumentException("Illegal Axes: " + axis0 + ", " + axis1 + ", " + axis2);
         }
         WrapperDComplexMatrix3D view = null;
@@ -437,17 +434,17 @@ public class WrapperDComplexMatrix3D extends DComplexMatrix3D {
         // check for "all"
         if (sliceIndexes == null) {
             sliceIndexes = new int[slices];
-            for (int i = slices; --i >= 0;)
+            for (int i = slices; --i >= 0; )
                 sliceIndexes[i] = i;
         }
         if (rowIndexes == null) {
             rowIndexes = new int[rows];
-            for (int i = rows; --i >= 0;)
+            for (int i = rows; --i >= 0; )
                 rowIndexes[i] = i;
         }
         if (columnIndexes == null) {
             columnIndexes = new int[columns];
-            for (int i = columns; --i >= 0;)
+            for (int i = columns; --i >= 0; )
                 columnIndexes[i] = i;
         }
 
@@ -503,7 +500,7 @@ public class WrapperDComplexMatrix3D extends DComplexMatrix3D {
                 return content.getQuick(_sliceStride * slice, _rowStride * row, _columnStride * column);
             }
 
-            public synchronized void setQuick(int slice, int row, int column, double value[]) {
+            public synchronized void setQuick(int slice, int row, int column, double[] value) {
                 content.setQuick(_sliceStride * slice, _rowStride * row, _columnStride * column, value);
             }
 
@@ -543,7 +540,7 @@ public class WrapperDComplexMatrix3D extends DComplexMatrix3D {
     }
 
     protected DComplexMatrix2D like2D(int rows, int columns, int rowZero, int columnZero, int rowStride,
-            int columnStride) {
+                                      int columnStride) {
         throw new InternalError(); // should never get called
     }
 

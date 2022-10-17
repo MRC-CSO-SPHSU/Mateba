@@ -25,7 +25,7 @@ import cern.mateba.function.tint.IntComparator;
  * (or some arbitrary comparison function). For example, we have<br>
  * <tt>X=[3, 2, 1], Y=[3.0, 2.0, 1.0], Z=[6.0, 7.0, 8.0]</tt>. The output should
  * be <tt><br>
- X=[1, 2, 3], Y=[1.0, 2.0, 3.0], Z=[8.0, 7.0, 6.0]</tt>.
+ * X=[1, 2, 3], Y=[1.0, 2.0, 3.0], Z=[8.0, 7.0, 6.0]</tt>.
  * </p>
  * <p>
  * How can we achive this? Here are several alternatives. We could ...
@@ -64,16 +64,16 @@ import cern.mateba.function.tint.IntComparator;
  * The following snippet shows how to solve the problem.
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  * final int[] x;
  * final double[] y;
  * final double[] z;
- * 
+ *
  * x = new int[] { 3, 2, 1 };
  * y = new double[] { 3.0, 2.0, 1.0 };
  * z = new double[] { 6.0, 7.0, 8.0 };
- * 
+ *
  * // this one knows how to swap two indexes (a,b)
  * Swapper swapper = new Swapper() {
  *     public void swap(int a, int b) {
@@ -97,21 +97,21 @@ import cern.mateba.function.tint.IntComparator;
  *         return x[a] == x[b] ? 0 : (x[a] &lt; x[b] ? -1 : 1);
  *     }
  * };
- * 
+ *
  * System.out.println(&quot;before:&quot;);
  * System.out.println(&quot;X=&quot; + Arrays.toString(x));
  * System.out.println(&quot;Y=&quot; + Arrays.toString(y));
  * System.out.println(&quot;Z=&quot; + Arrays.toString(z));
- * 
+ *
  * GenericSorting.quickSort(0, X.length, comp, swapper);
  * // GenericSorting.mergeSort(0, X.length, comp, swapper);
- * 
+ *
  * System.out.println(&quot;after:&quot;);
  * System.out.println(&quot;X=&quot; + Arrays.toString(x));
  * System.out.println(&quot;Y=&quot; + Arrays.toString(y));
  * System.out.println(&quot;Z=&quot; + Arrays.toString(z));
  * </pre>
- * 
+ *
  * </td>
  * </table>
  * <h4>Sorting by multiple sorting criterias (primary, secondary, tertiary, ...)
@@ -122,7 +122,7 @@ import cern.mateba.function.tint.IntComparator;
  * example, we have<br>
  * <tt>X=[6, 7, 8, 9], Y=[3.0, 2.0, 1.0, 3.0], Z=[5.0, 4.0, 4.0, 1.0]</tt>. The
  * output should be <tt><br>
- X=[8, 7, 9, 6], Y=[1.0, 2.0, 3.0, 3.0], Z=[4.0, 4.0, 1.0, 5.0]</tt>.
+ * X=[8, 7, 9, 6], Y=[1.0, 2.0, 3.0, 3.0], Z=[4.0, 4.0, 1.0, 5.0]</tt>.
  * </p>
  * <p>
  * Here is how to solve the problem. All code in the above example stays the
@@ -130,7 +130,7 @@ import cern.mateba.function.tint.IntComparator;
  * </p>
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  * //compare by Y, if that doesn't help, reside to Z
  * IntComparator comp = new IntComparator() {
@@ -141,10 +141,10 @@ import cern.mateba.function.tint.IntComparator;
  *     }
  * };
  * </pre>
- * 
+ *
  * </td>
  * </table>
- * 
+ *
  * <h4>Notes</h4>
  * <p>
  * </p>
@@ -170,13 +170,12 @@ import cern.mateba.function.tint.IntComparator;
  * while quicksort is not. A stable sort is, for example, helpful, if matrices
  * are sorted successively by multiple columns. It preserves the relative
  * position of equal elements.
- * 
+ *
+ * @author wolfgang.hoschek@cern.ch
+ * @version 1.0, 03-Jul-99
  * @see java.util.Arrays
  * @see cern.mateba.Sorting
  * @see cern.mateba.matrix.tdouble.algo.DoubleSorting
- * 
- * @author wolfgang.hoschek@cern.ch
- * @version 1.0, 03-Jul-99
  */
 public class GenericSorting {
     private static final int SMALL = 7;
@@ -249,20 +248,15 @@ public class GenericSorting {
      * Performs a binary search on an already-sorted range: finds the first
      * position where an element can be inserted without violating the ordering.
      * Sorting is by a user-supplied comparison function.
-     * 
-     * @param array
-     *            Array containing the range.
-     * @param first
-     *            Beginning of the range.
-     * @param last
-     *            One past the end of the range.
-     * @param x
-     *            Element to be searched for.
-     * @param comp
-     *            Comparison function.
+     *
+     * @param array Array containing the range.
+     * @param first Beginning of the range.
+     * @param last  One past the end of the range.
+     * @param x     Element to be searched for.
+     * @param comp  Comparison function.
      * @return The largest index i such that, for every j in the range
-     *         <code>[first, i)</code>, <code>comp.apply(array[j], x)</code> is
-     *         <code>true</code>.
+     * <code>[first, i)</code>, <code>comp.apply(array[j], x)</code> is
+     * <code>true</code>.
      * @see Sorting#upper_bound
      * @see Sorting#equal_range
      * @see Sorting#binary_search
@@ -300,26 +294,21 @@ public class GenericSorting {
      * <tt>c.compare(a, b)</tt> must not throw an exception for any indexes
      * <tt>a</tt> and <tt>b</tt> in the range).
      * <p>
-     * 
+     * <p>
      * This sort is guaranteed to be <i>stable</i>: equal elements will not be
      * reordered as a result of the sort.
      * <p>
-     * 
+     * <p>
      * The sorting algorithm is a modified mergesort (in which the merge is
      * omitted if the highest element in the low sublist is less than the lowest
      * element in the high sublist). This algorithm offers guaranteed n*log(n)
      * performance, and can approach linear performance on nearly sorted lists.
-     * 
-     * @param fromIndex
-     *            the index of the first element (inclusive) to be sorted.
-     * @param toIndex
-     *            the index of the last element (exclusive) to be sorted.
-     * @param c
-     *            the comparator to determine the order of the generic data.
-     * @param swapper
-     *            an object that knows how to swap the elements at any two
-     *            indexes (a,b).
-     * 
+     *
+     * @param fromIndex the index of the first element (inclusive) to be sorted.
+     * @param toIndex   the index of the last element (exclusive) to be sorted.
+     * @param c         the comparator to determine the order of the generic data.
+     * @param swapper   an object that knows how to swap the elements at any two
+     *                  indexes (a,b).
      * @see IntComparator
      * @see Swapper
      */
@@ -365,23 +354,18 @@ public class GenericSorting {
      * <tt>c.compare(a, b)</tt> must not throw an exception for any indexes
      * <tt>a</tt> and <tt>b</tt> in the range).
      * <p>
-     * 
+     * <p>
      * The sorting algorithm is a tuned quicksort, adapted from Jon L. Bentley
      * and M. Douglas McIlroy's "Engineering a Sort Function", Software-Practice
      * and Experience, Vol. 23(11) P. 1249-1265 (November 1993). This algorithm
      * offers n*log(n) performance on many data sets that cause other quicksorts
      * to degrade to quadratic performance.
-     * 
-     * @param fromIndex
-     *            the index of the first element (inclusive) to be sorted.
-     * @param toIndex
-     *            the index of the last element (exclusive) to be sorted.
-     * @param c
-     *            the comparator to determine the order of the generic data.
-     * @param swapper
-     *            an object that knows how to swap the elements at any two
-     *            indexes (a,b).
-     * 
+     *
+     * @param fromIndex the index of the first element (inclusive) to be sorted.
+     * @param toIndex   the index of the last element (exclusive) to be sorted.
+     * @param c         the comparator to determine the order of the generic data.
+     * @param swapper   an object that knows how to swap the elements at any two
+     *                  indexes (a,b).
      * @see IntComparator
      * @see Swapper
      */
@@ -466,15 +450,11 @@ public class GenericSorting {
 
     /**
      * Reverses a sequence of elements.
-     * 
-     * @param array
-     *            Array containing the sequence
-     * @param first
-     *            Beginning of the range
-     * @param last
-     *            One past the end of the range
-     * @exception ArrayIndexOutOfBoundsException
-     *                If the range is invalid.
+     *
+     * @param array Array containing the sequence
+     * @param first Beginning of the range
+     * @param last  One past the end of the range
+     * @throws ArrayIndexOutOfBoundsException If the range is invalid.
      */
     private static void reverse(int first, int last, Swapper swapper) {
         // no more needed since manually inlined
@@ -489,16 +469,12 @@ public class GenericSorting {
      * <code>array[first+1]</code>, etc. Generally, the element in position
      * <code>i</code> is put into position
      * <code>(i + (last-middle)) % (last-first)</code>.
-     * 
-     * @param array
-     *            Array containing the range
-     * @param first
-     *            Beginning of the range
-     * @param middle
-     *            Index of the element that will be put in
-     *            <code>array[first]</code>
-     * @param last
-     *            One past the end of the range
+     *
+     * @param array  Array containing the range
+     * @param first  Beginning of the range
+     * @param middle Index of the element that will be put in
+     *               <code>array[first]</code>
+     * @param last   One past the end of the range
      */
     private static void rotate(int first, int middle, int last, Swapper swapper) {
         // no more needed since manually inlined
@@ -513,20 +489,15 @@ public class GenericSorting {
      * Performs a binary search on an already-sorted range: finds the last
      * position where an element can be inserted without violating the ordering.
      * Sorting is by a user-supplied comparison function.
-     * 
-     * @param array
-     *            Array containing the range.
-     * @param first
-     *            Beginning of the range.
-     * @param last
-     *            One past the end of the range.
-     * @param x
-     *            Element to be searched for.
-     * @param comp
-     *            Comparison function.
+     *
+     * @param array Array containing the range.
+     * @param first Beginning of the range.
+     * @param last  One past the end of the range.
+     * @param x     Element to be searched for.
+     * @param comp  Comparison function.
      * @return The largest index i such that, for every j in the range
-     *         <code>[first, i)</code>, <code>comp.apply(x, array[j])</code> is
-     *         <code>false</code>.
+     * <code>[first, i)</code>, <code>comp.apply(x, array[j])</code> is
+     * <code>false</code>.
      * @see Sorting#lower_bound
      * @see Sorting#equal_range
      * @see Sorting#binary_search

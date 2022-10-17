@@ -320,9 +320,9 @@ public class DiagonalDoubleMatrix2DTest extends DoubleMatrix2DTest {
 
     public void testToArray() {
         double[][] array = A.toArray();
-        assertTrue(NROWS == array.length);
+        assertEquals(NROWS, array.length);
         for (int r = 0; r < NROWS; r++) {
-            assertTrue(NCOLUMNS == array[r].length);
+            assertEquals(NCOLUMNS, array[r].length);
             for (int c = 0; c < NCOLUMNS; c++) {
                 assertEquals(array[r][c], A.getQuick(r, c), TOL);
             }
@@ -405,11 +405,7 @@ public class DiagonalDoubleMatrix2DTest extends DoubleMatrix2DTest {
             A.setQuick(NROWS / 2, NROWS / 2 + DINDEX, value);
             DoubleMatrix2D B = A.viewSelection(new DoubleMatrix1DProcedure() {
                 public boolean apply(DoubleMatrix1D element) {
-                    if (Math.abs(element.getQuick(NROWS / 4 + DINDEX) - value) < TOL) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return Math.abs(element.getQuick(NROWS / 4 + DINDEX) - value) < TOL;
                 }
             });
             assertEquals(1, B.rows());
@@ -420,11 +416,7 @@ public class DiagonalDoubleMatrix2DTest extends DoubleMatrix2DTest {
             A.setQuick(NROWS / 2 - DINDEX, NROWS / 2, value);
             DoubleMatrix2D B = A.viewSelection(new DoubleMatrix1DProcedure() {
                 public boolean apply(DoubleMatrix1D element) {
-                    if (Math.abs(element.getQuick(NROWS / 4) - value) < TOL) {
-                        return true;
-                    } else {
-                        return false;
-                    }
+                    return Math.abs(element.getQuick(NROWS / 4) - value) < TOL;
                 }
             });
             assertEquals(1, B.rows());
@@ -434,8 +426,8 @@ public class DiagonalDoubleMatrix2DTest extends DoubleMatrix2DTest {
     }
 
     public void testViewSelectionIntArrayIntArray() {
-        int[] rowIndexes = new int[] { NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2 };
-        int[] colIndexes = new int[] { NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2, NROWS - 1 };
+        int[] rowIndexes = new int[]{NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2};
+        int[] colIndexes = new int[]{NROWS / 6, NROWS / 5, NROWS / 4, NROWS / 3, NROWS / 2, NROWS - 1};
         DoubleMatrix2D B = A.viewSelection(rowIndexes, colIndexes);
         assertEquals(rowIndexes.length, B.rows());
         assertEquals(colIndexes.length, B.columns());

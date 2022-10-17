@@ -12,9 +12,8 @@ import cern.jet.math.tdouble.DoubleConstants;
 
 /**
  * Complex arithmetic
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
- * 
  */
 public class DComplex extends DoubleConstants {
 
@@ -195,11 +194,7 @@ public class DComplex extends DoubleConstants {
     }
 
     public static final boolean isEqual(double[] x, double[] y, double tol) {
-        if (abs(x[0] - y[0], x[1] - y[1]) <= Math.abs(tol)) {
-            return true;
-        } else {
-            return false;
-        }
+        return abs(x[0] - y[0], x[1] - y[1]) <= Math.abs(tol);
     }
 
     public static final double[] exp(double[] x) {

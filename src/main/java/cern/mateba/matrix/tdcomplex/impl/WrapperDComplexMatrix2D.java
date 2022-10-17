@@ -21,7 +21,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
 /**
  * 2-d matrix holding <tt>complex</tt> elements; either a view wrapping another
  * matrix or a matrix whose views are wrappers.
- * 
+ *
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
  */
 public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
@@ -44,7 +44,7 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
             final double[] elems = ((DiagonalDComplexMatrix2D) content).elements;
             if (values.length != 2 * dlength)
                 throw new IllegalArgumentException("Must have same length: length=" + values.length + " 2 * dlength="
-                        + 2 * dlength);
+                    + 2 * dlength);
             int nthreads = ConcurrencyUtils.getNumberOfThreads();
             if ((nthreads > 1) && (dlength >= ConcurrencyUtils.getThreadsBeginN_2D())) {
                 nthreads = Math.min(nthreads, dlength);
@@ -82,7 +82,7 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
             final double[] elems = ((DiagonalDComplexMatrix2D) content).elements;
             if (values.length != 2 * dlength)
                 throw new IllegalArgumentException("Must have same length: length=" + values.length + " 2 * dlength="
-                        + 2 * dlength);
+                    + 2 * dlength);
             int nthreads = ConcurrencyUtils.getNumberOfThreads();
             if ((nthreads > 1) && (dlength >= ConcurrencyUtils.getThreadsBeginN_2D())) {
                 nthreads = Math.min(nthreads, dlength);
@@ -131,8 +131,8 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
                 diff[0] = Math.abs(value[0] - x[0]);
                 diff[1] = Math.abs(value[1] - x[1]);
                 if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                        || (DComplex.isEqual(value, x, epsilon))) {
+                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                    || (DComplex.isEqual(value, x, epsilon))) {
                     diff[0] = 0;
                     diff[1] = 0;
                 }
@@ -147,7 +147,7 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
     }
 
     public boolean equals(Object obj) {
-        if (content instanceof DiagonalDComplexMatrix2D && obj instanceof DiagonalDComplexMatrix2D) {
+        if (content instanceof DiagonalDComplexMatrix2D A && obj instanceof DiagonalDComplexMatrix2D B) {
             DiagonalDComplexMatrix2D other = (DiagonalDComplexMatrix2D) obj;
             int dlength = ((DiagonalDComplexMatrix2D) content).dlength;
             double epsilon = cern.mateba.matrix.tdcomplex.algo.DComplexProperty.DEFAULT.tolerance();
@@ -155,10 +155,8 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
                 return true;
             if (!(this != null && obj != null))
                 return false;
-            DiagonalDComplexMatrix2D A = (DiagonalDComplexMatrix2D) content;
-            DiagonalDComplexMatrix2D B = (DiagonalDComplexMatrix2D) obj;
             if (A.columns() != B.columns() || A.rows() != B.rows() || A.diagonalIndex() != B.diagonalIndex()
-                    || A.diagonalLength() != B.diagonalLength())
+                || A.diagonalLength() != B.diagonalLength())
                 return false;
             double[] otherElements = other.elements;
             double[] elements = ((DiagonalDComplexMatrix2D) content).elements;
@@ -173,8 +171,8 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
                 diff[0] = Math.abs(value[0] - x[0]);
                 diff[1] = Math.abs(value[1] - x[1]);
                 if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                        || (DComplex.isEqual(value, x, epsilon))) {
+                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                    || (DComplex.isEqual(value, x, epsilon))) {
                     diff[0] = 0;
                     diff[1] = 0;
                 }
@@ -202,11 +200,10 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
 
     /**
      * Computes the 2D discrete Fourier transform (DFT) of this matrix.
-     * 
      */
     public void fft2() {
         if (content instanceof DenseLargeDComplexMatrix2D) {
-            if (isNoView == true) {
+            if (isNoView) {
                 ((DenseLargeDComplexMatrix2D) content).fft2();
             } else {
                 DenseLargeDComplexMatrix2D copy = (DenseLargeDComplexMatrix2D) copy();
@@ -221,11 +218,10 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
     /**
      * Computes the discrete Fourier transform (DFT) of each column of this
      * matrix.
-     * 
      */
     public void fftColumns() {
         if (content instanceof DenseLargeDComplexMatrix2D) {
-            if (isNoView == true) {
+            if (isNoView) {
                 ((DenseLargeDComplexMatrix2D) content).fftColumns();
             } else {
                 DenseLargeDComplexMatrix2D copy = (DenseLargeDComplexMatrix2D) copy();
@@ -239,11 +235,10 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
 
     /**
      * Computes the discrete Fourier transform (DFT) of each row of this matrix.
-     * 
      */
     public void fftRows() {
         if (content instanceof DenseLargeDComplexMatrix2D) {
-            if (isNoView == true) {
+            if (isNoView) {
                 ((DenseLargeDComplexMatrix2D) content).fftRows();
             } else {
                 DenseLargeDComplexMatrix2D copy = (DenseLargeDComplexMatrix2D) copy();
@@ -258,11 +253,10 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
     /**
      * Computes the inverse of the discrete Fourier transform (DFT) of each
      * column of this matrix.
-     * 
      */
     public void ifftColumns(boolean scale) {
         if (content instanceof DenseLargeDComplexMatrix2D) {
-            if (isNoView == true) {
+            if (isNoView) {
                 ((DenseLargeDComplexMatrix2D) content).ifftColumns(scale);
             } else {
                 DenseLargeDComplexMatrix2D copy = (DenseLargeDComplexMatrix2D) copy();
@@ -277,11 +271,10 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
     /**
      * Computes the inverse of the discrete Fourier transform (DFT) of each row
      * of this matrix.
-     * 
      */
     public void ifftRows(boolean scale) {
         if (content instanceof DenseLargeDComplexMatrix2D) {
-            if (isNoView == true) {
+            if (isNoView) {
                 ((DenseLargeDComplexMatrix2D) content).ifftRows(scale);
             } else {
                 DenseLargeDComplexMatrix2D copy = (DenseLargeDComplexMatrix2D) copy();
@@ -296,14 +289,12 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
     /**
      * Computes the 2D inverse of the discrete Fourier transform (IDFT) of this
      * matrix.
-     * 
-     * @param scale
-     *            if true then scaling is performed
-     * 
+     *
+     * @param scale if true then scaling is performed
      */
     public void ifft2(boolean scale) {
         if (content instanceof DenseLargeDComplexMatrix2D) {
-            if (isNoView == true) {
+            if (isNoView) {
                 ((DenseLargeDComplexMatrix2D) content).ifft2(scale);
             } else {
                 DenseLargeDComplexMatrix2D copy = (DenseLargeDComplexMatrix2D) copy();
@@ -513,12 +504,12 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
         // check for "all"
         if (rowIndexes == null) {
             rowIndexes = new int[rows];
-            for (int i = rows; --i >= 0;)
+            for (int i = rows; --i >= 0; )
                 rowIndexes[i] = i;
         }
         if (columnIndexes == null) {
             columnIndexes = new int[columns];
-            for (int i = columns; --i >= 0;)
+            for (int i = columns; --i >= 0; )
                 columnIndexes[i] = i;
         }
 

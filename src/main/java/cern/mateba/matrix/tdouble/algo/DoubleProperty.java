@@ -54,7 +54,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * follows
  * <table>
  * <td class="PRE">
- * 
+ *
  * <pre>
  *  { some other tests not related to tolerance go here }
  *  double epsilon = tolerance();
@@ -66,7 +66,7 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  *  }
  *  return true;
  * </pre>
- * 
+ *
  * </td>
  * </table>
  * Here are some example properties
@@ -74,40 +74,40 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * <tr align="left" valign="top">
  * <td valign="middle" align="left"><tt>matrix</tt></td>
  * <td> <tt>4&nbsp;x&nbsp;4&nbsp;<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+ * 1&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;1&nbsp;0<br>
- 0&nbsp;1&nbsp;1&nbsp;1<br>
- 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;1&nbsp;0<br>
+ * 0&nbsp;1&nbsp;1&nbsp;1<br>
+ * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
  * <td><tt> 4&nbsp;x&nbsp;4<br>
- 0&nbsp;1&nbsp;1&nbsp;1<br>
- 0&nbsp;1&nbsp;1&nbsp;1<br>
- 0&nbsp;0&nbsp;0&nbsp;1<br>
- 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+ * 0&nbsp;1&nbsp;1&nbsp;1<br>
+ * 0&nbsp;1&nbsp;1&nbsp;1<br>
+ * 0&nbsp;0&nbsp;0&nbsp;1<br>
+ * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
  * <td><tt> 4&nbsp;x&nbsp;4<br>
- 0&nbsp;0&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
+ * 0&nbsp;0&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;1&nbsp;0&nbsp;0<br>
- 0&nbsp;1&nbsp;1&nbsp;0<br>
- 0&nbsp;1&nbsp;0&nbsp;1<br>
- 1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
+ * 1&nbsp;1&nbsp;0&nbsp;0<br>
+ * 0&nbsp;1&nbsp;1&nbsp;0<br>
+ * 0&nbsp;1&nbsp;0&nbsp;1<br>
+ * 1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
  * <td><tt>4&nbsp;x&nbsp;4<br>
- 1&nbsp;1&nbsp;1&nbsp;0<br>
- 0&nbsp;1&nbsp;0&nbsp;0<br>
- 1&nbsp;1&nbsp;0&nbsp;1<br>
- 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+ * 1&nbsp;1&nbsp;1&nbsp;0<br>
+ * 0&nbsp;1&nbsp;0&nbsp;0<br>
+ * 1&nbsp;1&nbsp;0&nbsp;1<br>
+ * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
  * </tr>
  * <tr align="center" valign="middle">
  * <td><tt>upperBandwidth</tt></td>
@@ -152,11 +152,10 @@ import edu.emory.mathcs.utils.ConcurrencyUtils;
  * </div></td>
  * </tr>
  * </table>
- * 
+ *
  * @author wolfgang.hoschek@cern.ch
- * @version 1.1, 28/May/2000 (fixed strange bugs involving NaN, -inf, inf)
- * 
  * @author Piotr Wendykier (piotr.wendykier@gmail.com)
+ * @version 1.1, 28/May/2000 (fixed strange bugs involving NaN, -inf, inf)
  */
 public class DoubleProperty implements Serializable, Cloneable {
 
@@ -210,9 +209,8 @@ public class DoubleProperty implements Serializable, Cloneable {
 
     /**
      * Checks whether the given matrix <tt>A</tt> is <i>rectangular</i>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>A.rows() < A.columns()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>A.rows() < A.columns()</tt>.
      */
     public void checkRectangular(DoubleMatrix2D A) {
         if (A.rows() < A.columns()) {
@@ -222,9 +220,8 @@ public class DoubleProperty implements Serializable, Cloneable {
 
     /**
      * Checks whether the given matrix <tt>A</tt> is <i>square</i>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>A.rows() != A.columns()</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>A.rows() != A.columns()</tt>.
      */
     public void checkSquare(DoubleMatrix2D A) {
         if (A.rows() != A.columns())
@@ -266,13 +263,11 @@ public class DoubleProperty implements Serializable, Cloneable {
      * given value. The result is <tt>true</tt> if and only if
      * <tt>A != null</tt> and <tt>! (Math.abs(value - A[i]) > tolerance())</tt>
      * holds for all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     *
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DoubleMatrix1D A, final double value) {
         if (A == null)
@@ -338,13 +333,11 @@ public class DoubleProperty implements Serializable, Cloneable {
      * <tt>true</tt> if and only if both arguments are <tt>!= null</tt>, have
      * the same size and <tt>! (Math.abs(A[i] - B[i]) > tolerance())</tt> holds
      * for all indexes.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     *
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DoubleMatrix1D A, final DoubleMatrix1D B) {
         if (A == B)
@@ -417,13 +410,11 @@ public class DoubleProperty implements Serializable, Cloneable {
      * <tt>A != null</tt> and
      * <tt>! (Math.abs(value - A[row,col]) > tolerance())</tt> holds for all
      * coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     *
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DoubleMatrix2D A, final double value) {
         if (A == null)
@@ -495,13 +486,11 @@ public class DoubleProperty implements Serializable, Cloneable {
      * the same number of columns and rows and
      * <tt>! (Math.abs(A[row,col] - B[row,col]) > tolerance())</tt> holds for
      * all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     *
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DoubleMatrix2D A, final DoubleMatrix2D B) {
         if (A == B)
@@ -578,13 +567,11 @@ public class DoubleProperty implements Serializable, Cloneable {
      * <tt>A != null</tt> and
      * <tt>! (Math.abs(value - A[slice,row,col]) > tolerance())</tt> holds for
      * all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param value
-     *            the value to compare against.
+     *
+     * @param A     the first matrix to compare.
+     * @param value the value to compare against.
      * @return <tt>true</tt> if the matrix is equal to the value; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DoubleMatrix3D A, final double value) {
         if (A == null)
@@ -661,13 +648,11 @@ public class DoubleProperty implements Serializable, Cloneable {
      * the same number of columns, rows and slices, and
      * <tt>! (Math.abs(A[slice,row,col] - B[slice,row,col]) > tolerance())</tt>
      * holds for all coordinates.
-     * 
-     * @param A
-     *            the first matrix to compare.
-     * @param B
-     *            the second matrix to compare.
+     *
+     * @param A the first matrix to compare.
+     * @param B the second matrix to compare.
      * @return <tt>true</tt> if both matrices are equal; <tt>false</tt>
-     *         otherwise.
+     * otherwise.
      */
     public boolean equals(final DoubleMatrix3D A, final DoubleMatrix3D B) {
         if (A == B)
@@ -747,20 +732,18 @@ public class DoubleProperty implements Serializable, Cloneable {
      * Modifies the given matrix square matrix <tt>A</tt> such that it is
      * diagonally dominant by row and column, hence non-singular, hence
      * invertible. For testing purposes only.
-     * 
-     * @param A
-     *            the square matrix to modify.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @param A the square matrix to modify.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public void generateNonSingular(DoubleMatrix2D A) {
         checkSquare(A);
         cern.jet.math.tdouble.DoubleFunctions F = cern.jet.math.tdouble.DoubleFunctions.functions;
         int min = Math.min(A.rows(), A.columns());
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             A.setQuick(i, i, 0);
         }
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             double rowSum = A.viewRow(i).aggregate(DoubleFunctions.plus, DoubleFunctions.abs);
             double colSum = A.viewColumn(i).aggregate(DoubleFunctions.plus, DoubleFunctions.abs);
             A.setQuick(i, i, Math.max(rowSum, colSum) + i + 1);
@@ -768,6 +751,7 @@ public class DoubleProperty implements Serializable, Cloneable {
     }
 
     /**
+     *
      */
     protected static String get(cern.mateba.list.tobject.ObjectArrayList list, int index) {
         return ((String) list.get(index));
@@ -781,8 +765,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (row != column && !(Math.abs(A.getQuick(row, column)) <= epsilon))
                     return false;
             }
@@ -794,7 +778,7 @@ public class DoubleProperty implements Serializable, Cloneable {
      * A matrix <tt>A</tt> is <i>diagonally dominant by column</i> if the
      * absolute value of each diagonal element is larger than the sum of the
      * absolute values of the off-diagonal elements in the corresponding column.
-     * 
+     *
      * <tt>returns true if for all i: abs(A[i,i]) &gt; Sum(abs(A[j,i])); j != i.</tt>
      * Matrix may but need not be square.
      * <p>
@@ -803,7 +787,7 @@ public class DoubleProperty implements Serializable, Cloneable {
     public boolean isDiagonallyDominantByColumn(DoubleMatrix2D A) {
         cern.jet.math.tdouble.DoubleFunctions F = cern.jet.math.tdouble.DoubleFunctions.functions;
         int min = Math.min(A.rows(), A.columns());
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             double diag = Math.abs(A.getQuick(i, i));
             diag += diag;
             if (diag <= A.viewColumn(i).aggregate(DoubleFunctions.plus, DoubleFunctions.abs))
@@ -824,7 +808,7 @@ public class DoubleProperty implements Serializable, Cloneable {
     public boolean isDiagonallyDominantByRow(DoubleMatrix2D A) {
         cern.jet.math.tdouble.DoubleFunctions F = cern.jet.math.tdouble.DoubleFunctions.functions;
         int min = Math.min(A.rows(), A.columns());
-        for (int i = min; --i >= 0;) {
+        for (int i = min; --i >= 0; ) {
             double diag = Math.abs(A.getQuick(i, i));
             diag += diag;
             if (diag <= A.viewRow(i).aggregate(DoubleFunctions.plus, DoubleFunctions.abs))
@@ -841,8 +825,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 double v = A.getQuick(row, column);
                 if (row == column) {
                     if (!(Math.abs(1 - v) < epsilon))
@@ -862,8 +846,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(row == column || row == column + 1)) {
                     if (!(Math.abs(A.getQuick(row, column)) <= epsilon))
                         return false;
@@ -881,8 +865,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = Math.min(column, rows); --row >= 0;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = Math.min(column, rows); --row >= 0; ) {
                 if (!(Math.abs(A.getQuick(row, column)) <= epsilon))
                     return false;
             }
@@ -899,8 +883,8 @@ public class DoubleProperty implements Serializable, Cloneable {
     public boolean isNonNegative(DoubleMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(A.getQuick(row, column) >= 0))
                     return false;
             }
@@ -911,14 +895,13 @@ public class DoubleProperty implements Serializable, Cloneable {
     /**
      * A square matrix <tt>A</tt> is <i>orthogonal</i> if
      * <tt>A*transpose(A) = I</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public boolean isOrthogonal(DoubleMatrix2D A) {
         checkSquare(A);
         return equals(A.zMult(A, null, 1, 0, false, true), cern.mateba.matrix.tdouble.DoubleFactory2D.dense.identity(A
-                .rows()));
+            .rows()));
     }
 
     /**
@@ -930,8 +913,8 @@ public class DoubleProperty implements Serializable, Cloneable {
     public boolean isPositive(DoubleMatrix2D A) {
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(A.getQuick(row, column) > 0))
                     return false;
             }
@@ -950,16 +933,15 @@ public class DoubleProperty implements Serializable, Cloneable {
     /**
      * A square matrix <tt>A</tt> is <i>skew-symmetric</i> if
      * <tt>A = -transpose(A)</tt>, that is <tt>A[i,j] == -A[j,i]</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public boolean isSkewSymmetric(DoubleMatrix2D A) {
         checkSquare(A);
         double epsilon = tolerance();
         int rows = A.rows();
-        for (int row = rows; --row >= 0;) {
-            for (int column = rows; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = rows; --column >= 0; ) {
                 if (!(Math.abs(A.getQuick(row, column) + A.getQuick(column, row)) <= epsilon))
                     return false;
             }
@@ -984,8 +966,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = Math.min(rows, column + 1); --row >= 0;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = Math.min(rows, column + 1); --row >= 0; ) {
                 if (!(Math.abs(A.getQuick(row, column)) <= epsilon))
                     return false;
             }
@@ -1002,7 +984,7 @@ public class DoubleProperty implements Serializable, Cloneable {
             return false;
 
         double epsilon = tolerance();
-        for (int i = Math.min(A.rows(), A.columns()); --i >= 0;) {
+        for (int i = Math.min(A.rows(), A.columns()); --i >= 0; ) {
             if (!(Math.abs(A.getQuick(i, i)) <= epsilon))
                 return false;
         }
@@ -1018,8 +1000,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = rows; --row >= column;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = rows; --row >= column; ) {
                 if (!(Math.abs(A.getQuick(row, column)) <= epsilon))
                     return false;
             }
@@ -1030,9 +1012,8 @@ public class DoubleProperty implements Serializable, Cloneable {
     /**
      * A matrix <tt>A</tt> is <i>symmetric</i> if <tt>A = tranpose(A)</tt>, that
      * is <tt>A[i,j] == A[j,i]</tt>.
-     * 
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     *
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      */
     public boolean isSymmetric(DoubleMatrix2D A) {
         checkSquare(A);
@@ -1055,8 +1036,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (Math.abs(row - column) > 1) {
                     if (!(Math.abs(A.getQuick(row, column)) <= epsilon))
                         return false;
@@ -1075,7 +1056,7 @@ public class DoubleProperty implements Serializable, Cloneable {
             return false;
 
         double epsilon = tolerance();
-        for (int i = Math.min(A.rows(), A.columns()); --i >= 0;) {
+        for (int i = Math.min(A.rows(), A.columns()); --i >= 0; ) {
             if (!(Math.abs(1 - A.getQuick(i, i)) <= epsilon))
                 return false;
         }
@@ -1090,8 +1071,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
         int columns = A.columns();
-        for (int row = rows; --row >= 0;) {
-            for (int column = columns; --column >= 0;) {
+        for (int row = rows; --row >= 0; ) {
+            for (int column = columns; --column >= 0; ) {
                 if (!(row == column || row == column - 1)) {
                     if (!(Math.abs(A.getQuick(row, column)) <= epsilon))
                         return false;
@@ -1109,8 +1090,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
         int columns = A.columns();
-        for (int column = columns; --column >= 0;) {
-            for (int row = rows; --row > column;) {
+        for (int column = columns; --column >= 0; ) {
+            for (int row = rows; --row > column; ) {
                 if (!(Math.abs(A.getQuick(row, column)) <= epsilon))
                     return false;
             }
@@ -1130,12 +1111,10 @@ public class DoubleProperty implements Serializable, Cloneable {
      * <tt>i-j</tt> for which <tt>A[i,j]</tt> is nonzero and <tt>i &gt; j</tt>.
      * A <i>banded</i> matrix has a "band" about the diagonal. Diagonal,
      * tridiagonal and triangular matrices are special cases.
-     * 
-     * @param A
-     *            the square matrix to analyze.
+     *
+     * @param A the square matrix to analyze.
      * @return the lower bandwith.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      * @see #semiBandwidth(DoubleMatrix2D)
      * @see #upperBandwidth(DoubleMatrix2D)
      */
@@ -1144,8 +1123,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
 
-        for (int k = rows; --k >= 0;) {
-            for (int i = rows - k; --i >= 0;) {
+        for (int k = rows; --k >= 0; ) {
+            for (int i = rows - k; --i >= 0; ) {
                 int j = i + k;
                 if (!(Math.abs(A.getQuick(j, i)) <= epsilon))
                     return k;
@@ -1176,40 +1155,40 @@ public class DoubleProperty implements Serializable, Cloneable {
      * <tr align="left" valign="top">
      * <td valign="middle" align="left"><tt>matrix</tt></td>
      * <td> <tt>4&nbsp;x&nbsp;4&nbsp;<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0 </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+     * 1&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;1&nbsp;0<br>
-     0&nbsp;1&nbsp;1&nbsp;1<br>
-     0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;1&nbsp;0<br>
+     * 0&nbsp;1&nbsp;1&nbsp;1<br>
+     * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
      * <td><tt> 4&nbsp;x&nbsp;4<br>
-     0&nbsp;1&nbsp;1&nbsp;1<br>
-     0&nbsp;1&nbsp;1&nbsp;1<br>
-     0&nbsp;0&nbsp;0&nbsp;1<br>
-     0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
+     * 0&nbsp;1&nbsp;1&nbsp;1<br>
+     * 0&nbsp;1&nbsp;1&nbsp;1<br>
+     * 0&nbsp;0&nbsp;0&nbsp;1<br>
+     * 0&nbsp;0&nbsp;0&nbsp;1 </tt></td>
      * <td><tt> 4&nbsp;x&nbsp;4<br>
-     0&nbsp;0&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
+     * 0&nbsp;0&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;1&nbsp;1 </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;1&nbsp;0&nbsp;0<br>
-     0&nbsp;1&nbsp;1&nbsp;0<br>
-     0&nbsp;1&nbsp;0&nbsp;1<br>
-     1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
+     * 1&nbsp;1&nbsp;0&nbsp;0<br>
+     * 0&nbsp;1&nbsp;1&nbsp;0<br>
+     * 0&nbsp;1&nbsp;0&nbsp;1<br>
+     * 1&nbsp;0&nbsp;1&nbsp;1 </tt><tt> </tt></td>
      * <td><tt>4&nbsp;x&nbsp;4<br>
-     1&nbsp;1&nbsp;1&nbsp;0<br>
-     0&nbsp;1&nbsp;0&nbsp;0<br>
-     1&nbsp;1&nbsp;0&nbsp;1<br>
-     0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
+     * 1&nbsp;1&nbsp;1&nbsp;0<br>
+     * 0&nbsp;1&nbsp;0&nbsp;0<br>
+     * 1&nbsp;1&nbsp;0&nbsp;1<br>
+     * 0&nbsp;0&nbsp;1&nbsp;1 </tt></td>
      * </tr>
      * <tr align="center" valign="middle">
      * <td><tt>upperBandwidth</tt></td>
@@ -1254,12 +1233,10 @@ public class DoubleProperty implements Serializable, Cloneable {
      * <tt>unstructured</tt></div></td>
      * </tr>
      * </table>
-     * 
-     * @param A
-     *            the square matrix to analyze.
+     *
+     * @param A the square matrix to analyze.
      * @return the semi-bandwith <tt>l</tt>.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      * @see #lowerBandwidth(DoubleMatrix2D)
      * @see #upperBandwidth(DoubleMatrix2D)
      */
@@ -1268,8 +1245,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
 
-        for (int k = rows; --k >= 0;) {
-            for (int i = rows - k; --i >= 0;) {
+        for (int k = rows; --k >= 0; ) {
+            for (int i = rows - k; --i >= 0; ) {
                 int j = i + k;
                 if (!(Math.abs(A.getQuick(j, i)) <= epsilon))
                     return k + 1;
@@ -1282,9 +1259,8 @@ public class DoubleProperty implements Serializable, Cloneable {
 
     /**
      * Sets the tolerance to <tt>Math.abs(newTolerance)</tt>.
-     * 
-     * @throws UnsupportedOperationException
-     *             if <tt>this==DEFAULT || this==ZERO || this==TWELVE</tt>.
+     *
+     * @throws UnsupportedOperationException if <tt>this==DEFAULT || this==ZERO || this==TWELVE</tt>.
      */
     public void setTolerance(double newTolerance) {
         if (this == DEFAULT || this == ZERO || this == TWELVE) {
@@ -1304,7 +1280,7 @@ public class DoubleProperty implements Serializable, Cloneable {
      * Returns summary information about the given matrix <tt>A</tt>. That is a
      * String with (propertyName, propertyValue) pairs. Useful for debugging or
      * to quickly get the rough picture of a matrix. For example,
-     * 
+     *
      * <pre>
      * 	 density                      : 0.9
      * 	 isDiagonal                   : false
@@ -1332,7 +1308,7 @@ public class DoubleProperty implements Serializable, Cloneable {
      * 	 lowerBandwidth               : Illegal operation or error: Matrix must be square.
      * 	 semiBandwidth                : Illegal operation or error: Matrix must be square.
      * 	 upperBandwidth               : Illegal operation or error: Matrix must be square.
-     * 
+     *
      * </pre>
      */
     public String toString(DoubleMatrix2D A) {
@@ -1572,12 +1548,10 @@ public class DoubleProperty implements Serializable, Cloneable {
      * <tt>j-i</tt> for which <tt>A[i,j]</tt> is nonzero and <tt>j &gt; i</tt>.
      * A <i>banded</i> matrix has a "band" about the diagonal. Diagonal,
      * tridiagonal and triangular matrices are special cases.
-     * 
-     * @param A
-     *            the square matrix to analyze.
+     *
+     * @param A the square matrix to analyze.
      * @return the upper bandwith.
-     * @throws IllegalArgumentException
-     *             if <tt>!isSquare(A)</tt>.
+     * @throws IllegalArgumentException if <tt>!isSquare(A)</tt>.
      * @see #semiBandwidth(DoubleMatrix2D)
      * @see #lowerBandwidth(DoubleMatrix2D)
      */
@@ -1586,8 +1560,8 @@ public class DoubleProperty implements Serializable, Cloneable {
         double epsilon = tolerance();
         int rows = A.rows();
 
-        for (int k = rows; --k >= 0;) {
-            for (int i = rows - k; --i >= 0;) {
+        for (int k = rows; --k >= 0; ) {
+            for (int i = rows - k; --i >= 0; ) {
                 int j = i + k;
                 if (!(Math.abs(A.getQuick(i, j)) <= epsilon))
                     return k;

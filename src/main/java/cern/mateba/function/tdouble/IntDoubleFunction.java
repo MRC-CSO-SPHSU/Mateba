@@ -15,12 +15,10 @@ package cern.mateba.function.tdouble;
 public interface IntDoubleFunction {
     /**
      * Applies a function to two arguments.
-     * 
-     * @param first
-     *            first argument passed to the function.
-     * @param second
-     *            second argument passed to the function.
+     *
+     * @param first  first argument passed to the function.
+     * @param second second argument passed to the function.
      * @return the result of the function.
      */
-    abstract public double apply(int first, double second);
+    double apply(int first, double second);
 }

@@ -74,11 +74,11 @@ public class TestQuantile1 {
         System.out.println();
         // int step = 1;
         int step = 10;
-        for (int i = 1; i < 100;) {
+        for (int i = 1; i < 100; ) {
             double percent = (i) * 0.01;
             double quantile = qAccum.quantile(percent);
             System.out.println(fmt.format(percent) + "  " + quantile + ",  " + dbin.quantile(percent) + ",  "
-                    + (dbin.quantile(percent) - quantile));
+                + (dbin.quantile(percent) - quantile));
             i = i + step;
         }
     }
