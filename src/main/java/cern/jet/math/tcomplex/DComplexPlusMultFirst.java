@@ -1,4 +1,4 @@
-package cern.jet.math.tdcomplex;
+package cern.jet.math.tcomplex;
 
 /**
  * Only for performance tuning of compute intensive linear algebraic

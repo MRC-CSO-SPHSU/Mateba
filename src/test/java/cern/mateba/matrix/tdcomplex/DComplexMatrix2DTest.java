@@ -9,8 +9,8 @@ import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.tdcomplex.impl.DenseDComplexMatrix1D;
 import cern.mateba.matrix.tdouble.DoubleFactory2D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
-import cern.jet.math.tdcomplex.DComplex;
-import cern.jet.math.tdcomplex.DComplexFunctions;
+import cern.jet.math.tcomplex.DComplex;
+import cern.jet.math.tcomplex.DComplexFunctions;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 public abstract class DComplexMatrix2DTest extends TestCase {

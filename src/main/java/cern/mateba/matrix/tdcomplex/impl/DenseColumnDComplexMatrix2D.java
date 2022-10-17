@@ -288,8 +288,8 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
         final int zero = (int) index(0, 0);
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if ((nthreads > 1) && (size() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
-            if (function instanceof cern.jet.math.tdcomplex.DComplexMult) {
-                double[] multiplicator = ((cern.jet.math.tdcomplex.DComplexMult) function).multiplicator;
+            if (function instanceof cern.jet.math.tcomplex.DComplexMult) {
+                double[] multiplicator = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
                 if (multiplicator[0] == 1 && multiplicator[1] == 0)
                     return this;
                 if (multiplicator[0] == 0 && multiplicator[1] == 0)
@@ -306,8 +306,8 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                     public void run() {
                         int idx = zero + firstColumn * columnStride;
                         double[] tmp = new double[2];
-                        if (function instanceof cern.jet.math.tdcomplex.DComplexMult) {
-                            double[] multiplicator = ((cern.jet.math.tdcomplex.DComplexMult) function).multiplicator;
+                        if (function instanceof cern.jet.math.tcomplex.DComplexMult) {
+                            double[] multiplicator = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
                             // x[i] = mult*x[i]
                             for (int c = firstColumn; c < lastColumn; c++) {
                                 for (int i = idx, r = 0; r < rows; r++) {
@@ -337,8 +337,8 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
         } else {
             int idx = zero;
             double[] tmp = new double[2];
-            if (function instanceof cern.jet.math.tdcomplex.DComplexMult) {
-                double[] multiplicator = ((cern.jet.math.tdcomplex.DComplexMult) function).multiplicator;
+            if (function instanceof cern.jet.math.tcomplex.DComplexMult) {
+                double[] multiplicator = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
                 // x[i] = mult*x[i]
                 for (int c = 0; c < columns; c++) {
                     for (int i = idx, r = 0; r < rows; r++) {
@@ -482,7 +482,7 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                     public void run() {
                         int idx = zero + firstColumn * columnStride;
                         double[] tmp = new double[2];
-                        if (function == cern.jet.math.tdcomplex.DComplexFunctions.abs) {
+                        if (function == cern.jet.math.tcomplex.DComplexFunctions.abs) {
                             for (int c = firstColumn; c < lastColumn; c++) {
                                 for (int i = idx, r = 0; r < rows; r++) {
                                     tmp[0] = elements[i];
@@ -523,7 +523,7 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
         } else {
             int idx = zero;
             double[] tmp = new double[2];
-            if (function == cern.jet.math.tdcomplex.DComplexFunctions.abs) {
+            if (function == cern.jet.math.tcomplex.DComplexFunctions.abs) {
                 for (int c = 0; c < columns; c++) {
                     for (int i = idx, r = 0; r < rows; r++) {
                         tmp[0] = elements[i];
@@ -663,7 +663,7 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                         int idxOther = zeroOther + firstColumn * columnStrideOther;
                         double[] tmp1 = new double[2];
                         double[] tmp2 = new double[2];
-                        if (function == cern.jet.math.tdcomplex.DComplexFunctions.mult) {
+                        if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) {
                             for (int c = firstColumn; c < lastColumn; c++) {
                                 for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
                                     tmp1[0] = elements[i];
@@ -678,7 +678,7 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                                 idx += columnStride;
                                 idxOther += columnStrideOther;
                             }
-                        } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjFirst) {
+                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjFirst) {
                             for (int c = firstColumn; c < lastColumn; c++) {
                                 for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
                                     tmp1[0] = elements[i];
@@ -694,7 +694,7 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                                 idxOther += columnStrideOther;
                             }
 
-                        } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjSecond) {
+                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjSecond) {
                             for (int c = firstColumn; c < lastColumn; c++) {
                                 for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
                                     tmp1[0] = elements[i];
@@ -735,7 +735,7 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             double[] tmp2 = new double[2];
             int idx = zero;
             int idxOther = zeroOther;
-            if (function == cern.jet.math.tdcomplex.DComplexFunctions.mult) {
+            if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) {
                 for (int c = 0; c < columns; c++) {
                     for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
                         tmp1[0] = elements[i];
@@ -750,7 +750,7 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                     idx += columnStride;
                     idxOther += columnStrideOther;
                 }
-            } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjFirst) {
+            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjFirst) {
                 for (int c = 0; c < columns; c++) {
                     for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
                         tmp1[0] = elements[i];
@@ -766,7 +766,7 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                     idxOther += columnStrideOther;
                 }
 
-            } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjSecond) {
+            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjSecond) {
                 for (int c = 0; c < columns; c++) {
                     for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
                         tmp1[0] = elements[i];

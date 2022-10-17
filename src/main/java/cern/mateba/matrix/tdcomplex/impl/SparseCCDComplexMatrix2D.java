@@ -16,7 +16,7 @@ import cern.mateba.list.tdouble.DoubleArrayList;
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
-import cern.jet.math.tdcomplex.DComplex;
+import cern.jet.math.tcomplex.DComplex;
 import edu.emory.mathcs.csparsej.tdcomplex.DZcs_common.DZcs;
 import edu.emory.mathcs.csparsej.tdcomplex.DZcs_transpose;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
@@ -271,8 +271,8 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
     }
 
     public DComplexMatrix2D assign(final cern.mateba.function.tdcomplex.DComplexDComplexFunction function) {
-        if (function instanceof cern.jet.math.tdcomplex.DComplexMult) { // x[i] = mult*x[i]
-            final double[] alpha = ((cern.jet.math.tdcomplex.DComplexMult) function).multiplicator;
+        if (function instanceof cern.jet.math.tcomplex.DComplexMult) { // x[i] = mult*x[i]
+            final double[] alpha = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
             if (alpha[0] == 1 && alpha[1] == 0)
                 return this;
             if (alpha[0] == 0 && alpha[1] == 0)
@@ -351,7 +351,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
         checkShape(y);
 
-        if ((y instanceof SparseCCDComplexMatrix2D) && (function == cern.jet.math.tdcomplex.DComplexFunctions.plus)) { // x[i] = x[i] + y[i] 
+        if ((y instanceof SparseCCDComplexMatrix2D) && (function == cern.jet.math.tcomplex.DComplexFunctions.plus)) { // x[i] = x[i] + y[i] 
             SparseCCDComplexMatrix2D yy = (SparseCCDComplexMatrix2D) y;
             int p, j, nz = 0, anz;
             int Cp[], Ci[], Bp[], m, n, bnz, w[];
@@ -384,8 +384,8 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             return this;
         }
 
-        if (function instanceof cern.jet.math.tdcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
-            final double[] alpha = ((cern.jet.math.tdcomplex.DComplexPlusMultSecond) function).multiplicator;
+        if (function instanceof cern.jet.math.tcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
+            final double[] alpha = ((cern.jet.math.tcomplex.DComplexPlusMultSecond) function).multiplicator;
             if (alpha[0] == 0 && alpha[1] == 0)
                 return this; // nothing to do
             y.forEachNonZero(new cern.mateba.function.tdcomplex.IntIntDComplexFunction() {
@@ -397,8 +397,8 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             return this;
         }
 
-        if (function instanceof cern.jet.math.tdcomplex.DComplexPlusMultFirst) { // x[i] = alpha*x[i] + y[i]
-            final double[] alpha = ((cern.jet.math.tdcomplex.DComplexPlusMultFirst) function).multiplicator;
+        if (function instanceof cern.jet.math.tcomplex.DComplexPlusMultFirst) { // x[i] = alpha*x[i] + y[i]
+            final double[] alpha = ((cern.jet.math.tcomplex.DComplexPlusMultFirst) function).multiplicator;
             if (alpha[0] == 0 && alpha[1] == 0)
                 return assign(y);
             y.forEachNonZero(new cern.mateba.function.tdcomplex.IntIntDComplexFunction() {
@@ -410,7 +410,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             return this;
         }
 
-        if (function == cern.jet.math.tdcomplex.DComplexFunctions.mult) { // x[i] = x[i] * y[i]
+        if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) { // x[i] = x[i] * y[i]
             final int[] rowIndexesA = rowIndexes;
             final int[] columnPointersA = columnPointers;
             final double[] valuesA = values;
@@ -431,7 +431,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             return this;
         }
 
-        if (function == cern.jet.math.tdcomplex.DComplexFunctions.div) { // x[i] = x[i] / y[i]
+        if (function == cern.jet.math.tcomplex.DComplexFunctions.div) { // x[i] = x[i] / y[i]
             final int[] rowIndexesA = rowIndexes;
             final int[] columnPointersA = columnPointers;
             final double[] valuesA = values;
@@ -782,7 +782,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
         if (!transposeA) {
             if ((!ignore) && !(beta[0] == 1 && beta[1] == 0)) {
-                z.assign(cern.jet.math.tdcomplex.DComplexFunctions.mult(beta));
+                z.assign(cern.jet.math.tcomplex.DComplexFunctions.mult(beta));
             }
 
             if ((nthreads > 1) && (cardinality() >= ConcurrencyUtils.getThreadsBeginN_2D())) {
@@ -951,7 +951,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             throw new IllegalArgumentException("Matrices must not be identical");
 
         if (!ignore && !(beta[0] == 1 && beta[1] == 0)) {
-            C.assign(cern.jet.math.tdcomplex.DComplexFunctions.mult(beta));
+            C.assign(cern.jet.math.tcomplex.DComplexFunctions.mult(beta));
         }
 
         if ((B instanceof DenseDComplexMatrix2D) && (C instanceof DenseDComplexMatrix2D)) {
@@ -999,7 +999,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
                 }
             }
             if (!(alpha[0] == 1.0 && alpha[1] == 0)) {
-                C.assign(cern.jet.math.tdcomplex.DComplexFunctions.mult(alpha));
+                C.assign(cern.jet.math.tcomplex.DComplexFunctions.mult(alpha));
             }
 
         } else if ((B instanceof SparseCCDComplexMatrix2D) && (C instanceof SparseCCDComplexMatrix2D)) {
@@ -1051,7 +1051,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             }
             Cp[n] = nz; /* finalize the last column of C */
             if (!(alpha[0] == 1.0 && alpha[1] == 0)) {
-                CC.assign(cern.jet.math.tdcomplex.DComplexFunctions.mult(alpha));
+                CC.assign(cern.jet.math.tcomplex.DComplexFunctions.mult(alpha));
             }
         } else {
             if (transposeB) {
@@ -1065,7 +1065,7 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
             for (int i = rowsA; --i >= 0;)
                 Crows[i] = C.viewRow(i);
 
-            final cern.jet.math.tdcomplex.DComplexPlusMultSecond fun = cern.jet.math.tdcomplex.DComplexPlusMultSecond
+            final cern.jet.math.tcomplex.DComplexPlusMultSecond fun = cern.jet.math.tcomplex.DComplexPlusMultSecond
                     .plusMult(new double[2]);
 
             final int[] rowIndexesA = rowIndexes;

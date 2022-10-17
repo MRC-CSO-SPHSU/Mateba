@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.AbstractMatrix1D;
 import cern.mateba.matrix.tdouble.DoubleMatrix1D;
-import cern.jet.math.tdcomplex.DComplex;
+import cern.jet.math.tcomplex.DComplex;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
@@ -54,7 +54,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * @param f
      *            a function transforming the current cell value.
      * @return the aggregated measure.
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public double[] aggregate(final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
             final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
@@ -109,7 +109,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * @return the aggregated measure.
      * @throws IllegalArgumentException
      *             if <tt>size() != other.size()</tt>.
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public double[] aggregate(final DComplexMatrix1D other,
             final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
@@ -156,7 +156,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * @param f
      *            a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix1D assign(final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
         int size = (int) size();
@@ -194,7 +194,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * @param f
      *            a function object.
      * @return <tt>this</tt> (for convenience only).
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix1D assign(final cern.mateba.function.tdcomplex.DComplexProcedure cond,
             final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
@@ -285,7 +285,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * @param f
      *            a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix1D assign(final cern.mateba.function.tdcomplex.DComplexRealFunction f) {
         int size = (int) size();
@@ -375,7 +375,7 @@ public abstract class DComplexMatrix1D extends AbstractMatrix1D {
      * @return <tt>this</tt> (for convenience only).
      * @throws IllegalArgumentException
      *             if <tt>size() != y.size()</tt>.
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix1D assign(final DComplexMatrix1D y,
             final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {

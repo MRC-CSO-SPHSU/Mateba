@@ -629,7 +629,7 @@ public class DComplexFactory2D implements Serializable, Cloneable {
      * (exclusive).
      */
     public DComplexMatrix2D random(int rows, int columns) {
-        return make(rows, columns).assign(cern.jet.math.tdcomplex.DComplexFunctions.random());
+        return make(rows, columns).assign(cern.jet.math.tcomplex.DComplexFunctions.random());
     }
 
     /**

@@ -152,7 +152,7 @@ public class DComplexFactory1D implements Serializable, Cloneable {
      * (exclusive).
      */
     public DComplexMatrix1D random(int size) {
-        return make(size).assign(cern.jet.math.tdcomplex.DComplexFunctions.random());
+        return make(size).assign(cern.jet.math.tcomplex.DComplexFunctions.random());
     }
 
     /**

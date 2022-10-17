@@ -19,7 +19,7 @@ import cern.mateba.matrix.tdcomplex.DComplexMatrix3D;
 import cern.mateba.matrix.tdcomplex.impl.DenseDComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.impl.SparseCCDComplexMatrix2D;
 import cern.mateba.matrix.tdcomplex.impl.SparseRCDComplexMatrix2D;
-import cern.jet.math.tdcomplex.DComplex;
+import cern.jet.math.tcomplex.DComplex;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**

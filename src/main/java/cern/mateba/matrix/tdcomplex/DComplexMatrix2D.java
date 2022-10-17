@@ -8,17 +8,17 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdcomplex;
 
+import cern.jet.math.tcomplex.DComplex;
+import cern.mateba.list.tint.IntArrayList;
+import cern.mateba.matrix.AbstractMatrix2D;
+import cern.mateba.matrix.tdouble.DoubleMatrix2D;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
+
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
-import cern.mateba.list.tint.IntArrayList;
-import cern.mateba.matrix.AbstractMatrix2D;
-import cern.mateba.matrix.tdouble.DoubleMatrix2D;
-import cern.jet.math.tdcomplex.DComplex;
-import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Abstract base class for 2-d matrices holding <tt>complex</tt> elements.
@@ -58,7 +58,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * @param f
      *            a function transforming the current cell value.
      * @return the aggregated measure.
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public double[] aggregate(final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
             final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
@@ -119,7 +119,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * @throws IllegalArgumentException
      *             if
      *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public double[] aggregate(final DComplexMatrix2D other,
             final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction aggr,
@@ -175,7 +175,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * @param f
      *            a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix2D assign(final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -217,7 +217,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * @param f
      *            a function object.
      * @return <tt>this</tt> (for convenience only).
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix2D assign(final cern.mateba.function.tdcomplex.DComplexProcedure cond,
             final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
@@ -314,7 +314,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * @param f
      *            a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix2D assign(final cern.mateba.function.tdcomplex.DComplexRealFunction f) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -416,7 +416,7 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
      * @throws IllegalArgumentException
      *             if
      *             <tt>columns() != other.columns() || rows() != other.rows()</tt>
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix2D assign(final DComplexMatrix2D y,
             final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction f) {
@@ -1753,8 +1753,8 @@ public abstract class DComplexMatrix2D extends AbstractMatrix2D {
     public double[] zSum() {
         if (size() == 0)
             return new double[] { 0, 0 };
-        return aggregate(cern.jet.math.tdcomplex.DComplexFunctions.plus,
-                cern.jet.math.tdcomplex.DComplexFunctions.identity);
+        return aggregate(cern.jet.math.tcomplex.DComplexFunctions.plus,
+                cern.jet.math.tcomplex.DComplexFunctions.identity);
     }
 
     /**

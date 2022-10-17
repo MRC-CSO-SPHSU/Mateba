@@ -9,8 +9,8 @@ import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix2DTest;
 import cern.mateba.matrix.tdouble.DoubleFactory2D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
-import cern.jet.math.tdcomplex.DComplex;
-import cern.jet.math.tdcomplex.DComplexFunctions;
+import cern.jet.math.tcomplex.DComplex;
+import cern.jet.math.tcomplex.DComplexFunctions;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 public class DiagonalDComplexMatrix2DTest extends DComplexMatrix2DTest {

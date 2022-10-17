@@ -20,8 +20,8 @@ import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix3D;
 import cern.mateba.matrix.tdouble.DoubleMatrix1D;
 import cern.mateba.matrix.tdouble.impl.DenseDoubleMatrix1D;
-import cern.jet.math.tdcomplex.DComplex;
-import cern.jet.math.tdcomplex.DComplexFunctions;
+import cern.jet.math.tcomplex.DComplex;
+import cern.jet.math.tcomplex.DComplexFunctions;
 import org.jtransforms.fft.DoubleFFT_1D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
 
@@ -221,8 +221,8 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
     public DComplexMatrix1D assign(final cern.mateba.function.tdcomplex.DComplexDComplexFunction function) {
         if (this.elements == null)
             throw new InternalError();
-        if (function instanceof cern.jet.math.tdcomplex.DComplexMult) {
-            double[] multiplicator = ((cern.jet.math.tdcomplex.DComplexMult) function).multiplicator;
+        if (function instanceof cern.jet.math.tcomplex.DComplexMult) {
+            double[] multiplicator = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
             if (multiplicator[0] == 1 && multiplicator[1] == 0)
                 return this;
         }
@@ -238,8 +238,8 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                     public void run() {
                         double[] tmp = new double[2];
                         int idx = zero + firstIdx * stride;
-                        if (function instanceof cern.jet.math.tdcomplex.DComplexMult) {
-                            double[] multiplicator = ((cern.jet.math.tdcomplex.DComplexMult) function).multiplicator;
+                        if (function instanceof cern.jet.math.tcomplex.DComplexMult) {
+                            double[] multiplicator = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
                             for (int k = firstIdx; k < lastIdx; k++) {
                                 elements[idx] = elements[idx] * multiplicator[0] - elements[idx + 1] * multiplicator[1];
                                 elements[idx + 1] = elements[idx + 1] * multiplicator[0] + elements[idx]
@@ -263,8 +263,8 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
         } else {
             double[] tmp = new double[2];
             int idx = zero;
-            if (function instanceof cern.jet.math.tdcomplex.DComplexMult) {
-                double[] multiplicator = ((cern.jet.math.tdcomplex.DComplexMult) function).multiplicator;
+            if (function instanceof cern.jet.math.tcomplex.DComplexMult) {
+                double[] multiplicator = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
                 for (int k = 0; k < size; k++) {
                     elements[idx] = elements[idx] * multiplicator[0] - elements[idx + 1] * multiplicator[1];
                     elements[idx + 1] = elements[idx + 1] * multiplicator[0] + elements[idx] * multiplicator[1];
@@ -535,21 +535,21 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                     public void run() {
                         int idx = zero + firstIdx * stride;
                         int idxOther = zeroOther + firstIdx * strideOther;
-                        if (function == cern.jet.math.tdcomplex.DComplexFunctions.plus) {
+                        if (function == cern.jet.math.tcomplex.DComplexFunctions.plus) {
                             for (int k = firstIdx; k < lastIdx; k++) {
                                 elements[idx] += elemsOther[idxOther];
                                 elements[idx + 1] += elemsOther[idxOther + 1];
                                 idx += stride;
                                 idxOther += strideOther;
                             }
-                        } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.minus) {
+                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.minus) {
                             for (int k = firstIdx; k < lastIdx; k++) {
                                 elements[idx] -= elemsOther[idxOther];
                                 elements[idx + 1] -= elemsOther[idxOther + 1];
                                 idx += stride;
                                 idxOther += strideOther;
                             }
-                        } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.div) {
+                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.div) {
                             double[] tmp = new double[2];
                             for (int k = firstIdx; k < lastIdx; k++) {
                                 double re = elemsOther[idxOther];
@@ -569,7 +569,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                                 idx += stride;
                                 idxOther += strideOther;
                             }
-                        } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.mult) {
+                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) {
                             double[] tmp = new double[2];
                             for (int k = firstIdx; k < lastIdx; k++) {
                                 tmp[0] = elements[idx] * elemsOther[idxOther] - elements[idx + 1]
@@ -581,7 +581,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                                 idx += stride;
                                 idxOther += strideOther;
                             }
-                        } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjFirst) {
+                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjFirst) {
                             double[] tmp = new double[2];
                             for (int k = firstIdx; k < lastIdx; k++) {
                                 tmp[0] = elements[idx] * elemsOther[idxOther] + elements[idx + 1]
@@ -593,7 +593,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                                 idx += stride;
                                 idxOther += strideOther;
                             }
-                        } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjSecond) {
+                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjSecond) {
                             double[] tmp = new double[2];
                             for (int k = firstIdx; k < lastIdx; k++) {
                                 tmp[0] = elements[idx] * elemsOther[idxOther] + elements[idx + 1]
@@ -627,21 +627,21 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
         } else {
             int idx = zero;
             int idxOther = zeroOther;
-            if (function == cern.jet.math.tdcomplex.DComplexFunctions.plus) {
+            if (function == cern.jet.math.tcomplex.DComplexFunctions.plus) {
                 for (int k = 0; k < size; k++) {
                     elements[idx] += elemsOther[idxOther];
                     elements[idx + 1] += elemsOther[idxOther + 1];
                     idx += stride;
                     idxOther += strideOther;
                 }
-            } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.minus) {
+            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.minus) {
                 for (int k = 0; k < size; k++) {
                     elements[idx] -= elemsOther[idxOther];
                     elements[idx + 1] -= elemsOther[idxOther + 1];
                     idx += stride;
                     idxOther += strideOther;
                 }
-            } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.div) {
+            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.div) {
                 double[] tmp = new double[2];
                 for (int k = 0; k < size; k++) {
                     double re = elemsOther[idxOther];
@@ -661,7 +661,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                     idx += stride;
                     idxOther += strideOther;
                 }
-            } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.mult) {
+            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) {
                 double[] tmp = new double[2];
                 for (int k = 0; k < size; k++) {
                     tmp[0] = elements[idx] * elemsOther[idxOther] - elements[idx + 1] * elemsOther[idxOther + 1];
@@ -671,7 +671,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                     idx += stride;
                     idxOther += strideOther;
                 }
-            } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjFirst) {
+            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjFirst) {
                 double[] tmp = new double[2];
                 for (int k = 0; k < size; k++) {
                     tmp[0] = elements[idx] * elemsOther[idxOther] + elements[idx + 1] * elemsOther[idxOther + 1];
@@ -681,7 +681,7 @@ public class DenseDComplexMatrix1D extends DComplexMatrix1D {
                     idx += stride;
                     idxOther += strideOther;
                 }
-            } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjSecond) {
+            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjSecond) {
                 double[] tmp = new double[2];
                 for (int k = 0; k < size; k++) {
                     tmp[0] = elements[idx] * elemsOther[idxOther] + elements[idx + 1] * elemsOther[idxOther + 1];

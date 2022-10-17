@@ -15,7 +15,7 @@ import java.util.concurrent.Future;
 
 import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
-import cern.jet.math.tdcomplex.DComplex;
+import cern.jet.math.tcomplex.DComplex;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
@@ -126,8 +126,8 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
     }
 
     public DComplexMatrix2D assign(final cern.mateba.function.tdcomplex.DComplexDComplexFunction function) {
-        if (function instanceof cern.jet.math.tdcomplex.DComplexMult) { // x[i] = mult*x[i]
-            final double[] alpha = ((cern.jet.math.tdcomplex.DComplexMult) function).multiplicator;
+        if (function instanceof cern.jet.math.tcomplex.DComplexMult) { // x[i] = mult*x[i]
+            final double[] alpha = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
             if (alpha[0] == 1 && alpha[1] == 0)
                 return this;
             if (alpha[0] == 0 && alpha[1] == 0)
@@ -279,8 +279,8 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
             if ((dindex != other.dindex) || (dlength != other.dlength)) {
                 throw new IllegalArgumentException("y is DiagonalDComplexMatrix2D with different diagonal stored.");
             }
-            if (function instanceof cern.jet.math.tdcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
-                final double[] alpha = ((cern.jet.math.tdcomplex.DComplexPlusMultSecond) function).multiplicator;
+            if (function instanceof cern.jet.math.tcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
+                final double[] alpha = ((cern.jet.math.tcomplex.DComplexPlusMultSecond) function).multiplicator;
                 if (alpha[0] == 0 && alpha[1] == 0) {
                     return this; // nothing to do
                 }
@@ -297,8 +297,8 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                     futures[j] = ConcurrencyUtils.submit(new Runnable() {
 
                         public void run() {
-                            if (function instanceof cern.jet.math.tdcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
-                                final double alpha[] = ((cern.jet.math.tdcomplex.DComplexPlusMultSecond) function).multiplicator;
+                            if (function instanceof cern.jet.math.tcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
+                                final double alpha[] = ((cern.jet.math.tcomplex.DComplexPlusMultSecond) function).multiplicator;
                                 if (alpha[0] == 1 && alpha[1] == 0) {
                                     for (int j = firstIdx; j < lastIdx; j++) {
                                         elements[2 * j] += otherElements[2 * j];
@@ -314,7 +314,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                                         elements[2 * j + 1] += elem[1];
                                     }
                                 }
-                            } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.mult) { // x[i] = x[i] * y[i]
+                            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) { // x[i] = x[i] * y[i]
                                 double[] elem = new double[2];
                                 double[] otherElem = new double[2];
                                 for (int j = firstIdx; j < lastIdx; j++) {
@@ -326,7 +326,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                                     elements[2 * j] = elem[0];
                                     elements[2 * j + 1] = elem[1];
                                 }
-                            } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.div) { // x[i] = x[i] /  y[i]
+                            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.div) { // x[i] = x[i] /  y[i]
                                 double[] elem = new double[2];
                                 double[] otherElem = new double[2];
                                 for (int j = firstIdx; j < lastIdx; j++) {
@@ -356,8 +356,8 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                 }
                 ConcurrencyUtils.waitForCompletion(futures);
             } else {
-                if (function instanceof cern.jet.math.tdcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
-                    final double alpha[] = ((cern.jet.math.tdcomplex.DComplexPlusMultSecond) function).multiplicator;
+                if (function instanceof cern.jet.math.tcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
+                    final double alpha[] = ((cern.jet.math.tcomplex.DComplexPlusMultSecond) function).multiplicator;
                     if (alpha[0] == 1 && alpha[1] == 0) {
                         for (int j = 0; j < dlength; j++) {
                             elements[2 * j] += otherElements[2 * j];
@@ -373,7 +373,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                             elements[2 * j + 1] += elem[1];
                         }
                     }
-                } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.mult) { // x[i] = x[i] * y[i]
+                } else if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) { // x[i] = x[i] * y[i]
                     double[] elem = new double[2];
                     double[] otherElem = new double[2];
                     for (int j = 0; j < dlength; j++) {
@@ -385,7 +385,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                         elements[2 * j] = elem[0];
                         elements[2 * j + 1] = elem[1];
                     }
-                } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.div) { // x[i] = x[i] /  y[i]
+                } else if (function == cern.jet.math.tcomplex.DComplexFunctions.div) { // x[i] = x[i] /  y[i]
                     double[] elem = new double[2];
                     double[] otherElem = new double[2];
                     for (int j = 0; j < dlength; j++) {
@@ -668,7 +668,7 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                     + z.toStringShort());
 
         if ((!ignore) && !((beta[0] == 1) && (beta[1] == 0)))
-            z.assign(cern.jet.math.tdcomplex.DComplexFunctions.mult(beta));
+            z.assign(cern.jet.math.tcomplex.DComplexFunctions.mult(beta));
 
         DenseDComplexMatrix1D zz = (DenseDComplexMatrix1D) z;
         final double[] elementsZ = zz.elements;

@@ -39,7 +39,7 @@ import cern.mateba.matrix.tint.IntFactory1D;
 import cern.mateba.matrix.tint.IntFactory2D;
 import cern.mateba.matrix.tint.IntMatrix1D;
 import cern.mateba.matrix.tint.IntMatrix2D;
-import cern.jet.math.tdcomplex.DComplexFunctions;
+import cern.jet.math.tcomplex.DComplexFunctions;
 import cern.jet.math.tdouble.DoubleFunctions;
 import cern.jet.math.tint.IntFunctions;
 //OS4ES

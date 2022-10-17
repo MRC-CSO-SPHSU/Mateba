@@ -112,7 +112,7 @@ public class DComplexFactory3D implements Serializable, Cloneable {
      * (exclusive).
      */
     public DComplexMatrix3D random(int slices, int rows, int columns) {
-        return make(slices, rows, columns).assign(cern.jet.math.tdcomplex.DComplexFunctions.random());
+        return make(slices, rows, columns).assign(cern.jet.math.tcomplex.DComplexFunctions.random());
     }
 
     @Override

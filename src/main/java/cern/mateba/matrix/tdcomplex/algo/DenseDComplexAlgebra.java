@@ -2,7 +2,7 @@ package cern.mateba.matrix.tdcomplex.algo;
 
 import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
 import cern.mateba.matrix.tdouble.DoubleMatrix1D;
-import cern.jet.math.tdcomplex.DComplexFunctions;
+import cern.jet.math.tcomplex.DComplexFunctions;
 import cern.jet.math.tdouble.DoubleFunctions;
 
 import java.io.Serial;

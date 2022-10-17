@@ -185,7 +185,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * @param function
      *            a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix3D assign(final cern.mateba.function.tdcomplex.DComplexDComplexFunction function) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -229,7 +229,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * @param function
      *            a function object taking as argument the current cell's value.
      * @return <tt>this</tt> (for convenience only).
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix3D assign(final cern.mateba.function.tdcomplex.DComplexRealFunction function) {
         int nthreads = ConcurrencyUtils.getNumberOfThreads();
@@ -279,7 +279,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * @param f
      *            a function object.
      * @return <tt>this</tt> (for convenience only).
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix3D assign(final cern.mateba.function.tdcomplex.DComplexProcedure cond,
             final cern.mateba.function.tdcomplex.DComplexDComplexFunction f) {
@@ -451,7 +451,7 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
      * @throws IllegalArgumentException
      *             if
      *             <tt>slices() != other.slices() || rows() != other.rows() || columns() != other.columns()</tt>
-     * @see cern.jet.math.tdcomplex.DComplexFunctions
+     * @see cern.jet.math.tcomplex.DComplexFunctions
      */
     public DComplexMatrix3D assign(final DComplexMatrix3D y,
             final cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction function) {
@@ -1566,8 +1566,8 @@ public abstract class DComplexMatrix3D extends AbstractMatrix3D {
     public double[] zSum() {
         if (size() == 0)
             return new double[2];
-        return aggregate(cern.jet.math.tdcomplex.DComplexFunctions.plus,
-                cern.jet.math.tdcomplex.DComplexFunctions.identity);
+        return aggregate(cern.jet.math.tcomplex.DComplexFunctions.plus,
+                cern.jet.math.tcomplex.DComplexFunctions.identity);
     }
 
     /**

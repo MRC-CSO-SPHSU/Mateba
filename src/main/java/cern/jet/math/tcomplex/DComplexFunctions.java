@@ -1,4 +1,4 @@
-package cern.jet.math.tdcomplex;
+package cern.jet.math.tcomplex;
 
 import cern.mateba.function.tdcomplex.DComplexDComplexDComplexFunction;
 import cern.mateba.function.tdcomplex.DComplexDComplexFunction;

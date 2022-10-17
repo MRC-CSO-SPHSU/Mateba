@@ -325,8 +325,8 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                     public void run() {
                         int idx;
                         double[] elem = new double[2];
-                        if (function instanceof cern.jet.math.tdcomplex.DComplexMult) {
-                            double[] multiplicator = ((cern.jet.math.tdcomplex.DComplexMult) function).multiplicator;
+                        if (function instanceof cern.jet.math.tcomplex.DComplexMult) {
+                            double[] multiplicator = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
                             // x[i] = mult*x[i]
                             for (int s = firstSlice; s < lastSlice; s++) {
                                 for (int r = 0; r < rows; r++) {
@@ -363,8 +363,8 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
         } else {
             int idx;
             double[] elem = new double[2];
-            if (function instanceof cern.jet.math.tdcomplex.DComplexMult) {
-                double[] multiplicator = ((cern.jet.math.tdcomplex.DComplexMult) function).multiplicator;
+            if (function instanceof cern.jet.math.tcomplex.DComplexMult) {
+                double[] multiplicator = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
                 // x[i] = mult*x[i]
                 for (int s = 0; s < slices; s++) {
                     for (int r = 0; r < rows; r++) {
@@ -524,7 +524,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                     public void run() {
                         int idx;
                         double[] elem = new double[2];
-                        if (function == cern.jet.math.tdcomplex.DComplexFunctions.abs) {
+                        if (function == cern.jet.math.tcomplex.DComplexFunctions.abs) {
                             for (int s = firstSlice; s < lastSlice; s++) {
                                 for (int r = 0; r < rows; r++) {
                                     idx = zero + s * sliceStride + r * rowStride;
@@ -685,7 +685,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                         int idxOther;
                         double[] tmp1 = new double[2];
                         double[] tmp2 = new double[2];
-                        if (function == cern.jet.math.tdcomplex.DComplexFunctions.mult) {
+                        if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) {
                             for (int s = firstSlice; s < lastSlice; s++) {
                                 for (int r = 0; r < rows; r++) {
                                     idx = zero + s * sliceStride + r * rowStride;
@@ -702,7 +702,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                                     }
                                 }
                             }
-                        } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjFirst) {
+                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjFirst) {
                             for (int s = firstSlice; s < lastSlice; s++) {
                                 for (int r = 0; r < rows; r++) {
                                     idx = zero + s * sliceStride + r * rowStride;
@@ -720,7 +720,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                                 }
                             }
 
-                        } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjSecond) {
+                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjSecond) {
                             for (int s = firstSlice; s < lastSlice; s++) {
                                 for (int r = 0; r < rows; r++) {
                                     idx = zero + s * sliceStride + r * rowStride;
@@ -765,7 +765,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
             int idxOther;
             double[] tmp1 = new double[2];
             double[] tmp2 = new double[2];
-            if (function == cern.jet.math.tdcomplex.DComplexFunctions.mult) {
+            if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) {
                 for (int s = 0; s < slices; s++) {
                     for (int r = 0; r < rows; r++) {
                         idx = zero + s * sliceStride + r * rowStride;
@@ -782,7 +782,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                         }
                     }
                 }
-            } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjFirst) {
+            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjFirst) {
                 for (int s = 0; s < slices; s++) {
                     for (int r = 0; r < rows; r++) {
                         idx = zero + s * sliceStride + r * rowStride;
@@ -800,7 +800,7 @@ public class DenseDComplexMatrix3D extends DComplexMatrix3D {
                     }
                 }
 
-            } else if (function == cern.jet.math.tdcomplex.DComplexFunctions.multConjSecond) {
+            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjSecond) {
                 for (int s = 0; s < slices; s++) {
                     for (int r = 0; r < rows; r++) {
                         idx = zero + s * sliceStride + r * rowStride;

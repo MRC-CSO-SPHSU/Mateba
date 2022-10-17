@@ -5,7 +5,7 @@ import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
 import cern.mateba.matrix.tdcomplex.algo.DComplexProperty;
 import cern.mateba.matrix.tdcomplex.impl.SparseCCDComplexMatrix2D;
 import cern.mateba.matrix.tdcomplex.impl.SparseRCDComplexMatrix2D;
-import cern.jet.math.tdcomplex.DComplexFunctions;
+import cern.jet.math.tcomplex.DComplexFunctions;
 import edu.emory.mathcs.csparsej.tdcomplex.DZcs_common.DZcsa;
 import edu.emory.mathcs.csparsej.tdcomplex.DZcs_dmperm;
 import edu.emory.mathcs.csparsej.tdcomplex.DZcs_ipvec;

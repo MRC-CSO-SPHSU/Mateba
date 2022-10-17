@@ -16,7 +16,7 @@ import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
 import cern.mateba.matrix.tdouble.impl.SparseDoubleMatrix2D;
-import cern.jet.math.tdcomplex.DComplex;
+import cern.jet.math.tcomplex.DComplex;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
@@ -139,9 +139,9 @@ public class SparseDComplexMatrix2D extends DComplexMatrix2D {
 
         checkShape(y);
 
-        if (function instanceof cern.jet.math.tdcomplex.DComplexPlusMultSecond) {
+        if (function instanceof cern.jet.math.tcomplex.DComplexPlusMultSecond) {
             // x[i] = x[i] + alpha*y[i]
-            final double[] alpha = ((cern.jet.math.tdcomplex.DComplexPlusMultSecond) function).multiplicator;
+            final double[] alpha = ((cern.jet.math.tcomplex.DComplexPlusMultSecond) function).multiplicator;
             if (alpha[0] == 0 && alpha[1] == 1)
                 return this; // nothing to do
             y.forEachNonZero(new cern.mateba.function.tdcomplex.IntIntDComplexFunction() {
