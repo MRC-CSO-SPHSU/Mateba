@@ -361,11 +361,9 @@ public abstract class AbstractLongDoubleMap extends AbstractMap {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = size - j * k;
                 final int lastIdx = (j == (nthreads - 1)) ? 0 : firstIdx - k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; --i >= lastIdx; ) {
-                            valueListElements[i] = get(keyListElements[i]);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; --i >= lastIdx; ) {
+                        valueListElements[i] = get(keyListElements[i]);
                     }
                 });
             }

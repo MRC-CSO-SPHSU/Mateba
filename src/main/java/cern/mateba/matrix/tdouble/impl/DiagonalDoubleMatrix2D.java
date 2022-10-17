@@ -8,14 +8,14 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdouble.impl;
 
+import cern.mateba.matrix.tdouble.DoubleMatrix1D;
+import cern.mateba.matrix.tdouble.DoubleMatrix2D;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
+
 import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
-import cern.mateba.matrix.tdouble.DoubleMatrix1D;
-import cern.mateba.matrix.tdouble.DoubleMatrix2D;
-import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Diagonal 2-d matrix holding <tt>double</tt> elements. First see the <a
@@ -153,12 +153,9 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? dlength : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        if (lastRow - firstRow >= 0)
-                            System.arraycopy(values, firstRow, elements, firstRow, lastRow - firstRow);
-                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    if (lastRow - firstRow >= 0)
+                        System.arraycopy(values, firstRow, elements, firstRow, lastRow - firstRow);
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
@@ -231,32 +228,29 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstRow = j * k;
                     final int lastRow = (j == nthreads - 1) ? dlength : firstRow + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            if (function instanceof cern.jet.math.tdouble.DoublePlusMultSecond) { // x[i] = x[i] + alpha*y[i]
-                                final double alpha = ((cern.jet.math.tdouble.DoublePlusMultSecond) function).multiplicator;
-                                if (alpha == 1) {
-                                    for (int j = firstRow; j < lastRow; j++) {
-                                        elements[j] += otherElements[j];
-                                    }
-                                } else {
-                                    for (int j = firstRow; j < lastRow; j++) {
-                                        elements[j] = elements[j] + alpha * otherElements[j];
-                                    }
-                                }
-                            } else if (function == cern.jet.math.tdouble.DoubleFunctions.mult) { // x[i] = x[i] * y[i]
-                                for (int j = firstRow; j < lastRow; j++) {
-                                    elements[j] = elements[j] * otherElements[j];
-                                }
-                            } else if (function == cern.jet.math.tdouble.DoubleFunctions.div) { // x[i] = x[i] /  y[i]
-                                for (int j = firstRow; j < lastRow; j++) {
-                                    elements[j] = elements[j] / otherElements[j];
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        if (function instanceof cern.jet.math.tdouble.DoublePlusMultSecond) { // x[i] = x[i] + alpha*y[i]
+                            final double alpha = ((cern.jet.math.tdouble.DoublePlusMultSecond) function).multiplicator;
+                            if (alpha == 1) {
+                                for (int j1 = firstRow; j1 < lastRow; j1++) {
+                                    elements[j1] += otherElements[j1];
                                 }
                             } else {
-                                for (int j = firstRow; j < lastRow; j++) {
-                                    elements[j] = function.apply(elements[j], otherElements[j]);
+                                for (int j1 = firstRow; j1 < lastRow; j1++) {
+                                    elements[j1] = elements[j1] + alpha * otherElements[j1];
                                 }
+                            }
+                        } else if (function == cern.jet.math.tdouble.DoubleFunctions.mult) { // x[i] = x[i] * y[i]
+                            for (int j1 = firstRow; j1 < lastRow; j1++) {
+                                elements[j1] = elements[j1] * otherElements[j1];
+                            }
+                        } else if (function == cern.jet.math.tdouble.DoubleFunctions.div) { // x[i] = x[i] /  y[i]
+                            for (int j1 = firstRow; j1 < lastRow; j1++) {
+                                elements[j1] = elements[j1] / otherElements[j1];
+                            }
+                        } else {
+                            for (int j1 = firstRow; j1 < lastRow; j1++) {
+                                elements[j1] = function.apply(elements[j1], otherElements[j1]);
                             }
                         }
                     });
@@ -305,15 +299,13 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? dlength : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int cardinality = 0;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            if (elements[r] != 0)
-                                cardinality++;
-                        }
-                        return cardinality;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int cardinality1 = 0;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        if (elements[r] != 0)
+                            cardinality1++;
                     }
+                    return cardinality1;
                 });
             }
             try {
@@ -427,20 +419,18 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? dlength : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<double[]>() {
-                    public double[] call() throws Exception {
-                        int location = firstRow;
-                        double maxValue = elements[location];
-                        double elem;
-                        for (int r = firstRow + 1; r < lastRow; r++) {
-                            elem = elements[r];
-                            if (maxValue < elem) {
-                                maxValue = elem;
-                                location = r;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int location1 = firstRow;
+                    double maxValue1 = elements[location1];
+                    double elem;
+                    for (int r = firstRow + 1; r < lastRow; r++) {
+                        elem = elements[r];
+                        if (maxValue1 < elem) {
+                            maxValue1 = elem;
+                            location1 = r;
                         }
-                        return new double[]{maxValue, location, location};
                     }
+                    return new double[]{maxValue1, location1, location1};
                 });
             }
             try {
@@ -498,20 +488,18 @@ public class DiagonalDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? dlength : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<double[]>() {
-                    public double[] call() throws Exception {
-                        int location = firstRow;
-                        double minValue = elements[location];
-                        double elem;
-                        for (int r = firstRow + 1; r < lastRow; r++) {
-                            elem = elements[r];
-                            if (minValue > elem) {
-                                minValue = elem;
-                                location = r;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int location1 = firstRow;
+                    double minValue1 = elements[location1];
+                    double elem;
+                    for (int r = firstRow + 1; r < lastRow; r++) {
+                        elem = elements[r];
+                        if (minValue1 > elem) {
+                            minValue1 = elem;
+                            location1 = r;
                         }
-                        return new double[]{minValue, location, location};
                     }
+                    return new double[]{minValue1, location1, location1};
                 });
             }
             try {

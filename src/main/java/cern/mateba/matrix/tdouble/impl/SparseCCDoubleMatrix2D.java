@@ -8,23 +8,17 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdouble.impl;
 
-import java.io.Serial;
-import java.util.Arrays;
-import java.util.concurrent.Future;
-
 import cern.mateba.list.tdouble.DoubleArrayList;
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.tdouble.DoubleMatrix1D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
-import edu.emory.mathcs.csparsej.tdouble.Dcs_add;
-import edu.emory.mathcs.csparsej.tdouble.Dcs_cumsum;
-import edu.emory.mathcs.csparsej.tdouble.Dcs_dropzeros;
-import edu.emory.mathcs.csparsej.tdouble.Dcs_dupl;
-import edu.emory.mathcs.csparsej.tdouble.Dcs_multiply;
-import edu.emory.mathcs.csparsej.tdouble.Dcs_transpose;
-import edu.emory.mathcs.csparsej.tdouble.Dcs_util;
+import edu.emory.mathcs.csparsej.tdouble.*;
 import edu.emory.mathcs.csparsej.tdouble.Dcs_common.Dcs;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.Arrays;
+import java.util.concurrent.Future;
 
 /**
  * Sparse column-compressed 2-d matrix holding <tt>double</tt> elements. First
@@ -734,25 +728,23 @@ public class SparseCCDoubleMatrix2D extends WrapperDoubleMatrix2D {
                     final int firstColumn = j * k;
                     final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
                     final int threadID = j;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            if (threadID == 0) {
-                                for (int i = firstColumn; i < lastColumn; i++) {
-                                    int high = columnPointersA[i + 1];
-                                    double yElem = elementsY[zeroY + strideY * i];
-                                    for (int k = columnPointersA[i]; k < high; k++) {
-                                        int j = rowIndexesA[k];
-                                        elementsZ[zeroZ + strideZ * j] += valuesA[k] * yElem;
-                                    }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        if (threadID == 0) {
+                            for (int i = firstColumn; i < lastColumn; i++) {
+                                int high = columnPointersA[i + 1];
+                                double yElem = elementsY[zeroY + strideY * i];
+                                for (int k1 = columnPointersA[i]; k1 < high; k1++) {
+                                    int j1 = rowIndexesA[k1];
+                                    elementsZ[zeroZ + strideZ * j1] += valuesA[k1] * yElem;
                                 }
-                            } else {
-                                for (int i = firstColumn; i < lastColumn; i++) {
-                                    int high = columnPointersA[i + 1];
-                                    double yElem = elementsY[zeroY + strideY * i];
-                                    for (int k = columnPointersA[i]; k < high; k++) {
-                                        int j = rowIndexesA[k];
-                                        result[j] += valuesA[k] * yElem;
-                                    }
+                            }
+                        } else {
+                            for (int i = firstColumn; i < lastColumn; i++) {
+                                int high = columnPointersA[i + 1];
+                                double yElem = elementsY[zeroY + strideY * i];
+                                for (int k1 = columnPointersA[i]; k1 < high; k1++) {
+                                    int j1 = rowIndexesA[k1];
+                                    result[j1] += valuesA[k1] * yElem;
                                 }
                             }
                         }
@@ -795,32 +787,30 @@ public class SparseCCDoubleMatrix2D extends WrapperDoubleMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstColumn = j * k;
                     final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            int zidx = zeroZ + firstColumn * strideZ;
-                            int k = dcs.p[firstColumn];
-                            for (int i = firstColumn; i < lastColumn; i++) {
-                                double sum = 0;
-                                int high = dcs.p[i + 1];
-                                for (; k + 10 < high; k += 10) {
-                                    int ind = k + 9;
-                                    sum += valuesA[ind] * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * dcs.i[ind--]];
-                                }
-                                for (; k < high; k++) {
-                                    sum += valuesA[k] * elementsY[dcs.i[k]];
-                                }
-                                elementsZ[zidx] = alpha * sum + beta * elementsZ[zidx];
-                                zidx += strideZ;
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int zidx1 = zeroZ + firstColumn * strideZ;
+                        int k12 = dcs.p[firstColumn];
+                        for (int i = firstColumn; i < lastColumn; i++) {
+                            double sum = 0;
+                            int high = dcs.p[i + 1];
+                            for (; k12 + 10 < high; k12 += 10) {
+                                int ind = k12 + 9;
+                                sum += valuesA[ind] * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * dcs.i[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * dcs.i[ind--]];
                             }
+                            for (; k12 < high; k12++) {
+                                sum += valuesA[k12] * elementsY[dcs.i[k12]];
+                            }
+                            elementsZ[zidx1] = alpha * sum + beta * elementsZ[zidx1];
+                            zidx1 += strideZ;
                         }
                     });
                 }

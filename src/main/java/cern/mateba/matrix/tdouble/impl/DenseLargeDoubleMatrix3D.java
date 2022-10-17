@@ -8,9 +8,9 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdouble.impl;
 
-import java.io.Serial;
-import java.util.concurrent.Future;
-
+import cern.mateba.matrix.tdcomplex.impl.DenseLargeDComplexMatrix3D;
+import cern.mateba.matrix.tdouble.DoubleMatrix3D;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 import org.jtransforms.dct.DoubleDCT_2D;
 import org.jtransforms.dct.DoubleDCT_3D;
 import org.jtransforms.dht.DoubleDHT_2D;
@@ -20,9 +20,8 @@ import org.jtransforms.dst.DoubleDST_3D;
 import org.jtransforms.fft.DoubleFFT_2D;
 import org.jtransforms.fft.DoubleFFT_3D;
 
-import cern.mateba.matrix.tdcomplex.impl.DenseLargeDComplexMatrix3D;
-import cern.mateba.matrix.tdouble.DoubleMatrix3D;
-import edu.emory.mathcs.utils.ConcurrencyUtils;
+import java.io.Serial;
+import java.util.concurrent.Future;
 
 /**
  * Dense 3-d matrix holding <tt>double</tt> elements. First see the <a
@@ -114,12 +113,9 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            dct2Slices.forward(elements[s], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        dct2Slices.forward(elements[s], scale);
                     }
                 });
             }
@@ -168,12 +164,9 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            dht2Slices.forward(elements[s]);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        dht2Slices.forward(elements[s]);
                     }
                 });
             }
@@ -226,12 +219,9 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            dst2Slices.forward(elements[s], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        dst2Slices.forward(elements[s], scale);
                     }
                 });
             }
@@ -337,15 +327,12 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                System.arraycopy(elements[s][r], 0, cElems[s][r], 0, columns);
-                            }
-                            fft2Slices.realForwardFull(cElems[s]);
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            System.arraycopy(elements[s][r], 0, cElems[s][r], 0, columns);
                         }
+                        fft2Slices.realForwardFull(cElems[s]);
                     }
                 });
             }
@@ -388,15 +375,13 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
                 } else {
                     stopslice = startslice + k;
                 }
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int s = startslice; s < stopslice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                System.arraycopy(elements[s][r], 0, cElems[s][r], 0, columns);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = startslice; s < stopslice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            System.arraycopy(elements[s][r], 0, cElems[s][r], 0, columns);
                         }
-
                     }
+
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
@@ -441,15 +426,12 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                System.arraycopy(elements[s][r], 0, cElems[s][r], 0, columns);
-                            }
-                            fft2Slices.realInverseFull(cElems[s], scale);
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            System.arraycopy(elements[s][r], 0, cElems[s][r], 0, columns);
                         }
+                        fft2Slices.realInverseFull(cElems[s], scale);
                     }
                 });
             }
@@ -494,15 +476,13 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
                 } else {
                     stopslice = startslice + k;
                 }
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int s = startslice; s < stopslice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                System.arraycopy(elements[s][r], 0, cElems[s][r], 0, columns);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = startslice; s < stopslice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            System.arraycopy(elements[s][r], 0, cElems[s][r], 0, columns);
                         }
-
                     }
+
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
@@ -547,12 +527,9 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            dct2Slices.inverse(elements[s], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        dct2Slices.inverse(elements[s], scale);
                     }
                 });
             }
@@ -610,12 +587,9 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            dht2Slices.inverse(elements[s], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        dht2Slices.inverse(elements[s], scale);
                     }
                 });
             }
@@ -669,12 +643,9 @@ public class DenseLargeDoubleMatrix3D extends WrapperDoubleMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            dst2Slices.inverse(elements[s], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        dst2Slices.inverse(elements[s], scale);
                     }
                 });
             }

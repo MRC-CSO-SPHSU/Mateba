@@ -8,14 +8,14 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tlong.impl;
 
+import cern.mateba.matrix.tlong.LongMatrix1D;
+import cern.mateba.matrix.tlong.LongMatrix2D;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
+
 import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
-import cern.mateba.matrix.tlong.LongMatrix1D;
-import cern.mateba.matrix.tlong.LongMatrix2D;
-import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Diagonal 2-d matrix holding <tt>long</tt> elements. First see the <a
@@ -153,12 +153,9 @@ public class DiagonalLongMatrix2D extends WrapperLongMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? dlength : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        if (lastRow - firstRow >= 0)
-                            System.arraycopy(values, firstRow, elements, firstRow, lastRow - firstRow);
-                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    if (lastRow - firstRow >= 0)
+                        System.arraycopy(values, firstRow, elements, firstRow, lastRow - firstRow);
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
@@ -236,32 +233,29 @@ public class DiagonalLongMatrix2D extends WrapperLongMatrix2D {
                     } else {
                         stoprow = startrow + k;
                     }
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            if (function instanceof cern.jet.math.tlong.LongPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
-                                final long alpha = ((cern.jet.math.tlong.LongPlusMultSecond) function).multiplicator;
-                                if (alpha == 1) {
-                                    for (int j = startrow; j < stoprow; j++) {
-                                        elements[j] += otherElements[j];
-                                    }
-                                } else {
-                                    for (int j = startrow; j < stoprow; j++) {
-                                        elements[j] = elements[j] + alpha * otherElements[j];
-                                    }
-                                }
-                            } else if (function == cern.jet.math.tlong.LongFunctions.mult) { // x[i] = x[i] * y[i]
-                                for (int j = startrow; j < stoprow; j++) {
-                                    elements[j] = elements[j] * otherElements[j];
-                                }
-                            } else if (function == cern.jet.math.tlong.LongFunctions.div) { // x[i] = x[i] /  y[i]
-                                for (int j = startrow; j < stoprow; j++) {
-                                    elements[j] = elements[j] / otherElements[j];
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        if (function instanceof cern.jet.math.tlong.LongPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
+                            final long alpha = ((cern.jet.math.tlong.LongPlusMultSecond) function).multiplicator;
+                            if (alpha == 1) {
+                                for (int j1 = startrow; j1 < stoprow; j1++) {
+                                    elements[j1] += otherElements[j1];
                                 }
                             } else {
-                                for (int j = startrow; j < stoprow; j++) {
-                                    elements[j] = function.apply(elements[j], otherElements[j]);
+                                for (int j1 = startrow; j1 < stoprow; j1++) {
+                                    elements[j1] = elements[j1] + alpha * otherElements[j1];
                                 }
+                            }
+                        } else if (function == cern.jet.math.tlong.LongFunctions.mult) { // x[i] = x[i] * y[i]
+                            for (int j1 = startrow; j1 < stoprow; j1++) {
+                                elements[j1] = elements[j1] * otherElements[j1];
+                            }
+                        } else if (function == cern.jet.math.tlong.LongFunctions.div) { // x[i] = x[i] /  y[i]
+                            for (int j1 = startrow; j1 < stoprow; j1++) {
+                                elements[j1] = elements[j1] / otherElements[j1];
+                            }
+                        } else {
+                            for (int j1 = startrow; j1 < stoprow; j1++) {
+                                elements[j1] = function.apply(elements[j1], otherElements[j1]);
                             }
                         }
                     });
@@ -310,15 +304,13 @@ public class DiagonalLongMatrix2D extends WrapperLongMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? dlength : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int cardinality = 0;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            if (elements[r] != 0)
-                                cardinality++;
-                        }
-                        return cardinality;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int cardinality1 = 0;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        if (elements[r] != 0)
+                            cardinality1++;
                     }
+                    return cardinality1;
                 });
             }
             try {
@@ -426,20 +418,18 @@ public class DiagonalLongMatrix2D extends WrapperLongMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? dlength : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<long[]>() {
-                    public long[] call() throws Exception {
-                        int location = firstRow;
-                        long maxValue = elements[location];
-                        long elem;
-                        for (int r = firstRow + 1; r < lastRow; r++) {
-                            elem = elements[r];
-                            if (maxValue < elem) {
-                                maxValue = elem;
-                                location = r;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int location1 = firstRow;
+                    long maxValue1 = elements[location1];
+                    long elem;
+                    for (int r = firstRow + 1; r < lastRow; r++) {
+                        elem = elements[r];
+                        if (maxValue1 < elem) {
+                            maxValue1 = elem;
+                            location1 = r;
                         }
-                        return new long[]{maxValue, location, location};
                     }
+                    return new long[]{maxValue1, location1, location1};
                 });
             }
             try {
@@ -497,20 +487,18 @@ public class DiagonalLongMatrix2D extends WrapperLongMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? dlength : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<long[]>() {
-                    public long[] call() throws Exception {
-                        int location = firstRow;
-                        long minValue = elements[location];
-                        long elem;
-                        for (int r = firstRow + 1; r < lastRow; r++) {
-                            elem = elements[r];
-                            if (minValue > elem) {
-                                minValue = elem;
-                                location = r;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int location1 = firstRow;
+                    long minValue1 = elements[location1];
+                    long elem;
+                    for (int r = firstRow + 1; r < lastRow; r++) {
+                        elem = elements[r];
+                        if (minValue1 > elem) {
+                            minValue1 = elem;
+                            location1 = r;
                         }
-                        return new long[]{minValue, location, location};
                     }
+                    return new long[]{minValue1, location1, location1};
                 });
             }
             try {

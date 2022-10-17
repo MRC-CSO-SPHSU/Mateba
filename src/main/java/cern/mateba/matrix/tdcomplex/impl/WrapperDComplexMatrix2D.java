@@ -8,15 +8,15 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdcomplex.impl;
 
-import java.io.Serial;
-import java.util.concurrent.Future;
-
+import cern.jet.math.tcomplex.DComplex;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
 import cern.mateba.matrix.tdouble.impl.DenseLargeDoubleMatrix2D;
-import cern.jet.math.tcomplex.DComplex;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.concurrent.Future;
 
 /**
  * 2-d matrix holding <tt>complex</tt> elements; either a view wrapping another
@@ -53,13 +53,10 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstIdx = j * k;
                     final int lastIdx = (j == nthreads - 1) ? dlength : firstIdx + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            for (int i = firstIdx; i < lastIdx; i++) {
-                                elems[2 * i] = values[2 * i];
-                                elems[2 * i + 1] = values[2 * i + 1];
-                            }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        for (int i = firstIdx; i < lastIdx; i++) {
+                            elems[2 * i] = values[2 * i];
+                            elems[2 * i + 1] = values[2 * i + 1];
                         }
                     });
                 }
@@ -91,13 +88,10 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstIdx = j * k;
                     final int lastIdx = (j == nthreads - 1) ? dlength : firstIdx + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            for (int i = firstIdx; i < lastIdx; i++) {
-                                elems[2 * i] = values[2 * i];
-                                elems[2 * i + 1] = values[2 * i + 1];
-                            }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        for (int i = firstIdx; i < lastIdx; i++) {
+                            elems[2 * i] = values[2 * i];
+                            elems[2 * i + 1] = values[2 * i + 1];
                         }
                     });
                 }
@@ -324,14 +318,11 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = firstColumn * rows;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int r = 0; r < rows; r++) {
-                                v.setQuick(idx++, getQuick(r, c));
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = firstColumn * rows;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int r = 0; r < rows; r++) {
+                            v.setQuick(idx++, getQuick(r, c));
                         }
                     }
                 });
@@ -614,12 +605,10 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                Im.setQuick(r, c, getQuick(r, c)[1]);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            Im.setQuick(r, c, getQuick(r, c)[1]);
                         }
                     }
                 });
@@ -645,12 +634,10 @@ public class WrapperDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                Re.setQuick(r, c, getQuick(r, c)[0]);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            Re.setQuick(r, c, getQuick(r, c)[0]);
                         }
                     }
                 });

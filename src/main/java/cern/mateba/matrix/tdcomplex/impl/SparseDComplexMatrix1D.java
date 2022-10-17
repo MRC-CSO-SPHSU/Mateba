@@ -8,16 +8,16 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdcomplex.impl;
 
-import java.io.Serial;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
-
 import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix3D;
 import cern.mateba.matrix.tdouble.DoubleMatrix1D;
 import cern.mateba.matrix.tdouble.impl.SparseDoubleMatrix1D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
 
 /**
  * Sparse hashed 1-d matrix (aka <i>vector</i>) holding <tt>complex</tt>
@@ -140,16 +140,14 @@ public class SparseDComplexMatrix1D extends DComplexMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            idx = c * rows;
-                            for (int r = 0; r < rows; r++) {
-                                double[] elem = getQuick(idx++);
-                                if ((elem[0] != 0) || (elem[1] != 0)) {
-                                    M.setQuick(r, c, elem);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        idx = c * rows;
+                        for (int r = 0; r < rows; r++) {
+                            double[] elem = getQuick(idx++);
+                            if ((elem[0] != 0) || (elem[1] != 0)) {
+                                M.setQuick(r, c, elem);
                             }
                         }
                     }
@@ -183,17 +181,15 @@ public class SparseDComplexMatrix1D extends DComplexMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int c = 0; c < columns; c++) {
-                                idx = s * rows * columns + c * rows;
-                                for (int r = 0; r < rows; r++) {
-                                    double[] elem = getQuick(idx++);
-                                    if ((elem[0] != 0) || (elem[1] != 0)) {
-                                        M.setQuick(s, r, c, elem);
-                                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int c = 0; c < columns; c++) {
+                            idx = s * rows * columns + c * rows;
+                            for (int r = 0; r < rows; r++) {
+                                double[] elem = getQuick(idx++);
+                                if ((elem[0] != 0) || (elem[1] != 0)) {
+                                    M.setQuick(s, r, c, elem);
                                 }
                             }
                         }
@@ -247,11 +243,9 @@ public class SparseDComplexMatrix1D extends DComplexMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            Im.setQuick(i, getQuick(i)[1]);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        Im.setQuick(i, getQuick(i)[1]);
                     }
                 });
             }
@@ -274,11 +268,9 @@ public class SparseDComplexMatrix1D extends DComplexMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            Re.setQuick(i, getQuick(i)[0]);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        Re.setQuick(i, getQuick(i)[0]);
                     }
                 });
             }

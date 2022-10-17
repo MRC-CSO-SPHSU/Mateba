@@ -8,14 +8,14 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdcomplex.impl;
 
-import java.io.Serial;
-import java.util.concurrent.Future;
-
 import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 import org.jtransforms.fft.DoubleFFT_1D;
 import org.jtransforms.fft.DoubleFFT_2D;
-import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.concurrent.Future;
 
 /**
  * Dense 2-d matrix holding <tt>complex</tt> elements.<br>
@@ -87,14 +87,11 @@ public class DenseLargeDComplexMatrix2D extends WrapperDComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            double[] column = (double[]) viewColumn(c).copy().elements();
-                            fftColumns.complexForward(column);
-                            viewColumn(c).assign(column);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        double[] column = (double[]) viewColumn(c).copy().elements();
+                        fftColumns.complexForward(column);
+                        viewColumn(c).assign(column);
                     }
                 });
             }
@@ -128,12 +125,9 @@ public class DenseLargeDComplexMatrix2D extends WrapperDComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            fftRows.complexForward(elements[r]);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        fftRows.complexForward(elements[r]);
                     }
                 });
             }
@@ -184,14 +178,11 @@ public class DenseLargeDComplexMatrix2D extends WrapperDComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            double[] column = (double[]) viewColumn(c).copy().elements();
-                            fftColumns.complexInverse(column, scale);
-                            viewColumn(c).assign(column);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        double[] column = (double[]) viewColumn(c).copy().elements();
+                        fftColumns.complexInverse(column, scale);
+                        viewColumn(c).assign(column);
                     }
                 });
             }
@@ -228,12 +219,9 @@ public class DenseLargeDComplexMatrix2D extends WrapperDComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            fftRows.complexInverse(elements[r], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        fftRows.complexInverse(elements[r], scale);
                     }
                 });
             }

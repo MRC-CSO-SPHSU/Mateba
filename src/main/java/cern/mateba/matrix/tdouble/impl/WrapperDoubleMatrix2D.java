@@ -8,15 +8,15 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdouble.impl;
 
-import java.io.Serial;
-import java.util.concurrent.Future;
-
 import cern.mateba.list.tdouble.DoubleArrayList;
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.tdcomplex.impl.DenseLargeDComplexMatrix2D;
 import cern.mateba.matrix.tdouble.DoubleMatrix1D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.concurrent.Future;
 
 /**
  * 2-d matrix holding <tt>double</tt> elements; either a view wrapping another
@@ -61,12 +61,9 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstIdx = j * k;
                     final int lastIdx = (j == nthreads - 1) ? dlength : firstIdx + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            if (lastIdx - firstIdx >= 0)
-                                System.arraycopy(values, firstIdx, elems, firstIdx, lastIdx - firstIdx);
-                        }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        if (lastIdx - firstIdx >= 0)
+                            System.arraycopy(values, firstIdx, elems, firstIdx, lastIdx - firstIdx);
                     });
                 }
                 ConcurrencyUtils.waitForCompletion(futures);
@@ -94,12 +91,9 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstIdx = j * k;
                     final int lastIdx = (j == nthreads - 1) ? dlength : firstIdx + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            for (int i = firstIdx; i < lastIdx; i++) {
-                                elems[i] = values[i];
-                            }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        for (int i = firstIdx; i < lastIdx; i++) {
+                            elems[i] = values[i];
                         }
                     });
                 }
@@ -753,13 +747,11 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
                 final int firstCol = j * k;
                 final int lastCol = (j == nthreads - 1) ? columns : firstCol + k;
                 final int firstidx = j * k * rows;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = firstidx;
-                        for (int c = firstCol; c < lastCol; c++) {
-                            for (int r = 0; r < rows; r++) {
-                                v.setQuick(idx++, getQuick(r, c));
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = firstidx;
+                    for (int c = firstCol; c < lastCol; c++) {
+                        for (int r = 0; r < rows; r++) {
+                            v.setQuick(idx++, getQuick(r, c));
                         }
                     }
                 });
@@ -784,10 +776,8 @@ public class WrapperDoubleMatrix2D extends DoubleMatrix2D {
         if (columns == 0)
             return this;
         WrapperDoubleMatrix2D view = new WrapperDoubleMatrix2D(this) {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+            @Serial
+            private static final long serialVersionUID = 191768199307131183L;
 
             public synchronized double getQuick(int row, int column) {
                 return content.getQuick(row, columns - 1 - column);

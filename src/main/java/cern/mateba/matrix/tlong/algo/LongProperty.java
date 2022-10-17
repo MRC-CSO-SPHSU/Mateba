@@ -193,14 +193,12 @@ public class LongProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            if (!(A.getQuick(i) == value))
-                                return false;
-                        }
-                        return true;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        if (!(A.getQuick(i) == value))
+                            return false;
                     }
+                    return true;
                 });
             }
             try {
@@ -257,14 +255,12 @@ public class LongProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            if (!(A.getQuick(i) == B.getQuick(i)))
-                                return false;
-                        }
-                        return true;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        if (!(A.getQuick(i) == B.getQuick(i)))
+                            return false;
                     }
+                    return true;
                 });
             }
             try {
@@ -317,16 +313,14 @@ public class LongProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? A.rows() : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                if (!(A.getQuick(r, c) == value))
-                                    return false;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            if (!(A.getQuick(r, c) == value))
+                                return false;
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -386,16 +380,14 @@ public class LongProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? A.rows() : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                if (!(A.getQuick(r, c) == B.getQuick(r, c)))
-                                    return false;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            if (!(A.getQuick(r, c) == B.getQuick(r, c)))
+                                return false;
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -456,18 +448,16 @@ public class LongProperty implements Serializable, Cloneable {
                 } else {
                     stopslice = startslice + k;
                 }
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int s = startslice; s < stopslice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    if (!(A.getQuick(s, r, c) == value))
-                                        return false;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = startslice; s < stopslice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                if (!(A.getQuick(s, r, c) == value))
+                                    return false;
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -532,11 +522,7 @@ public class LongProperty implements Serializable, Cloneable {
                 final int stopslice;
                 if (j == nthreads - 1) {
                     stopslice = slices;
-                } else {
-                    stopslice = startslice + k;
-                }
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
+                    futures[j] = ConcurrencyUtils.submit(() -> {
                         for (int s = startslice; s < stopslice; s++) {
                             for (int r = 0; r < rows; r++) {
                                 for (int c = 0; c < columns; c++) {
@@ -546,8 +532,21 @@ public class LongProperty implements Serializable, Cloneable {
                             }
                         }
                         return true;
-                    }
-                });
+                    });
+                } else {
+                    stopslice = startslice + k;
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        for (int s = startslice; s < stopslice; s++) {
+                            for (int r = 0; r < rows; r++) {
+                                for (int c = 0; c < columns; c++) {
+                                    if (!(A.getQuick(s, r, c) == B.getQuick(s, r, c)))
+                                        return false;
+                                }
+                            }
+                        }
+                        return true;
+                    });
+                }
             }
             try {
                 for (int j = 0; j < nthreads; j++) {

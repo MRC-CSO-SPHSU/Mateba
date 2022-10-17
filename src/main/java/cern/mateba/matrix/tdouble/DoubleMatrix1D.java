@@ -8,16 +8,16 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdouble;
 
+import cern.jet.math.tdouble.DoubleFunctions;
+import cern.mateba.list.tdouble.DoubleArrayList;
+import cern.mateba.list.tint.IntArrayList;
+import cern.mateba.matrix.AbstractMatrix1D;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
+
 import java.io.Serial;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
-
-import cern.mateba.list.tdouble.DoubleArrayList;
-import cern.mateba.list.tint.IntArrayList;
-import cern.mateba.matrix.AbstractMatrix1D;
-import cern.jet.math.tdouble.DoubleFunctions;
-import edu.emory.mathcs.utils.ConcurrencyUtils;
 
 /**
  * Abstract base class for 1-d matrices (aka <i>vectors</i>) holding
@@ -88,14 +88,12 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-                    public Double call() throws Exception {
-                        double a = f.apply(getQuick(firstIdx));
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            a = aggr.apply(a, f.apply(getQuick(i)));
-                        }
-                        return Double.valueOf(a);
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double a1 = f.apply(getQuick(firstIdx));
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        a1 = aggr.apply(a1, f.apply(getQuick(i)));
                     }
+                    return Double.valueOf(a1);
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -134,17 +132,14 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-
-                    public Double call() throws Exception {
-                        double a = f.apply(getQuick(indexElements[firstIdx]));
-                        double elem;
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            elem = getQuick(indexElements[i]);
-                            a = aggr.apply(a, f.apply(elem));
-                        }
-                        return a;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double a1 = f.apply(getQuick(indexElements[firstIdx]));
+                    double elem;
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        elem = getQuick(indexElements[i]);
+                        a1 = aggr.apply(a1, f.apply(elem));
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -208,14 +203,12 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-                    public Double call() throws Exception {
-                        double a = f.apply(getQuick(firstIdx), other.getQuick(firstIdx));
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            a = aggr.apply(a, f.apply(getQuick(i), other.getQuick(i)));
-                        }
-                        return Double.valueOf(a);
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double a1 = f.apply(getQuick(firstIdx), other.getQuick(firstIdx));
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        a1 = aggr.apply(a1, f.apply(getQuick(i), other.getQuick(i)));
                     }
+                    return Double.valueOf(a1);
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -259,12 +252,9 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            setQuick(i, f.apply(getQuick(i)));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        setQuick(i, f.apply(getQuick(i)));
                     }
                 });
             }
@@ -295,14 +285,12 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        double elem;
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            elem = getQuick(i);
-                            if (cond.apply(elem)) {
-                                setQuick(i, f.apply(elem));
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double elem;
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        elem = getQuick(i);
+                        if (cond.apply(elem)) {
+                            setQuick(i, f.apply(elem));
                         }
                     }
                 });
@@ -336,15 +324,12 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        double elem;
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            elem = getQuick(i);
-                            if (cond.apply(elem)) {
-                                setQuick(i, value);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double elem;
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        elem = getQuick(i);
+                        if (cond.apply(elem)) {
+                            setQuick(i, value);
                         }
                     }
                 });
@@ -377,12 +362,9 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            setQuick(i, value);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        setQuick(i, value);
                     }
                 });
             }
@@ -418,12 +400,9 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            setQuick(i, values[i]);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        setQuick(i, values[i]);
                     }
                 });
             }
@@ -466,12 +445,9 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            setQuick(i, source.getQuick(i));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        setQuick(i, source.getQuick(i));
                     }
                 });
             }
@@ -521,12 +497,9 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            setQuick(i, function.apply(getQuick(i), y.getQuick(i)));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        setQuick(i, function.apply(getQuick(i), y.getQuick(i)));
                     }
                 });
             }
@@ -632,15 +605,13 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int cardinality = 0;
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            if (getQuick(i) != 0)
-                                cardinality++;
-                        }
-                        return cardinality;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int cardinality1 = 0;
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        if (getQuick(i) != 0)
+                            cardinality1++;
                     }
+                    return cardinality1;
                 });
             }
             try {
@@ -751,20 +722,18 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<double[]>() {
-                    public double[] call() throws Exception {
-                        int location = firstIdx;
-                        double maxValue = getQuick(location);
-                        double elem;
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            elem = getQuick(i);
-                            if (maxValue < elem) {
-                                maxValue = elem;
-                                location = i;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int location1 = firstIdx;
+                    double maxValue1 = getQuick(location1);
+                    double elem;
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        elem = getQuick(i);
+                        if (maxValue1 < elem) {
+                            maxValue1 = elem;
+                            location1 = i;
                         }
-                        return new double[]{maxValue, location};
                     }
+                    return new double[]{maxValue1, location1};
                 });
             }
             try {
@@ -815,20 +784,18 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<double[]>() {
-                    public double[] call() throws Exception {
-                        int location = firstIdx;
-                        double minValue = getQuick(location);
-                        double elem;
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            elem = getQuick(i);
-                            if (minValue > elem) {
-                                minValue = elem;
-                                location = i;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int location1 = firstIdx;
+                    double minValue1 = getQuick(location1);
+                    double elem;
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        elem = getQuick(i);
+                        if (minValue1 > elem) {
+                            minValue1 = elem;
+                            location1 = i;
                         }
-                        return new double[]{minValue, location};
                     }
+                    return new double[]{minValue1, location1};
                 });
             }
             try {
@@ -1223,13 +1190,11 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            double tmp = getQuick(i);
-                            setQuick(i, other.getQuick(i));
-                            other.setQuick(i, tmp);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        double tmp = getQuick(i);
+                        setQuick(i, other.getQuick(i));
+                        other.setQuick(i, tmp);
                     }
                 });
             }
@@ -1278,11 +1243,9 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            values[i] = getQuick(i);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        values[i] = getQuick(i);
                     }
                 });
             }
@@ -1500,16 +1463,14 @@ public abstract class DoubleMatrix1D extends AbstractMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? length : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-                    public Double call() throws Exception {
-                        double sum = 0;
-                        int idx;
-                        for (int k = firstIdx; k < lastIdx; k++) {
-                            idx = k + from;
-                            sum += getQuick(idx) * y.getQuick(idx);
-                        }
-                        return Double.valueOf(sum);
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double sum1 = 0;
+                    int idx;
+                    for (int k1 = firstIdx; k1 < lastIdx; k1++) {
+                        idx = k1 + from;
+                        sum1 += getQuick(idx) * y.getQuick(idx);
                     }
+                    return Double.valueOf(sum1);
                 });
             }
             try {

@@ -223,11 +223,9 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size_x : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            C.viewPart(i * size_y, size_y).assign(y, DoubleFunctions.multSecond(x.getQuick(i)));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        C.viewPart(i * size_y, size_y).assign(y, DoubleFunctions.multSecond(x.getQuick(i)));
                     }
                 });
             }
@@ -264,13 +262,11 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstRow = j * k;
                     final int lastRow = (j == nthreads - 1) ? rows_x : firstRow + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            for (int r = firstRow; r < lastRow; r++) {
-                                for (int c = 0; c < columns_x; c++) {
-                                    C.viewPart(r * rows_y, c * columns_y, rows_y, columns_y).assign(Y,
-                                        DoubleFunctions.multSecond(X.getQuick(r, c)));
-                                }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        for (int r = firstRow; r < lastRow; r++) {
+                            for (int c = 0; c < columns_x; c++) {
+                                C.viewPart(r * rows_y, c * columns_y, rows_y, columns_y).assign(Y,
+                                    DoubleFunctions.multSecond(X.getQuick(r, c)));
                             }
                         }
                     });
@@ -407,11 +403,9 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            AA.viewRow(r).assign(y);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        AA.viewRow(r).assign(y);
                     }
                 });
             }
@@ -432,11 +426,9 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            AA.viewColumn(c).assign(x, DoubleFunctions.mult);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        AA.viewColumn(c).assign(x, DoubleFunctions.mult);
                     }
                 });
             }
@@ -498,18 +490,16 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstRow = j * k;
                     final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                    futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-                        public Double call() throws Exception {
-                            double sum = 0;
-                            double elem;
-                            for (int r = firstRow; r < lastRow; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    elem = X.getQuick(r, c);
-                                    sum += (elem * elem);
-                                }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        double sum1 = 0;
+                        double elem;
+                        for (int r = firstRow; r < lastRow; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                elem = X.getQuick(r, c);
+                                sum1 += (elem * elem);
                             }
-                            return sum;
                         }
+                        return sum1;
                     });
                 }
                 try {
@@ -544,14 +534,12 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstIdx = j * k;
                     final int lastIdx = (j == nthreads - 1) ? elems.length : firstIdx + k;
-                    futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-                        public Double call() throws Exception {
-                            double sum = 0;
-                            for (int l = firstIdx; l < lastIdx; l++) {
-                                sum += (elems[l] * elems[l]);
-                            }
-                            return sum;
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        double sum12 = 0;
+                        for (int l = firstIdx; l < lastIdx; l++) {
+                            sum12 += (elems[l] * elems[l]);
                         }
+                        return sum12;
                     });
                 }
                 try {
@@ -593,20 +581,18 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstSlice = j * k;
                     final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                    futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-                        public Double call() throws Exception {
-                            double sum = 0;
-                            double elem;
-                            for (int s = firstSlice; s < lastSlice; s++) {
-                                for (int r = 0; r < rows; r++) {
-                                    for (int c = 0; c < columns; c++) {
-                                        elem = X.getQuick(s, r, c);
-                                        sum += (elem * elem);
-                                    }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        double sum1 = 0;
+                        double elem;
+                        for (int s = firstSlice; s < lastSlice; s++) {
+                            for (int r = 0; r < rows; r++) {
+                                for (int c = 0; c < columns; c++) {
+                                    elem = X.getQuick(s, r, c);
+                                    sum1 += (elem * elem);
                                 }
                             }
-                            return sum;
                         }
+                        return sum1;
                     });
                 }
                 try {
@@ -643,14 +629,12 @@ public class DenseDoubleAlgebra implements Serializable, Cloneable {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstIdx = j * k;
                     final int lastIdx = (j == nthreads - 1) ? elems.length : firstIdx + k;
-                    futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-                        public Double call() throws Exception {
-                            double sum = 0;
-                            for (int l = firstIdx; l < lastIdx; l++) {
-                                sum += (elems[l] * elems[l]);
-                            }
-                            return sum;
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        double sum12 = 0;
+                        for (int l = firstIdx; l < lastIdx; l++) {
+                            sum12 += (elems[l] * elems[l]);
                         }
+                        return sum12;
                     });
                 }
                 try {

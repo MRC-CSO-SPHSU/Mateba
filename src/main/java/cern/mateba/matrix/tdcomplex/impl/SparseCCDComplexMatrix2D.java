@@ -789,39 +789,37 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
                     final int firstColumn = j * k;
                     final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
                     final int threadID = j;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            double[] yElem = new double[2];
-                            double[] valA = new double[2];
-                            if (threadID == 0) {
-                                for (int i = firstColumn; i < lastColumn; i++) {
-                                    int high = columnPointersA[i + 1];
-                                    yElem[0] = elementsY[zeroY + strideY * i];
-                                    yElem[1] = elementsY[zeroY + strideY * i + 1];
-                                    for (int k = columnPointersA[i]; k < high; k++) {
-                                        int j = rowIndexesA[k];
-                                        valA[0] = valuesA[2 * k];
-                                        valA[1] = valuesA[2 * k + 1];
-                                        valA = DComplex.mult(valA, yElem);
-                                        valA = DComplex.mult(valA, alpha);
-                                        elementsZ[zeroZ + strideZ * j] += valA[0];
-                                        elementsZ[zeroZ + strideZ * j + 1] += valA[1];
-                                    }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        double[] yElem = new double[2];
+                        double[] valA = new double[2];
+                        if (threadID == 0) {
+                            for (int i = firstColumn; i < lastColumn; i++) {
+                                int high = columnPointersA[i + 1];
+                                yElem[0] = elementsY[zeroY + strideY * i];
+                                yElem[1] = elementsY[zeroY + strideY * i + 1];
+                                for (int k1 = columnPointersA[i]; k1 < high; k1++) {
+                                    int j1 = rowIndexesA[k1];
+                                    valA[0] = valuesA[2 * k1];
+                                    valA[1] = valuesA[2 * k1 + 1];
+                                    valA = DComplex.mult(valA, yElem);
+                                    valA = DComplex.mult(valA, alpha);
+                                    elementsZ[zeroZ + strideZ * j1] += valA[0];
+                                    elementsZ[zeroZ + strideZ * j1 + 1] += valA[1];
                                 }
-                            } else {
-                                for (int i = firstColumn; i < lastColumn; i++) {
-                                    int high = columnPointersA[i + 1];
-                                    yElem[0] = elementsY[zeroY + strideY * i];
-                                    yElem[1] = elementsY[zeroY + strideY * i + 1];
-                                    for (int k = columnPointersA[i]; k < high; k++) {
-                                        int j = rowIndexesA[k];
-                                        valA[0] = valuesA[2 * k];
-                                        valA[1] = valuesA[2 * k + 1];
-                                        valA = DComplex.mult(valA, yElem);
-                                        valA = DComplex.mult(valA, alpha);
-                                        result[2 * j] += valA[0];
-                                        result[2 * j + 1] += valA[1];
-                                    }
+                            }
+                        } else {
+                            for (int i = firstColumn; i < lastColumn; i++) {
+                                int high = columnPointersA[i + 1];
+                                yElem[0] = elementsY[zeroY + strideY * i];
+                                yElem[1] = elementsY[zeroY + strideY * i + 1];
+                                for (int k1 = columnPointersA[i]; k1 < high; k1++) {
+                                    int j1 = rowIndexesA[k1];
+                                    valA[0] = valuesA[2 * k1];
+                                    valA[1] = valuesA[2 * k1 + 1];
+                                    valA = DComplex.mult(valA, yElem);
+                                    valA = DComplex.mult(valA, alpha);
+                                    result[2 * j1] += valA[0];
+                                    result[2 * j1 + 1] += valA[1];
                                 }
                             }
                         }
@@ -857,30 +855,28 @@ public class SparseCCDComplexMatrix2D extends WrapperDComplexMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstColumn = j * k;
                     final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            int zidx = zeroZ + firstColumn * strideZ;
-                            double[] valA = new double[2];
-                            double[] valY = new double[2];
-                            double[] valZ = new double[2];
-                            for (int i = firstColumn; i < lastColumn; i++) {
-                                double[] sum = new double[2];
-                                int high = columnPointers[i + 1];
-                                for (int k = columnPointers[i]; k < high; k++) {
-                                    valA[0] = valuesA[2 * k];
-                                    valA[1] = -valuesA[2 * k + 1];
-                                    valY[0] = elementsY[zeroY + strideY * rowIndexes[k]];
-                                    valY[1] = elementsY[zeroY + strideY * rowIndexes[k] + 1];
-                                    sum = DComplex.plus(sum, DComplex.mult(valA, valY));
-                                }
-                                sum = DComplex.mult(alpha, sum);
-                                valZ[0] = elementsZ[zidx];
-                                valZ[1] = elementsZ[zidx + 1];
-                                valZ = DComplex.mult(valZ, beta);
-                                elementsZ[zidx] = sum[0] + valZ[0];
-                                elementsZ[zidx + 1] = sum[1] + valZ[1];
-                                zidx += strideZ;
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int zidx1 = zeroZ + firstColumn * strideZ;
+                        double[] valA = new double[2];
+                        double[] valY = new double[2];
+                        double[] valZ = new double[2];
+                        for (int i = firstColumn; i < lastColumn; i++) {
+                            double[] sum = new double[2];
+                            int high = columnPointers[i + 1];
+                            for (int k12 = columnPointers[i]; k12 < high; k12++) {
+                                valA[0] = valuesA[2 * k12];
+                                valA[1] = -valuesA[2 * k12 + 1];
+                                valY[0] = elementsY[zeroY + strideY * rowIndexes[k12]];
+                                valY[1] = elementsY[zeroY + strideY * rowIndexes[k12] + 1];
+                                sum = DComplex.plus(sum, DComplex.mult(valA, valY));
                             }
+                            sum = DComplex.mult(alpha, sum);
+                            valZ[0] = elementsZ[zidx1];
+                            valZ[1] = elementsZ[zidx1 + 1];
+                            valZ = DComplex.mult(valZ, beta);
+                            elementsZ[zidx1] = sum[0] + valZ[0];
+                            elementsZ[zidx1 + 1] = sum[1] + valZ[1];
+                            zidx1 += strideZ;
                         }
                     });
                 }

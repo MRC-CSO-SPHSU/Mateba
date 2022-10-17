@@ -168,13 +168,10 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? dlength : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            elements[2 * i] = values[2 * i];
-                            elements[2 * i + 1] = values[2 * i + 1];
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        elements[2 * i] = values[2 * i];
+                        elements[2 * i + 1] = values[2 * i + 1];
                     }
                 });
             }
@@ -200,13 +197,10 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? dlength : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            elements[2 * i] = values[2 * i];
-                            elements[2 * i + 1] = values[2 * i + 1];
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        elements[2 * i] = values[2 * i];
+                        elements[2 * i + 1] = values[2 * i + 1];
                     }
                 });
             }
@@ -285,62 +279,59 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstIdx = j * k;
                     final int lastIdx = (j == nthreads - 1) ? dlength : firstIdx + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            if (function instanceof cern.jet.math.tcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
-                                final double[] alpha = ((cern.jet.math.tcomplex.DComplexPlusMultSecond) function).multiplicator;
-                                if (alpha[0] == 1 && alpha[1] == 0) {
-                                    for (int j = firstIdx; j < lastIdx; j++) {
-                                        elements[2 * j] += otherElements[2 * j];
-                                        elements[2 * j + 1] += otherElements[2 * j + 1];
-                                    }
-                                } else {
-                                    double[] elem = new double[2];
-                                    for (int j = firstIdx; j < lastIdx; j++) {
-                                        elem[0] = otherElements[2 * j];
-                                        elem[1] = otherElements[2 * j + 1];
-                                        elem = DComplex.mult(alpha, elem);
-                                        elements[2 * j] += elem[0];
-                                        elements[2 * j + 1] += elem[1];
-                                    }
-                                }
-                            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) { // x[i] = x[i] * y[i]
-                                double[] elem = new double[2];
-                                double[] otherElem = new double[2];
-                                for (int j = firstIdx; j < lastIdx; j++) {
-                                    otherElem[0] = otherElements[2 * j];
-                                    otherElem[1] = otherElements[2 * j + 1];
-                                    elem[0] = elements[2 * j];
-                                    elem[1] = elements[2 * j + 1];
-                                    elem = DComplex.mult(elem, otherElem);
-                                    elements[2 * j] = elem[0];
-                                    elements[2 * j + 1] = elem[1];
-                                }
-                            } else if (function == cern.jet.math.tcomplex.DComplexFunctions.div) { // x[i] = x[i] /  y[i]
-                                double[] elem = new double[2];
-                                double[] otherElem = new double[2];
-                                for (int j = firstIdx; j < lastIdx; j++) {
-                                    otherElem[0] = otherElements[2 * j];
-                                    otherElem[1] = otherElements[2 * j + 1];
-                                    elem[0] = elements[2 * j];
-                                    elem[1] = elements[2 * j + 1];
-                                    elem = DComplex.div(elem, otherElem);
-                                    elements[2 * j] = elem[0];
-                                    elements[2 * j + 1] = elem[1];
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        if (function instanceof cern.jet.math.tcomplex.DComplexPlusMultSecond) { // x[i] = x[i] + alpha*y[i]
+                            final double[] alpha = ((cern.jet.math.tcomplex.DComplexPlusMultSecond) function).multiplicator;
+                            if (alpha[0] == 1 && alpha[1] == 0) {
+                                for (int j1 = firstIdx; j1 < lastIdx; j1++) {
+                                    elements[2 * j1] += otherElements[2 * j1];
+                                    elements[2 * j1 + 1] += otherElements[2 * j1 + 1];
                                 }
                             } else {
                                 double[] elem = new double[2];
-                                double[] otherElem = new double[2];
-                                for (int j = firstIdx; j < lastIdx; j++) {
-                                    otherElem[0] = otherElements[2 * j];
-                                    otherElem[1] = otherElements[2 * j + 1];
-                                    elem[0] = elements[2 * j];
-                                    elem[1] = elements[2 * j + 1];
-                                    elem = function.apply(elem, otherElem);
-                                    elements[2 * j] = elem[0];
-                                    elements[2 * j + 1] = elem[1];
+                                for (int j1 = firstIdx; j1 < lastIdx; j1++) {
+                                    elem[0] = otherElements[2 * j1];
+                                    elem[1] = otherElements[2 * j1 + 1];
+                                    elem = DComplex.mult(alpha, elem);
+                                    elements[2 * j1] += elem[0];
+                                    elements[2 * j1 + 1] += elem[1];
                                 }
+                            }
+                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) { // x[i] = x[i] * y[i]
+                            double[] elem = new double[2];
+                            double[] otherElem = new double[2];
+                            for (int j1 = firstIdx; j1 < lastIdx; j1++) {
+                                otherElem[0] = otherElements[2 * j1];
+                                otherElem[1] = otherElements[2 * j1 + 1];
+                                elem[0] = elements[2 * j1];
+                                elem[1] = elements[2 * j1 + 1];
+                                elem = DComplex.mult(elem, otherElem);
+                                elements[2 * j1] = elem[0];
+                                elements[2 * j1 + 1] = elem[1];
+                            }
+                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.div) { // x[i] = x[i] /  y[i]
+                            double[] elem = new double[2];
+                            double[] otherElem = new double[2];
+                            for (int j1 = firstIdx; j1 < lastIdx; j1++) {
+                                otherElem[0] = otherElements[2 * j1];
+                                otherElem[1] = otherElements[2 * j1 + 1];
+                                elem[0] = elements[2 * j1];
+                                elem[1] = elements[2 * j1 + 1];
+                                elem = DComplex.div(elem, otherElem);
+                                elements[2 * j1] = elem[0];
+                                elements[2 * j1 + 1] = elem[1];
+                            }
+                        } else {
+                            double[] elem = new double[2];
+                            double[] otherElem = new double[2];
+                            for (int j1 = firstIdx; j1 < lastIdx; j1++) {
+                                otherElem[0] = otherElements[2 * j1];
+                                otherElem[1] = otherElements[2 * j1 + 1];
+                                elem[0] = elements[2 * j1];
+                                elem[1] = elements[2 * j1 + 1];
+                                elem = function.apply(elem, otherElem);
+                                elements[2 * j1] = elem[0];
+                                elements[2 * j1 + 1] = elem[1];
                             }
                         }
                     });
@@ -419,15 +410,13 @@ public class DiagonalDComplexMatrix2D extends WrapperDComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? dlength : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int cardinality = 0;
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            if (elements[2 * i] != 0 || elements[2 * i + 1] != 0)
-                                cardinality++;
-                        }
-                        return cardinality;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int cardinality1 = 0;
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        if (elements[2 * i] != 0 || elements[2 * i + 1] != 0)
+                            cardinality1++;
                     }
+                    return cardinality1;
                 });
             }
             try {

@@ -284,19 +284,17 @@ public class DoubleProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            double x = A.getQuick(i);
-                            double diff = Math.abs(value - x);
-                            if ((diff != diff) && ((value != value && x != x) || value == x))
-                                diff = 0;
-                            if (!(diff <= epsilon)) {
-                                return false;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        double x = A.getQuick(i);
+                        double diff = Math.abs(value - x);
+                        if ((diff != diff) && ((value != value && x != x) || value == x))
+                            diff = 0;
+                        if (!(diff <= epsilon)) {
+                            return false;
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -359,20 +357,18 @@ public class DoubleProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            double x = A.getQuick(i);
-                            double value = B.getQuick(i);
-                            double diff = Math.abs(value - x);
-                            if ((diff != diff) && ((value != value && x != x) || value == x))
-                                diff = 0;
-                            if (!(diff <= epsilon)) {
-                                return false;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        double x = A.getQuick(i);
+                        double value = B.getQuick(i);
+                        double diff = Math.abs(value - x);
+                        if ((diff != diff) && ((value != value && x != x) || value == x))
+                            diff = 0;
+                        if (!(diff <= epsilon)) {
+                            return false;
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -432,21 +428,19 @@ public class DoubleProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? A.rows() : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                double x = A.getQuick(r, c);
-                                double diff = Math.abs(value - x);
-                                if ((diff != diff) && ((value != value && x != x) || value == x))
-                                    diff = 0;
-                                if (!(diff <= epsilon)) {
-                                    return false;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            double x = A.getQuick(r, c);
+                            double diff = Math.abs(value - x);
+                            if ((diff != diff) && ((value != value && x != x) || value == x))
+                                diff = 0;
+                            if (!(diff <= epsilon)) {
+                                return false;
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -512,22 +506,20 @@ public class DoubleProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? A.rows() : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                double x = A.getQuick(r, c);
-                                double value = B.getQuick(r, c);
-                                double diff = Math.abs(value - x);
-                                if ((diff != diff) && ((value != value && x != x) || value == x))
-                                    diff = 0;
-                                if (!(diff <= epsilon)) {
-                                    return false;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            double x = A.getQuick(r, c);
+                            double value = B.getQuick(r, c);
+                            double diff = Math.abs(value - x);
+                            if ((diff != diff) && ((value != value && x != x) || value == x))
+                                diff = 0;
+                            if (!(diff <= epsilon)) {
+                                return false;
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -590,23 +582,21 @@ public class DoubleProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    double x = A.getQuick(s, r, c);
-                                    double diff = Math.abs(value - x);
-                                    if ((diff != diff) && ((value != value && x != x) || value == x))
-                                        diff = 0;
-                                    if (!(diff <= epsilon)) {
-                                        return false;
-                                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                double x = A.getQuick(s, r, c);
+                                double diff = Math.abs(value - x);
+                                if ((diff != diff) && ((value != value && x != x) || value == x))
+                                    diff = 0;
+                                if (!(diff <= epsilon)) {
+                                    return false;
                                 }
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -675,24 +665,22 @@ public class DoubleProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    double x = A.getQuick(s, r, c);
-                                    double value = B.getQuick(s, r, c);
-                                    double diff = Math.abs(value - x);
-                                    if ((diff != diff) && ((value != value && x != x) || value == x))
-                                        diff = 0;
-                                    if (!(diff <= epsilon)) {
-                                        return false;
-                                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                double x = A.getQuick(s, r, c);
+                                double value = B.getQuick(s, r, c);
+                                double diff = Math.abs(value - x);
+                                if ((diff != diff) && ((value != value && x != x) || value == x))
+                                    diff = 0;
+                                if (!(diff <= epsilon)) {
+                                    return false;
                                 }
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {

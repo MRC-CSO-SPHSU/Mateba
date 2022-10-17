@@ -8,15 +8,15 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tobject.impl;
 
-import java.io.Serial;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.tobject.ObjectMatrix1D;
 import cern.mateba.matrix.tobject.ObjectMatrix2D;
 import cern.mateba.matrix.tobject.ObjectMatrix3D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 
 /**
  * Dense 1-d matrix (aka <i>vector</i>) holding <tt>Object</tt> elements. First
@@ -106,16 +106,14 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Object>() {
-                    public Object call() throws Exception {
-                        int idx = zero + firstIdx * stride;
-                        Object a = f.apply(elements[idx]);
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            idx += stride;
-                            a = aggr.apply(a, f.apply(elements[idx]));
-                        }
-                        return a;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstIdx * stride;
+                    Object a1 = f.apply(elements[idx]);
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        idx += stride;
+                        a1 = aggr.apply(a1, f.apply(elements[idx]));
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -145,19 +143,16 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Object>() {
-
-                    public Object call() throws Exception {
-                        int idx = zero + indexElements[firstIdx] * stride;
-                        Object a = f.apply(elements[idx]);
-                        Object elem;
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            idx = zero + indexElements[i] * stride;
-                            elem = elements[idx];
-                            a = aggr.apply(a, f.apply(elem));
-                        }
-                        return a;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + indexElements[firstIdx] * stride;
+                    Object a1 = f.apply(elements[idx]);
+                    Object elem;
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        idx = zero + indexElements[i] * stride;
+                        elem = elements[idx];
+                        a1 = aggr.apply(a1, f.apply(elem));
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -194,18 +189,16 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Object>() {
-                    public Object call() throws Exception {
-                        int idx = zero + firstIdx * stride;
-                        int idxOther = zeroOther + firstIdx * strideOther;
-                        Object a = f.apply(elements[idx], elemsOther[idxOther]);
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            idx += stride;
-                            idxOther += strideOther;
-                            a = aggr.apply(a, f.apply(elements[idx], elemsOther[idxOther]));
-                        }
-                        return a;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstIdx * stride;
+                    int idxOther = zeroOther + firstIdx * strideOther;
+                    Object a1 = f.apply(elements[idx], elemsOther[idxOther]);
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        idx += stride;
+                        idxOther += strideOther;
+                        a1 = aggr.apply(a1, f.apply(elements[idx], elemsOther[idxOther]));
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -283,15 +276,12 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        // the general case x[i] = f(x[i])
-                        int idx = zero + firstIdx * stride;
-                        for (int k = firstIdx; k < lastIdx; k++) {
-                            elements[idx] = function.apply(elements[idx]);
-                            idx += stride;
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    // the general case x[i] = f(x[i])
+                    int idx = zero + firstIdx * stride;
+                    for (int k1 = firstIdx; k1 < lastIdx; k1++) {
+                        elements[idx] = function.apply(elements[idx]);
+                        idx += stride;
                     }
                 });
             }
@@ -354,15 +344,13 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstIdx * stride;
-                        int idxOther = zeroOther + firstIdx * strideOther;
-                        for (int k = firstIdx; k < lastIdx; k++) {
-                            elements[idx] = elemsOther[idxOther];
-                            idx += stride;
-                            idxOther += strideOther;
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstIdx * stride;
+                    int idxOther = zeroOther + firstIdx * strideOther;
+                    for (int k1 = firstIdx; k1 < lastIdx; k1++) {
+                        elements[idx] = elemsOther[idxOther];
+                        idx += stride;
+                        idxOther += strideOther;
                     }
                 });
             }
@@ -434,18 +422,16 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx;
-                        int idxOther;
-                        // the general case x[i] = f(x[i],y[i])
-                        idx = zero + firstIdx * stride;
-                        idxOther = zeroOther + firstIdx * strideOther;
-                        for (int k = firstIdx; k < lastIdx; k++) {
-                            elements[idx] = function.apply(elements[idx], elemsOther[idxOther]);
-                            idx += stride;
-                            idxOther += strideOther;
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx;
+                    int idxOther;
+                    // the general case x[i] = f(x[i],y[i])
+                    idx = zero + firstIdx * stride;
+                    idxOther = zeroOther + firstIdx * strideOther;
+                    for (int k1 = firstIdx; k1 < lastIdx; k1++) {
+                        elements[idx] = function.apply(elements[idx], elemsOther[idxOther]);
+                        idx += stride;
+                        idxOther += strideOther;
                     }
                 });
             }
@@ -476,13 +462,11 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstIdx * stride;
-                        for (int k = firstIdx; k < lastIdx; k++) {
-                            elems[idx] = value;
-                            idx += stride;
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstIdx * stride;
+                    for (int k1 = firstIdx; k1 < lastIdx; k1++) {
+                        elems[idx] = value;
+                        idx += stride;
                     }
                 });
             }
@@ -599,18 +583,16 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx;
-                        int idxOther;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            idxOther = zeroOther + c * colStrideOther;
-                            idx = zero + (c * rows) * stride;
-                            for (int r = 0; r < rows; r++) {
-                                elemsOther[idxOther] = elements[idx];
-                                idxOther += rowStrideOther;
-                                idx += stride;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx;
+                    int idxOther;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        idxOther = zeroOther + c * colStrideOther;
+                        idx = zero + (c * rows) * stride;
+                        for (int r = 0; r < rows; r++) {
+                            elemsOther[idxOther] = elements[idx];
+                            idxOther += rowStrideOther;
+                            idx += stride;
                         }
                     }
                 });
@@ -649,19 +631,17 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx;
-                        int idxOther;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int c = 0; c < columns; c++) {
-                                idxOther = zeroOther + s * sliceStrideOther + c * colStrideOther;
-                                idx = zero + (s * rows * columns + c * rows) * stride;
-                                for (int r = 0; r < rows; r++) {
-                                    elemsOther[idxOther] = elements[idx];
-                                    idxOther += rowStrideOther;
-                                    idx += stride;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx;
+                    int idxOther;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int c = 0; c < columns; c++) {
+                            idxOther = zeroOther + s * sliceStrideOther + c * colStrideOther;
+                            idx = zero + (s * rows * columns + c * rows) * stride;
+                            for (int r = 0; r < rows; r++) {
+                                elemsOther[idxOther] = elements[idx];
+                                idxOther += rowStrideOther;
+                                idx += stride;
                             }
                         }
                     }
@@ -734,17 +714,15 @@ public class DenseObjectMatrix1D extends ObjectMatrix1D {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstIdx * stride;
-                        int idxOther = zeroOther + firstIdx * strideOther;
-                        for (int k = firstIdx; k < lastIdx; k++) {
-                            Object tmp = elements[idx];
-                            elements[idx] = elemsOther[idxOther];
-                            elemsOther[idxOther] = tmp;
-                            idx += stride;
-                            idxOther += strideOther;
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstIdx * stride;
+                    int idxOther = zeroOther + firstIdx * strideOther;
+                    for (int k1 = firstIdx; k1 < lastIdx; k1++) {
+                        Object tmp = elements[idx];
+                        elements[idx] = elemsOther[idxOther];
+                        elemsOther[idxOther] = tmp;
+                        idx += stride;
+                        idxOther += strideOther;
                     }
                 });
             }

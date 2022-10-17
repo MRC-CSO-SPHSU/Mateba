@@ -8,15 +8,15 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tobject;
 
-import java.io.Serial;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.list.tobject.ObjectArrayList;
 import cern.mateba.matrix.AbstractMatrix3D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Abstract base class for 3-d matrices holding <tt>Object</tt> elements. First
@@ -97,21 +97,18 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Object>() {
-
-                    public Object call() throws Exception {
-                        Object a = f.apply(getQuick(firstSlice, 0, 0));
-                        int d = 1;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = d; c < columns; c++) {
-                                    a = aggr.apply(a, f.apply(getQuick(s, r, c)));
-                                }
-                                d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object a1 = f.apply(getQuick(firstSlice, 0, 0));
+                    int d = 1;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = d; c < columns; c++) {
+                                a1 = aggr.apply(a1, f.apply(getQuick(s, r, c)));
                             }
+                            d = 0;
                         }
-                        return a;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -154,28 +151,25 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Object>() {
-
-                    public Object call() throws Exception {
-                        Object elem = getQuick(firstSlice, 0, 0);
-                        Object a = 0;
-                        if (cond.apply(elem)) {
-                            a = aggr.apply(a, f.apply(elem));
-                        }
-                        int d = 1;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = d; c < columns; c++) {
-                                    elem = getQuick(s, r, c);
-                                    if (cond.apply(elem)) {
-                                        a = aggr.apply(a, f.apply(elem));
-                                    }
-                                    d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object elem = getQuick(firstSlice, 0, 0);
+                    Object a1 = 0;
+                    if (cond.apply(elem)) {
+                        a1 = aggr.apply(a1, f.apply(elem));
+                    }
+                    int d = 1;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = d; c < columns; c++) {
+                                elem = getQuick(s, r, c);
+                                if (cond.apply(elem)) {
+                                    a1 = aggr.apply(a1, f.apply(elem));
                                 }
+                                d = 0;
                             }
                         }
-                        return a;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -233,18 +227,15 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Object>() {
-
-                    public Object call() throws Exception {
-                        Object a = f.apply(getQuick(sliceElements[firstIdx], rowElements[firstIdx],
-                            columnElements[firstIdx]));
-                        Object elem;
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            elem = getQuick(sliceElements[i], rowElements[i], columnElements[i]);
-                            a = aggr.apply(a, f.apply(elem));
-                        }
-                        return a;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object a1 = f.apply(getQuick(sliceElements[firstIdx], rowElements[firstIdx],
+                        columnElements[firstIdx]));
+                    Object elem;
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        elem = getQuick(sliceElements[i], rowElements[i], columnElements[i]);
+                        a1 = aggr.apply(a1, f.apply(elem));
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -322,20 +313,18 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Object>() {
-                    public Object call() throws Exception {
-                        Object a = f.apply(getQuick(firstSlice, 0, 0), other.getQuick(firstSlice, 0, 0));
-                        int d = 1;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = d; c < columns; c++) {
-                                    a = aggr.apply(a, f.apply(getQuick(s, r, c), other.getQuick(s, r, c)));
-                                }
-                                d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object a1 = f.apply(getQuick(firstSlice, 0, 0), other.getQuick(firstSlice, 0, 0));
+                    int d = 1;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = d; c < columns; c++) {
+                                a1 = aggr.apply(a1, f.apply(getQuick(s, r, c), other.getQuick(s, r, c)));
                             }
+                            d = 0;
                         }
-                        return a;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -372,17 +361,14 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        Object elem;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    elem = getQuick(s, r, c);
-                                    if (cond.apply(elem)) {
-                                        setQuick(s, r, c, f.apply(elem));
-                                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object elem;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                elem = getQuick(s, r, c);
+                                if (cond.apply(elem)) {
+                                    setQuick(s, r, c, f.apply(elem));
                                 }
                             }
                         }
@@ -423,17 +409,14 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        Object elem;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    elem = getQuick(s, r, c);
-                                    if (cond.apply(elem)) {
-                                        setQuick(s, r, c, value);
-                                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object elem;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                elem = getQuick(s, r, c);
+                                if (cond.apply(elem)) {
+                                    setQuick(s, r, c, value);
                                 }
                             }
                         }
@@ -487,24 +470,21 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            Object[][] currentSlice = values[s];
-                            if (currentSlice.length != rows)
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        Object[][] currentSlice = values[s];
+                        if (currentSlice.length != rows)
+                            throw new IllegalArgumentException(
+                                "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                    + "rows()=" + rows());
+                        for (int r = 0; r < rows; r++) {
+                            Object[] currentRow = currentSlice[r];
+                            if (currentRow.length != columns)
                                 throw new IllegalArgumentException(
-                                    "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                        + "rows()=" + rows());
-                            for (int r = 0; r < rows; r++) {
-                                Object[] currentRow = currentSlice[r];
-                                if (currentRow.length != columns)
-                                    throw new IllegalArgumentException(
-                                        "Must have same number of columns in every row: columns="
-                                            + currentRow.length + "columns()=" + columns());
-                                for (int c = 0; c < columns; c++) {
-                                    setQuick(s, r, c, currentRow[c]);
-                                }
+                                    "Must have same number of columns in every row: columns="
+                                        + currentRow.length + "columns()=" + columns());
+                            for (int c = 0; c < columns; c++) {
+                                setQuick(s, r, c, currentRow[c]);
                             }
                         }
                     }
@@ -556,14 +536,12 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = firstSlice * rows * columns;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    setQuick(s, r, c, values[idx++]);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = firstSlice * rows * columns;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                setQuick(s, r, c, values[idx++]);
                             }
                         }
                     }
@@ -619,13 +597,11 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    setQuick(s, r, c, function.apply(getQuick(s, r, c)));
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                setQuick(s, r, c, function.apply(getQuick(s, r, c)));
                             }
                         }
                     }
@@ -677,14 +653,11 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    setQuick(s, r, c, otherLoc.getQuick(s, r, c));
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                setQuick(s, r, c, otherLoc.getQuick(s, r, c));
                             }
                         }
                     }
@@ -749,14 +722,11 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    setQuick(s, r, c, function.apply(getQuick(s, r, c), y.getQuick(s, r, c)));
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                setQuick(s, r, c, function.apply(getQuick(s, r, c), y.getQuick(s, r, c)));
                             }
                         }
                     }
@@ -805,14 +775,11 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            setQuick(sliceElements[i], rowElements[i], columnElements[i], function.apply(getQuick(
-                                sliceElements[i], rowElements[i], columnElements[i]), y.getQuick(sliceElements[i],
-                                rowElements[i], columnElements[i])));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        setQuick(sliceElements[i], rowElements[i], columnElements[i], function.apply(getQuick(
+                            sliceElements[i], rowElements[i], columnElements[i]), y.getQuick(sliceElements[i],
+                            rowElements[i], columnElements[i])));
                     }
                 });
             }
@@ -843,13 +810,11 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    setQuick(s, r, c, value);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                setQuick(s, r, c, value);
                             }
                         }
                     }
@@ -882,19 +847,17 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int cardinality = 0;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    if (getQuick(s, r, c) != null)
-                                        cardinality++;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int cardinality1 = 0;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                if (getQuick(s, r, c) != null)
+                                    cardinality1++;
                             }
                         }
-                        return Integer.valueOf(cardinality);
                     }
+                    return Integer.valueOf(cardinality1);
                 });
             }
             try {
@@ -1239,15 +1202,13 @@ public abstract class ObjectMatrix3D extends AbstractMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            Object[][] currentSlice = values[s];
-                            for (int r = 0; r < rows; r++) {
-                                Object[] currentRow = currentSlice[r];
-                                for (int c = 0; c < columns; c++) {
-                                    currentRow[c] = getQuick(s, r, c);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        Object[][] currentSlice = values[s];
+                        for (int r = 0; r < rows; r++) {
+                            Object[] currentRow = currentSlice[r];
+                            for (int c = 0; c < columns; c++) {
+                                currentRow[c] = getQuick(s, r, c);
                             }
                         }
                     }

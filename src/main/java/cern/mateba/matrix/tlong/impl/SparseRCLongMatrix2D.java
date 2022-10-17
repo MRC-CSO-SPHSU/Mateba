@@ -8,16 +8,16 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tlong.impl;
 
-import java.io.Serial;
-import java.util.Arrays;
-import java.util.concurrent.Future;
-
+import cern.jet.math.tlong.LongFunctions;
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.list.tlong.LongArrayList;
 import cern.mateba.matrix.tlong.LongMatrix1D;
 import cern.mateba.matrix.tlong.LongMatrix2D;
-import cern.jet.math.tlong.LongFunctions;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.Arrays;
+import java.util.concurrent.Future;
 
 /**
  * Sparse row-compressed 2-d matrix holding <tt>long</tt> elements. First see
@@ -818,25 +818,23 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
                     final int firstRow = j * k;
                     final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
                     final int threadID = j;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            if (threadID == 0) {
-                                for (int i = firstRow; i < lastRow; i++) {
-                                    int high = rowPointers[i + 1];
-                                    long yElem = alpha * elementsY[zeroY + strideY * i];
-                                    for (int k = rowPointers[i]; k < high; k++) {
-                                        int j = columnIndexes[k];
-                                        elementsZ[zeroZ + strideZ * j] += values[k] * yElem;
-                                    }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        if (threadID == 0) {
+                            for (int i = firstRow; i < lastRow; i++) {
+                                int high = rowPointers[i + 1];
+                                long yElem = alpha * elementsY[zeroY + strideY * i];
+                                for (int k1 = rowPointers[i]; k1 < high; k1++) {
+                                    int j1 = columnIndexes[k1];
+                                    elementsZ[zeroZ + strideZ * j1] += values[k1] * yElem;
                                 }
-                            } else {
-                                for (int i = firstRow; i < lastRow; i++) {
-                                    int high = rowPointers[i + 1];
-                                    long yElem = alpha * elementsY[zeroY + strideY * i];
-                                    for (int k = rowPointers[i]; k < high; k++) {
-                                        int j = columnIndexes[k];
-                                        result[j] += values[k] * yElem;
-                                    }
+                            }
+                        } else {
+                            for (int i = firstRow; i < lastRow; i++) {
+                                int high = rowPointers[i + 1];
+                                long yElem = alpha * elementsY[zeroY + strideY * i];
+                                for (int k1 = rowPointers[i]; k1 < high; k1++) {
+                                    int j1 = columnIndexes[k1];
+                                    result[j1] += values[k1] * yElem;
                                 }
                             }
                         }
@@ -880,56 +878,54 @@ public class SparseRCLongMatrix2D extends WrapperLongMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int zidx = zeroZ + firstRow * strideZ;
-                        int k = rowPointers[firstRow];
-                        if (beta == 0.0) {
-                            for (int i = firstRow; i < lastRow; i++) {
-                                long sum = 0;
-                                int high = rowPointers[i + 1];
-                                for (; k + 10 < high; k += 10) {
-                                    int ind = k + 9;
-                                    sum += values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]];
-                                }
-                                for (; k < high; k++) {
-                                    sum += values[k] * elementsY[columnIndexes[k]];
-                                }
-                                elementsZ[zidx] = alpha * sum;
-                                zidx += strideZ;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int zidx = zeroZ + firstRow * strideZ;
+                    int k12 = rowPointers[firstRow];
+                    if (beta == 0.0) {
+                        for (int i = firstRow; i < lastRow; i++) {
+                            long sum = 0;
+                            int high = rowPointers[i + 1];
+                            for (; k12 + 10 < high; k12 += 10) {
+                                int ind = k12 + 9;
+                                sum += values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]];
                             }
-                        } else {
-                            for (int i = firstRow; i < lastRow; i++) {
-                                long sum = 0;
-                                int high = rowPointers[i + 1];
-                                for (; k + 10 < high; k += 10) {
-                                    int ind = k + 9;
-                                    sum += values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
-                                        + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]];
-                                }
-                                for (; k < high; k++) {
-                                    sum += values[k] * elementsY[columnIndexes[k]];
-                                }
-                                elementsZ[zidx] = alpha * sum + beta * elementsZ[zidx];
-                                zidx += strideZ;
+                            for (; k12 < high; k12++) {
+                                sum += values[k12] * elementsY[columnIndexes[k12]];
                             }
+                            elementsZ[zidx] = alpha * sum;
+                            zidx += strideZ;
+                        }
+                    } else {
+                        for (int i = firstRow; i < lastRow; i++) {
+                            long sum = 0;
+                            int high = rowPointers[i + 1];
+                            for (; k12 + 10 < high; k12 += 10) {
+                                int ind = k12 + 9;
+                                sum += values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]]
+                                    + values[ind] * elementsY[zeroY + strideY * columnIndexes[ind--]];
+                            }
+                            for (; k12 < high; k12++) {
+                                sum += values[k12] * elementsY[columnIndexes[k12]];
+                            }
+                            elementsZ[zidx] = alpha * sum + beta * elementsZ[zidx];
+                            zidx += strideZ;
                         }
                     }
                 });

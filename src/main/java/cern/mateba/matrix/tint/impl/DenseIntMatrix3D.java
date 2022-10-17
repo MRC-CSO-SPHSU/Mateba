@@ -8,16 +8,16 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tint.impl;
 
-import java.io.Serial;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.tint.IntMatrix1D;
 import cern.mateba.matrix.tint.IntMatrix2D;
 import cern.mateba.matrix.tint.IntMatrix3D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Dense 3-d matrix holding <tt>int</tt> elements. First see the <a
@@ -162,22 +162,19 @@ public class DenseIntMatrix3D extends IntMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-
-                    public Integer call() throws Exception {
-                        int a = f.apply(elements[zero + firstSlice * sliceStride]);
-                        int d = 1;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = d; c < columns; c++) {
-                                    a = aggr.apply(a, f.apply(elements[zero + s * sliceStride + r * rowStride + c
-                                        * columnStride]));
-                                }
-                                d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int a1 = f.apply(elements[zero + firstSlice * sliceStride]);
+                    int d = 1;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = d; c < columns; c++) {
+                                a1 = aggr.apply(a1, f.apply(elements[zero + s * sliceStride + r * rowStride + c
+                                    * columnStride]));
                             }
+                            d = 0;
                         }
-                        return a;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -210,28 +207,25 @@ public class DenseIntMatrix3D extends IntMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-
-                    public Integer call() throws Exception {
-                        int elem = elements[zero + firstSlice * sliceStride];
-                        int a = 0;
-                        if (cond.apply(elem)) {
-                            a = aggr.apply(a, f.apply(elem));
-                        }
-                        int d = 1;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = d; c < columns; c++) {
-                                    elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
-                                    if (cond.apply(elem)) {
-                                        a = aggr.apply(a, f.apply(elem));
-                                    }
-                                    d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int elem = elements[zero + firstSlice * sliceStride];
+                    int a1 = 0;
+                    if (cond.apply(elem)) {
+                        a1 = aggr.apply(a1, f.apply(elem));
+                    }
+                    int d = 1;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = d; c < columns; c++) {
+                                elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
+                                if (cond.apply(elem)) {
+                                    a1 = aggr.apply(a1, f.apply(elem));
                                 }
+                                d = 0;
                             }
                         }
-                        return a;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -277,19 +271,16 @@ public class DenseIntMatrix3D extends IntMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-
-                    public Integer call() throws Exception {
-                        int a = f.apply(elements[zero + sliceElements[firstIdx] * sliceStride + rowElements[firstIdx]
-                            * rowStride + columnElements[firstIdx] * columnStride]);
-                        int elem;
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            elem = elements[zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride
-                                + columnElements[i] * columnStride];
-                            a = aggr.apply(a, f.apply(elem));
-                        }
-                        return a;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int a1 = f.apply(elements[zero + sliceElements[firstIdx] * sliceStride + rowElements[firstIdx]
+                        * rowStride + columnElements[firstIdx] * columnStride]);
+                    int elem;
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        elem = elements[zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride
+                            + columnElements[i] * columnStride];
+                        a1 = aggr.apply(a1, f.apply(elem));
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -329,25 +320,23 @@ public class DenseIntMatrix3D extends IntMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int idx = zero + firstSlice * sliceStride;
-                        int idxOther = zeroOther + firstSlice * sliceStrideOther;
-                        int a = f.apply(elements[idx], elemsOther[idxOther]);
-                        int d = 1;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = d; c < columns; c++) {
-                                    idx = zero + s * sliceStride + r * rowStride + c * columnStride;
-                                    idxOther = zeroOther + s * sliceStrideOther + r * rowStrideOther + c
-                                        * colStrideOther;
-                                    a = aggr.apply(a, f.apply(elements[idx], elemsOther[idxOther]));
-                                }
-                                d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstSlice * sliceStride;
+                    int idxOther = zeroOther + firstSlice * sliceStrideOther;
+                    int a1 = f.apply(elements[idx], elemsOther[idxOther]);
+                    int d = 1;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = d; c < columns; c++) {
+                                idx = zero + s * sliceStride + r * rowStride + c * columnStride;
+                                idxOther = zeroOther + s * sliceStrideOther + r * rowStrideOther + c
+                                    * colStrideOther;
+                                a1 = aggr.apply(a1, f.apply(elements[idx], elemsOther[idxOther]));
                             }
+                            d = 0;
                         }
-                        return a;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -381,16 +370,14 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                idx = zero + s * sliceStride + r * rowStride;
-                                for (int c = 0; c < columns; c++) {
-                                    elements[idx] = function.apply(elements[idx]);
-                                    idx += columnStride;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            idx = zero + s * sliceStride + r * rowStride;
+                            for (int c = 0; c < columns; c++) {
+                                elements[idx] = function.apply(elements[idx]);
+                                idx += columnStride;
                             }
                         }
                     }
@@ -424,16 +411,14 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                idx = zero + s * sliceStride + r * rowStride;
-                                for (int c = 0; c < columns; c++) {
-                                    elements[idx] = value;
-                                    idx += columnStride;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            idx = zero + s * sliceStride + r * rowStride;
+                            for (int c = 0; c < columns; c++) {
+                                elements[idx] = value;
+                                idx += columnStride;
                             }
                         }
                     }
@@ -472,17 +457,15 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     final int firstSlice = j * k;
                     final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            int idxOther = firstSlice * rows * columns;
-                            int idx;
-                            for (int s = firstSlice; s < lastSlice; s++) {
-                                for (int r = 0; r < rows; r++) {
-                                    idx = zero + s * sliceStride + r * rowStride;
-                                    for (int c = 0; c < columns; c++) {
-                                        elements[idx] = values[idxOther++];
-                                        idx += columnStride;
-                                    }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int idxOther = firstSlice * rows * columns;
+                        int idx;
+                        for (int s = firstSlice; s < lastSlice; s++) {
+                            for (int r = 0; r < rows; r++) {
+                                idx = zero + s * sliceStride + r * rowStride;
+                                for (int c = 0; c < columns; c++) {
+                                    elements[idx] = values[idxOther++];
+                                    idx += columnStride;
                                 }
                             }
                         }
@@ -520,24 +503,22 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     final int firstSlice = j * k;
                     final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            int i = firstSlice * sliceStride;
-                            for (int s = firstSlice; s < lastSlice; s++) {
-                                int[][] currentSlice = values[s];
-                                if (currentSlice.length != rows)
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int i = firstSlice * sliceStride;
+                        for (int s = firstSlice; s < lastSlice; s++) {
+                            int[][] currentSlice = values[s];
+                            if (currentSlice.length != rows)
+                                throw new IllegalArgumentException(
+                                    "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                        + "rows()=" + rows());
+                            for (int r = 0; r < rows; r++) {
+                                int[] currentRow = currentSlice[r];
+                                if (currentRow.length != columns)
                                     throw new IllegalArgumentException(
-                                        "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                            + "rows()=" + rows());
-                                for (int r = 0; r < rows; r++) {
-                                    int[] currentRow = currentSlice[r];
-                                    if (currentRow.length != columns)
-                                        throw new IllegalArgumentException(
-                                            "Must have same number of columns in every row: columns="
-                                                + currentRow.length + "columns()=" + columns());
-                                    System.arraycopy(currentRow, 0, elements, i, columns);
-                                    i += columns;
-                                }
+                                        "Must have same number of columns in every row: columns="
+                                            + currentRow.length + "columns()=" + columns());
+                                System.arraycopy(currentRow, 0, elements, i, columns);
+                                i += columns;
                             }
                         }
                     });
@@ -571,27 +552,24 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     final int firstSlice = j * k;
                     final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            int idx;
-                            for (int s = firstSlice; s < lastSlice; s++) {
-                                int[][] currentSlice = values[s];
-                                if (currentSlice.length != rows)
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int idx;
+                        for (int s = firstSlice; s < lastSlice; s++) {
+                            int[][] currentSlice = values[s];
+                            if (currentSlice.length != rows)
+                                throw new IllegalArgumentException(
+                                    "Must have same number of rows in every slice: rows=" + currentSlice.length
+                                        + "rows()=" + rows());
+                            for (int r = 0; r < rows; r++) {
+                                idx = zero + s * sliceStride + r * rowStride;
+                                int[] currentRow = currentSlice[r];
+                                if (currentRow.length != columns)
                                     throw new IllegalArgumentException(
-                                        "Must have same number of rows in every slice: rows=" + currentSlice.length
-                                            + "rows()=" + rows());
-                                for (int r = 0; r < rows; r++) {
-                                    idx = zero + s * sliceStride + r * rowStride;
-                                    int[] currentRow = currentSlice[r];
-                                    if (currentRow.length != columns)
-                                        throw new IllegalArgumentException(
-                                            "Must have same number of columns in every row: columns="
-                                                + currentRow.length + "columns()=" + columns());
-                                    for (int c = 0; c < columns; c++) {
-                                        elements[idx] = currentRow[c];
-                                        idx += columnStride;
-                                    }
+                                        "Must have same number of columns in every row: columns="
+                                            + currentRow.length + "columns()=" + columns());
+                                for (int c = 0; c < columns; c++) {
+                                    elements[idx] = currentRow[c];
+                                    idx += columnStride;
                                 }
                             }
                         }
@@ -636,21 +614,18 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int elem;
-                        int idx;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                idx = zero + s * sliceStride + r * rowStride;
-                                for (int c = 0; c < columns; c++) {
-                                    elem = elements[idx];
-                                    if (cond.apply(elem)) {
-                                        elements[idx] = f.apply(elem);
-                                    }
-                                    idx += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int elem;
+                    int idx;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            idx = zero + s * sliceStride + r * rowStride;
+                            for (int c = 0; c < columns; c++) {
+                                elem = elements[idx];
+                                if (cond.apply(elem)) {
+                                    elements[idx] = f.apply(elem);
                                 }
+                                idx += columnStride;
                             }
                         }
                     }
@@ -687,21 +662,18 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int elem;
-                        int idx;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                idx = zero + s * sliceStride + r * rowStride;
-                                for (int c = 0; c < columns; c++) {
-                                    elem = elements[idx];
-                                    if (cond.apply(elem)) {
-                                        elements[idx] = value;
-                                    }
-                                    idx += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int elem;
+                    int idx;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            idx = zero + s * sliceStride + r * rowStride;
+                            for (int c = 0; c < columns; c++) {
+                                elem = elements[idx];
+                                if (cond.apply(elem)) {
+                                    elements[idx] = value;
                                 }
+                                idx += columnStride;
                             }
                         }
                     }
@@ -765,20 +737,17 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                     final int firstSlice = j * k;
                     final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            int idx;
-                            int idxOther;
-                            for (int s = firstSlice; s < lastSlice; s++) {
-                                for (int r = 0; r < rows; r++) {
-                                    idx = zero + s * sliceStride + r * rowStride;
-                                    idxOther = zeroOther + s * sliceStrideOther + r * rowStrideOther;
-                                    for (int c = 0; c < columns; c++) {
-                                        elements[idx] = elemsOther[idxOther];
-                                        idx += columnStride;
-                                        idxOther += columnStrideOther;
-                                    }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int idx;
+                        int idxOther;
+                        for (int s = firstSlice; s < lastSlice; s++) {
+                            for (int r = 0; r < rows; r++) {
+                                idx = zero + s * sliceStride + r * rowStride;
+                                idxOther = zeroOther + s * sliceStrideOther + r * rowStrideOther;
+                                for (int c = 0; c < columns; c++) {
+                                    elements[idx] = elemsOther[idxOther];
+                                    idx += columnStride;
+                                    idxOther += columnStrideOther;
                                 }
                             }
                         }
@@ -825,19 +794,17 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx;
-                        int idxOther;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                idx = zero + s * sliceStride + r * rowStride;
-                                idxOther = zeroOther + s * sliceStrideOther + r * rowStrideOther;
-                                for (int c = 0; c < columns; c++) {
-                                    elements[idx] = function.apply(elements[idx], elemsOther[idxOther]);
-                                    idx += columnStride;
-                                    idxOther += columnStrideOther;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx;
+                    int idxOther;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            idx = zero + s * sliceStride + r * rowStride;
+                            idxOther = zeroOther + s * sliceStrideOther + r * rowStrideOther;
+                            for (int c = 0; c < columns; c++) {
+                                elements[idx] = function.apply(elements[idx], elemsOther[idxOther]);
+                                idx += columnStride;
+                                idxOther += columnStrideOther;
                             }
                         }
                     }
@@ -888,16 +855,13 @@ public class DenseIntMatrix3D extends IntMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            int idx = zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride
-                                + columnElements[i] * columnStride;
-                            int idxOther = zeroOther + sliceElements[i] * sliceStrideOther + rowElements[i]
-                                * rowStrideOther + columnElements[i] * columnStrideOther;
-                            elements[idx] = function.apply(elements[idx], elemsOther[idxOther]);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        int idx = zero + sliceElements[i] * sliceStride + rowElements[i] * rowStride
+                            + columnElements[i] * columnStride;
+                        int idxOther = zeroOther + sliceElements[i] * sliceStrideOther + rowElements[i]
+                            * rowStrideOther + columnElements[i] * columnStrideOther;
+                        elements[idx] = function.apply(elements[idx], elemsOther[idxOther]);
                     }
                 });
             }
@@ -927,23 +891,21 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int cardinality = 0;
-                        int idx;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                idx = zero + s * sliceStride + r * rowStride;
-                                for (int c = 0; c < columns; c++) {
-                                    if (elements[idx] != 0) {
-                                        cardinality++;
-                                    }
-                                    idx += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int cardinality1 = 0;
+                    int idx;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            idx = zero + s * sliceStride + r * rowStride;
+                            for (int c = 0; c < columns; c++) {
+                                if (elements[idx] != 0) {
+                                    cardinality1++;
                                 }
+                                idx += columnStride;
                             }
                         }
-                        return cardinality;
                     }
+                    return cardinality1;
                 });
             }
             try {
@@ -1094,30 +1056,28 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Callable<int[]>() {
-                    public int[] call() throws Exception {
-                        int slice_loc = firstSlice;
-                        int row_loc = 0;
-                        int col_loc = 0;
-                        int maxValue = elements[zero + firstSlice * sliceStride];
-                        int d = 1;
-                        int elem;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = d; c < columns; c++) {
-                                    elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
-                                    if (maxValue < elem) {
-                                        maxValue = elem;
-                                        slice_loc = s;
-                                        row_loc = r;
-                                        col_loc = c;
-                                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int slice_loc1 = firstSlice;
+                    int row_loc1 = 0;
+                    int col_loc1 = 0;
+                    int maxValue1 = elements[zero + firstSlice * sliceStride];
+                    int d = 1;
+                    int elem;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = d; c < columns; c++) {
+                                elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
+                                if (maxValue1 < elem) {
+                                    maxValue1 = elem;
+                                    slice_loc1 = s;
+                                    row_loc1 = r;
+                                    col_loc1 = c;
                                 }
-                                d = 0;
                             }
+                            d = 0;
                         }
-                        return new int[]{maxValue, slice_loc, row_loc, col_loc};
                     }
+                    return new int[]{maxValue1, slice_loc1, row_loc1, col_loc1};
                 });
             }
             try {
@@ -1179,30 +1139,28 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Callable<int[]>() {
-                    public int[] call() throws Exception {
-                        int slice_loc = firstSlice;
-                        int row_loc = 0;
-                        int col_loc = 0;
-                        int minValue = elements[zero + slice_loc * sliceStride];
-                        int d = 1;
-                        int elem;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = d; c < columns; c++) {
-                                    elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
-                                    if (minValue > elem) {
-                                        minValue = elem;
-                                        slice_loc = s;
-                                        row_loc = r;
-                                        col_loc = c;
-                                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int slice_loc1 = firstSlice;
+                    int row_loc1 = 0;
+                    int col_loc1 = 0;
+                    int minValue1 = elements[zero + slice_loc1 * sliceStride];
+                    int d = 1;
+                    int elem;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = d; c < columns; c++) {
+                                elem = elements[zero + s * sliceStride + r * rowStride + c * columnStride];
+                                if (minValue1 > elem) {
+                                    minValue1 = elem;
+                                    slice_loc1 = s;
+                                    row_loc1 = r;
+                                    col_loc1 = c;
                                 }
-                                d = 0;
                             }
+                            d = 0;
                         }
-                        return new int[]{minValue, slice_loc, row_loc, col_loc};
                     }
+                    return new int[]{minValue1, slice_loc1, row_loc1, col_loc1};
                 });
             }
             try {
@@ -1264,18 +1222,16 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            int[][] currentSlice = values[s];
-                            for (int r = 0; r < rows; r++) {
-                                idx = zero + s * sliceStride + r * rowStride;
-                                int[] currentRow = currentSlice[r];
-                                for (int c = 0; c < columns; c++) {
-                                    currentRow[c] = elements[idx];
-                                    idx += columnStride;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        int[][] currentSlice = values[s];
+                        for (int r = 0; r < rows; r++) {
+                            idx = zero + s * sliceStride + r * rowStride;
+                            int[] currentRow = currentSlice[r];
+                            for (int c = 0; c < columns; c++) {
+                                currentRow[c] = elements[idx];
+                                idx += columnStride;
                             }
                         }
                     }
@@ -1320,22 +1276,19 @@ public class DenseIntMatrix3D extends IntMatrix3D {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-
-                    public Integer call() throws Exception {
-                        int sum = 0;
-                        int idx;
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                idx = zero + s * sliceStride + r * rowStride;
-                                for (int c = 0; c < columns; c++) {
-                                    sum += elements[idx];
-                                    idx += columnStride;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int sum1 = 0;
+                    int idx;
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            idx = zero + s * sliceStride + r * rowStride;
+                            for (int c = 0; c < columns; c++) {
+                                sum1 += elements[idx];
+                                idx += columnStride;
                             }
                         }
-                        return sum;
                     }
+                    return sum1;
                 });
             }
             try {

@@ -93,19 +93,16 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Object>() {
-
-                    public Object call() throws Exception {
-                        Object a = f.apply(getQuick(firstRow, 0));
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                a = aggr.apply(a, f.apply(getQuick(r, c)));
-                            }
-                            d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object a1 = f.apply(getQuick(firstRow, 0));
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            a1 = aggr.apply(a1, f.apply(getQuick(r, c)));
                         }
-                        return a;
+                        d = 0;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -146,26 +143,23 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Object>() {
-
-                    public Object call() throws Exception {
-                        Object elem = getQuick(firstRow, 0);
-                        Object a = 0;
-                        if (cond.apply(elem)) {
-                            a = aggr.apply(a, f.apply(elem));
-                        }
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                elem = getQuick(r, c);
-                                if (cond.apply(elem)) {
-                                    a = aggr.apply(a, f.apply(elem));
-                                }
-                            }
-                            d = 0;
-                        }
-                        return a;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object elem = getQuick(firstRow, 0);
+                    Object a1 = 0;
+                    if (cond.apply(elem)) {
+                        a1 = aggr.apply(a1, f.apply(elem));
                     }
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            elem = getQuick(r, c);
+                            if (cond.apply(elem)) {
+                                a1 = aggr.apply(a1, f.apply(elem));
+                            }
+                        }
+                        d = 0;
+                    }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -216,17 +210,14 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Object>() {
-
-                    public Object call() throws Exception {
-                        Object a = f.apply(getQuick(rowElements[firstIdx], columnElements[firstIdx]));
-                        Object elem;
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            elem = getQuick(rowElements[i], columnElements[i]);
-                            a = aggr.apply(a, f.apply(elem));
-                        }
-                        return a;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object a1 = f.apply(getQuick(rowElements[firstIdx], columnElements[firstIdx]));
+                    Object elem;
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        elem = getQuick(rowElements[i], columnElements[i]);
+                        a1 = aggr.apply(a1, f.apply(elem));
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -298,19 +289,16 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Object>() {
-
-                    public Object call() throws Exception {
-                        Object a = f.apply(getQuick(firstRow, 0), other.getQuick(firstRow, 0));
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                a = aggr.apply(a, f.apply(getQuick(r, c), other.getQuick(r, c)));
-                            }
-                            d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object a1 = f.apply(getQuick(firstRow, 0), other.getQuick(firstRow, 0));
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            a1 = aggr.apply(a1, f.apply(getQuick(r, c), other.getQuick(r, c)));
                         }
-                        return a;
+                        d = 0;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -354,18 +342,15 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            Object[] currentRow = values[r];
-                            if (currentRow.length != columns)
-                                throw new IllegalArgumentException(
-                                    "Must have same number of columns in every row: columns=" + currentRow.length
-                                        + "columns()=" + columns());
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, currentRow[c]);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        Object[] currentRow = values[r];
+                        if (currentRow.length != columns)
+                            throw new IllegalArgumentException(
+                                "Must have same number of columns in every row: columns=" + currentRow.length
+                                    + "columns()=" + columns());
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, currentRow[c]);
                         }
                     }
                 });
@@ -422,13 +407,10 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, function.apply(getQuick(r, c)));
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, function.apply(getQuick(r, c)));
                         }
                     }
                 });
@@ -462,16 +444,13 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        Object elem;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                elem = getQuick(r, c);
-                                if (cond.apply(elem)) {
-                                    setQuick(r, c, f.apply(elem));
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object elem;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            elem = getQuick(r, c);
+                            if (cond.apply(elem)) {
+                                setQuick(r, c, f.apply(elem));
                             }
                         }
                     }
@@ -509,16 +488,13 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        Object elem;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                elem = getQuick(r, c);
-                                if (cond.apply(elem)) {
-                                    setQuick(r, c, value);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    Object elem;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            elem = getQuick(r, c);
+                            if (cond.apply(elem)) {
+                                setQuick(r, c, value);
                             }
                         }
                     }
@@ -564,14 +540,11 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = firstRow * columns;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, values[idx++]);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = firstRow * columns;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, values[idx++]);
                         }
                     }
                 });
@@ -623,13 +596,10 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, other_loc.getQuick(r, c));
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, other_loc.getQuick(r, c));
                         }
                     }
                 });
@@ -669,13 +639,10 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, function.apply(getQuick(r, c), y.getQuick(r, c)));
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, function.apply(getQuick(r, c), y.getQuick(r, c)));
                         }
                     }
                 });
@@ -718,15 +685,11 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            setQuick(rowElements[i], columnElements[i], function.apply(getQuick(rowElements[i],
-                                columnElements[i]), y.getQuick(rowElements[i], columnElements[i])));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        setQuick(rowElements[i], columnElements[i], function.apply(getQuick(rowElements[i],
+                            columnElements[i]), y.getQuick(rowElements[i], columnElements[i])));
                     }
-
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
@@ -756,13 +719,10 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, value);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, value);
                         }
                     }
                 });
@@ -793,17 +753,15 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int cardinality = 0;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                if (getQuick(r, c) != null)
-                                    cardinality++;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int cardinality1 = 0;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            if (getQuick(r, c) != null)
+                                cardinality1++;
                         }
-                        return cardinality;
                     }
+                    return cardinality1;
                 });
             }
             try {
@@ -936,16 +894,14 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                Object value = getQuick(r, c);
-                                if (value != null) {
-                                    Object a = function.apply(r, c, value);
-                                    if (a != value)
-                                        setQuick(r, c, a);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            Object value = getQuick(r, c);
+                            if (value != null) {
+                                Object a = function.apply(r, c, value);
+                                if (a != value)
+                                    setQuick(r, c, a);
                             }
                         }
                     }
@@ -1189,13 +1145,11 @@ public abstract class ObjectMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            Object[] currentRow = values[r];
-                            for (int c = 0; c < columns; c++) {
-                                currentRow[c] = getQuick(r, c);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        Object[] currentRow = values[r];
+                        for (int c = 0; c < columns; c++) {
+                            currentRow[c] = getQuick(r, c);
                         }
                     }
                 });

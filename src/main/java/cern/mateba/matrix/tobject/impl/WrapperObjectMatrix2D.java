@@ -76,12 +76,9 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstIdx = j * k;
                     final int lastIdx = (j == nthreads - 1) ? dlength : firstIdx + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            for (int i = firstIdx; i < lastIdx; i++) {
-                                elems[i] = values[i];
-                            }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        for (int i = firstIdx; i < lastIdx; i++) {
+                            elems[i] = values[i];
                         }
                     });
                 }
@@ -112,12 +109,9 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstIdx = j * k;
                     final int lastIdx = (j == nthreads - 1) ? dlength : firstIdx + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            if (lastIdx - firstIdx >= 0)
-                                System.arraycopy(values, firstIdx, elems, firstIdx, lastIdx - firstIdx);
-                        }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        if (lastIdx - firstIdx >= 0)
+                            System.arraycopy(values, firstIdx, elems, firstIdx, lastIdx - firstIdx);
                     });
                 }
                 ConcurrencyUtils.waitForCompletion(futures);
@@ -185,13 +179,11 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
                 final int firstCol = j * k;
                 final int lastCol = (j == nthreads - 1) ? columns : firstCol + k;
                 final int firstidx = j * k * rows;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = firstidx;
-                        for (int c = firstCol; c < lastCol; c++) {
-                            for (int r = 0; r < rows; r++) {
-                                v.setQuick(idx++, getQuick(r, c));
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = firstidx;
+                    for (int c = firstCol; c < lastCol; c++) {
+                        for (int r = 0; r < rows; r++) {
+                            v.setQuick(idx++, getQuick(r, c));
                         }
                     }
                 });
@@ -216,10 +208,8 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
         if (columns == 0)
             return this;
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+            @Serial
+            private static final long serialVersionUID = 9180699564660076100L;
 
             public synchronized Object getQuick(int row, int column) {
                 return content.getQuick(row, columns - 1 - column);
@@ -244,10 +234,8 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
 
     public ObjectMatrix2D viewDice() {
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+            @Serial
+            private static final long serialVersionUID = -8722797627121616611L;
 
             public synchronized Object getQuick(int row, int column) {
                 return content.getQuick(column, row);
@@ -275,10 +263,8 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
     public ObjectMatrix2D viewPart(final int row, final int column, int height, int width) {
         checkBox(row, column, height, width);
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+            @Serial
+            private static final long serialVersionUID = 1144279670751388672L;
 
             public synchronized Object getQuick(int i, int j) {
                 return content.getQuick(row + i, column + j);
@@ -312,10 +298,8 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
         if (rows == 0)
             return this;
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+            @Serial
+            private static final long serialVersionUID = 4278206669090557721L;
 
             public synchronized Object getQuick(int row, int column) {
                 return content.getQuick(rows - 1 - row, column);
@@ -356,10 +340,8 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
         final int[] cix = columnIndexes;
 
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+            @Serial
+            private static final long serialVersionUID = 98083048931773917L;
 
             public synchronized Object getQuick(int i, int j) {
                 return content.getQuick(rix[i], cix[j]);
@@ -388,10 +370,8 @@ public class WrapperObjectMatrix2D extends ObjectMatrix2D {
         if (_rowStride <= 0 || _columnStride <= 0)
             throw new IndexOutOfBoundsException("illegal stride");
         WrapperObjectMatrix2D view = new WrapperObjectMatrix2D(this) {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 1L;
+            @Serial
+            private static final long serialVersionUID = 6689345544445890793L;
 
             public synchronized Object getQuick(int row, int column) {
                 return content.getQuick(_rowStride * row, _columnStride * column);

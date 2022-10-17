@@ -769,25 +769,23 @@ public class SparseCCLongMatrix2D extends WrapperLongMatrix2D {
                     final int firstColumn = j * k;
                     final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
                     final int threadID = j;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            if (threadID == 0) {
-                                for (int i = firstColumn; i < lastColumn; i++) {
-                                    int high = columnPointersA[i + 1];
-                                    long yElem = elementsY[zeroY + strideY * i];
-                                    for (int k = columnPointersA[i]; k < high; k++) {
-                                        int j = rowIndexesA[k];
-                                        elementsZ[zeroZ + strideZ * j] += alpha * valuesA[k] * yElem;
-                                    }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        if (threadID == 0) {
+                            for (int i = firstColumn; i < lastColumn; i++) {
+                                int high = columnPointersA[i + 1];
+                                long yElem = elementsY[zeroY + strideY * i];
+                                for (int k1 = columnPointersA[i]; k1 < high; k1++) {
+                                    int j1 = rowIndexesA[k1];
+                                    elementsZ[zeroZ + strideZ * j1] += alpha * valuesA[k1] * yElem;
                                 }
-                            } else {
-                                for (int i = firstColumn; i < lastColumn; i++) {
-                                    int high = columnPointersA[i + 1];
-                                    long yElem = elementsY[zeroY + strideY * i];
-                                    for (int k = columnPointersA[i]; k < high; k++) {
-                                        int j = rowIndexesA[k];
-                                        result[j] += alpha * valuesA[k] * yElem;
-                                    }
+                            }
+                        } else {
+                            for (int i = firstColumn; i < lastColumn; i++) {
+                                int high = columnPointersA[i + 1];
+                                long yElem = elementsY[zeroY + strideY * i];
+                                for (int k1 = columnPointersA[i]; k1 < high; k1++) {
+                                    int j1 = rowIndexesA[k1];
+                                    result[j1] += alpha * valuesA[k1] * yElem;
                                 }
                             }
                         }
@@ -827,32 +825,30 @@ public class SparseCCLongMatrix2D extends WrapperLongMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstColumn = j * k;
                     final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            int zidx = zeroZ + firstColumn * strideZ;
-                            int k = columnPointers[firstColumn];
-                            for (int i = firstColumn; i < lastColumn; i++) {
-                                long sum = 0;
-                                int high = columnPointers[i + 1];
-                                for (; k + 10 < high; k += 10) {
-                                    int ind = k + 9;
-                                    sum += valuesA[ind] * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
-                                        * elementsY[zeroY + strideY * rowIndexes[ind--]];
-                                }
-                                for (; k < high; k++) {
-                                    sum += valuesA[k] * elementsY[rowIndexes[k]];
-                                }
-                                elementsZ[zidx] = alpha * sum + beta * elementsZ[zidx];
-                                zidx += strideZ;
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int zidx1 = zeroZ + firstColumn * strideZ;
+                        int k12 = columnPointers[firstColumn];
+                        for (int i = firstColumn; i < lastColumn; i++) {
+                            long sum = 0;
+                            int high = columnPointers[i + 1];
+                            for (; k12 + 10 < high; k12 += 10) {
+                                int ind = k12 + 9;
+                                sum += valuesA[ind] * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * rowIndexes[ind--]] + valuesA[ind]
+                                    * elementsY[zeroY + strideY * rowIndexes[ind--]];
                             }
+                            for (; k12 < high; k12++) {
+                                sum += valuesA[k12] * elementsY[rowIndexes[k12]];
+                            }
+                            elementsZ[zidx1] = alpha * sum + beta * elementsZ[zidx1];
+                            zidx1 += strideZ;
                         }
                     });
                 }

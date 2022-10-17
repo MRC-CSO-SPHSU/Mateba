@@ -8,12 +8,12 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdouble.algo;
 
-import java.util.concurrent.Future;
-
+import cern.jet.math.tdouble.DoubleFunctions;
 import cern.mateba.matrix.tdouble.DoubleMatrix1D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
-import cern.jet.math.tdouble.DoubleFunctions;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.util.concurrent.Future;
 
 /**
  * Parallel implementation of the Basic Linear Algebra System for symmetric
@@ -180,19 +180,16 @@ public class SmpDoubleBlas implements DoubleBlas {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            double sum = 0;
-                            for (int j = 0; j <= i; j++) {
-                                sum += A_loc.getQuick(i, j) * x.getQuick(j);
-                            }
-                            for (int j = i + 1; j < lastIdx; j++) {
-                                sum += A_loc.getQuick(j, i) * x.getQuick(j);
-                            }
-                            tmp.setQuick(i, alpha * sum + beta * y.getQuick(i));
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        double sum = 0;
+                        for (int j1 = 0; j1 <= i; j1++) {
+                            sum += A_loc.getQuick(i, j1) * x.getQuick(j1);
                         }
+                        for (int j1 = i + 1; j1 < lastIdx; j1++) {
+                            sum += A_loc.getQuick(j1, i) * x.getQuick(j1);
+                        }
+                        tmp.setQuick(i, alpha * sum + beta * y.getQuick(i));
                     }
                 });
             }
@@ -247,24 +244,21 @@ public class SmpDoubleBlas implements DoubleBlas {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            double sum = 0;
-                            if (!isUpperTriangular_loc) {
-                                for (int j = 0; j < i; j++) {
-                                    sum += A_loc.getQuick(i, j) * x.getQuick(j);
-                                }
-                                sum += y.getQuick(i) * x.getQuick(i);
-                            } else {
-                                sum += y.getQuick(i) * x.getQuick(i);
-                                for (int j = i + 1; j < lastIdx; j++) {
-                                    sum += A_loc.getQuick(i, j) * x.getQuick(j);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        double sum = 0;
+                        if (!isUpperTriangular_loc) {
+                            for (int j1 = 0; j1 < i; j1++) {
+                                sum += A_loc.getQuick(i, j1) * x.getQuick(j1);
                             }
-                            b.setQuick(i, sum);
+                            sum += y.getQuick(i) * x.getQuick(i);
+                        } else {
+                            sum += y.getQuick(i) * x.getQuick(i);
+                            for (int j1 = i + 1; j1 < lastIdx; j1++) {
+                                sum += A_loc.getQuick(i, j1) * x.getQuick(j1);
+                            }
                         }
+                        b.setQuick(i, sum);
                     }
                 });
             }

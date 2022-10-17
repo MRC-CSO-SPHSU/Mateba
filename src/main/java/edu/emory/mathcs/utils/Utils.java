@@ -23,8 +23,9 @@
 
 package edu.emory.mathcs.utils;
 
-import java.util.concurrent.Future;
-
+import cern.jet.math.tcomplex.DComplexFunctions;
+import cern.jet.math.tdouble.DoubleFunctions;
+import cern.jet.math.tint.IntFunctions;
 import cern.mateba.list.tdouble.DoubleArrayList;
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.tdcomplex.DComplexFactory1D;
@@ -39,9 +40,8 @@ import cern.mateba.matrix.tint.IntFactory1D;
 import cern.mateba.matrix.tint.IntFactory2D;
 import cern.mateba.matrix.tint.IntMatrix1D;
 import cern.mateba.matrix.tint.IntMatrix2D;
-import cern.jet.math.tcomplex.DComplexFunctions;
-import cern.jet.math.tdouble.DoubleFunctions;
-import cern.jet.math.tint.IntFunctions;
+
+import java.util.concurrent.Future;
 //OS4ES
 //import edu.emory.mathcs.utils.ConcurrencyUtils;
 
@@ -196,11 +196,9 @@ public class Utils {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            values[i] = 0;
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        values[i] = 0;
                     }
                 });
             }
@@ -227,11 +225,9 @@ public class Utils {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            values[i] = 1;
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        values[i] = 1;
                     }
                 });
             }
@@ -259,11 +255,9 @@ public class Utils {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            values[i] = (int) Math.round(d.getQuick(i));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        values[i] = (int) Math.round(d.getQuick(i));
                     }
                 });
             }
@@ -291,11 +285,9 @@ public class Utils {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            values.setQuick(i, (int) Math.round(d.getQuick(i)));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        values.setQuick(i, (int) Math.round(d.getQuick(i)));
                     }
                 });
             }
@@ -323,11 +315,9 @@ public class Utils {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            values.setQuick(i, ix[i]);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        values.setQuick(i, ix[i]);
                     }
                 });
             }
@@ -355,11 +345,9 @@ public class Utils {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            values.setQuick(i, ix.getQuick(i));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        values.setQuick(i, ix.getQuick(i));
                     }
                 });
             }
@@ -387,11 +375,9 @@ public class Utils {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            values.setQuick(i, ix.getQuick(i), 0);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        values.setQuick(i, ix.getQuick(i), 0);
                     }
                 });
             }

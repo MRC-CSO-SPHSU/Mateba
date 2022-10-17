@@ -8,14 +8,6 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdcomplex.impl;
 
-import java.io.Serial;
-import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import org.jtransforms.fft.DoubleFFT_2D;
-
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
@@ -23,6 +15,13 @@ import cern.mateba.matrix.tdouble.DoubleMatrix2D;
 import cern.mateba.matrix.tdouble.impl.DenseColumnDoubleMatrix2D;
 import cern.mateba.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+import org.jtransforms.fft.DoubleFFT_2D;
+
+import java.io.Serial;
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Dense 2-d matrix holding <tt>complex</tt> elements. <b>Implementation:</b>
@@ -165,20 +164,18 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<double[]>() {
-                    public double[] call() throws Exception {
-                        int idx = zero + firstColumn * columnStride;
-                        double[] a = f.apply(elements[idx], elements[idx + 1]);
-                        int d = 1;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int r = d; r < rows; r++) {
-                                idx = zero + r * rowStride + c * columnStride;
-                                a = aggr.apply(a, f.apply(elements[idx], elements[idx + 1]));
-                            }
-                            d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    double[] a1 = f.apply(elements[idx], elements[idx + 1]);
+                    int d = 1;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int r = d; r < rows; r++) {
+                            idx = zero + r * rowStride + c * columnStride;
+                            a1 = aggr.apply(a1, f.apply(elements[idx], elements[idx + 1]));
                         }
-                        return a;
+                        d = 0;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -224,25 +221,22 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<double[]>() {
-
-                    public double[] call() throws Exception {
-                        int idx = zero + firstColumn * columnStride;
-                        int idxOther = zeroOther + firstColumn * columnStrideOther;
-                        double[] a = f.apply(new double[]{elements[idx], elements[idx + 1]}, new double[]{
-                            elemsOther[idxOther], elemsOther[idxOther + 1]});
-                        int d = 1;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int r = d; r < rows; r++) {
-                                idx = zero + r * rowStride + c * columnStride;
-                                idxOther = zeroOther + r * rowStrideOther + c * columnStrideOther;
-                                a = aggr.apply(a, f.apply(new double[]{elements[idx], elements[idx + 1]},
-                                    new double[]{elemsOther[idxOther], elemsOther[idxOther + 1]}));
-                            }
-                            d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    int idxOther = zeroOther + firstColumn * columnStrideOther;
+                    double[] a1 = f.apply(new double[]{elements[idx], elements[idx + 1]}, new double[]{
+                        elemsOther[idxOther], elemsOther[idxOther + 1]});
+                    int d = 1;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int r = d; r < rows; r++) {
+                            idx = zero + r * rowStride + c * columnStride;
+                            idxOther = zeroOther + r * rowStrideOther + c * columnStrideOther;
+                            a1 = aggr.apply(a1, f.apply(new double[]{elements[idx], elements[idx + 1]},
+                                new double[]{elemsOther[idxOther], elemsOther[idxOther + 1]}));
                         }
-                        return a;
+                        d = 0;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -282,34 +276,31 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        double[] tmp = new double[2];
-                        if (function instanceof cern.jet.math.tcomplex.DComplexMult) {
-                            double[] multiplicator = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
-                            // x[i] = mult*x[i]
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                for (int i = idx, r = 0; r < rows; r++) {
-                                    tmp[0] = elements[i];
-                                    tmp[1] = elements[i + 1];
-                                    elements[i] = tmp[0] * multiplicator[0] - tmp[1] * multiplicator[1];
-                                    elements[i + 1] = tmp[1] * multiplicator[0] + tmp[0] * multiplicator[1];
-                                    i += rowStride;
-                                }
-                                idx += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    double[] tmp = new double[2];
+                    if (function instanceof cern.jet.math.tcomplex.DComplexMult) {
+                        double[] multiplicator = ((cern.jet.math.tcomplex.DComplexMult) function).multiplicator;
+                        // x[i] = mult*x[i]
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            for (int i = idx, r = 0; r < rows; r++) {
+                                tmp[0] = elements[i];
+                                tmp[1] = elements[i + 1];
+                                elements[i] = tmp[0] * multiplicator[0] - tmp[1] * multiplicator[1];
+                                elements[i + 1] = tmp[1] * multiplicator[0] + tmp[0] * multiplicator[1];
+                                i += rowStride;
                             }
-                        } else {
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                for (int i = idx, r = 0; r < rows; r++) {
-                                    tmp = function.apply(elements[i], elements[i + 1]);
-                                    elements[i] = tmp[0];
-                                    elements[i + 1] = tmp[1];
-                                    i += rowStride;
-                                }
-                                idx += columnStride;
+                            idx += columnStride;
+                        }
+                    } else {
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            for (int i = idx, r = 0; r < rows; r++) {
+                                tmp = function.apply(elements[i], elements[i + 1]);
+                                elements[i] = tmp[0];
+                                elements[i + 1] = tmp[1];
+                                i += rowStride;
                             }
+                            idx += columnStride;
                         }
                     }
                 });
@@ -357,24 +348,21 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        double[] elem = new double[2];
-                        int idx = zero + firstColumn * columnStride;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, r = 0; r < rows; r++) {
-                                elem[0] = elements[i];
-                                elem[1] = elements[i + 1];
-                                if (cond.apply(elem)) {
-                                    elem = function.apply(elem);
-                                    elements[i] = elem[0];
-                                    elements[i + 1] = elem[1];
-                                }
-                                i += rowStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] elem = new double[2];
+                    int idx = zero + firstColumn * columnStride;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, r = 0; r < rows; r++) {
+                            elem[0] = elements[i];
+                            elem[1] = elements[i + 1];
+                            if (cond.apply(elem)) {
+                                elem = function.apply(elem);
+                                elements[i] = elem[0];
+                                elements[i + 1] = elem[1];
                             }
-                            idx += columnStride;
+                            i += rowStride;
                         }
+                        idx += columnStride;
                     }
                 });
             }
@@ -409,22 +397,20 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        double[] elem = new double[2];
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, r = 0; r < rows; r++) {
-                                elem[0] = elements[i];
-                                elem[1] = elements[i + 1];
-                                if (cond.apply(elem)) {
-                                    elements[i] = value[0];
-                                    elements[i + 1] = value[1];
-                                }
-                                i += rowStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    double[] elem = new double[2];
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, r = 0; r < rows; r++) {
+                            elem[0] = elements[i];
+                            elem[1] = elements[i + 1];
+                            if (cond.apply(elem)) {
+                                elements[i] = value[0];
+                                elements[i + 1] = value[1];
                             }
-                            idx += columnStride;
+                            i += rowStride;
                         }
+                        idx += columnStride;
                     }
                 });
             }
@@ -458,44 +444,41 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        double[] tmp = new double[2];
-                        if (function == cern.jet.math.tcomplex.DComplexFunctions.abs) {
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                for (int i = idx, r = 0; r < rows; r++) {
-                                    tmp[0] = elements[i];
-                                    tmp[1] = elements[i + 1];
-                                    double absX = Math.abs(elements[i]);
-                                    double absY = Math.abs(elements[i + 1]);
-                                    if (absX == 0 && absY == 0) {
-                                        elements[i] = 0;
-                                    } else if (absX >= absY) {
-                                        double d = tmp[1] / tmp[0];
-                                        elements[i] = absX * Math.sqrt(1 + d * d);
-                                    } else {
-                                        double d = tmp[0] / tmp[1];
-                                        elements[i] = absY * Math.sqrt(1 + d * d);
-                                    }
-                                    elements[i + 1] = 0;
-                                    i += rowStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    double[] tmp = new double[2];
+                    if (function == cern.jet.math.tcomplex.DComplexFunctions.abs) {
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            for (int i = idx, r = 0; r < rows; r++) {
+                                tmp[0] = elements[i];
+                                tmp[1] = elements[i + 1];
+                                double absX = Math.abs(elements[i]);
+                                double absY = Math.abs(elements[i + 1]);
+                                if (absX == 0 && absY == 0) {
+                                    elements[i] = 0;
+                                } else if (absX >= absY) {
+                                    double d = tmp[1] / tmp[0];
+                                    elements[i] = absX * Math.sqrt(1 + d * d);
+                                } else {
+                                    double d = tmp[0] / tmp[1];
+                                    elements[i] = absY * Math.sqrt(1 + d * d);
                                 }
-                                idx += columnStride;
+                                elements[i + 1] = 0;
+                                i += rowStride;
                             }
-                        } else {
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                for (int i = idx, r = 0; r < rows; r++) {
-                                    tmp[0] = elements[i];
-                                    tmp[1] = elements[i + 1];
-                                    tmp[0] = function.apply(tmp);
-                                    elements[i] = tmp[0];
-                                    elements[i + 1] = 0;
-                                    i += rowStride;
-                                }
-                                idx += columnStride;
+                            idx += columnStride;
+                        }
+                    } else {
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            for (int i = idx, r = 0; r < rows; r++) {
+                                tmp[0] = elements[i];
+                                tmp[1] = elements[i + 1];
+                                tmp[0] = function.apply(tmp);
+                                elements[i] = tmp[0];
+                                elements[i + 1] = 0;
+                                i += rowStride;
                             }
+                            idx += columnStride;
                         }
                     }
                 });
@@ -579,20 +562,18 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        int idxOther = zeroOther + firstColumn * columnStrideOther;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
-                                elements[i] = elemsOther[j];
-                                elements[i + 1] = elemsOther[j + 1];
-                                i += rowStride;
-                                j += rowStrideOther;
-                            }
-                            idx += columnStride;
-                            idxOther += columnStrideOther;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    int idxOther = zeroOther + firstColumn * columnStrideOther;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, j1 = idxOther, r = 0; r < rows; r++) {
+                            elements[i] = elemsOther[j1];
+                            elements[i + 1] = elemsOther[j1 + 1];
+                            i += rowStride;
+                            j1 += rowStrideOther;
                         }
+                        idx += columnStride;
+                        idxOther += columnStrideOther;
                     }
                 });
             }
@@ -637,74 +618,72 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        int idxOther = zeroOther + firstColumn * columnStrideOther;
-                        double[] tmp1 = new double[2];
-                        double[] tmp2 = new double[2];
-                        if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) {
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
-                                    tmp1[0] = elements[i];
-                                    tmp1[1] = elements[i + 1];
-                                    tmp2[0] = elemsOther[j];
-                                    tmp2[1] = elemsOther[j + 1];
-                                    elements[i] = tmp1[0] * tmp2[0] - tmp1[1] * tmp2[1];
-                                    elements[i + 1] = tmp1[1] * tmp2[0] + tmp1[0] * tmp2[1];
-                                    i += rowStride;
-                                    j += rowStrideOther;
-                                }
-                                idx += columnStride;
-                                idxOther += columnStrideOther;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    int idxOther = zeroOther + firstColumn * columnStrideOther;
+                    double[] tmp1 = new double[2];
+                    double[] tmp2 = new double[2];
+                    if (function == cern.jet.math.tcomplex.DComplexFunctions.mult) {
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            for (int i = idx, j1 = idxOther, r = 0; r < rows; r++) {
+                                tmp1[0] = elements[i];
+                                tmp1[1] = elements[i + 1];
+                                tmp2[0] = elemsOther[j1];
+                                tmp2[1] = elemsOther[j1 + 1];
+                                elements[i] = tmp1[0] * tmp2[0] - tmp1[1] * tmp2[1];
+                                elements[i + 1] = tmp1[1] * tmp2[0] + tmp1[0] * tmp2[1];
+                                i += rowStride;
+                                j1 += rowStrideOther;
                             }
-                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjFirst) {
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
-                                    tmp1[0] = elements[i];
-                                    tmp1[1] = elements[i + 1];
-                                    tmp2[0] = elemsOther[j];
-                                    tmp2[1] = elemsOther[j + 1];
-                                    elements[i] = tmp1[0] * tmp2[0] + tmp1[1] * tmp2[1];
-                                    elements[i + 1] = -tmp1[1] * tmp2[0] + tmp1[0] * tmp2[1];
-                                    i += rowStride;
-                                    j += rowStrideOther;
-                                }
-                                idx += columnStride;
-                                idxOther += columnStrideOther;
+                            idx += columnStride;
+                            idxOther += columnStrideOther;
+                        }
+                    } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjFirst) {
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            for (int i = idx, j1 = idxOther, r = 0; r < rows; r++) {
+                                tmp1[0] = elements[i];
+                                tmp1[1] = elements[i + 1];
+                                tmp2[0] = elemsOther[j1];
+                                tmp2[1] = elemsOther[j1 + 1];
+                                elements[i] = tmp1[0] * tmp2[0] + tmp1[1] * tmp2[1];
+                                elements[i + 1] = -tmp1[1] * tmp2[0] + tmp1[0] * tmp2[1];
+                                i += rowStride;
+                                j1 += rowStrideOther;
                             }
+                            idx += columnStride;
+                            idxOther += columnStrideOther;
+                        }
 
-                        } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjSecond) {
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
-                                    tmp1[0] = elements[i];
-                                    tmp1[1] = elements[i + 1];
-                                    tmp2[0] = elemsOther[j];
-                                    tmp2[1] = elemsOther[j + 1];
-                                    elements[i] = tmp1[0] * tmp2[0] + tmp1[1] * tmp2[1];
-                                    elements[i + 1] = tmp1[1] * tmp2[0] - tmp1[0] * tmp2[1];
-                                    i += rowStride;
-                                    j += rowStrideOther;
-                                }
-                                idx += columnStride;
-                                idxOther += columnStrideOther;
+                    } else if (function == cern.jet.math.tcomplex.DComplexFunctions.multConjSecond) {
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            for (int i = idx, j1 = idxOther, r = 0; r < rows; r++) {
+                                tmp1[0] = elements[i];
+                                tmp1[1] = elements[i + 1];
+                                tmp2[0] = elemsOther[j1];
+                                tmp2[1] = elemsOther[j1 + 1];
+                                elements[i] = tmp1[0] * tmp2[0] + tmp1[1] * tmp2[1];
+                                elements[i + 1] = tmp1[1] * tmp2[0] - tmp1[0] * tmp2[1];
+                                i += rowStride;
+                                j1 += rowStrideOther;
                             }
-                        } else {
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
-                                    tmp1[0] = elements[i];
-                                    tmp1[1] = elements[i + 1];
-                                    tmp2[0] = elemsOther[j];
-                                    tmp2[1] = elemsOther[j + 1];
-                                    tmp1 = function.apply(tmp1, tmp2);
-                                    elements[i] = tmp1[0];
-                                    elements[i + 1] = tmp1[1];
-                                    i += rowStride;
-                                    j += rowStrideOther;
-                                }
-                                idx += columnStride;
-                                idxOther += columnStrideOther;
+                            idx += columnStride;
+                            idxOther += columnStrideOther;
+                        }
+                    } else {
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            for (int i = idx, j1 = idxOther, r = 0; r < rows; r++) {
+                                tmp1[0] = elements[i];
+                                tmp1[1] = elements[i + 1];
+                                tmp2[0] = elemsOther[j1];
+                                tmp2[1] = elemsOther[j1 + 1];
+                                tmp1 = function.apply(tmp1, tmp2);
+                                elements[i] = tmp1[0];
+                                elements[i + 1] = tmp1[1];
+                                i += rowStride;
+                                j1 += rowStrideOther;
                             }
+                            idx += columnStride;
+                            idxOther += columnStrideOther;
                         }
                     }
                 });
@@ -792,17 +771,15 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, r = 0; r < rows; r++) {
-                                elements[i] = re;
-                                elements[i + 1] = im;
-                                i += rowStride;
-                            }
-                            idx += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, r = 0; r < rows; r++) {
+                            elements[i] = re;
+                            elements[i + 1] = im;
+                            i += rowStride;
                         }
+                        idx += columnStride;
                     }
                 });
             }
@@ -837,18 +814,16 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstColumn = j * k;
                     final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            int idxOther = firstColumn * rows * 2;
-                            int idx = zero + firstColumn * columnStride;
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                for (int i = idx, r = 0; r < rows; r++) {
-                                    elements[i] = values[idxOther++];
-                                    elements[i + 1] = values[idxOther++];
-                                    i += rowStride;
-                                }
-                                idx += columnStride;
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int idxOther = firstColumn * rows * 2;
+                        int idx = zero + firstColumn * columnStride;
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            for (int i = idx, r = 0; r < rows; r++) {
+                                elements[i] = values[idxOther++];
+                                elements[i + 1] = values[idxOther++];
+                                i += rowStride;
                             }
+                            idx += columnStride;
                         }
                     });
                 }
@@ -882,19 +857,17 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstColumn = j * k;
                     final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            int idx = 2 * rows;
-                            int i = firstColumn * columnStride;
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                double[] currentColumn = values[c];
-                                if (currentColumn.length != idx)
-                                    throw new IllegalArgumentException(
-                                        "Must have same number of rows in every column: rows="
-                                            + currentColumn.length + "2*rows()=" + idx);
-                                System.arraycopy(currentColumn, 0, elements, i, idx);
-                                i += idx;
-                            }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int idx = 2 * rows;
+                        int i = firstColumn * columnStride;
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            double[] currentColumn = values[c];
+                            if (currentColumn.length != idx)
+                                throw new IllegalArgumentException(
+                                    "Must have same number of rows in every column: rows="
+                                        + currentColumn.length + "2*rows()=" + idx);
+                            System.arraycopy(currentColumn, 0, elements, i, idx);
+                            i += idx;
                         }
                     });
                 }
@@ -920,22 +893,20 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstColumn = j * k;
                     final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            int idx = zero + firstColumn * columnStride;
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                double[] currentColumn = values[c];
-                                if (currentColumn.length != 2 * rows)
-                                    throw new IllegalArgumentException(
-                                        "Must have same number of rows in every column: rows="
-                                            + currentColumn.length + "2*rows()=" + idx);
-                                for (int i = idx, r = 0; r < rows; r++) {
-                                    elements[i] = currentColumn[2 * r];
-                                    elements[i + 1] = currentColumn[2 * r + 1];
-                                    i += rowStride;
-                                }
-                                idx += columnStride;
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int idx = zero + firstColumn * columnStride;
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            double[] currentColumn = values[c];
+                            if (currentColumn.length != 2 * rows)
+                                throw new IllegalArgumentException(
+                                    "Must have same number of rows in every column: rows="
+                                        + currentColumn.length + "2*rows()=" + idx);
+                            for (int i = idx, r = 0; r < rows; r++) {
+                                elements[i] = currentColumn[2 * r];
+                                elements[i + 1] = currentColumn[2 * r + 1];
+                                i += rowStride;
                             }
+                            idx += columnStride;
                         }
                     });
                 }
@@ -972,19 +943,16 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idxOther = firstColumn * rows * 2;
-                        int idx = zero + firstColumn * columnStride;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, r = 0; r < rows; r++) {
-                                elements[i] = values[idxOther++];
-                                elements[i + 1] = values[idxOther++];
-                                i += rowStride;
-                            }
-                            idx += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idxOther = firstColumn * rows * 2;
+                    int idx = zero + firstColumn * columnStride;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, r = 0; r < rows; r++) {
+                            elements[i] = values[idxOther++];
+                            elements[i + 1] = values[idxOther++];
+                            i += rowStride;
                         }
+                        idx += columnStride;
                     }
                 });
             }
@@ -1019,20 +987,17 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        int idxOther = zeroOther + firstColumn * columnStrideOther;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
-                                elements[i + 1] = elemsOther[j];
-                                i += rowStride;
-                                j += rowStrideOther;
-                            }
-                            idx += columnStride;
-                            idxOther += columnStrideOther;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    int idxOther = zeroOther + firstColumn * columnStrideOther;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, j1 = idxOther, r = 0; r < rows; r++) {
+                            elements[i + 1] = elemsOther[j1];
+                            i += rowStride;
+                            j1 += rowStrideOther;
                         }
+                        idx += columnStride;
+                        idxOther += columnStrideOther;
                     }
                 });
             }
@@ -1068,20 +1033,17 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        int idxOther = zeroOther + firstColumn * columnStrideOther;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
-                                elements[i] = elemsOther[j];
-                                i += rowStride;
-                                j += rowStrideOther;
-                            }
-                            idx += columnStride;
-                            idxOther += columnStrideOther;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    int idxOther = zeroOther + firstColumn * columnStrideOther;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, j1 = idxOther, r = 0; r < rows; r++) {
+                            elements[i] = elemsOther[j1];
+                            i += rowStride;
+                            j1 += rowStrideOther;
                         }
+                        idx += columnStride;
+                        idxOther += columnStrideOther;
                     }
                 });
             }
@@ -1114,20 +1076,18 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int cardinality = 0;
-                        int idx = zero + firstColumn * columnStride;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, r = 0; r < rows; r++) {
-                                if ((elements[i] != 0.0) || (elements[i + 1] != 0.0))
-                                    cardinality++;
-                                i += rowStride;
-                            }
-                            idx += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int cardinality1 = 0;
+                    int idx = zero + firstColumn * columnStride;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, r = 0; r < rows; r++) {
+                            if ((elements[i] != 0.0) || (elements[i + 1] != 0.0))
+                                cardinality1++;
+                            i += rowStride;
                         }
-                        return Integer.valueOf(cardinality);
+                        idx += columnStride;
                     }
+                    return Integer.valueOf(cardinality1);
                 });
             }
             try {
@@ -1187,11 +1147,9 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            ((DenseDComplexMatrix1D) viewColumn(c)).fft();
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        ((DenseDComplexMatrix1D) viewColumn(c)).fft();
                     }
                 });
             }
@@ -1218,11 +1176,9 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            ((DenseDComplexMatrix1D) viewRow(r)).fft();
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        ((DenseDComplexMatrix1D) viewRow(r)).fft();
                     }
                 });
             }
@@ -1245,23 +1201,21 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        double[] value = new double[2];
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, r = 0; r < rows; r++) {
-                                value[0] = elements[i];
-                                value[1] = elements[i + 1];
-                                if (value[0] != 0 || value[1] != 0) {
-                                    double[] v = function.apply(r, c, value);
-                                    elements[i] = v[0];
-                                    elements[i + 1] = v[1];
-                                }
-                                i += rowStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    double[] value = new double[2];
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, r = 0; r < rows; r++) {
+                            value[0] = elements[i];
+                            value[1] = elements[i + 1];
+                            if (value[0] != 0 || value[1] != 0) {
+                                double[] v = function.apply(r, c, value);
+                                elements[i] = v[0];
+                                elements[i + 1] = v[1];
                             }
-                            idx += columnStride;
+                            i += rowStride;
                         }
+                        idx += columnStride;
                     }
                 });
             }
@@ -1301,15 +1255,12 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columnsOther : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idxOther = zeroOther + firstColumn * columnStrideOther;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int r = 0; r < rowsOther; r++) {
-                                elemsOther[idxOther + 1] = -elemsOther[idxOther + 1];
-                                idxOther += 2;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idxOther = zeroOther + firstColumn * columnStrideOther;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int r = 0; r < rowsOther; r++) {
+                            elemsOther[idxOther + 1] = -elemsOther[idxOther + 1];
+                            idxOther += 2;
                         }
                     }
                 });
@@ -1346,19 +1297,17 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        int idxOther = zeroOther + firstColumn * columnStrideOther;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
-                                elemsOther[j] = elements[i + 1];
-                                i += rowStride;
-                                j += rowStrideOther;
-                            }
-                            idx += columnStride;
-                            idxOther += columnStrideOther;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    int idxOther = zeroOther + firstColumn * columnStrideOther;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, j1 = idxOther, r = 0; r < rows; r++) {
+                            elemsOther[j1] = elements[i + 1];
+                            i += rowStride;
+                            j1 += rowStrideOther;
                         }
+                        idx += columnStride;
+                        idxOther += columnStrideOther;
                     }
                 });
             }
@@ -1422,19 +1371,17 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        int idxOther = zeroOther + firstColumn * columnStrideOther;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, j = idxOther, r = 0; r < rows; r++) {
-                                elemsOther[j] = elements[i];
-                                i += rowStride;
-                                j += rowStrideOther;
-                            }
-                            idx += columnStride;
-                            idxOther += columnStrideOther;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    int idxOther = zeroOther + firstColumn * columnStrideOther;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, j1 = idxOther, r = 0; r < rows; r++) {
+                            elemsOther[j1] = elements[i];
+                            i += rowStride;
+                            j1 += rowStrideOther;
                         }
+                        idx += columnStride;
+                        idxOther += columnStrideOther;
                     }
                 });
             }
@@ -1490,11 +1437,9 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            ((DenseDComplexMatrix1D) viewColumn(c)).ifft(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        ((DenseDComplexMatrix1D) viewColumn(c)).ifft(scale);
                     }
                 });
             }
@@ -1524,11 +1469,9 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            ((DenseDComplexMatrix1D) viewRow(r)).ifft(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        ((DenseDComplexMatrix1D) viewRow(r)).ifft(scale);
                     }
                 });
             }
@@ -1572,17 +1515,15 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstColumn * columnStride;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, r = 0; r < rows; r++) {
-                                values[r][2 * c] = elements[i];
-                                values[r][2 * c + 1] = elements[i + 1];
-                                i += rowStride;
-                            }
-                            idx += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstColumn * columnStride;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, r = 0; r < rows; r++) {
+                            values[r][2 * c] = elements[i];
+                            values[r][2 * c + 1] = elements[i + 1];
+                            i += rowStride;
                         }
+                        idx += columnStride;
                     }
                 });
             }
@@ -1619,19 +1560,16 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                     final int firstColumn = j * k;
                     final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
                     final int firstIdx = j * k * rows;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            int idx = 0;
-                            int idxOther = zeroOther + firstIdx * strideOther;
-                            for (int c = firstColumn; c < lastColumn; c++) {
-                                idx = zero + c * columnStride;
-                                for (int r = 0; r < rows; r++) {
-                                    elemsOther[idxOther] = elements[idx];
-                                    elemsOther[idxOther + 1] = elements[idx + 1];
-                                    idx += rowStride;
-                                    idxOther += strideOther;
-                                }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int idx = 0;
+                        int idxOther = zeroOther + firstIdx * strideOther;
+                        for (int c = firstColumn; c < lastColumn; c++) {
+                            idx = zero + c * columnStride;
+                            for (int r = 0; r < rows; r++) {
+                                elemsOther[idxOther] = elements[idx];
+                                elemsOther[idxOther + 1] = elements[idx + 1];
+                                idx += rowStride;
+                                idxOther += strideOther;
                             }
                         }
                     });
@@ -1815,10 +1753,8 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
                 CC = C.viewPart(offset, 0, span, columnsB);
             }
 
-            subTasks[i] = ConcurrencyUtils.submit(new Runnable() {
-                public void run() {
-                    ((DenseColumnDComplexMatrix2D) AA).zMultSeq(BB, CC, alpha, beta, transposeA, transposeB);
-                }
+            subTasks[i] = ConcurrencyUtils.submit(() -> {
+                ((DenseColumnDComplexMatrix2D) AA).zMultSeq(BB, CC, alpha, beta, transposeA, transposeB);
             });
         }
         ConcurrencyUtils.waitForCompletion(subTasks);
@@ -1972,21 +1908,18 @@ public class DenseColumnDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<double[]>() {
-
-                    public double[] call() throws Exception {
-                        double[] sum = new double[2];
-                        int idx = zero + firstColumn * columnStride;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            for (int i = idx, r = 0; r < rows; r++) {
-                                sum[0] += elements[i];
-                                sum[1] += elements[i + 1];
-                                i += rowStride;
-                            }
-                            idx += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] sum1 = new double[2];
+                    int idx = zero + firstColumn * columnStride;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        for (int i = idx, r = 0; r < rows; r++) {
+                            sum1[0] += elements[i];
+                            sum1[1] += elements[i + 1];
+                            i += rowStride;
                         }
-                        return sum;
+                        idx += columnStride;
                     }
+                    return sum1;
                 });
             }
             try {

@@ -8,20 +8,13 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdouble.algo;
 
-import cern.jet.random.engine.MersenneTwister;
-
-import java.util.concurrent.Future;
-
-import cern.mateba.function.tdouble.DoubleDoubleFunction;
-import cern.mateba.matrix.tdouble.DoubleFactory1D;
-import cern.mateba.matrix.tdouble.DoubleFactory2D;
-import cern.mateba.matrix.tdouble.DoubleMatrix1D;
-import cern.mateba.matrix.tdouble.DoubleMatrix2D;
-import cern.mateba.matrix.tdouble.DoubleMatrix3D;
 import cern.jet.math.tdouble.DoubleFunctions;
+import cern.jet.random.engine.MersenneTwister;
 import cern.jet.random.engine.RandomEngine;
 import cern.jet.random.sampling.RandomSampler;
 import cern.jet.stat.Descriptive;
+import cern.mateba.function.tdouble.DoubleDoubleFunction;
+import cern.mateba.matrix.tdouble.*;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
 import hep.aida.IAxis;
 import hep.aida.IHistogram1D;
@@ -32,6 +25,8 @@ import hep.aida.bin.DynamicBin1D;
 import hep.aida.ref.Histogram2D;
 import hep.aida.ref.Histogram3D;
 import hep.aida.ref.VariableAxis;
+
+import java.util.concurrent.Future;
 
 /**
  * Basic statistics operations on matrices. Computation of covariance,
@@ -627,16 +622,13 @@ public class DoubleStatistic {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? m : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        DoubleMatrix2D view = null;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < n; c++) {
-                                view = matrix.viewPart(r * row_size, c * col_size, height[r], width[c]);
-                                histo[r][c].fill_2D((double[]) view.elements(), view.rows(), view.columns(), (int) view
-                                    .index(0, 0), view.rowStride(), view.columnStride());
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    DoubleMatrix2D view = null;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < n; c++) {
+                            view = matrix.viewPart(r * row_size, c * col_size, height[r], width[c]);
+                            histo[r][c].fill_2D((double[]) view.elements(), view.rows(), view.columns(), (int) view
+                                .index(0, 0), view.rowStride(), view.columnStride());
                         }
                     }
                 });

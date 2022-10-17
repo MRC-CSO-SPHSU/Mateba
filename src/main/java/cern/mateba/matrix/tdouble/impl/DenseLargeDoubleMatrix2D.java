@@ -8,9 +8,10 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdouble.impl;
 
-import java.io.Serial;
-import java.util.concurrent.Future;
-
+import cern.mateba.matrix.tdcomplex.impl.DenseLargeDComplexMatrix2D;
+import cern.mateba.matrix.tdouble.DoubleMatrix1D;
+import cern.mateba.matrix.tdouble.DoubleMatrix2D;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 import org.jtransforms.dct.DoubleDCT_1D;
 import org.jtransforms.dct.DoubleDCT_2D;
 import org.jtransforms.dht.DoubleDHT_1D;
@@ -20,10 +21,8 @@ import org.jtransforms.dst.DoubleDST_2D;
 import org.jtransforms.fft.DoubleFFT_1D;
 import org.jtransforms.fft.DoubleFFT_2D;
 
-import cern.mateba.matrix.tdcomplex.impl.DenseLargeDComplexMatrix2D;
-import cern.mateba.matrix.tdouble.DoubleMatrix1D;
-import cern.mateba.matrix.tdouble.DoubleMatrix2D;
-import edu.emory.mathcs.utils.ConcurrencyUtils;
+import java.io.Serial;
+import java.util.concurrent.Future;
 
 /**
  * Dense 2-d matrix holding <tt>double</tt> elements. First see the <a
@@ -123,15 +122,12 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstCol = j * k;
                 final int lastCol = (j == nthreads - 1) ? columns : firstCol + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        double[] column;
-                        for (int c = firstCol; c < lastCol; c++) {
-                            column = (double[]) viewColumn(c).copy().elements();
-                            dctColumns.forward(column, scale);
-                            viewColumn(c).assign(column);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] column;
+                    for (int c = firstCol; c < lastCol; c++) {
+                        column = (double[]) viewColumn(c).copy().elements();
+                        dctColumns.forward(column, scale);
+                        viewColumn(c).assign(column);
                     }
                 });
             }
@@ -168,12 +164,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            dctRows.forward(elements[r], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        dctRows.forward(elements[r], scale);
                     }
                 });
             }
@@ -219,15 +212,12 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstCol = j * k;
                 final int lastCol = (j == nthreads - 1) ? columns : firstCol + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        double[] column;
-                        for (int c = firstCol; c < lastCol; c++) {
-                            column = (double[]) viewColumn(c).copy().elements();
-                            dhtColumns.forward(column);
-                            viewColumn(c).assign(column);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] column;
+                    for (int c = firstCol; c < lastCol; c++) {
+                        column = (double[]) viewColumn(c).copy().elements();
+                        dhtColumns.forward(column);
+                        viewColumn(c).assign(column);
                     }
                 });
             }
@@ -261,12 +251,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            dhtRows.forward(elements[r]);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        dhtRows.forward(elements[r]);
                     }
                 });
             }
@@ -316,15 +303,12 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstCol = j * k;
                 final int lastCol = (j == nthreads - 1) ? columns : firstCol + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        double[] column;
-                        for (int c = firstCol; c < lastCol; c++) {
-                            column = (double[]) viewColumn(c).copy().elements();
-                            dstColumns.forward(column, scale);
-                            viewColumn(c).assign(column);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] column;
+                    for (int c = firstCol; c < lastCol; c++) {
+                        column = (double[]) viewColumn(c).copy().elements();
+                        dstColumns.forward(column, scale);
+                        viewColumn(c).assign(column);
                     }
                 });
             }
@@ -360,12 +344,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            dstRows.forward(elements[r], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        dstRows.forward(elements[r], scale);
                     }
                 });
             }
@@ -442,11 +423,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            System.arraycopy(elements[r], 0, elementsC[r], 0, columns);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        System.arraycopy(elements[r], 0, elementsC[r], 0, columns);
                     }
                 });
             }
@@ -486,15 +465,12 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstCol = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstCol + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstCol; c < lastColumn; c++) {
-                            double[] column = new double[2 * rows];
-                            System.arraycopy(viewColumn(c).copy().elements(), 0, column, 0, rows);
-                            fftColumns.realForwardFull(column);
-                            C.viewColumn(c).assign(column);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstCol; c < lastColumn; c++) {
+                        double[] column = new double[2 * rows];
+                        System.arraycopy(viewColumn(c).copy().elements(), 0, column, 0, rows);
+                        fftColumns.realForwardFull(column);
+                        C.viewColumn(c).assign(column);
                     }
                 });
             }
@@ -537,14 +513,12 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            double[] row = new double[2 * columns];
-                            System.arraycopy(elements[r], 0, row, 0, columns);
-                            fftRows.realForwardFull(row);
-                            C.viewRow(r).assign(row);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        double[] row = new double[2 * columns];
+                        System.arraycopy(elements[r], 0, row, 0, columns);
+                        fftRows.realForwardFull(row);
+                        C.viewRow(r).assign(row);
                     }
                 });
             }
@@ -583,11 +557,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            System.arraycopy(elements[r], 0, elementsC[r], 0, columns);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        System.arraycopy(elements[r], 0, elementsC[r], 0, columns);
                     }
                 });
             }
@@ -630,15 +602,12 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            double[] column = new double[2 * rows];
-                            System.arraycopy(viewColumn(c).copy().elements(), 0, column, 0, rows);
-                            fftColumns.realInverseFull(column, scale);
-                            C.viewColumn(c).assign(column);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        double[] column = new double[2 * rows];
+                        System.arraycopy(viewColumn(c).copy().elements(), 0, column, 0, rows);
+                        fftColumns.realInverseFull(column, scale);
+                        C.viewColumn(c).assign(column);
                     }
                 });
             }
@@ -681,14 +650,12 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            double[] row = new double[2 * columns];
-                            System.arraycopy(elements[r], 0, row, 0, columns);
-                            fftRows.realInverseFull(row, scale);
-                            C.viewRow(r).assign(row);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        double[] row = new double[2 * columns];
+                        System.arraycopy(elements[r], 0, row, 0, columns);
+                        fftRows.realInverseFull(row, scale);
+                        C.viewRow(r).assign(row);
                     }
                 });
             }
@@ -748,15 +715,12 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        double[] column;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            column = (double[]) viewColumn(c).copy().elements();
-                            dctColumns.inverse(column, scale);
-                            viewColumn(c).assign(column);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] column;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        column = (double[]) viewColumn(c).copy().elements();
+                        dctColumns.inverse(column, scale);
+                        viewColumn(c).assign(column);
                     }
                 });
             }
@@ -793,12 +757,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            dctRows.inverse(elements[r], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        dctRows.inverse(elements[r], scale);
                     }
                 });
             }
@@ -849,15 +810,12 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        double[] column;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            column = (double[]) viewColumn(c).copy().elements();
-                            dhtColumns.inverse(column, scale);
-                            viewColumn(c).assign(column);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] column;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        column = (double[]) viewColumn(c).copy().elements();
+                        dhtColumns.inverse(column, scale);
+                        viewColumn(c).assign(column);
                     }
                 });
             }
@@ -894,12 +852,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            dhtRows.inverse(elements[r], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        dhtRows.inverse(elements[r], scale);
                     }
                 });
             }
@@ -950,15 +905,12 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        double[] column;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            column = (double[]) viewColumn(c).copy().elements();
-                            dstColumns.inverse(column, scale);
-                            viewColumn(c).assign(column);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] column;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        column = (double[]) viewColumn(c).copy().elements();
+                        dstColumns.inverse(column, scale);
+                        viewColumn(c).assign(column);
                     }
                 });
             }
@@ -995,12 +947,9 @@ public class DenseLargeDoubleMatrix2D extends WrapperDoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            dstRows.inverse(elements[r], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        dstRows.inverse(elements[r], scale);
                     }
                 });
             }

@@ -8,17 +8,6 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdouble.impl;
 
-import java.io.IOException;
-import java.io.Serial;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import org.jtransforms.dct.DoubleDCT_2D;
-import org.jtransforms.dht.DoubleDHT_2D;
-import org.jtransforms.dst.DoubleDST_2D;
-import org.jtransforms.fft.DoubleFFT_2D;
-
 import cern.mateba.list.tdouble.DoubleArrayList;
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.matrix.io.MatrixInfo;
@@ -28,6 +17,16 @@ import cern.mateba.matrix.tdcomplex.impl.DenseDComplexMatrix2D;
 import cern.mateba.matrix.tdouble.DoubleMatrix1D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+import org.jtransforms.dct.DoubleDCT_2D;
+import org.jtransforms.dht.DoubleDHT_2D;
+import org.jtransforms.dst.DoubleDST_2D;
+import org.jtransforms.fft.DoubleFFT_2D;
+
+import java.io.IOException;
+import java.io.Serial;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Dense 2-d matrix holding <tt>double</tt> elements. First see the <a
@@ -201,20 +200,17 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = rows - j * k;
                 final int lastRow = (j == (nthreads - 1)) ? 0 : firstRow - k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-
-                    public Double call() throws Exception {
-                        double a = f.apply(elements[zero + (firstRow - 1) * rowStride + (columns - 1) * columnStride]);
-                        int d = 1;
-                        for (int r = firstRow; --r >= lastRow; ) {
-                            int ridx = zero + r * rowStride;
-                            for (int c = columns - d; --c >= 0; ) {
-                                a = aggr.apply(a, f.apply(elements[ridx + c * columnStride]));
-                            }
-                            d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double a1 = f.apply(elements[zero + (firstRow - 1) * rowStride + (columns - 1) * columnStride]);
+                    int d = 1;
+                    for (int r = firstRow; --r >= lastRow; ) {
+                        int ridx = zero + r * rowStride;
+                        for (int c = columns - d; --c >= 0; ) {
+                            a1 = aggr.apply(a1, f.apply(elements[ridx + c * columnStride]));
                         }
-                        return a;
+                        d = 0;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -246,26 +242,23 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-
-                    public Double call() throws Exception {
-                        double elem = elements[zero + firstRow * rowStride];
-                        double a = 0;
-                        if (cond.apply(elem)) {
-                            a = f.apply(elem);
-                        }
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                elem = elements[zero + r * rowStride + c * columnStride];
-                                if (cond.apply(elem)) {
-                                    a = aggr.apply(a, f.apply(elem));
-                                }
-                            }
-                            d = 0;
-                        }
-                        return a;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double elem = elements[zero + firstRow * rowStride];
+                    double a1 = 0;
+                    if (cond.apply(elem)) {
+                        a1 = f.apply(elem);
                     }
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            elem = elements[zero + r * rowStride + c * columnStride];
+                            if (cond.apply(elem)) {
+                                a1 = aggr.apply(a1, f.apply(elem));
+                            }
+                        }
+                        d = 0;
+                    }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -305,18 +298,15 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-
-                    public Double call() throws Exception {
-                        double a = f.apply(elements[zero + rowElements[firstIdx] * rowStride + columnElements[firstIdx]
-                            * columnStride]);
-                        double elem;
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            elem = elements[zero + rowElements[i] * rowStride + columnElements[i] * columnStride];
-                            a = aggr.apply(a, f.apply(elem));
-                        }
-                        return a;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double a1 = f.apply(elements[zero + rowElements[firstIdx] * rowStride + columnElements[firstIdx]
+                        * columnStride]);
+                    double elem;
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        elem = elements[zero + rowElements[i] * rowStride + columnElements[i] * columnStride];
+                        a1 = aggr.apply(a1, f.apply(elem));
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -353,21 +343,18 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-
-                    public Double call() throws Exception {
-                        double a = f.apply(elements[zero + firstRow * rowStride], elementsOther[zeroOther + firstRow
-                            * rowStrideOther]);
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                a = aggr.apply(a, f.apply(elements[zero + r * rowStride + c * columnStride],
-                                    elementsOther[zeroOther + r * rowStrideOther + c * colStrideOther]));
-                            }
-                            d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double a1 = f.apply(elements[zero + firstRow * rowStride], elementsOther[zeroOther + firstRow
+                        * rowStrideOther]);
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            a1 = aggr.apply(a1, f.apply(elements[zero + r * rowStride + c * columnStride],
+                                elementsOther[zeroOther + r * rowStrideOther + c * colStrideOther]));
                         }
-                        return a;
+                        d = 0;
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -406,32 +393,29 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = zero + firstRow * rowStride;
-                        // specialization for speed
-                        if (function instanceof cern.jet.math.tdouble.DoubleMult) {
-                            // x[i] = mult*x[i]
-                            double multiplicator = ((cern.jet.math.tdouble.DoubleMult) function).multiplicator;
-                            if (multiplicator == 1)
-                                return;
-                            for (int r = firstRow; r < lastRow; r++) {
-                                for (int i = idx, c = 0; c < columns; c++) {
-                                    elems[i] *= multiplicator;
-                                    i += columnStride;
-                                }
-                                idx += rowStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstRow * rowStride;
+                    // specialization for speed
+                    if (function instanceof cern.jet.math.tdouble.DoubleMult) {
+                        // x[i] = mult*x[i]
+                        double multiplicator = ((cern.jet.math.tdouble.DoubleMult) function).multiplicator;
+                        if (multiplicator == 1)
+                            return;
+                        for (int r = firstRow; r < lastRow; r++) {
+                            for (int i = idx, c = 0; c < columns; c++) {
+                                elems[i] *= multiplicator;
+                                i += columnStride;
                             }
-                        } else {
-                            // the general case x[i] = f(x[i])
-                            for (int r = firstRow; r < lastRow; r++) {
-                                for (int i = idx, c = 0; c < columns; c++) {
-                                    elems[i] = function.apply(elems[i]);
-                                    i += columnStride;
-                                }
-                                idx += rowStride;
+                            idx += rowStride;
+                        }
+                    } else {
+                        // the general case x[i] = f(x[i])
+                        for (int r = firstRow; r < lastRow; r++) {
+                            for (int i = idx, c = 0; c < columns; c++) {
+                                elems[i] = function.apply(elems[i]);
+                                i += columnStride;
                             }
+                            idx += rowStride;
                         }
                     }
                 });
@@ -478,21 +462,18 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        double elem;
-                        int idx = zero + firstRow * rowStride;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int i = idx, c = 0; c < columns; c++) {
-                                elem = elements[i];
-                                if (cond.apply(elem)) {
-                                    elements[i] = function.apply(elem);
-                                }
-                                i += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double elem;
+                    int idx = zero + firstRow * rowStride;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int i = idx, c = 0; c < columns; c++) {
+                            elem = elements[i];
+                            if (cond.apply(elem)) {
+                                elements[i] = function.apply(elem);
                             }
-                            idx += rowStride;
+                            i += columnStride;
                         }
+                        idx += rowStride;
                     }
                 });
             }
@@ -524,21 +505,18 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        double elem;
-                        int idx = zero + firstRow * rowStride;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int i = idx, c = 0; c < columns; c++) {
-                                elem = elements[i];
-                                if (cond.apply(elem)) {
-                                    elements[i] = value;
-                                }
-                                i += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double elem;
+                    int idx = zero + firstRow * rowStride;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int i = idx, c = 0; c < columns; c++) {
+                            elem = elements[i];
+                            if (cond.apply(elem)) {
+                                elements[i] = value;
                             }
-                            idx += rowStride;
+                            i += columnStride;
                         }
+                        idx += rowStride;
                     }
                 });
             }
@@ -571,16 +549,14 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstRow * rowStride;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int i = idx, c = 0; c < columns; c++) {
-                                elems[i] = value;
-                                i += columnStride;
-                            }
-                            idx += rowStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstRow * rowStride;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int i = idx, c = 0; c < columns; c++) {
+                            elems[i] = value;
+                            i += columnStride;
                         }
+                        idx += rowStride;
                     }
                 });
             }
@@ -614,18 +590,15 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstRow = j * k;
                     final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            int idxOther = firstRow * columns;
-                            int idx = zero + firstRow * rowStride;
-                            for (int r = firstRow; r < lastRow; r++) {
-                                for (int i = idx, c = 0; c < columns; c++) {
-                                    elements[i] = values[idxOther++];
-                                    i += columnStride;
-                                }
-                                idx += rowStride;
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int idxOther = firstRow * columns;
+                        int idx = zero + firstRow * rowStride;
+                        for (int r = firstRow; r < lastRow; r++) {
+                            for (int i = idx, c = 0; c < columns; c++) {
+                                elements[i] = values[idxOther++];
+                                i += columnStride;
                             }
+                            idx += rowStride;
                         }
                     });
                 }
@@ -659,18 +632,16 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstRow = j * k;
                     final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                        public void run() {
-                            int i = firstRow * rowStride;
-                            for (int r = firstRow; r < lastRow; r++) {
-                                double[] currentRow = values[r];
-                                if (currentRow.length != columns)
-                                    throw new IllegalArgumentException(
-                                        "Must have same number of columns in every row: columns="
-                                            + currentRow.length + "columns()=" + columns());
-                                System.arraycopy(currentRow, 0, elements, i, columns);
-                                i += columns;
-                            }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int i = firstRow * rowStride;
+                        for (int r = firstRow; r < lastRow; r++) {
+                            double[] currentRow = values[r];
+                            if (currentRow.length != columns)
+                                throw new IllegalArgumentException(
+                                    "Must have same number of columns in every row: columns="
+                                        + currentRow.length + "columns()=" + columns());
+                            System.arraycopy(currentRow, 0, elements, i, columns);
+                            i += columns;
                         }
                     });
                 }
@@ -695,22 +666,19 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
                 for (int j = 0; j < nthreads; j++) {
                     final int firstRow = j * k;
                     final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            int idx = zero + firstRow * rowStride;
-                            for (int r = firstRow; r < lastRow; r++) {
-                                double[] currentRow = values[r];
-                                if (currentRow.length != columns)
-                                    throw new IllegalArgumentException(
-                                        "Must have same number of columns in every row: columns="
-                                            + currentRow.length + "columns()=" + columns());
-                                for (int i = idx, c = 0; c < columns; c++) {
-                                    elements[i] = currentRow[c];
-                                    i += columnStride;
-                                }
-                                idx += rowStride;
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        int idx = zero + firstRow * rowStride;
+                        for (int r = firstRow; r < lastRow; r++) {
+                            double[] currentRow = values[r];
+                            if (currentRow.length != columns)
+                                throw new IllegalArgumentException(
+                                    "Must have same number of columns in every row: columns="
+                                        + currentRow.length + "columns()=" + columns());
+                            for (int i = idx, c = 0; c < columns; c++) {
+                                elements[i] = currentRow[c];
+                                i += columnStride;
                             }
+                            idx += rowStride;
                         }
                     });
                 }
@@ -771,19 +739,17 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstRow * rowStride;
-                        int idxOther = zeroOther + firstRow * rowStrideOther;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int i = idx, j = idxOther, c = 0; c < columns; c++) {
-                                elements[i] = elementsOther[j];
-                                i += columnStride;
-                                j += columnStrideOther;
-                            }
-                            idx += rowStride;
-                            idxOther += rowStrideOther;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstRow * rowStride;
+                    int idxOther = zeroOther + firstRow * rowStrideOther;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int i = idx, j1 = idxOther, c = 0; c < columns; c++) {
+                            elements[i] = elementsOther[j1];
+                            i += columnStride;
+                            j1 += columnStrideOther;
                         }
+                        idx += rowStride;
+                        idxOther += rowStrideOther;
                     }
                 });
             }
@@ -832,94 +798,90 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx;
-                        int idxOther;
-                        // specialized for speed
-                        if (function == cern.jet.math.tdouble.DoubleFunctions.mult) {
-                            // x[i] = x[i]*y[i]
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx;
+                    int idxOther;
+                    // specialized for speed
+                    if (function == cern.jet.math.tdouble.DoubleFunctions.mult) {
+                        // x[i] = x[i]*y[i]
+                        idx = zero + firstRow * rowStride;
+                        idxOther = zeroOther + firstRow * rowStrideOther;
+                        for (int r = firstRow; r < lastRow; r++) {
+                            for (int i = idx, j1 = idxOther, c = 0; c < columns; c++) {
+                                elements[i] *= elementsOther[j1];
+                                i += columnStride;
+                                j1 += columnStrideOther;
+                            }
+                            idx += rowStride;
+                            idxOther += rowStrideOther;
+                        }
+                    } else if (function == cern.jet.math.tdouble.DoubleFunctions.div) {
+                        // x[i] = x[i] / y[i]
+                        idx = zero + firstRow * rowStride;
+                        idxOther = zeroOther + firstRow * rowStrideOther;
+                        for (int r = firstRow; r < lastRow; r++) {
+                            for (int i = idx, j1 = idxOther, c = 0; c < columns; c++) {
+                                elements[i] /= elementsOther[j1];
+                                i += columnStride;
+                                j1 += columnStrideOther;
+                            }
+                            idx += rowStride;
+                            idxOther += rowStrideOther;
+                        }
+                    } else if (function instanceof cern.jet.math.tdouble.DoublePlusMultSecond) {
+                        double multiplicator = ((cern.jet.math.tdouble.DoublePlusMultSecond) function).multiplicator;
+                        if (multiplicator == 1) {
+                            // x[i] = x[i] + y[i]
                             idx = zero + firstRow * rowStride;
                             idxOther = zeroOther + firstRow * rowStrideOther;
                             for (int r = firstRow; r < lastRow; r++) {
-                                for (int i = idx, j = idxOther, c = 0; c < columns; c++) {
-                                    elements[i] *= elementsOther[j];
+                                for (int i = idx, j1 = idxOther, c = 0; c < columns; c++) {
+                                    elements[i] += elementsOther[j1];
                                     i += columnStride;
-                                    j += columnStrideOther;
+                                    j1 += columnStrideOther;
                                 }
                                 idx += rowStride;
                                 idxOther += rowStrideOther;
                             }
-                        } else if (function == cern.jet.math.tdouble.DoubleFunctions.div) {
-                            // x[i] = x[i] / y[i]
+                        } else if (multiplicator == -1) {
+                            // x[i] = x[i] - y[i]
                             idx = zero + firstRow * rowStride;
                             idxOther = zeroOther + firstRow * rowStrideOther;
                             for (int r = firstRow; r < lastRow; r++) {
-                                for (int i = idx, j = idxOther, c = 0; c < columns; c++) {
-                                    elements[i] /= elementsOther[j];
+                                for (int i = idx, j1 = idxOther, c = 0; c < columns; c++) {
+                                    elements[i] -= elementsOther[j1];
                                     i += columnStride;
-                                    j += columnStrideOther;
+                                    j1 += columnStrideOther;
                                 }
                                 idx += rowStride;
                                 idxOther += rowStrideOther;
                             }
-                        } else if (function instanceof cern.jet.math.tdouble.DoublePlusMultSecond) {
-                            double multiplicator = ((cern.jet.math.tdouble.DoublePlusMultSecond) function).multiplicator;
-                            if (multiplicator == 1) {
-                                // x[i] = x[i] + y[i]
-                                idx = zero + firstRow * rowStride;
-                                idxOther = zeroOther + firstRow * rowStrideOther;
-                                for (int r = firstRow; r < lastRow; r++) {
-                                    for (int i = idx, j = idxOther, c = 0; c < columns; c++) {
-                                        elements[i] += elementsOther[j];
-                                        i += columnStride;
-                                        j += columnStrideOther;
-                                    }
-                                    idx += rowStride;
-                                    idxOther += rowStrideOther;
-                                }
-                            } else if (multiplicator == -1) {
-                                // x[i] = x[i] - y[i]
-                                idx = zero + firstRow * rowStride;
-                                idxOther = zeroOther + firstRow * rowStrideOther;
-                                for (int r = firstRow; r < lastRow; r++) {
-                                    for (int i = idx, j = idxOther, c = 0; c < columns; c++) {
-                                        elements[i] -= elementsOther[j];
-                                        i += columnStride;
-                                        j += columnStrideOther;
-                                    }
-                                    idx += rowStride;
-                                    idxOther += rowStrideOther;
-                                }
-                            } else { // the general case
-                                // x[i] = x[i] + mult*y[i]
-                                idx = zero + firstRow * rowStride;
-                                idxOther = zeroOther + firstRow * rowStrideOther;
-                                for (int r = firstRow; r < lastRow; r++) {
-                                    for (int i = idx, j = idxOther, c = 0; c < columns; c++) {
-                                        elements[i] += multiplicator * elementsOther[j];
-                                        i += columnStride;
-                                        j += columnStrideOther;
-                                    }
-                                    idx += rowStride;
-                                    idxOther += rowStrideOther;
-                                }
-                            }
-                        } else { // the general case x[i] = f(x[i],y[i])
+                        } else { // the general case
+                            // x[i] = x[i] + mult*y[i]
                             idx = zero + firstRow * rowStride;
                             idxOther = zeroOther + firstRow * rowStrideOther;
                             for (int r = firstRow; r < lastRow; r++) {
-                                for (int i = idx, j = idxOther, c = 0; c < columns; c++) {
-                                    elements[i] = function.apply(elements[i], elementsOther[j]);
+                                for (int i = idx, j1 = idxOther, c = 0; c < columns; c++) {
+                                    elements[i] += multiplicator * elementsOther[j1];
                                     i += columnStride;
-                                    j += columnStrideOther;
+                                    j1 += columnStrideOther;
                                 }
                                 idx += rowStride;
                                 idxOther += rowStrideOther;
                             }
                         }
-
+                    } else { // the general case x[i] = f(x[i],y[i])
+                        idx = zero + firstRow * rowStride;
+                        idxOther = zeroOther + firstRow * rowStrideOther;
+                        for (int r = firstRow; r < lastRow; r++) {
+                            for (int i = idx, j1 = idxOther, c = 0; c < columns; c++) {
+                                elements[i] = function.apply(elements[i], elementsOther[j1]);
+                                i += columnStride;
+                                j1 += columnStrideOther;
+                            }
+                            idx += rowStride;
+                            idxOther += rowStrideOther;
+                        }
                     }
 
                 });
@@ -1035,19 +997,15 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx;
-                        int idxOther;
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            idx = zero + rowElements[i] * rowStride + columnElements[i] * columnStride;
-                            idxOther = zeroOther + rowElements[i] * rowStrideOther + columnElements[i]
-                                * columnStrideOther;
-                            elements[idx] = function.apply(elements[idx], elementsOther[idxOther]);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx;
+                    int idxOther;
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        idx = zero + rowElements[i] * rowStride + columnElements[i] * columnStride;
+                        idxOther = zeroOther + rowElements[i] * rowStrideOther + columnElements[i]
+                            * columnStrideOther;
+                        elements[idx] = function.apply(elements[idx], elementsOther[idxOther]);
                     }
-
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
@@ -1076,18 +1034,15 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = zero + firstRow * rowStride;
-                        int idxOther = firstRow * columns;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int i = idx, c = 0; c < columns; c++) {
-                                elements[i] = values[idxOther++];
-                                i += columnStride;
-                            }
-                            idx += rowStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstRow * rowStride;
+                    int idxOther = firstRow * columns;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int i = idx, c = 0; c < columns; c++) {
+                            elements[i] = values[idxOther++];
+                            i += columnStride;
                         }
+                        idx += rowStride;
                     }
                 });
             }
@@ -1118,20 +1073,18 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int cardinality = 0;
-                        int idx = zero + firstRow * rowStride;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int i = idx, c = 0; c < columns; c++) {
-                                if (elements[i] != 0)
-                                    cardinality++;
-                                i += columnStride;
-                            }
-                            idx += rowStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int cardinality1 = 0;
+                    int idx = zero + firstRow * rowStride;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int i = idx, c = 0; c < columns; c++) {
+                            if (elements[i] != 0)
+                                cardinality1++;
+                            i += columnStride;
                         }
-                        return Integer.valueOf(cardinality);
+                        idx += rowStride;
                     }
+                    return Integer.valueOf(cardinality1);
                 });
             }
             try {
@@ -1199,12 +1152,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            ((DenseDoubleMatrix1D) viewColumn(c)).dct(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        ((DenseDoubleMatrix1D) viewColumn(c)).dct(scale);
                     }
                 });
             }
@@ -1236,12 +1186,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            ((DenseDoubleMatrix1D) viewRow(r)).dct(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        ((DenseDoubleMatrix1D) viewRow(r)).dct(scale);
                     }
                 });
             }
@@ -1291,12 +1238,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            ((DenseDoubleMatrix1D) viewColumn(c)).dht();
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        ((DenseDoubleMatrix1D) viewColumn(c)).dht();
                     }
                 });
             }
@@ -1326,12 +1270,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            ((DenseDoubleMatrix1D) viewRow(r)).dht();
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        ((DenseDoubleMatrix1D) viewRow(r)).dht();
                     }
                 });
             }
@@ -1385,12 +1326,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            ((DenseDoubleMatrix1D) viewColumn(c)).dst(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        ((DenseDoubleMatrix1D) viewColumn(c)).dst(scale);
                     }
                 });
             }
@@ -1422,12 +1360,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            ((DenseDoubleMatrix1D) viewRow(r)).dst(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        ((DenseDoubleMatrix1D) viewRow(r)).dst(scale);
                     }
                 });
             }
@@ -1501,19 +1436,17 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstRow * rowStride;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int i = idx, c = 0; c < columns; c++) {
-                                double value = elements[i];
-                                if (value != 0) {
-                                    elements[i] = function.apply(r, c, value);
-                                }
-                                i += columnStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstRow * rowStride;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int i = idx, c = 0; c < columns; c++) {
+                            double value = elements[i];
+                            if (value != 0) {
+                                elements[i] = function.apply(r, c, value);
                             }
-                            idx += rowStride;
+                            i += columnStride;
                         }
+                        idx += rowStride;
                     }
                 });
             }
@@ -1557,20 +1490,17 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == (nthreads - 1)) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = zero + (firstRow - 1) * rowStride;
-                        int idxR = zeroR + (firstRow - 1) * rowStrideR;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int i = idx, j = idxR, c = 0; r < columns; c++) {
-                                elementsR[j] = elements[i];
-                                i += rowStride;
-                                j += rowStrideR;
-                            }
-                            idx += columnStride;
-                            idxR += columnStrideR;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + (firstRow - 1) * rowStride;
+                    int idxR = zeroR + (firstRow - 1) * rowStrideR;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int i = idx, j1 = idxR, c = 0; r < columns; c++) {
+                            elementsR[j1] = elements[i];
+                            i += rowStride;
+                            j1 += rowStrideR;
                         }
+                        idx += columnStride;
+                        idxR += columnStrideR;
                     }
                 });
             }
@@ -1619,12 +1549,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            System.arraycopy(elementsA, r * columns, elementsC, r * columns, columns);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        System.arraycopy(elementsA, r * columns, elementsC, r * columns, columns);
                     }
                 });
             }
@@ -1660,12 +1587,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            C.viewColumn(c).assign(((DenseDoubleMatrix1D) viewColumn(c)).getFft());
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        C.viewColumn(c).assign(((DenseDoubleMatrix1D) viewColumn(c)).getFft());
                     }
                 });
             }
@@ -1700,12 +1624,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            C.viewRow(r).assign(((DenseDoubleMatrix1D) viewRow(r)).getFft());
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        C.viewRow(r).assign(((DenseDoubleMatrix1D) viewRow(r)).getFft());
                     }
                 });
             }
@@ -1751,12 +1672,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
                 } else {
                     lastRow = firstRow + k;
                 }
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            System.arraycopy(elementsA, r * columns, elementsC, r * columns, columns);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        System.arraycopy(elementsA, r * columns, elementsC, r * columns, columns);
                     }
                 });
             }
@@ -1795,12 +1713,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            C.viewColumn(c).assign(((DenseDoubleMatrix1D) viewColumn(c)).getIfft(scale));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        C.viewColumn(c).assign(((DenseDoubleMatrix1D) viewColumn(c)).getIfft(scale));
                     }
                 });
             }
@@ -1836,11 +1751,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            C.viewRow(r).assign(((DenseDoubleMatrix1D) viewRow(r)).getIfft(scale));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        C.viewRow(r).assign(((DenseDoubleMatrix1D) viewRow(r)).getIfft(scale));
                     }
                 });
             }
@@ -1869,26 +1782,24 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<double[]>() {
-                    public double[] call() throws Exception {
-                        double maxValue = elements[zero + firstRow * rowStride];
-                        int rowLocation = firstRow;
-                        int colLocation = 0;
-                        double elem;
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                elem = elements[zero + r * rowStride + c * columnStride];
-                                if (maxValue < elem) {
-                                    maxValue = elem;
-                                    rowLocation = r;
-                                    colLocation = c;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double maxValue1 = elements[zero + firstRow * rowStride];
+                    int rowLocation1 = firstRow;
+                    int colLocation = 0;
+                    double elem;
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            elem = elements[zero + r * rowStride + c * columnStride];
+                            if (maxValue1 < elem) {
+                                maxValue1 = elem;
+                                rowLocation1 = r;
+                                colLocation = c;
                             }
-                            d = 0;
                         }
-                        return new double[]{maxValue, rowLocation, colLocation};
+                        d = 0;
                     }
+                    return new double[]{maxValue1, rowLocation1, colLocation};
                 });
             }
             try {
@@ -1943,26 +1854,24 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<double[]>() {
-                    public double[] call() throws Exception {
-                        int rowLocation = firstRow;
-                        int columnLocation = 0;
-                        double minValue = elements[zero + firstRow * rowStride];
-                        double elem;
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                elem = elements[zero + r * rowStride + c * columnStride];
-                                if (minValue > elem) {
-                                    minValue = elem;
-                                    rowLocation = r;
-                                    columnLocation = c;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int rowLocation1 = firstRow;
+                    int columnLocation1 = 0;
+                    double minValue1 = elements[zero + firstRow * rowStride];
+                    double elem;
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            elem = elements[zero + r * rowStride + c * columnStride];
+                            if (minValue1 > elem) {
+                                minValue1 = elem;
+                                rowLocation1 = r;
+                                columnLocation1 = c;
                             }
-                            d = 0;
                         }
-                        return new double[]{minValue, rowLocation, columnLocation};
+                        d = 0;
                     }
+                    return new double[]{minValue1, rowLocation1, columnLocation1};
                 });
             }
             try {
@@ -2107,12 +2016,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            ((DenseDoubleMatrix1D) viewColumn(c)).idct(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        ((DenseDoubleMatrix1D) viewColumn(c)).idct(scale);
                     }
                 });
             }
@@ -2145,11 +2051,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            ((DenseDoubleMatrix1D) viewRow(r)).idct(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        ((DenseDoubleMatrix1D) viewRow(r)).idct(scale);
                     }
                 });
             }
@@ -2204,12 +2108,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            ((DenseDoubleMatrix1D) viewColumn(c)).idht(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        ((DenseDoubleMatrix1D) viewColumn(c)).idht(scale);
                     }
                 });
             }
@@ -2242,11 +2143,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            ((DenseDoubleMatrix1D) viewRow(r)).idht(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        ((DenseDoubleMatrix1D) viewRow(r)).idht(scale);
                     }
                 });
             }
@@ -2301,12 +2200,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            ((DenseDoubleMatrix1D) viewColumn(c)).idst(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        ((DenseDoubleMatrix1D) viewColumn(c)).idst(scale);
                     }
                 });
             }
@@ -2339,11 +2235,9 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            ((DenseDoubleMatrix1D) viewRow(r)).idst(scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        ((DenseDoubleMatrix1D) viewRow(r)).idst(scale);
                     }
                 });
             }
@@ -2430,17 +2324,15 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idx = zero + firstRow * rowStride;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            double[] currentRow = values[r];
-                            for (int i = idx, c = 0; c < columns; c++) {
-                                currentRow[c] = elements[i];
-                                i += columnStride;
-                            }
-                            idx += rowStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = zero + firstRow * rowStride;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        double[] currentRow = values[r];
+                        for (int i = idx, c = 0; c < columns; c++) {
+                            currentRow[c] = elements[i];
+                            i += columnStride;
                         }
+                        idx += rowStride;
                     }
                 });
             }
@@ -2473,18 +2365,15 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstColumn = j * k;
                 final int lastColumn = (j == nthreads - 1) ? columns : firstColumn + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = 0;
-                        int idxOther = zeroOther + firstColumn * rows;
-                        for (int c = firstColumn; c < lastColumn; c++) {
-                            idx = zero + c * columnStride;
-                            for (int r = 0; r < rows; r++) {
-                                elementsOther[idxOther] = elements[idx];
-                                idx += rowStride;
-                                idxOther += strideOther;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = 0;
+                    int idxOther = zeroOther + firstColumn * rows;
+                    for (int c = firstColumn; c < lastColumn; c++) {
+                        idx = zero + c * columnStride;
+                        for (int r = 0; r < rows; r++) {
+                            elementsOther[idxOther] = elements[idx];
+                            idx += rowStride;
+                            idxOther += strideOther;
                         }
                     }
                 });
@@ -2614,23 +2503,21 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        int idxZero = zero + firstRow * rowStride;
-                        int idxZeroZ = zeroZ + firstRow * strideZ;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            double sum = 0;
-                            int idx = idxZero;
-                            int idxY = zeroY;
-                            for (int c = 0; c < columns; c++) {
-                                sum += elements[idx] * elemsY[idxY];
-                                idx += columnStride;
-                                idxY += strideY;
-                            }
-                            elemsZ[idxZeroZ] = alpha * sum + beta * elemsZ[idxZeroZ];
-                            idxZero += rowStride;
-                            idxZeroZ += strideZ;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idxZero = zero + firstRow * rowStride;
+                    int idxZeroZ = zeroZ + firstRow * strideZ;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        double sum = 0;
+                        int idx = idxZero;
+                        int idxY = zeroY;
+                        for (int c = 0; c < columns; c++) {
+                            sum += elements[idx] * elemsY[idxY];
+                            idx += columnStride;
+                            idxY += strideY;
                         }
+                        elemsZ[idxZeroZ] = alpha * sum + beta * elemsZ[idxZeroZ];
+                        idxZero += rowStride;
+                        idxZeroZ += strideZ;
                     }
                 });
             }
@@ -2739,10 +2626,8 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
                 CC = C.viewPart(offset, 0, span, columnsB);
             }
 
-            subTasks[i] = ConcurrencyUtils.submit(new Runnable() {
-                public void run() {
-                    ((DenseDoubleMatrix2D) AA).zMultSequential(BB, CC, alpha, beta, transposeA, transposeB);
-                }
+            subTasks[i] = ConcurrencyUtils.submit(() -> {
+                ((DenseDoubleMatrix2D) AA).zMultSequential(BB, CC, alpha, beta, transposeA, transposeB);
             });
         }
 
@@ -2763,20 +2648,17 @@ public class DenseDoubleMatrix2D extends DoubleMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Double>() {
-
-                    public Double call() throws Exception {
-                        double sum = 0;
-                        int idx = zero + firstRow * rowStride;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int i = idx, c = 0; c < columns; c++) {
-                                sum += elements[i];
-                                i += columnStride;
-                            }
-                            idx += rowStride;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double sum1 = 0;
+                    int idx = zero + firstRow * rowStride;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int i = idx, c = 0; c < columns; c++) {
+                            sum1 += elements[i];
+                            i += columnStride;
                         }
-                        return sum;
+                        idx += rowStride;
                     }
+                    return sum1;
                 });
             }
             try {

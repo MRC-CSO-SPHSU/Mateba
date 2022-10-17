@@ -8,15 +8,15 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdcomplex.impl;
 
-import java.io.Serial;
-import java.util.concurrent.Future;
-
 import cern.mateba.matrix.AbstractMatrix2D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
 import cern.mateba.matrix.tdouble.DoubleMatrix2D;
 import cern.mateba.matrix.tdouble.impl.DenseDoubleMatrix2D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.concurrent.Future;
 
 /**
  * Selection view on dense 2-d matrices holding <tt>complex</tt> elements.
@@ -229,14 +229,12 @@ class SelectedDenseDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        double[] tmp;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                tmp = getQuick(r, c);
-                                R.setQuick(r, c, tmp[0]);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] tmp;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            tmp = getQuick(r, c);
+                            R.setQuick(r, c, tmp[0]);
                         }
                     }
                 });
@@ -264,14 +262,12 @@ class SelectedDenseDComplexMatrix2D extends DComplexMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        double[] tmp;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                tmp = getQuick(r, c);
-                                Im.setQuick(r, c, tmp[1]);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] tmp;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            tmp = getQuick(r, c);
+                            Im.setQuick(r, c, tmp[1]);
                         }
                     }
                 });

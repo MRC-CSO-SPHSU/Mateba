@@ -8,16 +8,16 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdcomplex.impl;
 
-import java.io.Serial;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Future;
-
 import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix3D;
 import cern.mateba.matrix.tdouble.DoubleMatrix3D;
 import cern.mateba.matrix.tdouble.impl.SparseDoubleMatrix3D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Future;
 
 /**
  * Sparse hashed 3-d matrix holding <tt>complex</tt> elements. This
@@ -201,13 +201,11 @@ public class SparseDComplexMatrix3D extends DComplexMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    Im.setQuick(s, r, c, getQuick(s, r, c)[1]);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                Im.setQuick(s, r, c, getQuick(s, r, c)[1]);
                             }
                         }
                     }
@@ -236,13 +234,11 @@ public class SparseDComplexMatrix3D extends DComplexMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    Re.setQuick(s, r, c, getQuick(s, r, c)[0]);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                Re.setQuick(s, r, c, getQuick(s, r, c)[0]);
                             }
                         }
                     }

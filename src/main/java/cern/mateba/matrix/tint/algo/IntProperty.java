@@ -8,18 +8,17 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tint.algo;
 
-import java.io.Serial;
-import java.io.Serializable;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
+import cern.jet.math.tint.IntFunctions;
 import cern.mateba.matrix.AbstractFormatter;
 import cern.mateba.matrix.tint.IntMatrix1D;
 import cern.mateba.matrix.tint.IntMatrix2D;
 import cern.mateba.matrix.tint.IntMatrix3D;
-import cern.jet.math.tint.IntFunctions;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Tests matrices for linear algebraic properties (equality, tridiagonality,
@@ -197,14 +196,12 @@ public class IntProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            if (!(A.getQuick(i) == value))
-                                return false;
-                        }
-                        return true;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        if (!(A.getQuick(i) == value))
+                            return false;
                     }
+                    return true;
                 });
             }
             try {
@@ -261,14 +258,12 @@ public class IntProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            if (!(A.getQuick(i) == B.getQuick(i)))
-                                return false;
-                        }
-                        return true;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        if (!(A.getQuick(i) == B.getQuick(i)))
+                            return false;
                     }
+                    return true;
                 });
             }
             try {
@@ -321,16 +316,14 @@ public class IntProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? A.rows() : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                if (!(A.getQuick(r, c) == value))
-                                    return false;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            if (!(A.getQuick(r, c) == value))
+                                return false;
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -390,16 +383,14 @@ public class IntProperty implements Serializable, Cloneable {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? A.rows() : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                if (!(A.getQuick(r, c) == B.getQuick(r, c)))
-                                    return false;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            if (!(A.getQuick(r, c) == B.getQuick(r, c)))
+                                return false;
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -460,18 +451,16 @@ public class IntProperty implements Serializable, Cloneable {
                 } else {
                     stopslice = startslice + k;
                 }
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int s = startslice; s < stopslice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    if (!(A.getQuick(s, r, c) == value))
-                                        return false;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = startslice; s < stopslice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                if (!(A.getQuick(s, r, c) == value))
+                                    return false;
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -539,18 +528,16 @@ public class IntProperty implements Serializable, Cloneable {
                 } else {
                     stopslice = startslice + k;
                 }
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        for (int s = startslice; s < stopslice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    if (!(A.getQuick(s, r, c) == B.getQuick(s, r, c)))
-                                        return false;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = startslice; s < stopslice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                if (!(A.getQuick(s, r, c) == B.getQuick(s, r, c)))
+                                    return false;
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {

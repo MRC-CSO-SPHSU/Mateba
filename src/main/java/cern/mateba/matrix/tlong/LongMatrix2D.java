@@ -8,19 +8,19 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tlong;
 
-import java.io.Serial;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import cern.mateba.list.tint.IntArrayList;
 import cern.mateba.list.tlong.LongArrayList;
 import cern.mateba.matrix.AbstractMatrix2D;
 import cern.mateba.matrix.tlong.impl.DenseLongMatrix1D;
 import cern.mateba.matrix.tlong.impl.DenseLongMatrix2D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Abstract base class for 2-d matrices holding <tt>int</tt> elements. First see
@@ -96,19 +96,16 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Long>() {
-
-                    public Long call() throws Exception {
-                        long a = f.apply(getQuick(firstRow, 0));
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                a = aggr.apply(a, f.apply(getQuick(r, c)));
-                            }
-                            d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    long a1 = f.apply(getQuick(firstRow, 0));
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            a1 = aggr.apply(a1, f.apply(getQuick(r, c)));
                         }
-                        return Long.valueOf(a);
+                        d = 0;
                     }
+                    return Long.valueOf(a1);
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -150,26 +147,23 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Long>() {
-
-                    public Long call() throws Exception {
-                        long elem = getQuick(firstRow, 0);
-                        long a = 0;
-                        if (cond.apply(elem)) {
-                            a = aggr.apply(a, f.apply(elem));
-                        }
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                elem = getQuick(r, c);
-                                if (cond.apply(elem)) {
-                                    a = aggr.apply(a, f.apply(elem));
-                                }
-                            }
-                            d = 0;
-                        }
-                        return Long.valueOf(a);
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    long elem = getQuick(firstRow, 0);
+                    long a1 = 0;
+                    if (cond.apply(elem)) {
+                        a1 = aggr.apply(a1, f.apply(elem));
                     }
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            elem = getQuick(r, c);
+                            if (cond.apply(elem)) {
+                                a1 = aggr.apply(a1, f.apply(elem));
+                            }
+                        }
+                        d = 0;
+                    }
+                    return Long.valueOf(a1);
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -221,17 +215,14 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Long>() {
-
-                    public Long call() throws Exception {
-                        long a = f.apply(getQuick(rowElements[firstIdx], columnElements[firstIdx]));
-                        long elem;
-                        for (int i = firstIdx + 1; i < lastIdx; i++) {
-                            elem = getQuick(rowElements[i], columnElements[i]);
-                            a = aggr.apply(a, f.apply(elem));
-                        }
-                        return a;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    long a1 = f.apply(getQuick(rowElements[firstIdx], columnElements[firstIdx]));
+                    long elem;
+                    for (int i = firstIdx + 1; i < lastIdx; i++) {
+                        elem = getQuick(rowElements[i], columnElements[i]);
+                        a1 = aggr.apply(a1, f.apply(elem));
                     }
+                    return a1;
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -302,19 +293,16 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Long>() {
-
-                    public Long call() throws Exception {
-                        long a = f.apply(getQuick(firstRow, 0), other.getQuick(firstRow, 0));
-                        int d = 1;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                a = aggr.apply(a, f.apply(getQuick(r, c), other.getQuick(r, c)));
-                            }
-                            d = 0;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    long a1 = f.apply(getQuick(firstRow, 0), other.getQuick(firstRow, 0));
+                    int d = 1;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            a1 = aggr.apply(a1, f.apply(getQuick(r, c), other.getQuick(r, c)));
                         }
-                        return Long.valueOf(a);
+                        d = 0;
                     }
+                    return Long.valueOf(a1);
                 });
             }
             a = ConcurrencyUtils.waitForCompletion(futures, aggr);
@@ -368,13 +356,10 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, f.apply(getQuick(r, c)));
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, f.apply(getQuick(r, c)));
                         }
                     }
                 });
@@ -409,16 +394,13 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        long elem;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                elem = getQuick(r, c);
-                                if (cond.apply(elem)) {
-                                    setQuick(r, c, f.apply(elem));
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    long elem;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            elem = getQuick(r, c);
+                            if (cond.apply(elem)) {
+                                setQuick(r, c, f.apply(elem));
                             }
                         }
                     }
@@ -456,16 +438,13 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        long elem;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                elem = getQuick(r, c);
-                                if (cond.apply(elem)) {
-                                    setQuick(r, c, value);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    long elem;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            elem = getQuick(r, c);
+                            if (cond.apply(elem)) {
+                                setQuick(r, c, value);
                             }
                         }
                     }
@@ -502,13 +481,10 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, value);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, value);
                         }
                     }
                 });
@@ -549,14 +525,11 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = firstRow * columns;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, values[idx++]);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = firstRow * columns;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, values[idx++]);
                         }
                     }
                 });
@@ -600,14 +573,11 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        int idx = firstRow * columns;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, values[idx++]);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int idx = firstRow * columns;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, values[idx++]);
                         }
                     }
                 });
@@ -653,18 +623,15 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            long[] currentRow = values[r];
-                            if (currentRow.length != columns)
-                                throw new IllegalArgumentException(
-                                    "Must have same number of columns in every row: columns=" + currentRow.length
-                                        + "columns()=" + columns());
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, currentRow[c]);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        long[] currentRow = values[r];
+                        if (currentRow.length != columns)
+                            throw new IllegalArgumentException(
+                                "Must have same number of columns in every row: columns=" + currentRow.length
+                                    + "columns()=" + columns());
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, currentRow[c]);
                         }
                     }
                 });
@@ -717,13 +684,10 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, other_loc.getQuick(r, c));
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, other_loc.getQuick(r, c));
                         }
                     }
                 });
@@ -786,16 +750,12 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                setQuick(r, c, function.apply(getQuick(r, c), y.getQuick(r, c)));
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            setQuick(r, c, function.apply(getQuick(r, c), y.getQuick(r, c)));
                         }
                     }
-
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
@@ -837,15 +797,11 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            setQuick(rowElements[i], columnElements[i], function.apply(getQuick(rowElements[i],
-                                columnElements[i]), y.getQuick(rowElements[i], columnElements[i])));
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        setQuick(rowElements[i], columnElements[i], function.apply(getQuick(rowElements[i],
+                            columnElements[i]), y.getQuick(rowElements[i], columnElements[i])));
                     }
-
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
@@ -875,17 +831,15 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int cardinality = 0;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                if (getQuick(r, c) != 0)
-                                    cardinality++;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int cardinality1 = 0;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            if (getQuick(r, c) != 0)
+                                cardinality1++;
                         }
-                        return cardinality;
                     }
+                    return cardinality1;
                 });
             }
             try {
@@ -990,16 +944,14 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < columns; c++) {
-                                long value = getQuick(r, c);
-                                if (value != 0) {
-                                    long a = function.apply(r, c, value);
-                                    if (a != value)
-                                        setQuick(r, c, a);
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < columns; c++) {
+                            long value = getQuick(r, c);
+                            if (value != 0) {
+                                long a = function.apply(r, c, value);
+                                if (a != value)
+                                    setQuick(r, c, a);
                             }
                         }
                     }
@@ -1259,26 +1211,24 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Callable<long[]>() {
-                    public long[] call() throws Exception {
-                        int rowLocation = firstRow;
-                        int columnLocation = 0;
-                        long maxValue = getQuick(rowLocation, 0);
-                        int d = 1;
-                        long elem;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                elem = getQuick(r, c);
-                                if (maxValue < elem) {
-                                    maxValue = elem;
-                                    rowLocation = r;
-                                    columnLocation = c;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int rowLocation1 = firstRow;
+                    int columnLocation1 = 0;
+                    long maxValue1 = getQuick(rowLocation1, 0);
+                    int d = 1;
+                    long elem;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            elem = getQuick(r, c);
+                            if (maxValue1 < elem) {
+                                maxValue1 = elem;
+                                rowLocation1 = r;
+                                columnLocation1 = c;
                             }
-                            d = 0;
                         }
-                        return new long[]{maxValue, rowLocation, columnLocation};
+                        d = 0;
                     }
+                    return new long[]{maxValue1, rowLocation1, columnLocation1};
                 });
             }
             try {
@@ -1338,26 +1288,24 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Callable<long[]>() {
-                    public long[] call() throws Exception {
-                        int rowLocation = firstRow;
-                        int columnLocation = 0;
-                        long minValue = getQuick(rowLocation, 0);
-                        int d = 1;
-                        long elem;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = d; c < columns; c++) {
-                                elem = getQuick(r, c);
-                                if (minValue > elem) {
-                                    minValue = elem;
-                                    rowLocation = r;
-                                    columnLocation = c;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int rowLocation1 = firstRow;
+                    int columnLocation1 = 0;
+                    long minValue1 = getQuick(rowLocation1, 0);
+                    int d = 1;
+                    long elem;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = d; c < columns; c++) {
+                            elem = getQuick(r, c);
+                            if (minValue1 > elem) {
+                                minValue1 = elem;
+                                rowLocation1 = r;
+                                columnLocation1 = c;
                             }
-                            d = 0;
                         }
-                        return new long[]{minValue, rowLocation, columnLocation};
+                        d = 0;
                     }
+                    return new long[]{minValue1, rowLocation1, columnLocation1};
                 });
             }
             try {
@@ -1453,13 +1401,11 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            long[] currentRow = values[r];
-                            for (int c = 0; c < columns; c++) {
-                                currentRow[c] = getQuick(r, c);
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        long[] currentRow = values[r];
+                        for (int c = 0; c < columns; c++) {
+                            currentRow[c] = getQuick(r, c);
                         }
                     }
                 });
@@ -1937,15 +1883,13 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? rows : firstRow + k;
 
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int r = firstRow; r < lastRow; r++) {
-                            int s = 0;
-                            for (int c = 0; c < columns; c++) {
-                                s += getQuick(r, c) * y.getQuick(c);
-                            }
-                            z_loc.setQuick(r, alpha * s + beta * z_loc.getQuick(r));
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int r = firstRow; r < lastRow; r++) {
+                        int s = 0;
+                        for (int c = 0; c < columns; c++) {
+                            s += getQuick(r, c) * y.getQuick(c);
                         }
+                        z_loc.setQuick(r, alpha * s + beta * z_loc.getQuick(r));
                     }
                 });
             }
@@ -2020,16 +1964,14 @@ public abstract class LongMatrix2D extends AbstractMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? p : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-                    public void run() {
-                        for (int a = firstIdx; a < lastIdx; a++) {
-                            for (int b = 0; b < m; b++) {
-                                int s = 0;
-                                for (int c = 0; c < n; c++) {
-                                    s += getQuick(b, c) * B.getQuick(c, a);
-                                }
-                                C_loc.setQuick(b, a, alpha * s + beta * C_loc.getQuick(b, a));
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int a = firstIdx; a < lastIdx; a++) {
+                        for (int b = 0; b < m; b++) {
+                            int s = 0;
+                            for (int c = 0; c < n; c++) {
+                                s += getQuick(b, c) * B.getQuick(c, a);
                             }
+                            C_loc.setQuick(b, a, alpha * s + beta * C_loc.getQuick(b, a));
                         }
                     }
                 });

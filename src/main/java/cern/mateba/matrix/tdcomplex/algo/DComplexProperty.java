@@ -8,10 +8,7 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdcomplex.algo;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
+import cern.jet.math.tcomplex.DComplex;
 import cern.mateba.matrix.AbstractFormatter;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.DComplexMatrix2D;
@@ -19,8 +16,11 @@ import cern.mateba.matrix.tdcomplex.DComplexMatrix3D;
 import cern.mateba.matrix.tdcomplex.impl.DenseDComplexMatrix1D;
 import cern.mateba.matrix.tdcomplex.impl.SparseCCDComplexMatrix2D;
 import cern.mateba.matrix.tdcomplex.impl.SparseRCDComplexMatrix2D;
-import cern.jet.math.tcomplex.DComplex;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Tests matrices for equality.
@@ -146,25 +146,23 @@ public class DComplexProperty {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        double[] diff = new double[2];
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            double[] x = A.getQuick(i);
-                            diff[0] = Math.abs(value[0] - x[0]);
-                            diff[1] = Math.abs(value[1] - x[1]);
-                            if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                || (DComplex.isEqual(value, x, epsilon))) {
-                                diff[0] = 0;
-                                diff[1] = 0;
-                            }
-                            if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
-                                return false;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] diff = new double[2];
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        double[] x = A.getQuick(i);
+                        diff[0] = Math.abs(value[0] - x[0]);
+                        diff[1] = Math.abs(value[1] - x[1]);
+                        if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
+                            && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                            || (DComplex.isEqual(value, x, epsilon))) {
+                            diff[0] = 0;
+                            diff[1] = 0;
                         }
-                        return true;
+                        if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
+                            return false;
+                        }
                     }
+                    return true;
                 });
             }
             try {
@@ -229,26 +227,24 @@ public class DComplexProperty {
             for (int j = 0; j < nthreads; j++) {
                 final int firstIdx = j * k;
                 final int lastIdx = (j == nthreads - 1) ? size : firstIdx + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        double[] diff = new double[2];
-                        for (int i = firstIdx; i < lastIdx; i++) {
-                            double[] x = A.getQuick(i);
-                            double[] value = B.getQuick(i);
-                            diff[0] = Math.abs(value[0] - x[0]);
-                            diff[1] = Math.abs(value[1] - x[1]);
-                            if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                || (DComplex.isEqual(value, x, epsilon))) {
-                                diff[0] = 0;
-                                diff[1] = 0;
-                            }
-                            if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
-                                return false;
-                            }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] diff = new double[2];
+                    for (int i = firstIdx; i < lastIdx; i++) {
+                        double[] x = A.getQuick(i);
+                        double[] value = B.getQuick(i);
+                        diff[0] = Math.abs(value[0] - x[0]);
+                        diff[1] = Math.abs(value[1] - x[1]);
+                        if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
+                            && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                            || (DComplex.isEqual(value, x, epsilon))) {
+                            diff[0] = 0;
+                            diff[1] = 0;
                         }
-                        return true;
+                        if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
+                            return false;
+                        }
                     }
+                    return true;
                 });
             }
             try {
@@ -311,27 +307,25 @@ public class DComplexProperty {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? A.rows() : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        double[] diff = new double[2];
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < A.columns(); c++) {
-                                double[] x = A.getQuick(r, c);
-                                diff[0] = Math.abs(value[0] - x[0]);
-                                diff[1] = Math.abs(value[1] - x[1]);
-                                if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                    || (DComplex.isEqual(value, x, epsilon))) {
-                                    diff[0] = 0;
-                                    diff[1] = 0;
-                                }
-                                if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
-                                    return false;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] diff = new double[2];
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < A.columns(); c++) {
+                            double[] x = A.getQuick(r, c);
+                            diff[0] = Math.abs(value[0] - x[0]);
+                            diff[1] = Math.abs(value[1] - x[1]);
+                            if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
+                                && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                                || (DComplex.isEqual(value, x, epsilon))) {
+                                diff[0] = 0;
+                                diff[1] = 0;
+                            }
+                            if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
+                                return false;
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -398,28 +392,26 @@ public class DComplexProperty {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? A.rows() : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        double[] diff = new double[2];
-                        for (int r = firstRow; r < lastRow; r++) {
-                            for (int c = 0; c < A.columns(); c++) {
-                                double[] x = A.getQuick(r, c);
-                                double[] value = B.getQuick(r, c);
-                                diff[0] = Math.abs(value[0] - x[0]);
-                                diff[1] = Math.abs(value[1] - x[1]);
-                                if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                    || (DComplex.isEqual(value, x, epsilon))) {
-                                    diff[0] = 0;
-                                    diff[1] = 0;
-                                }
-                                if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
-                                    return false;
-                                }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] diff = new double[2];
+                    for (int r = firstRow; r < lastRow; r++) {
+                        for (int c = 0; c < A.columns(); c++) {
+                            double[] x = A.getQuick(r, c);
+                            double[] value = B.getQuick(r, c);
+                            diff[0] = Math.abs(value[0] - x[0]);
+                            diff[1] = Math.abs(value[1] - x[1]);
+                            if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
+                                && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                                || (DComplex.isEqual(value, x, epsilon))) {
+                                diff[0] = 0;
+                                diff[1] = 0;
+                            }
+                            if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
+                                return false;
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -486,29 +478,27 @@ public class DComplexProperty {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        double[] diff = new double[2];
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    double[] x = A.getQuick(s, r, c);
-                                    diff[0] = Math.abs(value[0] - x[0]);
-                                    diff[1] = Math.abs(value[1] - x[1]);
-                                    if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                        || (DComplex.isEqual(value, x, epsilon))) {
-                                        diff[0] = 0;
-                                        diff[1] = 0;
-                                    }
-                                    if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
-                                        return false;
-                                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] diff = new double[2];
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                double[] x = A.getQuick(s, r, c);
+                                diff[0] = Math.abs(value[0] - x[0]);
+                                diff[1] = Math.abs(value[1] - x[1]);
+                                if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
+                                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                                    || (DComplex.isEqual(value, x, epsilon))) {
+                                    diff[0] = 0;
+                                    diff[1] = 0;
+                                }
+                                if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
+                                    return false;
                                 }
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {
@@ -583,30 +573,28 @@ public class DComplexProperty {
                 } else {
                     stopslice = startslice + k;
                 }
-                futures[j] = ConcurrencyUtils.submit(new Callable<Boolean>() {
-                    public Boolean call() throws Exception {
-                        double[] diff = new double[2];
-                        for (int s = startslice; s < stopslice; s++) {
-                            for (int r = 0; r < rows; r++) {
-                                for (int c = 0; c < columns; c++) {
-                                    double[] x = A.getQuick(s, r, c);
-                                    double[] value = B.getQuick(s, r, c);
-                                    diff[0] = Math.abs(value[0] - x[0]);
-                                    diff[1] = Math.abs(value[1] - x[1]);
-                                    if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
-                                        && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
-                                        || (DComplex.isEqual(value, x, epsilon))) {
-                                        diff[0] = 0;
-                                        diff[1] = 0;
-                                    }
-                                    if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
-                                        return false;
-                                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    double[] diff = new double[2];
+                    for (int s = startslice; s < stopslice; s++) {
+                        for (int r = 0; r < rows; r++) {
+                            for (int c = 0; c < columns; c++) {
+                                double[] x = A.getQuick(s, r, c);
+                                double[] value = B.getQuick(s, r, c);
+                                diff[0] = Math.abs(value[0] - x[0]);
+                                diff[1] = Math.abs(value[1] - x[1]);
+                                if (((diff[0] != diff[0]) || (diff[1] != diff[1]))
+                                    && ((((value[0] != value[0]) || (value[1] != value[1])) && ((x[0] != x[0]) || (x[1] != x[1]))))
+                                    || (DComplex.isEqual(value, x, epsilon))) {
+                                    diff[0] = 0;
+                                    diff[1] = 0;
+                                }
+                                if ((diff[0] > epsilon) || (diff[1] > epsilon)) {
+                                    return false;
                                 }
                             }
                         }
-                        return true;
                     }
+                    return true;
                 });
             }
             try {

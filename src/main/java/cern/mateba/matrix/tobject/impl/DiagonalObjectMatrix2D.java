@@ -8,14 +8,13 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tobject.impl;
 
-import java.io.Serial;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import cern.mateba.matrix.tobject.ObjectMatrix1D;
 import cern.mateba.matrix.tobject.ObjectMatrix2D;
 import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 /**
  * Diagonal 2-d matrix holding <tt>Object</tt> elements. First see the <a
@@ -140,12 +139,9 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? dlength : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        if (lastRow - firstRow >= 0)
-                            System.arraycopy(values, firstRow, elements, firstRow, lastRow - firstRow);
-                    }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    if (lastRow - firstRow >= 0)
+                        System.arraycopy(values, firstRow, elements, firstRow, lastRow - firstRow);
                 });
             }
             ConcurrencyUtils.waitForCompletion(futures);
@@ -217,12 +213,9 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
                     } else {
                         stoprow = startrow + k;
                     }
-                    futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                        public void run() {
-                            for (int j = startrow; j < stoprow; j++) {
-                                elements[j] = function.apply(elements[j], otherElements[j]);
-                            }
+                    futures[j] = ConcurrencyUtils.submit(() -> {
+                        for (int j1 = startrow; j1 < stoprow; j1++) {
+                            elements[j1] = function.apply(elements[j1], otherElements[j1]);
                         }
                     });
                 }
@@ -249,15 +242,13 @@ public class DiagonalObjectMatrix2D extends WrapperObjectMatrix2D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstRow = j * k;
                 final int lastRow = (j == nthreads - 1) ? dlength : firstRow + k;
-                futures[j] = ConcurrencyUtils.submit(new Callable<Integer>() {
-                    public Integer call() throws Exception {
-                        int cardinality = 0;
-                        for (int r = firstRow; r < lastRow; r++) {
-                            if (elements[r] != null)
-                                cardinality++;
-                        }
-                        return cardinality;
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    int cardinality1 = 0;
+                    for (int r = firstRow; r < lastRow; r++) {
+                        if (elements[r] != null)
+                            cardinality1++;
                     }
+                    return cardinality1;
                 });
             }
             try {

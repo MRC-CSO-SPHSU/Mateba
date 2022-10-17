@@ -8,13 +8,13 @@ It is provided "as is" without expressed or implied warranty.
  */
 package cern.mateba.matrix.tdcomplex.impl;
 
-import java.io.Serial;
-import java.util.concurrent.Future;
-
 import cern.mateba.matrix.tdcomplex.DComplexMatrix3D;
+import edu.emory.mathcs.utils.ConcurrencyUtils;
 import org.jtransforms.fft.DoubleFFT_2D;
 import org.jtransforms.fft.DoubleFFT_3D;
-import edu.emory.mathcs.utils.ConcurrencyUtils;
+
+import java.io.Serial;
+import java.util.concurrent.Future;
 
 /**
  * Dense 3-d matrix holding <tt>complex</tt> elements.<br>
@@ -84,12 +84,9 @@ public class DenseLargeDComplexMatrix3D extends WrapperDComplexMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            fft2Slices.complexForward(elements[s]);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        fft2Slices.complexForward(elements[s]);
                     }
                 });
             }
@@ -140,12 +137,9 @@ public class DenseLargeDComplexMatrix3D extends WrapperDComplexMatrix3D {
             for (int j = 0; j < nthreads; j++) {
                 final int firstSlice = j * k;
                 final int lastSlice = (j == nthreads - 1) ? slices : firstSlice + k;
-                futures[j] = ConcurrencyUtils.submit(new Runnable() {
-
-                    public void run() {
-                        for (int s = firstSlice; s < lastSlice; s++) {
-                            fft2Slices.complexInverse(elements[s], scale);
-                        }
+                futures[j] = ConcurrencyUtils.submit(() -> {
+                    for (int s = firstSlice; s < lastSlice; s++) {
+                        fft2Slices.complexInverse(elements[s], scale);
                     }
                 });
             }
